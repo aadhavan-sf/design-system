@@ -1,5 +1,7 @@
 @import './theme/colors.css';
 @import './theme/typography.css';
+@import './theme/spacing.css';
+@import './theme/shadows.css';
 
 :root {
   --text: #6b6375;
@@ -11,6 +13,12 @@
   --accent-bg: rgba(170, 59, 255, 0.1);
   --accent-border: rgba(170, 59, 255, 0.5);
   --social-bg: rgba(244, 243, 236, 0.5);
+  --ds-surface: var(--neutral_00);
+  --ds-surface-subtle: var(--neutral_25);
+  --ds-border: var(--neutral_200);
+  --ds-text-strong: var(--neutral_900);
+  --ds-text: var(--neutral_700);
+  --ds-text-muted: var(--neutral_600);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
@@ -20,7 +28,6 @@
 
   /* Design-system tokens (from Figma) */
   --radius_8: 8px;
-  --shadow_xs: 0px 1px 2px rgba(10, 13, 18, 0.05);
   --font_family_text: 'Figtree', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
     sans-serif;
 
@@ -50,6 +57,12 @@
     --accent-bg: rgba(192, 132, 252, 0.15);
     --accent-border: rgba(192, 132, 252, 0.5);
     --social-bg: rgba(47, 48, 58, 0.5);
+    --ds-surface: #1f2028;
+    --ds-surface-subtle: #252630;
+    --ds-border: #3b3d49;
+    --ds-text-strong: #f6f6f7;
+    --ds-text: #e2e3e4;
+    --ds-text-muted: #babbc0;
     --shadow:
       rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
   }
@@ -61,6 +74,32 @@
 
 body {
   margin: 0;
+}
+
+.sbdocs,
+.sbdocs-wrapper,
+.sbdocs-content,
+.docs-story {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+  --ds-surface: var(--neutral_00);
+  --ds-surface-subtle: var(--neutral_25);
+  --ds-border: var(--neutral_200);
+  --ds-text-strong: var(--neutral_900);
+  --ds-text: var(--neutral_700);
+  --ds-text-muted: var(--neutral_600);
+  color: var(--neutral_900);
+  color-scheme: light;
+}
+
+.sbdocs .ds-text,
+.sbdocs-wrapper .ds-text,
+.sbdocs-content .ds-text,
+.docs-story .ds-text {
+  color: var(--neutral_900);
 }
 
 #root {

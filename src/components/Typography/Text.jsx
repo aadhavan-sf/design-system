@@ -20,7 +20,7 @@ export function Text({
   as: Component = 'p',
   variant = 'text-md',
   weight = 'regular',
-  color = 'var(--neutral_900)',
+  color = 'var(--ds-text-strong, var(--neutral_900))',
   className,
   children,
   ...props
@@ -46,4 +46,3 @@ Text.propTypes = {
   className: PropTypes.string,
   children: PropTypes.node,
 };
-

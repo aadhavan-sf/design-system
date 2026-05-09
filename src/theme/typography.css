@@ -51,7 +51,7 @@
 .ds-text {
   font-family: var(--font_family_base);
   margin: 0;
-  color: var(--neutral_900);
+  color: var(--ds-text-strong, var(--neutral_900));
 }
 
 .ds-text--display-2xl {
@@ -123,4 +123,3 @@
 .ds-text--bold {
   font-weight: 700;
 }
-

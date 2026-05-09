@@ -36,7 +36,7 @@ export const Playground = {
     as: 'p',
     variant: 'text-md',
     weight: 'regular',
-    color: 'var(--neutral_900)',
+    color: 'var(--ds-text-strong, var(--neutral_900))',
     children: 'The quick brown fox jumps over the lazy dog.',
   },
 };
@@ -80,4 +80,3 @@ export const Scale = {
     </div>
   ),
 };
-
