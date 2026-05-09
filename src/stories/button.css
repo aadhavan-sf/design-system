@@ -23,8 +23,7 @@
 }
 
 .storybook-button:focus-visible {
-  outline: 2px solid var(--brand_300);
-  outline-offset: 2px;
+  outline: none;
 }
 
 .storybook-button:disabled {
@@ -34,14 +33,21 @@
 }
 
 .storybook-button--primary {
-  background-color: var(--brand_500);
-  border-color: var(--brand_500);
+  background-color: var(--brand_400);
+  border-color: var(--brand_400);
   color: var(--neutral_00);
 }
 
 .storybook-button--primary:hover:not(:disabled) {
-  background-color: var(--brand_600);
-  border-color: var(--brand_600);
+  background-color: var(--brand_700);
+  border-color: var(--brand_700);
+}
+
+.storybook-button--primary:focus-visible,
+.storybook-button--primary.storybook-button--focus {
+  background-color: var(--brand_400);
+  border-color: var(--brand_400);
+  box-shadow: 0 0 0 4px var(--brand_100);
 }
 
 .storybook-button--secondary {
@@ -57,12 +63,12 @@
 .storybook-button--tertiary {
   background-color: transparent;
   border-color: transparent;
-  color: var(--brand_500);
+  color: var(--brand_400);
   box-shadow: none;
 }
 
 .storybook-button--tertiary:hover:not(:disabled) {
-  color: var(--brand_600);
+  color: var(--brand_700);
   box-shadow: none;
 }
 
@@ -75,6 +81,13 @@
 .storybook-button--destructive:hover:not(:disabled) {
   background-color: var(--error_600);
   border-color: var(--error_600);
+}
+
+.storybook-button--destructive:focus-visible,
+.storybook-button--destructive.storybook-button--focus {
+  background-color: var(--error_500);
+  border-color: var(--error_500);
+  box-shadow: 0 0 0 4px var(--brand_100);
 }
 .storybook-button--small {
   padding: var(--spacing_2) 14px;

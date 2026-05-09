@@ -64,3 +64,22 @@ export const Disabled = {
     disabled: true,
   },
 };
+
+export const Focus = {
+  render: () => (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing_4)' }}>
+      <Button
+        variant="primary"
+        size="medium"
+        label="Primary focus"
+        className="storybook-button--focus"
+      />
+      <Button
+        variant="destructive"
+        size="medium"
+        label="Destructive focus"
+        className="storybook-button--focus"
+      />
+    </div>
+  ),
+};
