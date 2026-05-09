@@ -1,7 +1,7 @@
 import { ColorPalette } from '../components/ColorPalette/ColorPalette';
 
 export default {
-  title: 'Design System/Colors',
+  title: 'Styling/Colors',
   component: ColorPalette,
   parameters: {
     layout: 'padded',
@@ -14,4 +14,3 @@ export const Palette = {
     showHex: true,
   },
 };
-

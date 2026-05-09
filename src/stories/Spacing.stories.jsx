@@ -1,7 +1,7 @@
 import { SpacingScale } from '../components/SpacingScale/SpacingScale';
 
 export default {
-  title: 'Design System/Spacing',
+  title: 'Styling/Spacing',
   component: SpacingScale,
   parameters: {
     layout: 'padded',
