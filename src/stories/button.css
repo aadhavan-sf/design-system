@@ -87,7 +87,7 @@
 .storybook-button--destructive.storybook-button--focus {
   background-color: var(--error_500);
   border-color: var(--error_500);
-  box-shadow: 0 0 0 4px var(--brand_100);
+  box-shadow: 0 0 0 4px var(--error_100);
 }
 .storybook-button--small {
   padding: var(--spacing_2) 14px;
