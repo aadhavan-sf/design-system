@@ -14,72 +14,306 @@ export default {
   tags: ['autodocs'],
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
-    variant: {
+    hierarchy: {
       control: 'select',
-      options: ['primary', 'secondary', 'tertiary', 'destructive'],
+      options: [
+        'primary',
+        'secondary',
+        'link-grey',
+        'link-color',
+      ],
     },
-    size: { control: 'select', options: ['small', 'medium', 'large', 'xlarge'] },
-    disabled: { control: 'boolean' },
+  
+    size: {
+      control: 'select',
+      options: ['small', 'medium', 'large', 'xlarge'],
+    },
+  
+    icon: {
+      control: 'select',
+      options: ['none', 'left', 'right', 'only'],
+    },
+  
+    destructive: {
+      control: 'boolean',
+    },
+  
+    state: {
+      control: 'select',
+      options: ['default', 'focus', 'disabled'],
+    },
   },
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args
   args: { onClick: fn() },
 };
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
-export const Primary = {
+export const Playground = {
   args: {
-    variant: 'primary',
+    hierarchy: 'primary',
     size: 'small',
+    icon: 'none',
+    destructive: false,
+    state: 'default',
     label: 'Button CTA',
   },
 };
 
 export const Variants = {
   render: () => (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing_3)' }}>
-      <Button variant="primary" size="medium" label="Primary" />
-      <Button variant="secondary" size="medium" label="Secondary" />
-      <Button variant="tertiary" size="medium" label="Button CTA" />
-      <Button variant="destructive" size="medium" label="Destructive" />
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: 'var(--spacing_3)',
+      }}
+    >
+      <Button
+        hierarchy="primary"
+        size="medium"
+        label="Primary"
+      />
+
+      <Button
+        hierarchy="secondary"
+        size="medium"
+        label="Secondary"
+      />
+
+      <Button
+        hierarchy="link-grey"
+        size="medium"
+        label="Link Grey"
+      />
+
+      <Button
+        hierarchy="link-color"
+        size="medium"
+        label="Link Color"
+      />
+    </div>
+  ),
+};
+
+export const DestructiveVariants = {
+  render: () => (
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: 'var(--spacing_5)',
+        alignItems: 'center',
+      }}
+    >
+      <Button
+        hierarchy="primary"
+        destructive
+        size="medium"
+        label="Primary"
+      />
+
+      <Button
+        hierarchy="link-color"
+        destructive
+        size="medium"
+        label="Link"
+      />
     </div>
   ),
 };
 
 export const Sizes = {
   render: () => (
-    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'var(--spacing_3)' }}>
-      <Button variant="primary" size="small" label="Small" />
-      <Button variant="primary" size="medium" label="Medium" />
-      <Button variant="primary" size="large" label="Large" />
-      <Button variant="primary" size="xlarge" label="Xlarge" />
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        gap: 'var(--spacing_3)',
+      }}
+    >
+      <Button hierarchy="primary" size="small" label="Small" />
+      <Button hierarchy="primary" size="medium" label="Medium" />
+      <Button hierarchy="primary" size="large" label="Large" />
+      <Button hierarchy="primary" size="xlarge" label="Xlarge" />
     </div>
   ),
 };
 
-export const Disabled = {
-  args: {
-    variant: 'primary',
-    size: 'medium',
-    label: 'Disabled',
-    disabled: true,
-  },
+export const Icons = {
+  render: () => (
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        gap: 'var(--spacing_3)',
+      }}
+    >
+      <Button
+        hierarchy="primary"
+        size="medium"
+        label="Left Icon"
+        icon="left"
+      />
+
+      <Button
+        hierarchy="primary"
+        size="medium"
+        label="Right Icon"
+        icon="right"
+      />
+
+      <Button
+        hierarchy="primary"
+        size="medium"
+        icon="only"
+      />
+    </div>
+  ),
 };
 
 export const Focus = {
   render: () => (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing_4)' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: 'var(--spacing_4)',
+      }}
+    >
       <Button
-        variant="primary"
+        hierarchy="primary"
         size="medium"
-        label="Primary focus"
-        className="storybook-button--focus"
+        label="Primary Focus"
+        state="focus"
       />
+
       <Button
-        variant="destructive"
+        hierarchy="secondary"
         size="medium"
-        label="Destructive focus"
-        className="storybook-button--focus"
+        label="Secondary Focus"
+        state="focus"
       />
+
+      <Button
+        hierarchy="primary"
+        destructive
+        size="medium"
+        label="Destructive Focus"
+        state="focus"
+      />
+    </div>
+  ),
+};
+
+
+export const PrimaryWithLeftIcon = {
+  args: {
+    hierarchy: 'primary',
+    size: 'medium',
+    label: 'Button CTA',
+    icon: 'left',
+  },
+};
+
+export const PrimaryWithRightIcon = {
+  args: {
+    hierarchy: 'primary',
+    size: 'medium',
+    label: 'Button CTA',
+    icon: 'right',
+  },
+};
+
+export const PrimaryIconOnly = {
+  args: {
+    hierarchy: 'primary',
+    size: 'medium',
+    icon: 'only',
+  },
+};
+
+export const DisabledStates = {
+  render: () => (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '24px',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          gap: '16px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <Button hierarchy="primary" size="small" label="Small" state="disabled" />
+
+        <Button hierarchy="primary" size="medium" label="Medium" state="disabled" />
+
+        <Button hierarchy="primary" size="large" label="Large" state="disabled" />
+
+        <Button hierarchy="primary" size="xlarge" label="Xlarge" state="disabled" />
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          gap: '16px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <Button
+          hierarchy="primary"
+          size="medium"
+          label="Left Icon"
+          icon="left"
+          state="disabled"
+        />
+
+        <Button
+          hierarchy="primary"
+          size="medium"
+          label="Right Icon"
+          icon="right"
+          state="disabled"
+        />
+
+        <Button
+          hierarchy="primary"
+          size="medium"
+          icon="only"
+          state="disabled"
+        />
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          gap: '16px',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+        }}
+      >
+        <Button
+          hierarchy="primary"
+          destructive
+          size="medium"
+          label="Button CTA"
+          state="disabled"
+        />
+
+        <Button
+          hierarchy="link-color"
+          destructive
+          size="medium"
+          label="Button CTA"
+          state="disabled"
+        />
+      </div>
     </div>
   ),
 };

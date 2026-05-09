@@ -1,0 +1,150 @@
+.storybook-textfield {
+    display: flex;
+    flex-direction: column;
+  
+    width: 280px;
+  }
+  
+  /* Label Wrapper */
+  
+  .storybook-textfield__label-wrapper {
+    display: flex;
+    align-items: center;
+  
+    gap: var(--spacing_1);
+  
+    margin-bottom: var(--spacing_1);
+  }
+  
+  /* Label */
+  
+  .storybook-textfield__label {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+  
+    color: var(--neutral_600);
+  }
+  
+  /* Tooltip */
+  
+  .storybook-textfield__tooltip {
+    color: var(--neutral_600);
+  
+    flex-shrink: 0;
+  }
+  
+  /* Astriks */
+  
+  .storybook-textfield__astriks {
+    font-size: 12px;
+    line-height: 20px;
+  
+    color: var(--error_600);
+  }
+  
+  /* Input */
+  
+  .storybook-textfield__input {
+    width: 100%;
+  
+    padding: 12px 14px;
+  
+    border: 1px solid var(--neutral_200);
+    border-radius: var(--radius_8);
+  
+    background-color: transparent;
+  
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+  
+    color: var(--neutral_300);
+  
+    outline: none;
+  
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease,
+      color 160ms ease,
+      box-shadow 160ms ease;
+  }
+  
+  /* Placeholder */
+  
+  .storybook-textfield__input::placeholder {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+  
+    color: var(--neutral_300);
+  }
+  
+  /* Active */
+  
+  .storybook-textfield--active,
+  .storybook-textfield__input:focus {
+    border-color: var(--neutral_500);
+  
+    color: var(--neutral_500);
+  
+    caret-color: var(--neutral_500);
+  }
+  
+  /* Filled */
+  
+  .storybook-textfield--filled {
+    color: var(--neutral_700);
+  }
+  
+  /* Info */
+  
+  .storybook-textfield__helper {
+    margin-top: 4px;
+  
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+  
+    color: var(--neutral_600);
+  }
+  
+  /* Error */
+  
+  .storybook-textfield--error {
+    border-color: var(--error_600);
+  
+    color: var(--error_600);
+  
+    caret-color: var(--error_600);
+  }
+  
+  .storybook-textfield--error::placeholder {
+    color: var(--error_600);
+  }
+  
+  .storybook-textfield__error {
+    margin-top: 4px;
+  
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+  
+    color: var(--error_600);
+  }
+  
+  /* Disabled */
+  
+  .storybook-textfield--disabled {
+    background-color: var(--neutral_25);
+  
+    border-color: var(--neutral_200);
+  
+    color: var(--neutral_300);
+  
+    cursor: not-allowed;
+  }
+  
+  .storybook-textfield--disabled::placeholder {
+    color: var(--neutral_300);
+  }
