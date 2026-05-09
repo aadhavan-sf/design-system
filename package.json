@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://superfans.github.io/design-system/",
+  "homepage": "https://aadhavan-sf.github.io/design-system/",
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
