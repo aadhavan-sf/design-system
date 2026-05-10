@@ -34,7 +34,7 @@ export default {
 export const Playground = {
   args: {
     as: 'p',
-    variant: 'text-md',
+    variant: 'text-xs',
     weight: 'regular',
     color: 'var(--ds-text-strong, var(--neutral_900))',
     children: 'The quick brown fox jumps over the lazy dog.',
