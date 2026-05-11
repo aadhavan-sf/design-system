@@ -1,5 +1,9 @@
 import { TextField } from './TextField';
 
+/* ========================================
+   DROPDOWN OPTIONS
+======================================== */
+
 const dropdownOptions = [
   'Phoenix Baker',
   'Olivia Rhye',
@@ -10,12 +14,36 @@ const dropdownOptions = [
   'Drew Cano',
 ];
 
+/* ========================================
+   COMMON PROPS
+======================================== */
+
 const commonProps = {
   label: true,
   astriks: true,
   tooltip: true,
+
   labelText: 'Label',
+
+  placeholder: 'Placeholder text',
 };
+
+/* ========================================
+   STATES
+======================================== */
+
+const states = [
+  'default',
+  'active',
+  'filled',
+  'info',
+  'error',
+  'disabled',
+];
+
+/* ========================================
+   STORYBOOK CONFIG
+======================================== */
 
 export default {
   title: 'Design System/Components/Text fields',
@@ -29,13 +57,13 @@ export default {
   tags: ['autodocs'],
 
   argTypes: {
-
     /* =========================
        TYPE
     ========================= */
 
     type: {
       control: 'select',
+
       options: [
         'input',
         'dropdown',
@@ -43,22 +71,16 @@ export default {
     },
 
     /* =========================
-       STATES
+       STATE
     ========================= */
 
     state: {
       control: 'select',
+
       description:
         'Accessibility and interaction states',
 
-      options: [
-        'default',
-        'active',
-        'filled',
-        'info',
-        'error',
-        'disabled',
-      ],
+      options: states,
     },
 
     /* =========================
@@ -87,9 +109,21 @@ export default {
   },
 };
 
-/* =========================================
+/* ========================================
+   SHARED GRID STYLE
+======================================== */
+
+const gridStyles = {
+  display: 'grid',
+
+  gap: '40px',
+
+  alignItems: 'start',
+};
+
+/* ========================================
    PLAYGROUND
-========================================= */
+======================================== */
 
 export const Playground = {
   args: {
@@ -97,75 +131,50 @@ export const Playground = {
     state: 'default',
 
     ...commonProps,
-
-    placeholder: 'Placeholder text',
   },
 };
 
-/* =========================================
+/* ========================================
    INPUT FIELD STATES
-========================================= */
-
-const inputStates = [
-  'default',
-  'active',
-  'filled',
-  'info',
-  'error',
-  'disabled',
-];
+======================================== */
 
 export const InputFieldStates = {
   render: () => (
     <div
       style={{
-        display: 'grid',
-        gridTemplateColumns:
-          'repeat(3, minmax(280px, 1fr))',
+        ...gridStyles,
 
-        gap: '40px',
+        gridTemplateColumns:
+          'repeat(3, 296px)',
       }}
     >
-
-      {inputStates.map((state) => (
+      {states.map((state) => (
         <TextField
           key={state}
-          state={state}
           type="input"
+          state={state}
           {...commonProps}
         />
       ))}
-
     </div>
   ),
 };
 
-/* =========================================
+/* ========================================
    DROPDOWN FIELD STATES
-========================================= */
-
-const dropdownStates = [
-  'default',
-  'active',
-  'filled',
-  'info',
-  'error',
-  'disabled',
-];
+======================================== */
 
 export const DropdownFieldStates = {
   render: () => (
     <div
       style={{
-        display: 'grid',
-        gridTemplateColumns:
-          'repeat(2, minmax(320px, 1fr))',
+        ...gridStyles,
 
-        gap: '40px',
+        gridTemplateColumns:
+          'repeat(2, 296px)',
       }}
     >
-
-      {dropdownStates.map((state) => (
+      {states.map((state) => (
         <TextField
           key={state}
           type="dropdown"
@@ -174,18 +183,18 @@ export const DropdownFieldStates = {
           {...commonProps}
         />
       ))}
-
     </div>
   ),
 };
 
-/* =========================================
+/* ========================================
    DROPDOWN WITH ICONS
-========================================= */
+======================================== */
 
 export const DropdownWithIcons = {
   args: {
     type: 'dropdown',
+
     state: 'default',
 
     withIcon: true,
@@ -196,13 +205,14 @@ export const DropdownWithIcons = {
   },
 };
 
-/* =========================================
-   SINGLE STORIES
-========================================= */
+/* ========================================
+   DROPDOWN ERROR
+======================================== */
 
 export const DropdownError = {
   args: {
     type: 'dropdown',
+
     state: 'error',
 
     options: dropdownOptions,
@@ -211,9 +221,14 @@ export const DropdownError = {
   },
 };
 
+/* ========================================
+   DROPDOWN DISABLED
+======================================== */
+
 export const DropdownDisabled = {
   args: {
     type: 'dropdown',
+
     state: 'disabled',
 
     options: dropdownOptions,

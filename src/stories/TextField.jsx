@@ -11,33 +11,69 @@ import {
 import './textfield.css';
 
 export const TextField = ({
+  /* ========================================
+     TYPE
+  ======================================== */
+
   type = 'input',
+
+  /* ========================================
+     STATE
+  ======================================== */
+
   state = 'default',
+
+  /* ========================================
+     LABEL
+  ======================================== */
 
   label = true,
   tooltip = false,
   astriks = false,
 
   labelText = 'Label',
+
+  /* ========================================
+     CONTENT
+  ======================================== */
+
   placeholder = 'Placeholder text',
 
   helperText = 'Info text comes here',
+
   errorText = 'Error text comes here',
+
+  /* ========================================
+     DROPDOWN
+  ======================================== */
 
   options = [],
   withIcon = false,
+
+  /* ========================================
+     ACCESSIBILITY
+  ======================================== */
 
   disabled = false,
 
   ...props
 }) => {
-  const [inputValue, setInputValue] = useState('');
-  const [selectedOption, setSelectedOption] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
+  /* ========================================
+     LOCAL STATE
+  ======================================== */
 
-  /* =========================
-     STATES
-  ========================= */
+  const [inputValue, setInputValue] =
+    useState('');
+
+  const [selectedOption, setSelectedOption] =
+    useState('');
+
+  const [isOpen, setIsOpen] =
+    useState(false);
+
+  /* ========================================
+     DERIVED STATES
+  ======================================== */
 
   const isDisabled =
     disabled || state === 'disabled';
@@ -49,60 +85,107 @@ export const TextField = ({
     state === 'active';
 
   const isFilled =
+    state === 'filled' ||
     inputValue.length > 0 ||
-    selectedOption.length > 0 ||
-    state === 'filled';
+    selectedOption.length > 0;
 
-  /* =========================
-     CLASS HELPERS
-  ========================= */
+  /* ========================================
+     CLASSNAME HELPERS
+  ======================================== */
 
-  const inputClasses = [
-    'storybook-textfield__input',
+  const getInputClasses = () =>
+    [
+      'storybook-textfield__input',
 
-    isActive &&
-      'storybook-textfield__input--active',
+      isActive &&
+        'storybook-textfield__input--active',
 
-    isFilled &&
-      'storybook-textfield__input--filled',
+      isFilled &&
+        'storybook-textfield__input--filled',
 
-    isError &&
-      'storybook-textfield__input--error',
+      isError &&
+        'storybook-textfield__input--error',
 
-    isDisabled &&
-      'storybook-textfield__input--disabled',
-  ]
-    .filter(Boolean)
-    .join(' ');
+      isDisabled &&
+        'storybook-textfield__input--disabled',
+    ]
+      .filter(Boolean)
+      .join(' ');
 
-  const dropdownClasses = [
-    'storybook-textfield__dropdown',
+  const getDropdownClasses = () =>
+    [
+      'storybook-textfield__dropdown',
 
-    isActive &&
-      'storybook-textfield__dropdown--active',
+      isActive &&
+        'storybook-textfield__dropdown--active',
 
-    isFilled &&
-      'storybook-textfield__dropdown--filled',
+      isFilled &&
+        'storybook-textfield__dropdown--filled',
 
-    isError &&
-      'storybook-textfield__dropdown--error',
+      isError &&
+        'storybook-textfield__dropdown--error',
 
-    isDisabled &&
-      'storybook-textfield__dropdown--disabled',
-  ]
-    .filter(Boolean)
-    .join(' ');
+      isDisabled &&
+        'storybook-textfield__dropdown--disabled',
+    ]
+      .filter(Boolean)
+      .join(' ');
 
-  /* =========================
+  const getDropdownTextClasses = () =>
+    [
+      'storybook-textfield__dropdown-text',
+
+      isFilled &&
+        'storybook-textfield__dropdown-text--filled',
+
+      isError &&
+        'storybook-textfield__dropdown-text--error',
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+  const getDropdownIconClasses = () =>
+    [
+      'storybook-textfield__dropdown-icon',
+
+      isFilled &&
+        'storybook-textfield__dropdown-icon--filled',
+
+      isError &&
+        'storybook-textfield__dropdown-icon--error',
+
+      isDisabled &&
+        'storybook-textfield__dropdown-icon--disabled',
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+  /* ========================================
+     HANDLERS
+  ======================================== */
+
+  const handleDropdownToggle = () => {
+    if (isDisabled) return;
+
+    setIsOpen((prev) => !prev);
+  };
+
+  const handleOptionSelect = (option) => {
+    setSelectedOption(option);
+
+    setIsOpen(false);
+  };
+
+  /* ========================================
      RENDER
-  ========================= */
+  ======================================== */
 
   return (
     <div className="storybook-textfield">
 
-      {/* =========================
+      {/* ========================================
           LABEL
-      ========================= */}
+      ======================================== */}
 
       {label && (
         <div className="storybook-textfield__header">
@@ -132,9 +215,9 @@ export const TextField = ({
         </div>
       )}
 
-      {/* =========================
+      {/* ========================================
           INPUT FIELD
-      ========================= */}
+      ======================================== */}
 
       {type === 'input' && (
         <input
@@ -143,19 +226,19 @@ export const TextField = ({
           value={inputValue}
           disabled={isDisabled}
           placeholder={placeholder}
-          onChange={(e) =>
-            setInputValue(e.target.value)
-          }
-          className={inputClasses}
+          className={getInputClasses()}
           aria-invalid={isError}
           aria-disabled={isDisabled}
+          onChange={(event) =>
+            setInputValue(event.target.value)
+          }
           {...props}
         />
       )}
 
-      {/* =========================
-          DROPDOWN
-      ========================= */}
+      {/* ========================================
+          DROPDOWN FIELD
+      ======================================== */}
 
       {type === 'dropdown' && (
         <div className="storybook-textfield__dropdown-wrapper">
@@ -163,60 +246,41 @@ export const TextField = ({
           <button
             type="button"
             disabled={isDisabled}
-            className={dropdownClasses}
-            onClick={() =>
-              setIsOpen(!isOpen)
-            }
+            className={getDropdownClasses()}
             aria-expanded={isOpen}
+            aria-disabled={isDisabled}
+            onClick={handleDropdownToggle}
           >
 
             <div className="storybook-textfield__dropdown-value">
 
               {withIcon && selectedOption && (
-                <User
-                  size={20}
-                  weight="regular"
-                />
+                <span className="storybook-textfield__dropdown-user-icon">
+                  <User
+                    size={16}
+                    weight="regular"
+                  />
+                </span>
               )}
 
-              <span
-                className={[
-                  'storybook-textfield__dropdown-text',
-
-                  isFilled &&
-                    'storybook-textfield__dropdown-text--filled',
-
-                  isError &&
-                    'storybook-textfield__dropdown-text--error',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-              >
+              <span className={getDropdownTextClasses()}>
                 {selectedOption || placeholder}
               </span>
 
             </div>
 
-            <span className="storybook-textfield__dropdown-icon">
-                <CaretUpDown
-                    size={20}
-                    weight="regular"
-                    className={[
-                        'storybook-textfield__dropdown-icon',
-
-                        isError &&
-                        'storybook-textfield__dropdown-icon--error',
-                    ]
-                        .filter(Boolean)
-                        .join(' ')}
-                />
+            <span className={getDropdownIconClasses()}>
+              <CaretUpDown
+                size={20}
+                weight="regular"
+              />
             </span>
 
           </button>
 
-          {/* =========================
+          {/* ========================================
               DROPDOWN MENU
-          ========================= */}
+          ======================================== */}
 
           {isOpen && !isDisabled && (
             <div className="storybook-textfield__menu">
@@ -238,10 +302,9 @@ export const TextField = ({
                     ]
                       .filter(Boolean)
                       .join(' ')}
-                    onClick={() => {
-                      setSelectedOption(option);
-                      setIsOpen(false);
-                    }}
+                    onClick={() =>
+                      handleOptionSelect(option)
+                    }
                   >
 
                     <div className="storybook-textfield__menu-item-left">
@@ -249,20 +312,22 @@ export const TextField = ({
                       {withIcon && (
                         <span className="storybook-textfield__menu-item-icon">
                           <User
-                            size={20}
+                            size={16}
                             weight="regular"
                           />
                         </span>
                       )}
 
-                      <span>{option}</span>
+                      <span className="storybook-textfield__menu-item-text">
+                        {option}
+                      </span>
 
                     </div>
 
                     {isSelected && (
                       <span className="storybook-textfield__menu-check">
                         <Check
-                          size={20}
+                          size={16}
                           weight="regular"
                         />
                       </span>
@@ -278,9 +343,9 @@ export const TextField = ({
         </div>
       )}
 
-      {/* =========================
+      {/* ========================================
           HELPER TEXT
-      ========================= */}
+      ======================================== */}
 
       {state === 'info' && (
         <span className="storybook-textfield__helper">
@@ -288,9 +353,9 @@ export const TextField = ({
         </span>
       )}
 
-      {/* =========================
+      {/* ========================================
           ERROR TEXT
-      ========================= */}
+      ======================================== */}
 
       {isError && (
         <span className="storybook-textfield__helper storybook-textfield__helper--error">
@@ -303,10 +368,18 @@ export const TextField = ({
 };
 
 TextField.propTypes = {
+  /* ========================================
+     TYPE
+  ======================================== */
+
   type: PropTypes.oneOf([
     'input',
     'dropdown',
   ]),
+
+  /* ========================================
+     STATE
+  ======================================== */
 
   state: PropTypes.oneOf([
     'default',
@@ -317,18 +390,41 @@ TextField.propTypes = {
     'disabled',
   ]),
 
+  /* ========================================
+     LABEL
+  ======================================== */
+
   label: PropTypes.bool,
+
   tooltip: PropTypes.bool,
+
   astriks: PropTypes.bool,
 
   labelText: PropTypes.string,
+
+  /* ========================================
+     CONTENT
+  ======================================== */
+
   placeholder: PropTypes.string,
 
   helperText: PropTypes.string,
+
   errorText: PropTypes.string,
 
-  options: PropTypes.array,
+  /* ========================================
+     DROPDOWN
+  ======================================== */
+
+  options: PropTypes.arrayOf(
+    PropTypes.string
+  ),
+
   withIcon: PropTypes.bool,
+
+  /* ========================================
+     ACCESSIBILITY
+  ======================================== */
 
   disabled: PropTypes.bool,
 };
