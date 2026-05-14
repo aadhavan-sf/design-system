@@ -1,4 +1,4 @@
-import { SpacingScale } from '../components/SpacingScale/SpacingScale';
+import { SpacingScale } from './SpacingScale';
 
 export default {
   title: 'Design System/Styling/Spacing',

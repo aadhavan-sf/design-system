@@ -1,4 +1,4 @@
-import { ColorPalette } from '../components/ColorPalette/ColorPalette';
+import { ColorPalette } from './ColorPalette';
 
 export default {
   title: 'Design System/Styling/Colors',

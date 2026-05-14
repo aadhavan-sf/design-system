@@ -1,4 +1,4 @@
-import { Text } from '../components/Typography/Text';
+import { Text } from './Typography';
 
 export default {
   title: 'Design System/Styling/Typography',

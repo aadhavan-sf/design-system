@@ -1,4 +1,4 @@
-import { ShadowScale } from '../components/ShadowScale/ShadowScale';
+import { ShadowScale } from './ShadowScale';
 
 export default {
   title: 'Design System/Styling/Shadows',
