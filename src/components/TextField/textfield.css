@@ -3,6 +3,8 @@
 
   display: flex;
   flex-direction: column;
+
+  overflow: visible;
 }
 
 /* ========================================
@@ -17,7 +19,7 @@
   padding: 12px 14px;
 
   border: 1px solid var(--neutral_200);
-  border-radius: var(--radius_8);
+  border-radius: 8px;
 
   background: transparent;
 
@@ -54,18 +56,11 @@
   color: var(--neutral_600);
 }
 
-.storybook-textfield__tooltip,
-.storybook-textfield__dropdown-icon,
-.storybook-textfield__menu-item-icon,
-.storybook-textfield__menu-check {
+.storybook-textfield__tooltip {
   display: flex;
   align-items: center;
   justify-content: center;
 
-  flex-shrink: 0;
-}
-
-.storybook-textfield__tooltip {
   width: 16px;
   height: 16px;
 
@@ -159,13 +154,15 @@
 }
 
 /* ========================================
-   DROPDOWN FIELD
+   DROPDOWN
 ======================================== */
 
 .storybook-textfield__dropdown-wrapper {
   position: relative;
 
   width: 100%;
+
+  overflow: visible;
 }
 
 .storybook-textfield__dropdown {
@@ -176,7 +173,7 @@
   cursor: pointer;
 }
 
-/* ----- DROPDOWN STATES ----- */
+/* ----- STATES ----- */
 
 .storybook-textfield__dropdown--active {
   border-color: var(--neutral_500);
@@ -237,9 +234,15 @@
    DROPDOWN ICONS
 ======================================== */
 
-.storybook-textfield__dropdown-user-icon,
-.storybook-textfield__dropdown-icon {
+.storybook-textfield__dropdown-icon,
+.storybook-textfield__dropdown-user-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   color: var(--neutral_600);
+
+  flex-shrink: 0;
 
   transition: color 160ms ease;
 }
@@ -287,13 +290,13 @@
   overflow-y: auto;
   overflow-x: hidden;
 
-  border-radius: var(--radius_8);
+  border-radius: 8px;
 
   background: var(--neutral_00);
 
   box-shadow: var(--shadow_sm);
 
-  z-index: 20;
+  z-index: 9999;
 }
 
 /* ========================================
@@ -348,8 +351,6 @@
 /* ----- SELECTED ----- */
 
 .storybook-textfield__menu-item--selected {
-  background: transparent;
-
   color: var(--neutral_900);
 }
 
@@ -377,6 +378,10 @@
 ======================================== */
 
 .storybook-textfield__menu-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   width: 16px;
   height: 16px;
 
@@ -419,6 +424,10 @@
 ======================================== */
 
 .storybook-textfield__menu-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   width: 16px;
   height: 16px;
 
