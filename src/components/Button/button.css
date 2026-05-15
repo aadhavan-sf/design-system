@@ -34,7 +34,7 @@
 .storybook-button--primary {
   background-color: var(--brand_400);
   border-color: var(--brand_400);
-  color: var(--neutral_00);
+  color: white;
 }
 
 .storybook-button--primary:hover:not(:disabled) {
@@ -55,7 +55,7 @@
 .storybook-button--primary:disabled {
   background-color: var(--brand_200);
   border-color: var(--brand_200);
-  color: var(--neutral_00);
+  color: white;
 }
 
 .storybook-button--secondary {
@@ -140,7 +140,7 @@
 .storybook-button--primary.storybook-button--destructive {
   background-color: var(--error_600);
   border-color: var(--error_600);
-  color: var(--neutral_00);
+  color: white;
 }
 
 .storybook-button--primary.storybook-button--destructive:hover:not(:disabled) {
@@ -159,7 +159,7 @@
 .storybook-button--primary.storybook-button--destructive:disabled {
   background-color: var(--error_300);
   border-color: var(--error_300);
-  color: var(--neutral_00);
+  color: white;
 }
 
 /* Link Destructive */

@@ -1,66 +1,44 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+
+import {
+  useState,
+  useRef,
+  useEffect,
+} from 'react';
 
 import {
   InfoIcon,
   CaretUpDown,
-  Check,
   User,
+  Check,
 } from '@phosphor-icons/react';
+
+import { HexColorPicker } from 'react-colorful';
 
 import './textfield.css';
 
 export const TextField = ({
-  /* ========================================
-     TYPE
-  ======================================== */
-
   type = 'input',
-
-  /* ========================================
-     STATE
-  ======================================== */
-
   state = 'default',
 
-  /* ========================================
-     LABEL
-  ======================================== */
-
   label = true,
-  tooltip = false,
-  astriks = false,
+  tooltip = true,
+  astriks = true,
 
   labelText = 'Label',
-
-  /* ========================================
-     CONTENT
-  ======================================== */
 
   placeholder = 'Placeholder text',
 
   helperText = 'Info text comes here',
-
   errorText = 'Error text comes here',
 
-  /* ========================================
-     DROPDOWN
-  ======================================== */
-
   options = [],
+
   withIcon = false,
-
-  /* ========================================
-     ACCESSIBILITY
-  ======================================== */
-
-  disabled = false,
-
-  ...props
 }) => {
-  /* ========================================
-     LOCAL STATE
-  ======================================== */
+  /* =====================================
+     FIELD STATES
+  ===================================== */
 
   const [inputValue, setInputValue] =
     useState('');
@@ -69,14 +47,27 @@ export const TextField = ({
     useState('');
 
   const [isOpen, setIsOpen] =
-    useState(false);
+    useState(state === 'active');
 
-  /* ========================================
-     DERIVED STATES
-  ======================================== */
+  /* =====================================
+     COLOR PICKER STATES
+  ===================================== */
+
+  const [color, setColor] =
+    useState('#131313');
+
+  const [opacity, setOpacity] =
+    useState(100);
+
+  const colorPickerRef =
+    useRef(null);
+
+  /* =====================================
+     INTERACTION STATES
+  ===================================== */
 
   const isDisabled =
-    disabled || state === 'disabled';
+    state === 'disabled';
 
   const isError =
     state === 'error';
@@ -84,116 +75,144 @@ export const TextField = ({
   const isActive =
     state === 'active';
 
+  const isColorPicker =
+    type === 'color-picker';
+
   const isFilled =
     state === 'filled' ||
+    state === 'error' ||
+    state === 'disabled' ||
+    state === 'info' ||
     inputValue.length > 0 ||
     selectedOption.length > 0;
 
-  /* ========================================
-     CLASSNAME HELPERS
-  ======================================== */
+  /* =====================================
+     CLOSE ON OUTSIDE CLICK
+  ===================================== */
 
-  const getInputClasses = () =>
-    [
-      'storybook-textfield__input',
+  useEffect(() => {
+    const handleClickOutside = (
+      event
+    ) => {
+      if (
+        colorPickerRef.current &&
+        !colorPickerRef.current.contains(
+          event.target
+        )
+      ) {
+        setIsOpen(false);
+      }
+    };
 
-      isActive &&
-        'storybook-textfield__input--active',
+    document.addEventListener(
+      'mousedown',
+      handleClickOutside
+    );
 
-      isFilled &&
-        'storybook-textfield__input--filled',
+    return () => {
+      document.removeEventListener(
+        'mousedown',
+        handleClickOutside
+      );
+    };
+  }, []);
 
-      isError &&
-        'storybook-textfield__input--error',
+  /* =====================================
+     HEX WITH OPACITY
+  ===================================== */
 
-      isDisabled &&
-        'storybook-textfield__input--disabled',
-    ]
-      .filter(Boolean)
-      .join(' ');
+  const alphaHex = Math.round(
+    (opacity / 100) * 255
+  )
+    .toString(16)
+    .padStart(2, '0')
+    .toUpperCase();
 
-  const getDropdownClasses = () =>
-    [
-      'storybook-textfield__dropdown',
+  const finalHex =
+    opacity === 100
+      ? color.toUpperCase()
+      : `${color.toUpperCase()}${alphaHex}`;
 
-      isActive &&
-        'storybook-textfield__dropdown--active',
+  /* =====================================
+     LIGHT COLOR DETECTION
+  ===================================== */
 
-      isFilled &&
-        'storybook-textfield__dropdown--filled',
+  const hexToRgb = (hex) => {
+    const cleanHex = hex
+      .replace('#', '')
+      .slice(0, 6);
 
-      isError &&
-        'storybook-textfield__dropdown--error',
+    const bigint = parseInt(
+      cleanHex,
+      16
+    );
 
-      isDisabled &&
-        'storybook-textfield__dropdown--disabled',
-    ]
-      .filter(Boolean)
-      .join(' ');
-
-  const getDropdownTextClasses = () =>
-    [
-      'storybook-textfield__dropdown-text',
-
-      isFilled &&
-        'storybook-textfield__dropdown-text--filled',
-
-      isError &&
-        'storybook-textfield__dropdown-text--error',
-    ]
-      .filter(Boolean)
-      .join(' ');
-
-  const getDropdownIconClasses = () =>
-    [
-      'storybook-textfield__dropdown-icon',
-
-      isFilled &&
-        'storybook-textfield__dropdown-icon--filled',
-
-      isError &&
-        'storybook-textfield__dropdown-icon--error',
-
-      isDisabled &&
-        'storybook-textfield__dropdown-icon--disabled',
-    ]
-      .filter(Boolean)
-      .join(' ');
-
-  /* ========================================
-     HANDLERS
-  ======================================== */
-
-  const handleDropdownToggle = () => {
-    if (isDisabled) return;
-
-    setIsOpen((prev) => !prev);
+    return {
+      r: (bigint >> 16) & 255,
+      g: (bigint >> 8) & 255,
+      b: bigint & 255,
+    };
   };
 
-  const handleOptionSelect = (option) => {
-    setSelectedOption(option);
+  const { r, g, b } =
+    hexToRgb(color);
 
-    setIsOpen(false);
-  };
+  const isLightColor =
+    r > 220 &&
+    g > 220 &&
+    b > 220;
 
-  /* ========================================
-     RENDER
-  ======================================== */
+  /* =====================================
+     CLASSNAMES
+  ===================================== */
+
+  const inputClasses = [
+    'storybook-textfield__input',
+
+    isActive &&
+      'storybook-textfield__input--active',
+
+    isFilled &&
+      'storybook-textfield__input--filled',
+
+    isError &&
+      'storybook-textfield__input--error',
+
+    isDisabled &&
+      'storybook-textfield__input--disabled',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const dropdownClasses = [
+    'storybook-textfield__dropdown',
+
+    isActive &&
+      'storybook-textfield__dropdown--active',
+
+    isFilled &&
+      'storybook-textfield__dropdown--filled',
+
+    isError &&
+      'storybook-textfield__dropdown--error',
+
+    isDisabled &&
+      'storybook-textfield__dropdown--disabled',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div className="storybook-textfield">
 
-      {/* ========================================
+      {/* =====================================
           LABEL
-      ======================================== */}
+      ===================================== */}
 
       {label && (
         <div className="storybook-textfield__header">
 
-          <label
-            htmlFor="textfield"
-            className="storybook-textfield__label"
-          >
+          <label className="storybook-textfield__label">
             {labelText}
           </label>
 
@@ -215,30 +234,28 @@ export const TextField = ({
         </div>
       )}
 
-      {/* ========================================
+      {/* =====================================
           INPUT FIELD
-      ======================================== */}
+      ===================================== */}
 
       {type === 'input' && (
         <input
-          id="textfield"
           type="text"
           value={inputValue}
           disabled={isDisabled}
           placeholder={placeholder}
-          className={getInputClasses()}
-          aria-invalid={isError}
-          aria-disabled={isDisabled}
-          onChange={(event) =>
-            setInputValue(event.target.value)
+          onChange={(e) =>
+            setInputValue(
+              e.target.value
+            )
           }
-          {...props}
+          className={inputClasses}
         />
       )}
 
-      {/* ========================================
-          DROPDOWN FIELD
-      ======================================== */}
+      {/* =====================================
+          DROPDOWN
+      ===================================== */}
 
       {type === 'dropdown' && (
         <div className="storybook-textfield__dropdown-wrapper">
@@ -246,106 +263,261 @@ export const TextField = ({
           <button
             type="button"
             disabled={isDisabled}
-            className={getDropdownClasses()}
-            aria-expanded={isOpen}
-            aria-disabled={isDisabled}
-            onClick={handleDropdownToggle}
+            className={dropdownClasses}
+            onClick={() =>
+              setIsOpen(!isOpen)
+            }
           >
 
             <div className="storybook-textfield__dropdown-value">
 
-              {withIcon && selectedOption && (
-                <span className="storybook-textfield__dropdown-user-icon">
+              {withIcon &&
+                selectedOption && (
                   <User
                     size={16}
                     weight="regular"
                   />
-                </span>
-              )}
+                )}
 
-              <span className={getDropdownTextClasses()}>
-                {selectedOption || placeholder}
+              <span
+                className={[
+                  'storybook-textfield__dropdown-text',
+
+                  isFilled &&
+                    'storybook-textfield__dropdown-text--filled',
+
+                  isError &&
+                    'storybook-textfield__dropdown-text--error',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+              >
+                {selectedOption ||
+                  placeholder}
               </span>
 
             </div>
 
-            <span className={getDropdownIconClasses()}>
+            <span className="storybook-textfield__dropdown-icon">
+
               <CaretUpDown
-                size={20}
+                size={16}
                 weight="regular"
               />
+
             </span>
 
           </button>
 
-          {/* ========================================
-              DROPDOWN MENU
-          ======================================== */}
+          {isOpen &&
+            !isDisabled && (
+              <div className="storybook-textfield__menu">
 
-          {isOpen && !isDisabled && (
-            <div className="storybook-textfield__menu">
+                {options.map(
+                  (option) => {
+                    const isSelected =
+                      selectedOption ===
+                      option;
 
-              {options.map((option) => {
+                    return (
+                      <button
+                        key={option}
+                        type="button"
+                        className={[
+                          'storybook-textfield__menu-item',
 
-                const isSelected =
-                  selectedOption === option;
+                          isSelected &&
+                            'storybook-textfield__menu-item--selected',
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
+                        onClick={() => {
+                          setSelectedOption(
+                            option
+                          );
 
-                return (
-                  <button
-                    key={option}
-                    type="button"
-                    className={[
-                      'storybook-textfield__menu-item',
+                          setIsOpen(
+                            false
+                          );
+                        }}
+                      >
 
-                      isSelected &&
-                        'storybook-textfield__menu-item--selected',
-                    ]
-                      .filter(Boolean)
-                      .join(' ')}
-                    onClick={() =>
-                      handleOptionSelect(option)
-                    }
-                  >
+                        <div className="storybook-textfield__menu-item-left">
 
-                    <div className="storybook-textfield__menu-item-left">
+                          {withIcon && (
+                            <span className="storybook-textfield__menu-item-icon">
+                              <User
+                                size={16}
+                                weight="regular"
+                              />
+                            </span>
+                          )}
 
-                      {withIcon && (
-                        <span className="storybook-textfield__menu-item-icon">
-                          <User
-                            size={16}
-                            weight="regular"
-                          />
-                        </span>
-                      )}
+                          <span className="storybook-textfield__menu-item-text">
+                            {option}
+                          </span>
 
-                      <span className="storybook-textfield__menu-item-text">
-                        {option}
-                      </span>
+                        </div>
 
-                    </div>
+                        {isSelected && (
+                          <span className="storybook-textfield__menu-check">
+                            <Check
+                              size={16}
+                              weight="regular"
+                            />
+                          </span>
+                        )}
 
-                    {isSelected && (
-                      <span className="storybook-textfield__menu-check">
-                        <Check
-                          size={16}
-                          weight="regular"
-                        />
-                      </span>
-                    )}
+                      </button>
+                    );
+                  }
+                )}
 
-                  </button>
-                );
-              })}
-
-            </div>
-          )}
+              </div>
+            )}
 
         </div>
       )}
 
-      {/* ========================================
+      {/* =====================================
+          COLOR PICKER
+      ===================================== */}
+
+      {isColorPicker && (
+        <div
+          ref={colorPickerRef}
+          className="storybook-textfield__colorpicker-wrapper"
+        >
+
+          <button
+            type="button"
+            className={dropdownClasses}
+            onClick={() =>
+              !isDisabled &&
+              setIsOpen(!isOpen)
+            }
+          >
+
+            <div className="storybook-textfield__dropdown-value">
+
+              {/* SHOW PREVIEW ONLY
+                  FOR NON DEFAULT STATES */}
+
+              {state !== 'default' && (
+                <div
+                  className={[
+                    'storybook-textfield__color-preview',
+
+                    isLightColor &&
+                      'storybook-textfield__color-preview--light',
+
+                    isDisabled &&
+                      'storybook-textfield__color-preview--disabled',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                  style={{
+                    background:
+                      finalHex,
+                  }}
+                />
+              )}
+
+              <span
+                className={[
+                  'storybook-textfield__dropdown-text',
+
+                  state !==
+                    'default' &&
+                    'storybook-textfield__dropdown-text--filled',
+
+                  isError &&
+                    'storybook-textfield__dropdown-text--error',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+              >
+                {state === 'default'
+                  ? 'Click to select'
+                  : finalHex}
+              </span>
+
+            </div>
+
+          </button>
+
+          {isOpen &&
+            !isDisabled && (
+              <div className="storybook-textfield__colorpicker-panel">
+
+                {/* =====================================
+                    HEX FIELD
+                ===================================== */}
+
+                <div className="storybook-textfield__colorpicker-hex">
+
+                  <input
+                    type="text"
+                    value={finalHex}
+                    onChange={(e) =>
+                      setColor(
+                        e.target.value
+                      )
+                    }
+                    placeholder="HEX Code"
+                    className="storybook-textfield__colorpicker-input"
+                  />
+
+                </div>
+
+                {/* =====================================
+                    COLOR PICKER
+                ===================================== */}
+
+                <HexColorPicker
+                  color={color}
+                  onChange={setColor}
+                />
+
+                {/* =====================================
+                    OPACITY
+                ===================================== */}
+
+                <div className="storybook-textfield__opacity-wrapper">
+
+                  <div className="storybook-textfield__opacity-grid" />
+
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={opacity}
+                    onChange={(e) =>
+                      setOpacity(
+                        Number(
+                          e.target
+                            .value
+                        )
+                      )
+                    }
+                    className="storybook-textfield__opacity-slider"
+                    style={{
+                      '--current-color':
+                        color,
+                    }}
+                  />
+
+                </div>
+
+              </div>
+            )}
+
+        </div>
+      )}
+
+      {/* =====================================
           HELPER TEXT
-      ======================================== */}
+      ===================================== */}
 
       {state === 'info' && (
         <span className="storybook-textfield__helper">
@@ -353,9 +525,9 @@ export const TextField = ({
         </span>
       )}
 
-      {/* ========================================
+      {/* =====================================
           ERROR TEXT
-      ======================================== */}
+      ===================================== */}
 
       {isError && (
         <span className="storybook-textfield__helper storybook-textfield__helper--error">
@@ -368,18 +540,11 @@ export const TextField = ({
 };
 
 TextField.propTypes = {
-  /* ========================================
-     TYPE
-  ======================================== */
-
   type: PropTypes.oneOf([
     'input',
     'dropdown',
+    'color-picker',
   ]),
-
-  /* ========================================
-     STATE
-  ======================================== */
 
   state: PropTypes.oneOf([
     'default',
@@ -390,41 +555,25 @@ TextField.propTypes = {
     'disabled',
   ]),
 
-  /* ========================================
-     LABEL
-  ======================================== */
-
   label: PropTypes.bool,
-
   tooltip: PropTypes.bool,
-
   astriks: PropTypes.bool,
 
-  labelText: PropTypes.string,
+  labelText:
+    PropTypes.string,
 
-  /* ========================================
-     CONTENT
-  ======================================== */
+  placeholder:
+    PropTypes.string,
 
-  placeholder: PropTypes.string,
+  helperText:
+    PropTypes.string,
 
-  helperText: PropTypes.string,
+  errorText:
+    PropTypes.string,
 
-  errorText: PropTypes.string,
+  options:
+    PropTypes.array,
 
-  /* ========================================
-     DROPDOWN
-  ======================================== */
-
-  options: PropTypes.arrayOf(
-    PropTypes.string
-  ),
-
-  withIcon: PropTypes.bool,
-
-  /* ========================================
-     ACCESSIBILITY
-  ======================================== */
-
-  disabled: PropTypes.bool,
+  withIcon:
+    PropTypes.bool,
 };

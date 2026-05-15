@@ -41,14 +41,14 @@
   padding: var(--spacing_4);
   border: 1px solid var(--ds-border, var(--neutral_200));
   border-radius: var(--radius_8);
-  background: var(--ds-surface, var(--neutral_00));
+  background: var(--ds-surface, white);
 }
 
 .ds-shadow-card__preview {
   min-height: 112px;
   border: 1px solid var(--ds-border, var(--neutral_200));
   border-radius: var(--radius_8);
-  background: var(--neutral_00);
+  background: white;
 }
 
 .ds-shadow-card__meta {

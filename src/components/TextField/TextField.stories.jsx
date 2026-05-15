@@ -35,9 +35,11 @@ export default {
 
     type: {
       control: 'select',
+
       options: [
         'input',
         'dropdown',
+        'color-picker',
       ],
     },
 
@@ -187,6 +189,44 @@ export const DropdownFieldStates = {
 };
 
 /* =========================================
+   COLOR PICKER STATES
+========================================= */
+
+const colorPickerStates = [
+  'default',
+  'active',
+  'filled',
+  'info',
+  'error',
+  'disabled',
+];
+
+export const ColorPickerStates = {
+  render: () => (
+    <div
+      style={{
+        display: 'grid',
+
+        gridTemplateColumns:
+          'repeat(2, 296px)',
+
+        gap: '40px',
+        alignItems: 'start',
+      }}
+    >
+      {colorPickerStates.map((state) => (
+        <TextField
+          key={state}
+          type="color-picker"
+          state={state}
+          {...commonProps}
+        />
+      ))}
+    </div>
+  ),
+};
+
+/* =========================================
    DROPDOWN WITH ICONS
 ========================================= */
 
@@ -245,6 +285,22 @@ export const DropdownDisabled = {
     state: 'disabled',
 
     options: dropdownOptions,
+
+    ...commonProps,
+  },
+};
+
+export const ColorPicker = {
+  render: (args) => (
+    <TextField
+      key={`${args.type}-${args.state}`}
+      {...args}
+    />
+  ),
+
+  args: {
+    type: 'color-picker',
+    state: 'default',
 
     ...commonProps,
   },

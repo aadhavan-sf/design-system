@@ -57,7 +57,7 @@ export function ColorPalette({ showHex = true }) {
           <div className="ds-section__title">Special Colors</div>
         </div>
         <div className="ds-section__grid">
-          <SpecialSwatch name="off-white" cssVar="--off-white" hex={colorHex.special.offWhite} showHex={showHex} />
+          <SpecialSwatch name="off-white" cssVar="--off-white" hex={colorHex.special.offwhite} showHex={showHex} />
           <SpecialSwatch name="lightening" cssVar="--lightening" hex={colorHex.special.lightening} showHex={showHex} />
           <SpecialSwatch name="midnight-black" cssVar="--midnight-black" hex={colorHex.special.midnightBlack} showHex={showHex} />
         </div>

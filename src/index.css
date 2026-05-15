@@ -13,7 +13,7 @@
   --accent-bg: rgba(170, 59, 255, 0.1);
   --accent-border: rgba(170, 59, 255, 0.5);
   --social-bg: rgba(244, 243, 236, 0.5);
-  --ds-surface: var(--neutral_00);
+  --ds-surface: white;
   --ds-surface-subtle: var(--neutral_25);
   --ds-border: var(--neutral_200);
   --ds-text-strong: var(--neutral_900);
@@ -85,7 +85,7 @@ body {
   --bg: #fff;
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
-  --ds-surface: var(--neutral_00);
+  --ds-surface: white;
   --ds-surface-subtle: var(--neutral_25);
   --ds-border: var(--neutral_200);
   --ds-text-strong: var(--neutral_900);

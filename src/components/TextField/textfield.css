@@ -3,23 +3,22 @@
 
   display: flex;
   flex-direction: column;
-
-  overflow: visible;
 }
 
 /* ========================================
-   COMMON FIELD STYLES
+   COMMON FIELD
 ======================================== */
 
 .storybook-textfield__input,
-.storybook-textfield__dropdown {
+.storybook-textfield__dropdown,
+.storybook-textfield__colorpicker-input {
   width: 100%;
   height: 48px;
 
   padding: 12px 14px;
 
   border: 1px solid var(--neutral_200);
-  border-radius: 8px;
+  border-radius: var(--radius_8);
 
   background: transparent;
 
@@ -29,10 +28,6 @@
     border-color 160ms ease,
     background-color 160ms ease,
     color 160ms ease;
-}
-
-.storybook-textfield__input:focus {
-  outline: none;
 }
 
 /* ========================================
@@ -65,6 +60,8 @@
   height: 16px;
 
   color: var(--neutral_600);
+
+  flex-shrink: 0;
 }
 
 .storybook-textfield__required {
@@ -84,42 +81,36 @@
   line-height: 20px;
   font-weight: 400;
 
-  color: var(--neutral_300);
+  color: var(--neutral_700);
 }
 
 .storybook-textfield__input::placeholder {
   color: var(--neutral_300);
 }
 
-/* ----- ACTIVE ----- */
+.storybook-textfield__input:focus {
+  outline: none;
+}
 
 .storybook-textfield__input--active {
   border-color: var(--neutral_500);
 
-  color: var(--neutral_500);
   caret-color: var(--neutral_500);
 }
-
-/* ----- FILLED ----- */
 
 .storybook-textfield__input--filled {
   color: var(--neutral_700);
 }
 
-/* ----- ERROR ----- */
-
 .storybook-textfield__input--error {
   border-color: var(--error_600);
 
   color: var(--error_600);
-  caret-color: var(--error_600);
 }
 
 .storybook-textfield__input--error::placeholder {
   color: var(--error_600);
 }
-
-/* ----- DISABLED ----- */
 
 .storybook-textfield__input--disabled {
   background: var(--neutral_25);
@@ -131,12 +122,199 @@
   cursor: not-allowed;
 }
 
-.storybook-textfield__input--disabled::placeholder {
+/* ========================================
+   DROPDOWN
+======================================== */
+
+.storybook-textfield__dropdown-wrapper {
+  position: relative;
+
+  width: 100%;
+}
+
+.storybook-textfield__dropdown {
+  appearance: none;
+  -webkit-appearance: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  cursor: pointer;
+}
+
+.storybook-textfield__dropdown--active {
+  border-color: var(--neutral_500);
+}
+
+.storybook-textfield__dropdown--error {
+  border-color: var(--error_600);
+}
+
+.storybook-textfield__dropdown--disabled {
+  background: var(--neutral_25);
+
+  border-color: var(--neutral_200);
+
+  cursor: not-allowed;
+
+  opacity: 1;
+}
+
+.storybook-textfield__dropdown-value {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  flex: 1;
+
+  min-width: 0;
+}
+
+.storybook-textfield__dropdown-text {
+  flex: 1;
+
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+
+  text-align: left;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   color: var(--neutral_300);
 }
 
+.storybook-textfield__dropdown-text--filled {
+  color: var(--neutral_700);
+}
+
+.storybook-textfield__dropdown--disabled
+.storybook-textfield__dropdown-text--filled {
+  color: var(--neutral_300);
+}
+
+.storybook-textfield__dropdown-text--error {
+  color: var(--error_600);
+}
+
+.storybook-textfield__dropdown-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 16px;
+  height: 16px;
+
+  flex-shrink: 0;
+
+  color: var(--neutral_600);
+}
+
+.storybook-textfield__dropdown--filled
+.storybook-textfield__dropdown-icon {
+  color: var(--neutral_700);
+}
+
+.storybook-textfield__dropdown--error
+.storybook-textfield__dropdown-icon {
+  color: var(--error_600);
+}
+
+.storybook-textfield__dropdown--disabled
+.storybook-textfield__dropdown-icon {
+  color: var(--neutral_200);
+}
+
 /* ========================================
-   HELPER TEXT
+   DROPDOWN MENU
+======================================== */
+
+.storybook-textfield__menu {
+  position: absolute;
+
+  top: calc(100% + 8px);
+  left: 0;
+
+  width: 100%;
+  max-height: 320px;
+
+  overflow-y: auto;
+
+  border-radius: var(--radius_8);
+
+  background: var(--neutral_0);
+
+  box-shadow: var(--shadow_sm);
+
+  z-index: 100;
+}
+
+.storybook-textfield__menu-item {
+  width: 100%;
+
+  padding: 12px 16px;
+
+  border: none;
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  cursor: pointer;
+
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.storybook-textfield__menu-item:hover {
+  background: var(--neutral_50);
+}
+
+.storybook-textfield__menu-item--selected {
+  background: var(--neutral_100);
+}
+
+.storybook-textfield__menu-item-left {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+.storybook-textfield__menu-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--neutral_600);
+}
+
+.storybook-textfield__menu-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--brand_400);
+}
+
+.storybook-textfield__menu-item-text {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+
+  color: var(--neutral_700);
+}
+
+/* ========================================
+   HELPER
 ======================================== */
 
 .storybook-textfield__helper {
@@ -154,282 +332,295 @@
 }
 
 /* ========================================
-   DROPDOWN
+   COLOR PICKER
 ======================================== */
 
-.storybook-textfield__dropdown-wrapper {
+.storybook-textfield__colorpicker-wrapper {
   position: relative;
 
   width: 100%;
-
-  overflow: visible;
-}
-
-.storybook-textfield__dropdown {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  cursor: pointer;
-}
-
-/* ----- STATES ----- */
-
-.storybook-textfield__dropdown--active {
-  border-color: var(--neutral_500);
-}
-
-.storybook-textfield__dropdown--error {
-  border-color: var(--error_600);
-}
-
-.storybook-textfield__dropdown--disabled {
-  background: var(--neutral_25);
-
-  border-color: var(--neutral_200);
-
-  cursor: not-allowed;
 }
 
 /* ========================================
-   DROPDOWN VALUE
+   COLOR PREVIEW
 ======================================== */
 
-.storybook-textfield__dropdown-value {
-  display: flex;
-  align-items: center;
+.storybook-textfield__color-preview {
+  width: 20px;
+  height: 20px;
 
-  gap: 8px;
+  min-width: 20px;
+  min-height: 20px;
 
-  flex: 1;
+  border-radius: 6px;
 
-  min-width: 0;
+  background: var(--neutral_0);
+
+  flex-shrink: 0;
+
+  overflow: hidden;
 }
 
-.storybook-textfield__dropdown-text {
+/* show border only for light colors */
+
+.storybook-textfield__color-preview--light {
+  border: 1px solid var(--neutral_100);
+}
+
+/* disabled state */
+
+.storybook-textfield__color-preview--disabled {
+  opacity: 1;
+
+  filter: none;
+}
+
+/* ========================================
+   COLOR PICKER PANEL
+======================================== */
+
+.storybook-textfield__colorpicker-panel {
+  width: 296px;
+
+  margin-top: 12px;
+  padding: 16px;
+
+  border: 1px solid var(--neutral_100);
+
+  border-radius: var(--radius_8);
+
+  background: var(--neutral_0);
+
+  box-shadow: var(--shadow_lg);
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+}
+
+/* ========================================
+   REACT COLORFUL
+======================================== */
+
+.react-colorful {
+  width: 100% !important;
+
+  gap: 16px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========================================
+   SATURATION
+======================================== */
+
+.react-colorful__saturation {
+  position: relative;
+
+  width: 100% !important;
+  height: 264px !important;
+
+  border-radius: 6px !important;
+
+  overflow: hidden;
+
+  margin: 0 !important;
+
+  cursor: crosshair;
+}
+
+.react-colorful__saturation-pointer {
+  width: 20px !important;
+  height: 20px !important;
+
+  transform: translate(-10px, -10px) !important;
+}
+
+/* ========================================
+   POINTER
+======================================== */
+
+.react-colorful__pointer {
+  width: 20px !important;
+  height: 20px !important;
+
+  border-radius: 999px !important;
+
+  background: transparent !important;
+
+  border: 4px solid var(--neutral_0) !important;
+
+  box-shadow: var(--shadow_md);
+
+  box-sizing: border-box;
+}
+
+.react-colorful__pointer-fill {
+  width: 100% !important;
+  height: 100% !important;
+
+  border-radius: 999px !important;
+
+  border: none !important;
+
+  box-shadow: none !important;
+}
+
+/* ========================================
+   HUE
+======================================== */
+
+.react-colorful__hue {
+  position: relative;
+
+  height: 20px !important;
+
+  border-radius: 999px !important;
+
+  overflow: hidden;
+
+  margin: 0 !important;
+}
+
+.react-colorful__hue-pointer {
+  width: 20px !important;
+  height: 20px !important;
+
+  top: 50% !important;
+
+  transform: translate(-10px, -50%) !important;
+
+  border-radius: 999px !important;
+
+  border: 4px solid var(--neutral_0) !important;
+
+  background: var(--neutral_0) !important;
+
+  box-shadow: var(--shadow_lg);
+}
+
+/* ========================================
+   HEX FIELD
+======================================== */
+
+.storybook-textfield__colorpicker-hex {
+  width: 100%;
+}
+
+.storybook-textfield__colorpicker-input {
+  width: 100%;
+  height: 48px;
+
+  padding: 12px 14px;
+
+  border: 1px solid var(--neutral_200);
+  border-radius: var(--radius_8);
+
+  background: transparent;
+
+  box-sizing: border-box;
+
   font-size: 14px;
   line-height: 20px;
   font-weight: 400;
 
+  color: var(--neutral_700);
+}
+
+.storybook-textfield__colorpicker-input::placeholder {
   color: var(--neutral_300);
-
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
-/* ----- FILLED ----- */
-
-.storybook-textfield__dropdown-text--filled {
-  color: var(--neutral_700);
-}
-
-/* ----- ERROR ----- */
-
-.storybook-textfield__dropdown-text--error {
-  color: var(--error_600);
+.storybook-textfield__colorpicker-input:focus {
+  outline: none;
 }
 
 /* ========================================
-   DROPDOWN ICONS
+   OPACITY
 ======================================== */
 
-.storybook-textfield__dropdown-icon,
-.storybook-textfield__dropdown-user-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.storybook-textfield__opacity-wrapper {
+  position: relative;
 
-  color: var(--neutral_600);
-
-  flex-shrink: 0;
-
-  transition: color 160ms ease;
-}
-
-/* ----- FILLED ----- */
-
-.storybook-textfield__dropdown--filled
-.storybook-textfield__dropdown-icon,
-.storybook-textfield__dropdown--filled
-.storybook-textfield__dropdown-user-icon {
-  color: var(--neutral_700);
-}
-
-/* ----- ERROR ----- */
-
-.storybook-textfield__dropdown--error
-.storybook-textfield__dropdown-icon,
-.storybook-textfield__dropdown--error
-.storybook-textfield__dropdown-user-icon {
-  color: var(--error_600);
-}
-
-/* ----- DISABLED ----- */
-
-.storybook-textfield__dropdown--disabled
-.storybook-textfield__dropdown-icon,
-.storybook-textfield__dropdown--disabled
-.storybook-textfield__dropdown-user-icon {
-  color: var(--neutral_200);
-}
-
-/* ========================================
-   DROPDOWN MENU
-======================================== */
-
-.storybook-textfield__menu {
-  position: absolute;
-
-  top: calc(100% + 8px);
-  left: 0;
-
-  width: 296px;
-  max-height: 320px;
-
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  border-radius: 8px;
-
-  background: var(--neutral_00);
-
-  box-shadow: var(--shadow_sm);
-
-  z-index: 9999;
-}
-
-/* ========================================
-   SCROLLBAR
-======================================== */
-
-.storybook-textfield__menu::-webkit-scrollbar {
-  width: 6px;
-}
-
-.storybook-textfield__menu::-webkit-scrollbar-thumb {
-  background: var(--neutral_200);
+  width: 100%;
+  height: 20px;
 
   border-radius: 999px;
+
+  overflow: hidden;
 }
 
-/* ========================================
-   MENU ITEM
-======================================== */
+.storybook-textfield__opacity-grid {
+  position: absolute;
 
-.storybook-textfield__menu-item {
+  inset: 0;
+
+  border-radius: 999px;
+
+  background-image:
+    linear-gradient(45deg, #d9d9d9 25%, transparent 25%),
+    linear-gradient(-45deg, #d9d9d9 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #d9d9d9 75%),
+    linear-gradient(-45deg, transparent 75%, #d9d9d9 75%);
+
+  background-size: 16px 16px;
+
+  background-position:
+    0 0,
+    0 8px,
+    8px -8px,
+    -8px 0px;
+}
+
+.storybook-textfield__opacity-slider {
+  position: absolute;
+
+  inset: 0;
+
   width: 100%;
+  height: 20px;
 
-  padding: 12px 16px;
+  margin: 0;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  appearance: none;
 
-  border: none;
-  background: transparent;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--current-color)
+  );
 
   cursor: pointer;
-
-  box-sizing: border-box;
-
-  transition:
-    background-color 160ms ease,
-    color 160ms ease;
-
-  color: var(--neutral_600);
 }
 
-/* ----- HOVER ----- */
+.storybook-textfield__opacity-slider::-webkit-slider-thumb {
+  appearance: none;
 
-.storybook-textfield__menu-item:hover {
-  background: var(--neutral_50);
+  width: 20px;
+  height: 20px;
 
-  color: var(--neutral_700);
+  border-radius: 999px;
+
+  background: var(--neutral_0);
+
+  border: 4px solid var(--neutral_0);
+
+  box-shadow: var(--shadow_md);
 }
 
-/* ----- SELECTED ----- */
+.storybook-textfield__opacity-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
 
-.storybook-textfield__menu-item--selected {
-  color: var(--neutral_900);
-}
+  border-radius: 999px;
 
-/* ----- DISABLED ----- */
+  background: var(--neutral_0);
 
-.storybook-textfield__menu-item--disabled {
-  color: var(--neutral_200);
+  border: 4px solid var(--neutral_0);
 
-  cursor: not-allowed;
-}
-
-/* ========================================
-   MENU ITEM LEFT
-======================================== */
-
-.storybook-textfield__menu-item-left {
-  display: flex;
-  align-items: center;
-
-  gap: 8px;
-}
-
-/* ========================================
-   MENU ITEM ICON
-======================================== */
-
-.storybook-textfield__menu-item-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 16px;
-  height: 16px;
-
-  color: var(--neutral_600);
-}
-
-/* ----- HOVER ----- */
-
-.storybook-textfield__menu-item:hover
-.storybook-textfield__menu-item-icon {
-  color: var(--neutral_700);
-}
-
-/* ----- SELECTED ----- */
-
-.storybook-textfield__menu-item--selected
-.storybook-textfield__menu-item-icon {
-  color: var(--neutral_900);
-}
-
-/* ----- DISABLED ----- */
-
-.storybook-textfield__menu-item--disabled
-.storybook-textfield__menu-item-icon {
-  color: var(--neutral_200);
-}
-
-/* ========================================
-   MENU ITEM TEXT
-======================================== */
-
-.storybook-textfield__menu-item-text {
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 500;
-}
-
-/* ========================================
-   CHECK ICON
-======================================== */
-
-.storybook-textfield__menu-check {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 16px;
-  height: 16px;
-
-  color: var(--brand_400);
+  box-shadow: var(--shadow_lg);
 }

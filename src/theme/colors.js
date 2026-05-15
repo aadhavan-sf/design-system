@@ -1,6 +1,6 @@
 export const colors = {
   neutral: {
-    0: 'var(--neutral_00)',
+    0: 'white',
     25: 'var(--neutral_25)',
     50: 'var(--neutral_50)',
     100: 'var(--neutral_100)',
@@ -67,7 +67,7 @@ export const colors = {
     900: 'var(--success_900)',
   },
   special: {
-    offWhite: 'var(--off-white)',
+    offwhite: 'var(--off-white)',
     lightening: 'var(--lightening)',
     midnightBlack: 'var(--midnight-black)',
   },
@@ -142,7 +142,7 @@ export const colorHex = {
     900: '#042A1E',
   },
   special: {
-    offWhite: '#FAF6FF',
+    offwhite: '#FAF6FF',
     lightening: '#EEE0FE',
     midnightBlack: '#0D0915',
   },
