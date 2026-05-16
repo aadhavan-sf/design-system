@@ -31,7 +31,7 @@ export default {
 
 export const Playground = {
   args: {
-    open: true,
+    open: false,
     supportingText: false,
     tooltip: 'Top no arrow',
     title: 'This is a tooltip',
