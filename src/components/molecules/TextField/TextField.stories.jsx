@@ -1,4 +1,9 @@
 import { TextField } from './TextField';
+import { Text } from '../../styling/Typography';
+import {
+  fieldTypeLabels,
+  PUBLIC_FIELD_TYPES,
+} from './textField.constants';
 
 const dropdownOptions = [
   'Phoenix Baker',
@@ -10,78 +15,75 @@ const dropdownOptions = [
   'Drew Cano',
 ];
 
+const styledDropdownItems = [
+  { label: 'Phoenix Baker', value: 'Phoenix Baker' },
+  { label: 'Olivia Rhye', value: 'Olivia Rhye', active: true },
+  { label: 'Lana Steiner', value: 'Lana Steiner', state: 'disabled' },
+  { label: 'Remove option', value: 'Remove option', state: 'destructive' },
+];
+
 const commonProps = {
   label: true,
   astriks: true,
   tooltip: true,
   labelText: 'Label',
+  tooltipPlacement: 'Top arrow',
+  options: dropdownOptions,
 };
 
+const fieldStates = [
+  'default',
+  'active',
+  'filled',
+  'info',
+  'error',
+  'disabled',
+];
+
+const fieldTypes = [
+  ...PUBLIC_FIELD_TYPES,
+];
+
 export default {
-  title: 'Molecules/Text fields',
-
+  title: 'Molecules/Text Fields',
   component: TextField,
-
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'Text fields match the Supernova Figma component set and cover input, dropdown, color, date, search, paragraph, mobile number, and multiselect variants.',
+      },
+    },
   },
-
   tags: ['autodocs'],
-
   argTypes: {
-    /* =========================
-       TYPE
-    ========================= */
-
     type: {
       control: 'select',
-
-      options: [
-        'input',
-        'dropdown',
-        'color-picker',
-      ],
+      options: fieldTypes,
+      labels: fieldTypeLabels,
     },
-
-    /* =========================
-       STATES
-    ========================= */
-
     state: {
       control: 'select',
-
-      description:
-        'Accessibility and interaction states',
-
-      options: [
-        'default',
-        'active',
-        'filled',
-        'info',
-        'error',
-        'disabled',
-      ],
+      options: fieldStates,
     },
-
-    /* =========================
-       LABEL
-    ========================= */
-
     label: {
       control: 'boolean',
     },
-
     astriks: {
       control: 'boolean',
     },
-
+    required: {
+      control: 'boolean',
+    },
     tooltip: {
       control: 'boolean',
     },
-
+    tooltipOpen: {
+      control: 'boolean',
+    },
     tooltipPlacement: {
       control: 'select',
-
       options: [
         'Top no arrow',
         'Top arrow',
@@ -92,32 +94,55 @@ export default {
         'Right',
       ],
     },
-
     tooltipSupportingText: {
       control: 'boolean',
     },
-
     tooltipTitle: {
       control: 'text',
     },
-
     tooltipDescription: {
       control: 'text',
     },
-
-    /* =========================
-       DROPDOWN
-    ========================= */
-
     withIcon: {
       control: 'boolean',
     },
+    dropdownListVariant: {
+      control: 'select',
+      options: [
+        'icon-left',
+        'checkbox-left',
+        'radio-left',
+        'toggle-right',
+        'icon-right',
+        'check-right',
+        'text',
+      ],
+    },
+    dropdownListItems: {
+      control: 'object',
+    },
+    datePickerType: {
+      control: 'select',
+      options: [
+        'single-date',
+        'month',
+        'year',
+        'date-range',
+        'with-presets',
+        'dual-dates',
+      ],
+    },
+    datePickerProps: {
+      control: 'object',
+    },
+    defaultSelectedOptions: {
+      control: 'object',
+    },
+    selectedOptions: {
+      control: 'object',
+    },
   },
 };
-
-/* =========================================
-   PLAYGROUND
-========================================= */
 
 export const Playground = {
   render: (args) => (
@@ -126,49 +151,21 @@ export const Playground = {
       {...args}
     />
   ),
-
   args: {
-    type: 'input',
+    type: 'input-fields',
     state: 'default',
-
     ...commonProps,
-
-    placeholder: 'Placeholder text',
-    tooltipPlacement: 'Top arrow',
-
-    options: dropdownOptions,
+    tooltipOpen: false,
   },
 };
-
-/* =========================================
-   INPUT FIELD STATES
-========================================= */
-
-const inputStates = [
-  'default',
-  'active',
-  'filled',
-  'info',
-  'error',
-  'disabled',
-];
 
 export const InputFieldStates = {
   render: () => (
-    <div
-      style={{
-        display: 'grid',
-
-        gridTemplateColumns:
-          'repeat(3, 296px)',
-
-        gap: '40px',
-      }}
-    >
-      {inputStates.map((state) => (
+    <div className="textfield-story-grid">
+      {fieldStates.map((state) => (
         <TextField
           key={state}
-          type="input"
+          type="input-fields"
           state={state}
           {...commonProps}
         />
@@ -176,38 +173,15 @@ export const InputFieldStates = {
     </div>
   ),
 };
-
-/* =========================================
-   DROPDOWN FIELD STATES
-========================================= */
-
-const dropdownStates = [
-  'default',
-  'active',
-  'filled',
-  'info',
-  'error',
-  'disabled',
-];
 
 export const DropdownFieldStates = {
   render: () => (
-    <div
-      style={{
-        display: 'grid',
-
-        gridTemplateColumns:
-          'repeat(2, 296px)',
-
-        gap: '40px',
-      }}
-    >
-      {dropdownStates.map((state) => (
+    <div className="textfield-story-grid">
+      {fieldStates.map((state) => (
         <TextField
           key={state}
-          type="dropdown"
+          type="dropdown-field"
           state={state}
-          options={dropdownOptions}
           {...commonProps}
         />
       ))}
@@ -215,106 +189,65 @@ export const DropdownFieldStates = {
   ),
 };
 
-/* =========================================
-   COLOR PICKER STATES
-========================================= */
-
-const colorPickerStates = [
-  'default',
-  'active',
-  'filled',
-  'info',
-  'error',
-  'disabled',
-];
-
-export const ColorPickerStates = {
+export const FieldTypes = {
   render: () => (
-    <div
-      style={{
-        display: 'grid',
+    <div className="textfield-story-grid">
+      {fieldTypes.map((type) => (
+        <div
+          key={type}
+          className="textfield-story-item"
+        >
+          <Text
+            as="p"
+            variant="text-sm"
+            weight="semibold"
+            className="textfield-story-label"
+          >
+            {fieldTypeLabels[type]}
+          </Text>
+          <TextField
+            type={type}
+            state="default"
+            label={type !== 'search-fields'}
+            astriks
+            tooltip
+            labelText="Label"
+            options={dropdownOptions}
+          />
+        </div>
+      ))}
+    </div>
+  ),
+};
 
-        gridTemplateColumns:
-          'repeat(2, 296px)',
-
-        gap: '40px',
-        alignItems: 'start',
-      }}
-    >
-      {colorPickerStates.map((state) => (
+export const SearchStates = {
+  render: () => (
+    <div className="textfield-story-grid">
+      {fieldStates.map((state) => (
         <TextField
           key={state}
-          type="color-picker"
+          type="search-fields"
           state={state}
-          {...commonProps}
+          label={false}
         />
       ))}
     </div>
   ),
 };
 
-/* =========================================
-   DROPDOWN WITH ICONS
-========================================= */
-
-export const DropdownWithIcons = {
-  render: (args) => (
-    <TextField
-      key={`${args.type}-${args.state}`}
-      {...args}
-    />
+export const ParagraphStates = {
+  render: () => (
+    <div className="textfield-story-grid">
+      {fieldStates.map((state) => (
+        <TextField
+          key={state}
+          type="text-area"
+          state={state}
+          {...commonProps}
+        />
+      ))}
+    </div>
   ),
-
-  args: {
-    type: 'dropdown',
-    state: 'default',
-
-    withIcon: true,
-
-    options: dropdownOptions,
-
-    ...commonProps,
-  },
-};
-
-/* =========================================
-   SINGLE STORIES
-========================================= */
-
-export const DropdownError = {
-  render: (args) => (
-    <TextField
-      key={`${args.type}-${args.state}`}
-      {...args}
-    />
-  ),
-
-  args: {
-    type: 'dropdown',
-    state: 'error',
-
-    options: dropdownOptions,
-
-    ...commonProps,
-  },
-};
-
-export const DropdownDisabled = {
-  render: (args) => (
-    <TextField
-      key={`${args.type}-${args.state}`}
-      {...args}
-    />
-  ),
-
-  args: {
-    type: 'dropdown',
-    state: 'disabled',
-
-    options: dropdownOptions,
-
-    ...commonProps,
-  },
 };
 
 export const ColorPicker = {
@@ -324,11 +257,40 @@ export const ColorPicker = {
       {...args}
     />
   ),
-
   args: {
-    type: 'color-picker',
+    type: 'color-dropdown',
     state: 'default',
+    ...commonProps,
+  },
+};
 
+export const DropdownWithIcons = {
+  render: (args) => (
+    <TextField
+      key={`${args.type}-${args.state}`}
+      {...args}
+    />
+  ),
+  args: {
+    type: 'dropdown-field',
+    state: 'default',
+    withIcon: true,
+    ...commonProps,
+  },
+};
+
+export const DropdownListCustomization = {
+  render: (args) => (
+    <TextField
+      key={`${args.dropdownListVariant}-${args.state}`}
+      {...args}
+    />
+  ),
+  args: {
+    type: 'dropdown-field',
+    state: 'default',
+    dropdownListVariant: 'icon-left',
+    dropdownListItems: styledDropdownItems,
     ...commonProps,
   },
 };

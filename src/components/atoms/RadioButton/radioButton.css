@@ -20,7 +20,7 @@
 
 .storybook-radio:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 4px var(--brand_100);
+  box-shadow: var(--shadow_focus-brand);
 }
 
 .storybook-radio:disabled {
@@ -77,7 +77,7 @@
 }
 
 .storybook-radio--focus {
-  box-shadow: 0 0 0 4px var(--brand_100);
+  box-shadow: var(--shadow_focus-brand);
 }
 
 .storybook-radio--disabled {
@@ -108,4 +108,3 @@
   flex-direction: column;
   gap: var(--spacing_8);
 }
-

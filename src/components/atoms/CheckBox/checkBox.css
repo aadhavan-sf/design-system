@@ -20,7 +20,7 @@
 
 .storybook-checkbox:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 4px var(--brand_100);
+  box-shadow: var(--shadow_focus-brand);
 }
 
 .storybook-checkbox:disabled {
@@ -68,7 +68,7 @@
 }
 
 .storybook-checkbox--focus {
-  box-shadow: 0 0 0 4px var(--brand_100);
+  box-shadow: var(--shadow_focus-brand);
 }
 
 .storybook-checkbox--disabled {

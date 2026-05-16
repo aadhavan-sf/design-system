@@ -1,7 +1,7 @@
 import { Text } from './Typography';
 
 export default {
-  title: 'Atoms/Typography',
+  title: 'Styling/Typography',
   component: Text,
   parameters: {
     layout: 'padded',

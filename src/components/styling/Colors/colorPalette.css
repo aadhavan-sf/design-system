@@ -1,20 +1,20 @@
 .ds-palette {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  font-family: var(--font_family_text, system-ui);
+  gap: var(--spacing_6);
+  font-family: var(--font_family_base);
 }
 
 .ds-section__header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: var(--spacing_2);
 }
 
 .ds-section__title {
-  font-size: 18px;
-  line-height: 28px;
+  font-size: var(--type-text-lg-size);
+  line-height: var(--type-text-lg-line);
   font-weight: 600;
   color: var(--ds-text-strong, var(--neutral_900));
 }
@@ -22,13 +22,13 @@
 .ds-section__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 160px));
-  gap: 16px;
+  gap: var(--spacing_4);
 }
 
 .ds-swatch {
-  background: var(--ds-surface, white);
-  border: 1px solid var(--ds-border, rgba(0, 0, 0, 0.1));
-  border-radius: 12px;
+  background: var(--ds-surface, var(--neutral_00));
+  border: 1px solid var(--ds-border, var(--neutral_200));
+  border-radius: var(--spacing_3);
   overflow: hidden;
   box-shadow: var(--shadow_lg);
 }
@@ -39,22 +39,22 @@
 }
 
 .ds-swatch__meta {
-  padding: 0 12px 12px;
+  padding: 0 var(--spacing_3) var(--spacing_3);
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--spacing_0_5);
 }
 
 .ds-swatch__name {
-  font-size: 18px;
-  line-height: 28px;
+  font-size: var(--type-text-lg-size);
+  line-height: var(--type-text-lg-line);
   font-weight: 500;
   color: var(--ds-text-strong, var(--neutral_900));
 }
 
 .ds-swatch__hex {
-  font-size: 16px;
-  line-height: 24px;
+  font-size: var(--type-text-md-size);
+  line-height: var(--type-text-md-line);
   font-weight: 400;
   color: var(--ds-text-muted, var(--neutral_600));
   text-transform: uppercase;

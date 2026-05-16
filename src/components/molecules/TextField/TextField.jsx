@@ -1,600 +1,513 @@
 import PropTypes from 'prop-types';
-
 import {
-  useState,
-  useRef,
   useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from 'react';
 
+import { TextFieldShell } from './TextFieldShell';
+import { ColorDropdown } from './fields/ColorDropdown';
+import { DatepickerField } from './fields/DatepickerField';
+import { DropdownField } from './fields/DropdownField';
+import { InputFields } from './fields/InputFields';
+import { MobileNumberField } from './fields/MobileNumberField';
+import { MultiselectOneLine } from './fields/MultiselectOneLine';
+import { MultiselectTwoLine } from './fields/MultiselectTwoLine';
+import { SearchFields } from './fields/SearchFields';
+import { TextArea } from './fields/TextArea';
 import {
-  CaretUpDown,
-  User,
-  Check,
-} from '@phosphor-icons/react';
-
-import { HexColorPicker } from 'react-colorful';
-import { HelpIcon } from '../Tooltip/HelpIcon';
+  FIELD_STATES,
+  FIELD_TYPES,
+  activeValueByType,
+  filledValueByType,
+  normalizeState,
+  normalizeType,
+  placeholderByType,
+} from './textField.constants';
 
 import './textfield.css';
 
-export const TextField = ({
+const EMPTY_OPTIONS = [];
+
+function getInitialTextValue(type, state) {
+  return state === 'filled'
+    ? filledValueByType[type] ?? ''
+    : '';
+}
+
+function getInitialSelections(type, state, options) {
+  if (state !== 'filled') {
+    return [];
+  }
+
+  if (type === 'multiselect-2-line') {
+    return options.slice(0, 2);
+  }
+
+  if (type === 'multiselect') {
+    return options.length > 0 ? [options[0]] : [];
+  }
+
+  if (type === 'dropdown') {
+    return [filledValueByType.dropdown];
+  }
+
+  return [];
+}
+
+function getDropdownItemValue(item) {
+  return typeof item === 'string'
+    ? item
+    : item.value ?? item.label;
+}
+
+function getDropdownItemLabel(item) {
+  return typeof item === 'string'
+    ? item
+    : item.label;
+}
+
+function getSelectedDropdownDisplayValue(selectedValues, items) {
+  return selectedValues
+    .map((selectedValue) => {
+      const matchingItem = items.find((item) =>
+        getDropdownItemValue(item) === selectedValue
+      );
+
+      return matchingItem
+        ? getDropdownItemLabel(matchingItem)
+        : selectedValue;
+    })
+    .join(', ');
+}
+
+function formatColorWithOpacity(color, opacity) {
+  const alphaHex = Math.round((opacity / 100) * 255)
+    .toString(16)
+    .padStart(2, '0')
+    .toUpperCase();
+
+  return opacity === 100
+    ? color.toUpperCase()
+    : `${color.toUpperCase()}${alphaHex}`;
+}
+
+export function TextField({
   type = 'input',
   state = 'default',
-
+  defaultSelectedOptions,
   label = true,
   tooltip = true,
+  tooltipClassName,
+  tooltipOpen = false,
   tooltipTitle = 'This is a tooltip',
   tooltipDescription = 'Tooltips are used to describe or identify an element.',
   tooltipSupportingText = false,
   tooltipPlacement = 'Top arrow',
   astriks = true,
-
+  required,
   labelText = 'Label',
-
-  placeholder = 'Placeholder text',
-
+  placeholder,
   helperText = 'Info text comes here',
   errorText = 'Error text comes here',
-
-  options = [],
-
+  datePickerProps,
+  datePickerType = 'single-date',
+  dropdownListItems,
+  dropdownListVariant,
+  onSelectedOptionsChange,
+  options = EMPTY_OPTIONS,
+  selectedOptions: controlledSelectedOptions,
   withIcon = false,
-}) => {
-  /* =====================================
-     FIELD STATES
-  ===================================== */
+}) {
+  const normalizedType = normalizeType(type);
+  const normalizedState = normalizeState(state);
+  const isDisabled = normalizedState === 'disabled';
+  const isError = normalizedState === 'error';
+  const isInfo = normalizedState === 'info';
+  const isRequired = required ?? astriks;
+  const resolvedPlaceholder =
+    placeholder ?? placeholderByType[normalizedType];
+  const resolvedDropdownItems = dropdownListItems ?? options;
 
-  const [inputValue, setInputValue] =
-    useState('');
-
-  const [selectedOption, setSelectedOption] =
-    useState('');
-
-  const [isOpen, setIsOpen] =
-    useState(state === 'active');
-
-  /* =====================================
-     COLOR PICKER STATES
-  ===================================== */
-
-  const [color, setColor] =
-    useState('#131313');
-
-  const [opacity, setOpacity] =
-    useState(100);
-
-  const colorPickerRef =
-    useRef(null);
-
-  /* =====================================
-     INTERACTION STATES
-  ===================================== */
-
-  const isDisabled =
-    state === 'disabled';
-
-  const isError =
-    state === 'error';
-
-  const isActive =
-    state === 'active';
-
-  const isColorPicker =
-    type === 'color-picker';
-
-  const isFilled =
-    state === 'filled' ||
-    state === 'error' ||
-    state === 'disabled' ||
-    state === 'info' ||
-    inputValue.length > 0 ||
-    selectedOption.length > 0;
-
-  /* =====================================
-     CLOSE ON OUTSIDE CLICK
-  ===================================== */
+  const [inputValue, setInputValue] = useState(() =>
+    getInitialTextValue(normalizedType, normalizedState)
+  );
+  const [internalSelectedOptions, setInternalSelectedOptions] = useState(() =>
+    defaultSelectedOptions ??
+    getInitialSelections(normalizedType, normalizedState, options)
+  );
+  const isSelectedOptionsControlled = Array.isArray(controlledSelectedOptions);
+  const selectedOptions = isSelectedOptionsControlled
+    ? controlledSelectedOptions
+    : internalSelectedOptions;
+  const [countryCode, setCountryCode] = useState('+91');
+  const [openMenu, setOpenMenu] = useState(
+    normalizedState === 'active' && normalizedType === 'color-picker'
+      ? normalizedType
+      : ''
+  );
+  const [color, setColor] = useState('#131313');
+  const [opacity, setOpacity] = useState(100);
+  const [hasPickedColor, setHasPickedColor] = useState(
+    normalizedState === 'filled'
+  );
+  const rootRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (
-      event
-    ) => {
+    const handleClickOutside = (event) => {
       if (
-        colorPickerRef.current &&
-        !colorPickerRef.current.contains(
-          event.target
-        )
+        rootRef.current &&
+        !rootRef.current.contains(event.target)
       ) {
-        setIsOpen(false);
+        setOpenMenu('');
       }
     };
 
-    document.addEventListener(
-      'mousedown',
-      handleClickOutside
-    );
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
-      document.removeEventListener(
-        'mousedown',
-        handleClickOutside
-      );
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
-  /* =====================================
-     HEX WITH OPACITY
-  ===================================== */
+  const colorValue = formatColorWithOpacity(color, opacity);
+  const hasInputValue = inputValue.length > 0;
+  const hasSelectedOptions = selectedOptions.length > 0;
+  const hasColorValue = hasPickedColor || normalizedState === 'filled';
 
-  const alphaHex = Math.round(
-    (opacity / 100) * 255
-  )
-    .toString(16)
-    .padStart(2, '0')
-    .toUpperCase();
-
-  const finalHex =
-    opacity === 100
-      ? color.toUpperCase()
-      : `${color.toUpperCase()}${alphaHex}`;
-
-  /* =====================================
-     LIGHT COLOR DETECTION
-  ===================================== */
-
-  const hexToRgb = (hex) => {
-    const cleanHex = hex
-      .replace('#', '')
-      .slice(0, 6);
-
-    const bigint = parseInt(
-      cleanHex,
-      16
-    );
-
-    return {
-      r: (bigint >> 16) & 255,
-      g: (bigint >> 8) & 255,
-      b: bigint & 255,
-    };
+  const hasValueByType = {
+    input: hasInputValue,
+    search: hasInputValue,
+    paragraph: hasInputValue,
+    'date-picker': hasInputValue,
+    'mobile-number': hasInputValue,
+    dropdown: hasSelectedOptions,
+    multiselect: hasSelectedOptions,
+    'multiselect-2-line': hasSelectedOptions,
+    'color-picker': hasColorValue,
   };
 
-  const { r, g, b } =
-    hexToRgb(color);
+  const hasStateDisplayValue =
+    normalizedType === 'dropdown' &&
+    (normalizedState === 'active' || normalizedState === 'filled');
 
-  const isLightColor =
-    r > 220 &&
-    g > 220 &&
-    b > 220;
+  const hasValue =
+    Boolean(hasValueByType[normalizedType]) ||
+    normalizedState === 'filled' ||
+    hasStateDisplayValue;
 
-  /* =====================================
-     CLASSNAMES
-  ===================================== */
+  const visualState = normalizedState;
 
-  const inputClasses = [
-    'storybook-textfield__input',
+  const selectedDisplayValue = useMemo(() => {
+    if (selectedOptions.length > 0) {
+      if (normalizedType === 'dropdown') {
+        return getSelectedDropdownDisplayValue(
+          selectedOptions,
+          resolvedDropdownItems
+        );
+      }
 
-    isActive &&
-      'storybook-textfield__input--active',
+      return selectedOptions.join(', ');
+    }
 
-    isFilled &&
-      'storybook-textfield__input--filled',
+    if (normalizedState === 'active') {
+      return activeValueByType[normalizedType] ?? resolvedPlaceholder;
+    }
 
-    isError &&
-      'storybook-textfield__input--error',
+    if (normalizedState === 'filled') {
+      return filledValueByType[normalizedType] ?? resolvedPlaceholder;
+    }
 
-    isDisabled &&
-      'storybook-textfield__input--disabled',
-  ]
-    .filter(Boolean)
-    .join(' ');
+    return resolvedPlaceholder;
+  }, [
+    normalizedState,
+    normalizedType,
+    resolvedPlaceholder,
+    resolvedDropdownItems,
+    selectedOptions,
+  ]);
 
-  const dropdownClasses = [
-    'storybook-textfield__dropdown',
+  const handleOpenChange = (key, isOpen) => {
+    setOpenMenu(isOpen ? key : '');
+  };
 
-    isActive &&
-      'storybook-textfield__dropdown--active',
+  const updateSelectedOptions = (nextSelectedOptions) => {
+    if (!isSelectedOptionsControlled) {
+      setInternalSelectedOptions(nextSelectedOptions);
+    }
 
-    isFilled &&
-      'storybook-textfield__dropdown--filled',
+    onSelectedOptionsChange?.(nextSelectedOptions);
+  };
 
-    isError &&
-      'storybook-textfield__dropdown--error',
+  const handleSingleSelect = (option) => {
+    updateSelectedOptions([option]);
+    setOpenMenu('');
+  };
 
-    isDisabled &&
-      'storybook-textfield__dropdown--disabled',
-  ]
-    .filter(Boolean)
-    .join(' ');
+  const handleMultiSelect = (option) => {
+    const nextSelectedOptions = selectedOptions.includes(option)
+      ? selectedOptions.filter((item) => item !== option)
+      : [...selectedOptions, option];
+
+    updateSelectedOptions(nextSelectedOptions);
+  };
+
+  const handleColorChange = (nextColor) => {
+    setColor(nextColor);
+    setHasPickedColor(true);
+  };
+
+  const renderField = () => {
+    if (normalizedType === 'dropdown') {
+      return (
+        <DropdownField
+          disabled={isDisabled}
+          displayValue={selectedDisplayValue}
+          hasValue={hasValue}
+          isOpen={openMenu === 'dropdown'}
+          onOpenChange={(nextOpen) => handleOpenChange('dropdown', nextOpen)}
+          onSelect={handleSingleSelect}
+          options={options}
+          dropdownListItems={resolvedDropdownItems}
+          dropdownListVariant={dropdownListVariant}
+          selectedOptions={selectedOptions}
+          state={visualState}
+          withIcon={withIcon}
+        />
+      );
+    }
+
+    if (normalizedType === 'multiselect') {
+      return (
+        <MultiselectOneLine
+          disabled={isDisabled}
+          displayValue={selectedDisplayValue}
+          hasValue={hasValue}
+          isOpen={openMenu === normalizedType}
+          onOpenChange={(nextOpen) => handleOpenChange(normalizedType, nextOpen)}
+          onSelect={handleMultiSelect}
+          options={options}
+          dropdownListItems={resolvedDropdownItems}
+          dropdownListVariant={dropdownListVariant}
+          selectedOptions={selectedOptions}
+          state={visualState}
+          withIcon={withIcon}
+        />
+      );
+    }
+
+    if (normalizedType === 'multiselect-2-line') {
+      return (
+        <MultiselectTwoLine
+          disabled={isDisabled}
+          displayValue={selectedDisplayValue}
+          hasValue={hasValue}
+          isOpen={openMenu === normalizedType}
+          onOpenChange={(nextOpen) => handleOpenChange(normalizedType, nextOpen)}
+          onSelect={handleMultiSelect}
+          options={options}
+          dropdownListItems={resolvedDropdownItems}
+          dropdownListVariant={dropdownListVariant}
+          selectedOptions={selectedOptions}
+          state={visualState}
+          withIcon={withIcon}
+        />
+      );
+    }
+
+    if (normalizedType === 'color-picker') {
+      return (
+        <ColorDropdown
+          color={color}
+          disabled={isDisabled}
+          displayValue={colorValue}
+          hasValue={hasValue}
+          isOpen={openMenu === 'color-picker'}
+          onColorChange={handleColorChange}
+          onOpenChange={(nextOpen) => handleOpenChange('color-picker', nextOpen)}
+          onOpacityChange={(nextOpacity) => {
+            setOpacity(nextOpacity);
+            setHasPickedColor(true);
+          }}
+          opacity={opacity}
+          placeholder={resolvedPlaceholder}
+          state={visualState}
+        />
+      );
+    }
+
+    if (normalizedType === 'date-picker') {
+      return (
+        <DatepickerField
+          datePickerProps={datePickerProps}
+          datePickerType={datePickerType}
+          disabled={isDisabled}
+          hasValue={hasValue}
+          isOpen={openMenu === 'date-picker'}
+          onChange={setInputValue}
+          onOpenChange={(nextOpen) => handleOpenChange('date-picker', nextOpen)}
+          placeholder={resolvedPlaceholder}
+          state={visualState}
+          value={inputValue}
+        />
+      );
+    }
+
+    if (normalizedType === 'search') {
+      return (
+        <SearchFields
+          disabled={isDisabled}
+          hasValue={hasValue}
+          onChange={setInputValue}
+          placeholder={resolvedPlaceholder}
+          state={visualState}
+          value={inputValue}
+        />
+      );
+    }
+
+    if (normalizedType === 'paragraph') {
+      return (
+        <TextArea
+          disabled={isDisabled}
+          hasValue={hasValue}
+          onChange={setInputValue}
+          placeholder={resolvedPlaceholder}
+          state={visualState}
+          value={inputValue}
+        />
+      );
+    }
+
+    if (normalizedType === 'mobile-number') {
+      return (
+        <MobileNumberField
+          countryCode={countryCode}
+          disabled={isDisabled}
+          hasValue={hasValue}
+          isCountryOpen={openMenu === 'country-code'}
+          onChange={setInputValue}
+          onCountryChange={setCountryCode}
+          onCountryOpenChange={(nextOpen) =>
+            handleOpenChange('country-code', nextOpen)
+          }
+          placeholder={resolvedPlaceholder}
+          state={visualState}
+          value={inputValue}
+        />
+      );
+    }
+
+    return (
+      <InputFields
+        disabled={isDisabled}
+        hasValue={hasValue}
+        onChange={setInputValue}
+        placeholder={resolvedPlaceholder}
+        state={visualState}
+        value={inputValue}
+      />
+    );
+  };
 
   return (
-    <div className="storybook-textfield">
-
-      {/* =====================================
-          LABEL
-      ===================================== */}
-
-      {label && (
-        <div className="storybook-textfield__header">
-
-          <label className="storybook-textfield__label">
-            {labelText}
-          </label>
-
-          {tooltip && (
-            <HelpIcon
-              className="storybook-textfield__tooltip"
-              title={tooltipTitle}
-              description={tooltipDescription}
-              supportingText={tooltipSupportingText}
-              tooltip={tooltipPlacement}
-            />
-          )}
-
-          {astriks && (
-            <span className="storybook-textfield__required">
-              *
-            </span>
-          )}
-
-        </div>
-      )}
-
-      {/* =====================================
-          INPUT FIELD
-      ===================================== */}
-
-      {type === 'input' && (
-        <input
-          type="text"
-          value={inputValue}
-          disabled={isDisabled}
-          placeholder={placeholder}
-          onChange={(e) =>
-            setInputValue(
-              e.target.value
-            )
-          }
-          className={inputClasses}
-        />
-      )}
-
-      {/* =====================================
-          DROPDOWN
-      ===================================== */}
-
-      {type === 'dropdown' && (
-        <div className="storybook-textfield__dropdown-wrapper">
-
-          <button
-            type="button"
-            disabled={isDisabled}
-            className={dropdownClasses}
-            onClick={() =>
-              setIsOpen(!isOpen)
-            }
-          >
-
-            <div className="storybook-textfield__dropdown-value">
-
-              {withIcon &&
-                selectedOption && (
-                  <User
-                    size={16}
-                    weight="regular"
-                  />
-                )}
-
-              <span
-                className={[
-                  'storybook-textfield__dropdown-text',
-
-                  isFilled &&
-                    'storybook-textfield__dropdown-text--filled',
-
-                  isError &&
-                    'storybook-textfield__dropdown-text--error',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-              >
-                {selectedOption ||
-                  placeholder}
-              </span>
-
-            </div>
-
-            <span className="storybook-textfield__dropdown-icon">
-
-              <CaretUpDown
-                size={16}
-                weight="regular"
-              />
-
-            </span>
-
-          </button>
-
-          {isOpen &&
-            !isDisabled && (
-              <div className="storybook-textfield__menu">
-
-                {options.map(
-                  (option) => {
-                    const isSelected =
-                      selectedOption ===
-                      option;
-
-                    return (
-                      <button
-                        key={option}
-                        type="button"
-                        className={[
-                          'storybook-textfield__menu-item',
-
-                          isSelected &&
-                            'storybook-textfield__menu-item--selected',
-                        ]
-                          .filter(Boolean)
-                          .join(' ')}
-                        onClick={() => {
-                          setSelectedOption(
-                            option
-                          );
-
-                          setIsOpen(
-                            false
-                          );
-                        }}
-                      >
-
-                        <div className="storybook-textfield__menu-item-left">
-
-                          {withIcon && (
-                            <span className="storybook-textfield__menu-item-icon">
-                              <User
-                                size={16}
-                                weight="regular"
-                              />
-                            </span>
-                          )}
-
-                          <span className="storybook-textfield__menu-item-text">
-                            {option}
-                          </span>
-
-                        </div>
-
-                        {isSelected && (
-                          <span className="storybook-textfield__menu-check">
-                            <Check
-                              size={16}
-                              weight="regular"
-                            />
-                          </span>
-                        )}
-
-                      </button>
-                    );
-                  }
-                )}
-
-              </div>
-            )}
-
-        </div>
-      )}
-
-      {/* =====================================
-          COLOR PICKER
-      ===================================== */}
-
-      {isColorPicker && (
-        <div
-          ref={colorPickerRef}
-          className="storybook-textfield__colorpicker-wrapper"
-        >
-
-          <button
-            type="button"
-            className={dropdownClasses}
-            onClick={() =>
-              !isDisabled &&
-              setIsOpen(!isOpen)
-            }
-          >
-
-            <div className="storybook-textfield__dropdown-value">
-
-              {/* SHOW PREVIEW ONLY
-                  FOR NON DEFAULT STATES */}
-
-              {state !== 'default' && (
-                <div
-                  className={[
-                    'storybook-textfield__color-preview',
-
-                    isLightColor &&
-                      'storybook-textfield__color-preview--light',
-
-                    isDisabled &&
-                      'storybook-textfield__color-preview--disabled',
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
-                  style={{
-                    background:
-                      finalHex,
-                  }}
-                />
-              )}
-
-              <span
-                className={[
-                  'storybook-textfield__dropdown-text',
-
-                  state !==
-                    'default' &&
-                    'storybook-textfield__dropdown-text--filled',
-
-                  isError &&
-                    'storybook-textfield__dropdown-text--error',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-              >
-                {state === 'default'
-                  ? 'Click to select'
-                  : finalHex}
-              </span>
-
-            </div>
-
-          </button>
-
-          {isOpen &&
-            !isDisabled && (
-              <div className="storybook-textfield__colorpicker-panel">
-
-                {/* =====================================
-                    HEX FIELD
-                ===================================== */}
-
-                <div className="storybook-textfield__colorpicker-hex">
-
-                  <input
-                    type="text"
-                    value={finalHex}
-                    onChange={(e) =>
-                      setColor(
-                        e.target.value
-                      )
-                    }
-                    placeholder="HEX Code"
-                    className="storybook-textfield__colorpicker-input"
-                  />
-
-                </div>
-
-                {/* =====================================
-                    COLOR PICKER
-                ===================================== */}
-
-                <HexColorPicker
-                  color={color}
-                  onChange={setColor}
-                />
-
-                {/* =====================================
-                    OPACITY
-                ===================================== */}
-
-                <div className="storybook-textfield__opacity-wrapper">
-
-                  <div className="storybook-textfield__opacity-grid" />
-
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={opacity}
-                    onChange={(e) =>
-                      setOpacity(
-                        Number(
-                          e.target
-                            .value
-                        )
-                      )
-                    }
-                    className="storybook-textfield__opacity-slider"
-                    style={{
-                      '--current-color':
-                        color,
-                    }}
-                  />
-
-                </div>
-
-              </div>
-            )}
-
-        </div>
-      )}
-
-      {/* =====================================
-          HELPER TEXT
-      ===================================== */}
-
-      {state === 'info' && (
-        <span className="storybook-textfield__helper">
-          {helperText}
-        </span>
-      )}
-
-      {/* =====================================
-          ERROR TEXT
-      ===================================== */}
-
-      {isError && (
-        <span className="storybook-textfield__helper storybook-textfield__helper--error">
-          {errorText}
-        </span>
-      )}
-
+    <div ref={rootRef}>
+      <TextFieldShell
+        errorText={errorText}
+        helperText={helperText}
+        isError={isError}
+        isInfo={isInfo}
+        isRequired={isRequired}
+        label={label}
+        labelText={labelText}
+        tooltip={tooltip}
+        tooltipClassName={tooltipClassName}
+        tooltipDescription={tooltipDescription}
+        tooltipOpen={tooltipOpen}
+        tooltipPlacement={tooltipPlacement}
+        tooltipSupportingText={tooltipSupportingText}
+        tooltipTitle={tooltipTitle}
+        type={normalizedType}
+      >
+        {renderField()}
+      </TextFieldShell>
     </div>
   );
-};
+}
 
 TextField.propTypes = {
-  type: PropTypes.oneOf([
-    'input',
-    'dropdown',
-    'color-picker',
-  ]),
-
-  state: PropTypes.oneOf([
-    'default',
-    'active',
-    'filled',
-    'info',
-    'error',
-    'disabled',
-  ]),
-
+  type: PropTypes.oneOf(FIELD_TYPES),
+  state: PropTypes.oneOf(FIELD_STATES),
+  defaultSelectedOptions: PropTypes.arrayOf(PropTypes.string),
   label: PropTypes.bool,
   tooltip: PropTypes.bool,
-  tooltipTitle:
-    PropTypes.string,
-  tooltipDescription:
-    PropTypes.string,
-  tooltipSupportingText:
-    PropTypes.bool,
-  tooltipPlacement:
-    PropTypes.oneOf([
-      'Top no arrow',
-      'Top arrow',
-      'Top left',
-      'Top right',
-      'Bottom',
-      'Left',
-      'Right',
-    ]),
+  tooltipClassName: PropTypes.string,
+  tooltipOpen: PropTypes.bool,
+  tooltipTitle: PropTypes.string,
+  tooltipDescription: PropTypes.string,
+  tooltipSupportingText: PropTypes.bool,
+  tooltipPlacement: PropTypes.oneOf([
+    'Top no arrow',
+    'Top arrow',
+    'Top left',
+    'Top right',
+    'Bottom',
+    'Left',
+    'Right',
+  ]),
   astriks: PropTypes.bool,
-
-  labelText:
+  required: PropTypes.bool,
+  labelText: PropTypes.string,
+  placeholder: PropTypes.string,
+  helperText: PropTypes.string,
+  errorText: PropTypes.string,
+  datePickerProps: PropTypes.shape({
+    selectedDay: PropTypes.string,
+    selectedMonth: PropTypes.string,
+    selectedYear: PropTypes.string,
+    rangeStart: PropTypes.string,
+    rangeEnd: PropTypes.string,
+    selectedPreset: PropTypes.string,
+    onApply: PropTypes.func,
+    onCancel: PropTypes.func,
+    onSelect: PropTypes.func,
+  }),
+  datePickerType: PropTypes.oneOf([
+    'single-date',
+    'month',
+    'year',
+    'date-range',
+    'with-presets',
+    'dual-dates',
+  ]),
+  dropdownListItems: PropTypes.arrayOf(PropTypes.oneOfType([
     PropTypes.string,
-
-  placeholder:
-    PropTypes.string,
-
-  helperText:
-    PropTypes.string,
-
-  errorText:
-    PropTypes.string,
-
-  options:
-    PropTypes.array,
-
-  withIcon:
-    PropTypes.bool,
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      value: PropTypes.string,
+      active: PropTypes.bool,
+      disabled: PropTypes.bool,
+      selected: PropTypes.bool,
+      state: PropTypes.oneOf([
+        'default',
+        'active',
+        'disabled',
+        'destructive',
+      ]),
+    }),
+  ])),
+  dropdownListVariant: PropTypes.oneOf([
+    'icon-left',
+    'checkbox-left',
+    'radio-left',
+    'toggle-right',
+    'icon-right',
+    'check-right',
+    'text',
+  ]),
+  onSelectedOptionsChange: PropTypes.func,
+  options: PropTypes.arrayOf(PropTypes.string),
+  selectedOptions: PropTypes.arrayOf(PropTypes.string),
+  withIcon: PropTypes.bool,
 };

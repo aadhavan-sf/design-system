@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing_6);
-  font-family: var(--font_family_text, system-ui);
+  font-family: var(--font_family_base);
   color: var(--ds-text-strong, var(--neutral_900));
 }
 
@@ -41,14 +41,14 @@
   padding: var(--spacing_4);
   border: 1px solid var(--ds-border, var(--neutral_200));
   border-radius: var(--radius_8);
-  background: var(--ds-surface, white);
+  background: var(--ds-surface, var(--neutral_00));
 }
 
 .ds-shadow-card__preview {
   min-height: 112px;
   border: 1px solid var(--ds-border, var(--neutral_200));
   border-radius: var(--radius_8);
-  background: white;
+  background: var(--neutral_00);
 }
 
 .ds-shadow-card__meta {

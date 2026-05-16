@@ -9,11 +9,11 @@
   border: 1px solid transparent;
   border-radius: var(--radius_8, 8px);
 
-  font-family: var(--font_family_text, system-ui);
+  font-family: var(--font_family_base);
   font-weight: 600;
   text-decoration: none;
 
-  box-shadow: var(--shadow_xs, 0px 1px 2px rgba(10, 13, 18, 0.05));
+  box-shadow: var(--shadow_xs);
 
   transition:
     background-color 160ms ease,
@@ -34,7 +34,7 @@
 .storybook-button--primary {
   background-color: var(--brand_400);
   border-color: var(--brand_400);
-  color: white;
+  color: var(--neutral_00);
 }
 
 .storybook-button--primary:hover:not(:disabled) {
@@ -49,13 +49,13 @@
   background-color: var(--brand_400);
   border-color: var(--brand_400);
 
-  box-shadow: 0 0 0 4px var(--brand_100);
+  box-shadow: var(--shadow_focus-brand);
 }
 
 .storybook-button--primary:disabled {
   background-color: var(--brand_200);
   border-color: var(--brand_200);
-  color: white;
+  color: var(--neutral_00);
 }
 
 .storybook-button--secondary {
@@ -78,7 +78,7 @@
   border-color: var(--neutral_300);
   color: var(--neutral_700);
 
-  box-shadow: 0 0 0 4px var(--neutral_100);
+  box-shadow: var(--shadow_focus-neutral);
 }
 
 .storybook-button--secondary:disabled {
@@ -140,7 +140,7 @@
 .storybook-button--primary.storybook-button--destructive {
   background-color: var(--error_600);
   border-color: var(--error_600);
-  color: white;
+  color: var(--neutral_00);
 }
 
 .storybook-button--primary.storybook-button--destructive:hover:not(:disabled) {
@@ -153,13 +153,13 @@
   background-color: var(--error_600);
   border-color: var(--error_600);
 
-  box-shadow: 0 0 0 4px var(--error_100);
+  box-shadow: var(--shadow_focus-error);
 }
 
 .storybook-button--primary.storybook-button--destructive:disabled {
   background-color: var(--error_300);
   border-color: var(--error_300);
-  color: white;
+  color: var(--neutral_00);
 }
 
 /* Link Destructive */
@@ -242,15 +242,15 @@
 }
 
 .storybook-button--icon-only.storybook-button--small {
-  padding: 8px;
+  padding: var(--spacing_2);
 }
 
 .storybook-button--icon-only.storybook-button--medium {
-  padding: 10px;
+  padding: var(--spacing_2_5);
 }
 
 .storybook-button--icon-only.storybook-button--large {
-  padding: 12px;
+  padding: var(--spacing_3);
 }
 
 .storybook-button--icon-only.storybook-button--xlarge {

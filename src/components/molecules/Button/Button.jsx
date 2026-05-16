@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { CircleIcon } from '@phosphor-icons/react';
+import { Text } from '../../styling/Typography';
 
 import './button.css';
 
@@ -51,9 +52,15 @@ export const Button = ({
       )}
 
       {!isIconOnly && (
-        <span className="storybook-button__label">
+        <Text
+          as="span"
+          variant={size === 'small' || size === 'medium' ? 'text-sm' : 'text-md'}
+          weight="semibold"
+          color="currentColor"
+          className="storybook-button__label"
+        >
           {label}
-        </span>
+        </Text>
       )}
 
       {icon === 'right' && (

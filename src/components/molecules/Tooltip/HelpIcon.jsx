@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Question } from '@phosphor-icons/react';
+import { Text } from '../../styling/Typography';
 
 import './helpIcon.css';
 
@@ -77,12 +78,26 @@ export function HelpIcon({
           role="tooltip"
         >
           <span className="storybook-help-icon__content">
-            <span className="storybook-help-icon__title">{title}</span>
+            <Text
+              as="span"
+              variant="text-xs"
+              weight={supportingText ? 'semibold' : 'medium'}
+              color="var(--neutral_00)"
+              className="storybook-help-icon__title"
+            >
+              {title}
+            </Text>
 
             {supportingText && (
-              <span className="storybook-help-icon__description">
+              <Text
+                as="span"
+                variant="text-xs"
+                weight="regular"
+                color="var(--neutral_00)"
+                className="storybook-help-icon__description"
+              >
                 {description}
-              </span>
+              </Text>
             )}
           </span>
         </span>
