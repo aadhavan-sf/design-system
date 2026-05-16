@@ -18,7 +18,7 @@ const commonProps = {
 };
 
 export default {
-  title: 'Design System/Components/Text fields',
+  title: 'Molecules/Text fields',
 
   component: TextField,
 
@@ -79,6 +79,32 @@ export default {
       control: 'boolean',
     },
 
+    tooltipPlacement: {
+      control: 'select',
+
+      options: [
+        'Top no arrow',
+        'Top arrow',
+        'Top left',
+        'Top right',
+        'Bottom',
+        'Left',
+        'Right',
+      ],
+    },
+
+    tooltipSupportingText: {
+      control: 'boolean',
+    },
+
+    tooltipTitle: {
+      control: 'text',
+    },
+
+    tooltipDescription: {
+      control: 'text',
+    },
+
     /* =========================
        DROPDOWN
     ========================= */
@@ -108,6 +134,7 @@ export const Playground = {
     ...commonProps,
 
     placeholder: 'Placeholder text',
+    tooltipPlacement: 'Top arrow',
 
     options: dropdownOptions,
   },

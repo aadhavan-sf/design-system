@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { colorHex } from '../../theme/colors';
+import { colorHex } from '../../../styling/theme/colors';
 import './colorPalette.css';
 
 function Swatch({ group, step, hex, showHex }) {
@@ -96,4 +96,3 @@ Section.propTypes = {
 ColorPalette.propTypes = {
   showHex: PropTypes.bool,
 };
-

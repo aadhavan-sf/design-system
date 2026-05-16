@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { spacing, spacingPx } from '../../theme/spacing.js';
+import { spacing, spacingPx } from '../../../styling/theme/spacing.js';
 import './spacingScale.css';
 
 const SPACING_STEPS = Object.keys(spacing);

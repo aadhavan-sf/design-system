@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { shadowValues, shadows } from '../../theme/shadows';
+import { shadowValues, shadows } from '../../../styling/theme/shadows';
 import './shadowScale.css';
 
 const SHADOW_STEPS = Object.keys(shadows);

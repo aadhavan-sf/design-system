@@ -7,13 +7,13 @@ import {
 } from 'react';
 
 import {
-  InfoIcon,
   CaretUpDown,
   User,
   Check,
 } from '@phosphor-icons/react';
 
 import { HexColorPicker } from 'react-colorful';
+import { HelpIcon } from '../Tooltip/HelpIcon';
 
 import './textfield.css';
 
@@ -23,6 +23,10 @@ export const TextField = ({
 
   label = true,
   tooltip = true,
+  tooltipTitle = 'This is a tooltip',
+  tooltipDescription = 'Tooltips are used to describe or identify an element.',
+  tooltipSupportingText = false,
+  tooltipPlacement = 'Top arrow',
   astriks = true,
 
   labelText = 'Label',
@@ -217,12 +221,13 @@ export const TextField = ({
           </label>
 
           {tooltip && (
-            <span className="storybook-textfield__tooltip">
-              <InfoIcon
-                size={16}
-                weight="regular"
-              />
-            </span>
+            <HelpIcon
+              className="storybook-textfield__tooltip"
+              title={tooltipTitle}
+              description={tooltipDescription}
+              supportingText={tooltipSupportingText}
+              tooltip={tooltipPlacement}
+            />
           )}
 
           {astriks && (
@@ -557,6 +562,22 @@ TextField.propTypes = {
 
   label: PropTypes.bool,
   tooltip: PropTypes.bool,
+  tooltipTitle:
+    PropTypes.string,
+  tooltipDescription:
+    PropTypes.string,
+  tooltipSupportingText:
+    PropTypes.bool,
+  tooltipPlacement:
+    PropTypes.oneOf([
+      'Top no arrow',
+      'Top arrow',
+      'Top left',
+      'Top right',
+      'Bottom',
+      'Left',
+      'Right',
+    ]),
   astriks: PropTypes.bool,
 
   labelText:
