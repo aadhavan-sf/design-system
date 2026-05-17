@@ -9,6 +9,7 @@ import {
 export function ColorDropdown({
   color,
   disabled,
+  fieldDisplayValue,
   displayValue,
   hasValue,
   isOpen,
@@ -19,7 +20,7 @@ export function ColorDropdown({
   placeholder,
   state,
 }) {
-  const textValue = hasValue ? displayValue : placeholder;
+  const textValue = hasValue ? fieldDisplayValue ?? displayValue : placeholder;
 
   return (
     <div className="storybook-textfield__dropdown-wrapper">
@@ -33,7 +34,7 @@ export function ColorDropdown({
           {hasValue && (
             <span
               className="storybook-textfield__color-preview"
-              style={{ background: displayValue }}
+              style={{ background: color }}
             />
           )}
           <span className={getFieldTextClassName({ state, hasValue })}>
@@ -75,6 +76,7 @@ export function ColorDropdown({
 ColorDropdown.propTypes = {
   color: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
+  fieldDisplayValue: PropTypes.string,
   displayValue: PropTypes.string.isRequired,
   hasValue: PropTypes.bool.isRequired,
   isOpen: PropTypes.bool.isRequired,

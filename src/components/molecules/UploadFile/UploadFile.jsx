@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   CircleNotch,
@@ -53,6 +53,12 @@ function getDisplayFile(files, fallbackName, fallbackSize) {
     name: file.name,
     size: formatFileSize(file.size),
   };
+}
+
+function getPreviewUrls(files) {
+  return files
+    .filter((file) => file.type?.startsWith('image/'))
+    .map((file) => URL.createObjectURL(file));
 }
 
 export function ImageAspectRatio({
@@ -425,6 +431,8 @@ export function UploadFile({
 }) {
   const inputRef = useRef(null);
   const [files, setFiles] = useState([]);
+  const [previewUrls, setPreviewUrls] = useState([]);
+  const [hasClearedQueuedFiles, setHasClearedQueuedFiles] = useState(false);
   const normalizedLayout = normalizeValue(layout, {
     Horizontal: 'horizontal',
     Vertical: 'vertical',
@@ -439,13 +447,32 @@ export function UploadFile({
   });
   const isMultiple = normalizedMode === 'multiple';
 
-  const commitFiles = (nextFiles) => {
+  useEffect(() => () => {
+    previewUrls.forEach((url) => URL.revokeObjectURL(url));
+  }, [previewUrls]);
+
+  const commitFiles = (nextFiles, { preserveClearedState = false } = {}) => {
+    previewUrls.forEach((url) => URL.revokeObjectURL(url));
+    setPreviewUrls(getPreviewUrls(nextFiles));
+    if (!preserveClearedState) {
+      setHasClearedQueuedFiles(false);
+    }
     setFiles(nextFiles);
     onFilesChange?.(nextFiles);
   };
 
   const handleInputChange = (event) => {
     commitFiles(Array.from(event.target.files ?? []));
+    event.target.value = '';
+  };
+
+  const hasQueuedFiles = (filesQueued && !hasClearedQueuedFiles) || files.length > 0;
+  const resolvedImageUrls = previewUrls.length > 0 ? previewUrls : imageUrls;
+
+  const handleDelete = () => {
+    setHasClearedQueuedFiles(true);
+    commitFiles([], { preserveClearedState: true });
+    onDelete?.();
   };
 
   return (
@@ -466,15 +493,15 @@ export function UploadFile({
         onChange={handleInputChange}
       />
 
-      {filesQueued ? (
+      {hasQueuedFiles ? (
         <UploadFileItem
           fileName={fileName}
           fileSize={fileSize}
           files={files}
-          imageUrls={imageUrls}
+          imageUrls={resolvedImageUrls}
           state={isMultiple ? multipleState : 'completed'}
           type={normalizedMode}
-          onDelete={onDelete}
+          onDelete={handleDelete}
           onReplace={() => {
             inputRef.current?.click();
             onReplace?.();

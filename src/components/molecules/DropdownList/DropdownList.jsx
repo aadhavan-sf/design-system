@@ -31,6 +31,12 @@ function getItemLabel(item) {
     : item.label;
 }
 
+function getItemPrefix(item) {
+  return typeof item === 'string'
+    ? null
+    : item.prefix ?? item.flag ?? null;
+}
+
 function getDefaultSelectedValues(items) {
   return items
     .filter((item) => typeof item !== 'string' && item.selected)
@@ -149,6 +155,7 @@ export function DropdownList({
       {items.map((item, index) => {
         const label = getItemLabel(item);
         const value = getItemValue(item);
+        const prefix = getItemPrefix(item);
         const itemState = typeof item === 'string' ? 'default' : item.state ?? 'default';
         const isDisabled = itemState === 'disabled' || (typeof item !== 'string' && item.disabled);
         const isDestructive = itemState === 'destructive';
@@ -185,6 +192,15 @@ export function DropdownList({
                 selected={isSelected}
                 variant={variant}
               />
+            )}
+
+            {prefix && (
+              <span
+                className="storybook-dropdown-list__prefix"
+                aria-hidden="true"
+              >
+                {prefix}
+              </span>
             )}
 
             <Text
@@ -232,6 +248,8 @@ const itemShape = PropTypes.oneOfType([
   PropTypes.shape({
     label: PropTypes.string.isRequired,
     value: PropTypes.string,
+    prefix: PropTypes.node,
+    flag: PropTypes.node,
     active: PropTypes.bool,
     disabled: PropTypes.bool,
     selected: PropTypes.bool,

@@ -14,7 +14,7 @@ const preview = {
       storySort: {
         order: [
           'Atoms',
-          ['Radio Button', 'Check Box', 'Toggle'],
+          ['Radio Button', 'Check Box', 'Toggle', 'Icon Hover Effect'],
           'Molecules',
           [
             'Buttons',
@@ -30,7 +30,7 @@ const preview = {
             'Dropdown List',
           ],
           'Organisms',
-          ['Modal', 'Top Navigation', 'Settings Panel', 'Layouts Panel'],
+          ['Modal', 'Top Navigation', 'Sidebar', 'Left Panel', 'Table', 'Settings Panel', 'Layouts Panel'],
           'Foundations',
           ['Typography', 'Colors', 'Spacing', 'Shadows'],
         ],

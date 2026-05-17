@@ -4,8 +4,22 @@ import { CalendarBlank } from '@phosphor-icons/react';
 import { DatePicker } from '../../DatePicker';
 import { getFieldClassName } from '../textFieldState';
 
-function formatSelectedDate(day) {
-  return `${String(day).padStart(2, '0')}/06/2024`;
+function formatDateParts(day, monthIndex, year) {
+  return [
+    String(day).padStart(2, '0'),
+    String(monthIndex + 1).padStart(2, '0'),
+    String(year),
+  ].join('/');
+}
+
+function formatSelectedDate(value) {
+  if (value && typeof value === 'object') {
+    return formatDateParts(value.day, value.monthIndex, value.year);
+  }
+
+  const today = new Date();
+
+  return formatDateParts(value, today.getMonth(), today.getFullYear());
 }
 
 function buildClassName(parts) {
@@ -30,14 +44,20 @@ export function DatepickerField({
     }
   };
 
-  const handleDateSelect = (day) => {
-    const selectedValue = String(day);
+  const handleDateSelect = (value, meta) => {
+    const shouldFormatDate =
+      typeof value === 'object' ||
+      meta?.type === 'day' ||
+      meta?.type === 'range-day';
 
-    onChange(/^\d+$/.test(selectedValue)
-      ? formatSelectedDate(selectedValue)
-      : selectedValue);
+    if (!shouldFormatDate) {
+      datePickerProps?.onSelect?.(value, meta);
+      return;
+    }
+
+    onChange(formatSelectedDate(value));
     onOpenChange(false);
-    datePickerProps?.onSelect?.(day);
+    datePickerProps?.onSelect?.(value, meta);
   };
 
   return (
@@ -72,7 +92,6 @@ export function DatepickerField({
         <div className="storybook-textfield__datepicker-panel">
           <DatePicker
             type={datePickerType}
-            selectedDay="8"
             {...datePickerProps}
             onSelect={handleDateSelect}
           />

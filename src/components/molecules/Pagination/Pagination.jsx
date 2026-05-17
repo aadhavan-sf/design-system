@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { ArrowLeft, ArrowRight } from '@phosphor-icons/react';
 
 import { Text } from '../../foundations/Typography';
@@ -147,13 +148,20 @@ PaginationButton.propTypes = {
 export function Pagination({
   alignment = 'right',
   breakpoint = 'desktop',
-  currentPage = 1,
+  currentPage,
+  defaultCurrentPage = 1,
+  disabled = false,
   pages,
   className,
+  nextDisabled = false,
+  onClick,
   onPageChange,
   onNext,
   onPrevious,
+  previousDisabled = false,
 }) {
+  const [internalCurrentPage, setInternalCurrentPage] = useState(defaultCurrentPage);
+  const isControlled = currentPage !== undefined;
   const normalizedAlignment = normalizeValue(alignment, {
     'Card button group right aligned': 'right',
     'Card button group left aligned': 'left',
@@ -166,6 +174,49 @@ export function Pagination({
   const displayedPages =
     pages ?? (normalizedBreakpoint === 'mobile' ? mobileItems : desktopItems);
   const isMobile = normalizedBreakpoint === 'mobile';
+  const resolvedCurrentPage = currentPage ?? internalCurrentPage;
+  const numericPages = displayedPages
+    .map((page) => Number(page))
+    .filter((page) => Number.isFinite(page));
+  const firstPage = numericPages[0] ?? 1;
+  const lastPage = numericPages[numericPages.length - 1] ?? firstPage;
+  const resolvedCurrentPageNumber = Number(resolvedCurrentPage);
+
+  const updatePage = (page, event) => {
+    const nextPage = Number(page);
+
+    if (!Number.isFinite(nextPage)) {
+      return;
+    }
+
+    onClick?.(event);
+
+    if (!isControlled) {
+      setInternalCurrentPage(nextPage);
+    }
+
+    onPageChange?.(nextPage);
+  };
+
+  const handlePrevious = (event) => {
+    const previousPage = Math.max(
+      firstPage,
+      (Number.isFinite(resolvedCurrentPageNumber) ? resolvedCurrentPageNumber : firstPage) - 1
+    );
+
+    updatePage(previousPage, event);
+    onPrevious?.(previousPage);
+  };
+
+  const handleNext = (event) => {
+    const nextPage = Math.min(
+      lastPage,
+      (Number.isFinite(resolvedCurrentPageNumber) ? resolvedCurrentPageNumber : firstPage) + 1
+    );
+
+    updatePage(nextPage, event);
+    onNext?.(nextPage);
+  };
 
   return (
     <nav
@@ -182,8 +233,9 @@ export function Pagination({
           hierarchy="leading"
           icon={isMobile ? 'only' : 'true'}
           label="Previous"
+          disabled={disabled || previousDisabled || resolvedCurrentPageNumber <= firstPage}
           aria-label="Previous page"
-          onClick={onPrevious}
+          onClick={handlePrevious}
         />
 
         {displayedPages.map((page, index) => (
@@ -195,14 +247,15 @@ export function Pagination({
             <PaginationButton
               hierarchy="middle"
               label={String(page)}
-              active={String(page) === String(currentPage)}
-              aria-current={String(page) === String(currentPage) ? 'page' : undefined}
+              active={String(page) === String(resolvedCurrentPage)}
+              disabled={disabled || page === '...'}
+              aria-current={String(page) === String(resolvedCurrentPage) ? 'page' : undefined}
               aria-label={page === '...'
                 ? 'Collapsed pages'
                 : `Go to page ${page}`}
-              onClick={() => {
+              onClick={(event) => {
                 if (page !== '...') {
-                  onPageChange?.(page);
+                  updatePage(page, event);
                 }
               }}
             />
@@ -213,8 +266,9 @@ export function Pagination({
           hierarchy="trailing"
           icon={isMobile ? 'only' : 'true'}
           label="Next"
+          disabled={disabled || nextDisabled || resolvedCurrentPageNumber >= lastPage}
           aria-label="Next page"
-          onClick={onNext}
+          onClick={handleNext}
         />
       </div>
     </nav>
@@ -230,12 +284,17 @@ Pagination.propTypes = {
   ]),
   breakpoint: PropTypes.oneOf([...BREAKPOINTS, 'Desktop', 'Mobile']),
   currentPage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  defaultCurrentPage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  disabled: PropTypes.bool,
   pages: PropTypes.arrayOf(PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
   ])),
   className: PropTypes.string,
+  nextDisabled: PropTypes.bool,
+  onClick: PropTypes.func,
   onPageChange: PropTypes.func,
   onNext: PropTypes.func,
   onPrevious: PropTypes.func,
+  previousDisabled: PropTypes.bool,
 };

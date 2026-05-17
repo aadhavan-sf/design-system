@@ -40,6 +40,9 @@ export default {
     active: {
       control: 'boolean',
     },
+    defaultActive: {
+      control: 'boolean',
+    },
   },
 };
 
@@ -51,7 +54,19 @@ export const Playground = {
     shape: 'pill',
     icon: 'none',
     border: false,
-    active: false,
+    defaultActive: false,
+    state: 'default',
+  },
+};
+
+export const InteractiveChipButton = {
+  args: {
+    type: 'button',
+    label: 'Label',
+    size: 'md',
+    shape: 'pill',
+    icon: 'right',
+    defaultActive: false,
     state: 'default',
   },
 };

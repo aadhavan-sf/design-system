@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import {
   SealCheck,
   Warning,
@@ -36,9 +37,13 @@ const MODAL_CONTENT = {
 
 export function Modal({
   actionCount = 2,
+  closeOnAction = true,
   description,
+  defaultOpen = true,
   onPrimaryAction,
+  onOpenChange,
   onSecondaryAction,
+  open,
   primaryButtonDestructive = false,
   primaryButtonHierarchy = 'primary',
   primaryButtonIcon = 'none',
@@ -56,6 +61,9 @@ export function Modal({
   state = 'error',
   title,
 }) {
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const isOpenControlled = typeof open === 'boolean';
+  const isOpen = isOpenControlled ? open : internalOpen;
   const content = MODAL_CONTENT[state];
   const Icon = content.icon;
   const resolvedTitle = title ?? content.title;
@@ -63,12 +71,40 @@ export function Modal({
   const resolvedPrimaryLabel = primaryLabel ?? content.primaryLabel;
   const resolvedSecondaryLabel = secondaryLabel ?? content.secondaryLabel;
   const showSecondaryAction = actionCount === 2;
+  const closeModal = () => {
+    if (!isOpenControlled) {
+      setInternalOpen(false);
+    }
+
+    onOpenChange?.(false);
+  };
+
+  const handlePrimaryAction = (event) => {
+    onPrimaryAction?.(event);
+
+    if (closeOnAction) {
+      closeModal();
+    }
+  };
+
+  const handleSecondaryAction = (event) => {
+    onSecondaryAction?.(event);
+
+    if (closeOnAction) {
+      closeModal();
+    }
+  };
+
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div className="storybook-modal__backdrop">
       <section
         aria-labelledby="storybook-modal-title"
         aria-describedby="storybook-modal-description"
+        aria-modal="true"
         className="storybook-modal"
         role="dialog"
       >
@@ -110,7 +146,7 @@ export function Modal({
                 label={resolvedSecondaryLabel}
                 size={secondaryButtonSize}
                 state={secondaryButtonState}
-                onClick={onSecondaryAction}
+                onClick={handleSecondaryAction}
                 {...secondaryButtonProps}
               />
             )}
@@ -122,7 +158,7 @@ export function Modal({
               label={resolvedPrimaryLabel}
               size={primaryButtonSize}
               state={primaryButtonState}
-              onClick={onPrimaryAction}
+              onClick={handlePrimaryAction}
               {...primaryButtonProps}
             />
           </div>
@@ -134,9 +170,13 @@ export function Modal({
 
 Modal.propTypes = {
   actionCount: PropTypes.oneOf([1, 2]),
+  closeOnAction: PropTypes.bool,
   description: PropTypes.string,
+  defaultOpen: PropTypes.bool,
   onPrimaryAction: PropTypes.func,
+  onOpenChange: PropTypes.func,
   onSecondaryAction: PropTypes.func,
+  open: PropTypes.bool,
   primaryButtonDestructive: PropTypes.bool,
   primaryButtonHierarchy: PropTypes.oneOf([
     'primary',

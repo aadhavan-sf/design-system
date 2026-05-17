@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import {
   ArrowUp,
   X,
@@ -95,13 +96,17 @@ export function Chip({
   style,
   border = false,
   icon = 'none',
-  active = false,
+  active,
+  defaultActive = false,
   state = 'default',
   disabled = false,
   className,
   onClick,
+  onActiveChange,
   ...props
 }) {
+  const [internalActive, setInternalActive] = useState(defaultActive);
+  const isActiveControlled = typeof active === 'boolean';
   const normalizedType = normalizeValue(type, {
     Chip: 'chip',
     Button: 'button',
@@ -129,6 +134,7 @@ export function Chip({
   });
   const isButton = normalizedType === 'button';
   const isDisabled = disabled || normalizedState === 'disabled';
+  const isActive = isActiveControlled ? active : internalActive;
   const Component = isButton ? 'button' : 'span';
   const showLabel = normalizedIcon !== 'icon-only';
   const hasLeftIcon = ['left', 'both', 'avatar-left'].includes(normalizedIcon);
@@ -141,7 +147,7 @@ export function Chip({
       type={isButton ? 'button' : undefined}
       disabled={isButton ? isDisabled : undefined}
       aria-disabled={!isButton && isDisabled ? true : undefined}
-      aria-pressed={isButton ? active : undefined}
+      aria-pressed={isButton ? isActive : undefined}
       className={buildClassName([
         'storybook-chip',
         `storybook-chip--${normalizedType}`,
@@ -149,12 +155,24 @@ export function Chip({
         `storybook-chip--${normalizedShape}`,
         `storybook-chip--state-${normalizedState}`,
         border && normalizedType === 'chip' && 'storybook-chip--bordered',
-        active && 'storybook-chip--active',
+        isActive && 'storybook-chip--active',
         isDisabled && 'storybook-chip--disabled',
         normalizedIcon === 'icon-only' && 'storybook-chip--icon-only',
         className,
       ])}
-      onClick={isDisabled ? undefined : onClick}
+      onClick={isDisabled ? undefined : (event) => {
+        if (isButton) {
+          const nextActive = !isActive;
+
+          if (!isActiveControlled) {
+            setInternalActive(nextActive);
+          }
+
+          onActiveChange?.(nextActive);
+        }
+
+        onClick?.(event);
+      }}
       {...props}
     >
       {hasLeftIcon && <ChipIcon name={leftIconName} size={size} />}
@@ -163,7 +181,7 @@ export function Chip({
         <Text
           as="span"
           variant={getTextVariant(size)}
-          weight={isButton && active ? 'semibold' : 'medium'}
+          weight={isButton && isActive ? 'semibold' : 'medium'}
           color="currentColor"
           className="storybook-chip__label"
         >
@@ -193,8 +211,10 @@ Chip.propTypes = {
     'Icon Only',
   ]),
   active: PropTypes.bool,
+  defaultActive: PropTypes.bool,
   state: PropTypes.oneOf([...BUTTON_STATES, 'Default', 'Hover', 'Focused', 'Disabled']),
   disabled: PropTypes.bool,
   className: PropTypes.string,
   onClick: PropTypes.func,
+  onActiveChange: PropTypes.func,
 };

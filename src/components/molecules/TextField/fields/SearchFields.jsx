@@ -14,6 +14,8 @@ export function SearchFields({
   state,
   value,
 }) {
+  const showClearButton = value.length > 0 && !disabled;
+
   return (
     <div className={getFieldClassName({ state, hasValue })}>
       <MagnifyingGlass
@@ -30,7 +32,7 @@ export function SearchFields({
         className="storybook-textfield__search-input"
       />
 
-      {hasValue && !disabled && (
+      {showClearButton && (
         <button
           type="button"
           aria-label="Clear search"

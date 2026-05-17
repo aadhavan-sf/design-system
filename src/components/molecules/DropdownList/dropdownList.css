@@ -63,8 +63,20 @@
 .storybook-dropdown-list__icon,
 .storybook-dropdown-list__checkbox,
 .storybook-dropdown-list__radio,
-.storybook-dropdown-list__toggle {
+.storybook-dropdown-list__toggle,
+.storybook-dropdown-list__prefix {
   flex-shrink: 0;
+}
+
+.storybook-dropdown-list__prefix {
+  width: 20px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: var(--type-text-sm-size);
+  line-height: var(--type-text-sm-line);
 }
 
 .storybook-dropdown-list__checkbox {

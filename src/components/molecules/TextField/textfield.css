@@ -301,17 +301,33 @@ button.storybook-textfield__field {
 
 .storybook-textfield__resize-mark {
   position: absolute;
-  right: 7px;
-  bottom: 7px;
+  right: var(--spacing_2);
+  bottom: var(--spacing_2);
 
-  width: 10px;
-  height: 10px;
+  width: 20px;
+  height: 20px;
 
-  border-right: 1px solid var(--neutral_400);
-  border-bottom: 1px solid var(--neutral_400);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  transform: skew(-12deg);
-  pointer-events: none;
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+  color: var(--neutral_400);
+
+  cursor: ns-resize;
+}
+
+.storybook-textfield__resize-mark:disabled {
+  color: var(--neutral_300);
+  cursor: not-allowed;
+}
+
+.storybook-textfield__resize-mark:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow_focus-brand);
 }
 
 .storybook-textfield__mobile {
@@ -322,10 +338,11 @@ button.storybook-textfield__field {
 }
 
 .storybook-textfield__country-code {
-  width: 68px;
+  width: auto;
+  min-width: 70px;
 
   justify-content: center;
-  gap: var(--spacing_2);
+  gap: var(--spacing_1);
 
   padding: var(--spacing_3) var(--spacing_2);
 
@@ -344,9 +361,10 @@ button.storybook-textfield__field {
   left: 0;
   z-index: 100;
 
-  width: 68px;
+  width: 240px;
+  max-height: 280px;
 
-  overflow: hidden;
+  overflow-y: auto;
 
   border: 1px solid var(--neutral_100);
   border-radius: var(--spacing_2);
@@ -355,23 +373,9 @@ button.storybook-textfield__field {
   box-shadow: var(--shadow_sm);
 }
 
-.storybook-textfield__country-menu-item {
+.storybook-textfield__country-menu .storybook-dropdown-list {
   width: 100%;
-
-  padding: var(--spacing_3) var(--spacing_2);
-
-  border: 0;
-  background: transparent;
-
-  font-size: var(--type-text-sm-size);
-  line-height: var(--type-text-sm-line);
-  color: var(--neutral_700);
-
-  cursor: pointer;
-}
-
-.storybook-textfield__country-menu-item:hover {
-  background: var(--neutral_50);
+  box-shadow: none;
 }
 
 .storybook-textfield__mobile-input {
@@ -475,11 +479,13 @@ button.storybook-textfield__field {
   order: 1;
 
   width: 100% !important;
-  height: 264px !important;
+  height: 262px !important;
+  padding-bottom: 0 !important;
 
   margin: 0 !important;
 
-  border-radius: var(--spacing_1_5) !important;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
 }
 
 .react-colorful__hue {

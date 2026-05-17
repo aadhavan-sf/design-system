@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { House } from '@phosphor-icons/react';
 
 import { Text } from '../../foundations/Typography';
@@ -97,7 +98,8 @@ TabItem.propTypes = {
 
 export function Tabs({
   tabs = ['Dynamic', 'Dynamic'],
-  activeIndex = 0,
+  activeIndex,
+  defaultActiveIndex = 0,
   type = 'no-segment',
   size = 'md',
   iconPosition = 'left',
@@ -105,6 +107,9 @@ export function Tabs({
   className,
   onTabChange,
 }) {
+  const [internalActiveIndex, setInternalActiveIndex] = useState(defaultActiveIndex);
+  const isControlled = typeof activeIndex === 'number';
+  const resolvedActiveIndex = isControlled ? activeIndex : internalActiveIndex;
   const normalizedType = normalizeValue(type, {
     'No Segment': 'no-segment',
     Segemnts: 'segments',
@@ -123,7 +128,7 @@ export function Tabs({
       {tabs.map((tab, index) => {
         const label = typeof tab === 'string' ? tab : tab.label;
         const disabled = typeof tab === 'string' ? false : tab.disabled;
-        const pressed = index === activeIndex;
+        const pressed = index === resolvedActiveIndex;
 
         return (
           <TabItem
@@ -138,6 +143,9 @@ export function Tabs({
             state={disabled ? 'disabled' : tab.state ?? 'default'}
             onClick={() => {
               if (!disabled) {
+                if (!isControlled) {
+                  setInternalActiveIndex(index);
+                }
                 onTabChange?.(index);
               }
             }}
@@ -161,6 +169,7 @@ Tabs.propTypes = {
     }),
   ])),
   activeIndex: PropTypes.number,
+  defaultActiveIndex: PropTypes.number,
   type: PropTypes.oneOf([...TYPES, 'No Segment', 'Segemnts', 'Segments']),
   size: PropTypes.oneOf(SIZES),
   iconPosition: PropTypes.oneOf([...ICON_POSITIONS, 'Left', 'Right']),

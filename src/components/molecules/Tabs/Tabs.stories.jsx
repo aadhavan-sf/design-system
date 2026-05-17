@@ -47,7 +47,7 @@ export const Playground = {
     size: 'md',
     showIcons: false,
     iconPosition: 'left',
-    activeIndex: 0,
+    defaultActiveIndex: 0,
     tabs: ['Dynamic', 'Dynamic', 'Dynamic'],
   },
 };

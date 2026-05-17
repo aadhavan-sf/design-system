@@ -83,10 +83,18 @@ export const activeValueByType = {
 };
 
 export const countryOptions = [
-  '+91',
-  '+1',
-  '+44',
-  '+61',
+  { code: '+91', name: 'India', flag: '🇮🇳' },
+  { code: '+1', name: 'United States', flag: '🇺🇸' },
+  { code: '+44', name: 'United Kingdom', flag: '🇬🇧' },
+  { code: '+61', name: 'Australia', flag: '🇦🇺' },
+  { code: '+971', name: 'United Arab Emirates', flag: '🇦🇪' },
+  { code: '+33', name: 'France', flag: '🇫🇷' },
+  { code: '+49', name: 'Germany', flag: '🇩🇪' },
+  { code: '+55', name: 'Brazil', flag: '🇧🇷' },
+  { code: '+591', name: 'Bolivia', flag: '🇧🇴' },
+  { code: '+501', name: 'Belize', flag: '🇧🇿' },
+  { code: '+375', name: 'Belarus', flag: '🇧🇾' },
+  { code: '+1441', name: 'Bermuda', flag: '🇧🇲' },
 ];
 
 export function normalizeType(type) {

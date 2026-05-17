@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 
 import { Text } from '../../foundations/Typography';
@@ -40,19 +41,19 @@ const monthNames = [
   'Nov',
   'Dec',
 ];
-const yearItems = [
-  '2020',
-  '2021',
-  '2022',
-  '2023',
-  '2024',
-  '2025',
-  '2026',
-  '2027',
-  '2028',
-  '2029',
-  '2030',
-  '2031',
+const fullMonthNames = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 const presetItems = [
   'Today',
@@ -61,27 +62,6 @@ const presetItems = [
   'Last week',
   'This month',
   'Last month',
-];
-
-const juneDays = [
-  { label: '29', state: 'disabled' },
-  { label: '30', state: 'disabled' },
-  { label: '31', state: 'disabled' },
-  ...Array.from({ length: 30 }, (_, index) => ({
-    label: String(index + 1),
-  })),
-  { label: '1', state: 'disabled' },
-  { label: '2', state: 'disabled' },
-];
-
-const julyDays = [
-  ...Array.from({ length: 31 }, (_, index) => ({
-    label: String(index + 1),
-  })),
-  { label: '1', state: 'disabled' },
-  { label: '2', state: 'disabled' },
-  { label: '3', state: 'disabled' },
-  { label: '4', state: 'disabled' },
 ];
 
 function normalizeType(type) {
@@ -138,6 +118,86 @@ function getDayColor(state, today) {
 
 function buildClassName(parts) {
   return parts.filter(Boolean).join(' ');
+}
+
+function getMonthIndex(month) {
+  const normalizedMonth = String(month).slice(0, 3).toLowerCase();
+  const index = monthNames.findIndex((item) => item.toLowerCase() === normalizedMonth);
+
+  return index >= 0 ? index : getTodayDate().monthIndex;
+}
+
+function getTodayDate() {
+  const today = new Date();
+
+  return {
+    day: String(today.getDate()),
+    monthIndex: today.getMonth(),
+    year: today.getFullYear(),
+  };
+}
+
+function getMonthYearLabel(monthIndex, year) {
+  return `${fullMonthNames[monthIndex]} ${year}`;
+}
+
+function getVisibleYearRange(startYear) {
+  return `${startYear} - ${startYear + 11}`;
+}
+
+function getTodayForMonth(todayDate, monthIndex, year) {
+  return todayDate.monthIndex === monthIndex && todayDate.year === year
+    ? todayDate.day
+    : '';
+}
+
+function buildCalendarDays(monthIndex, year) {
+  const firstDay = new Date(year, monthIndex, 1);
+  const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+  const daysInPreviousMonth = new Date(year, monthIndex, 0).getDate();
+  const leadingCount = firstDay.getDay();
+  const trailingCount = (7 - ((leadingCount + daysInMonth) % 7)) % 7;
+  const leadingDays = Array.from({ length: leadingCount }, (_, index) => ({
+    label: String(daysInPreviousMonth - leadingCount + index + 1),
+    state: 'disabled',
+  }));
+  const currentDays = Array.from({ length: daysInMonth }, (_, index) => ({
+    label: String(index + 1),
+  }));
+  const trailingDays = Array.from({ length: trailingCount }, (_, index) => ({
+    label: String(index + 1),
+    state: 'disabled',
+  }));
+
+  return [...leadingDays, ...currentDays, ...trailingDays];
+}
+
+function isSameMonthYear(dateA, dateB) {
+  return dateA.monthIndex === dateB.monthIndex && dateA.year === dateB.year;
+}
+
+function dateToNumber(date) {
+  return date.year * 10000 + (date.monthIndex + 1) * 100 + Number(date.day);
+}
+
+function getDateRangeDays(startDate, endDate, monthIndex, year) {
+  if (!startDate || !endDate) {
+    return [];
+  }
+
+  const startNumber = dateToNumber(startDate);
+  const endNumber = dateToNumber(endDate);
+  const low = Math.min(startNumber, endNumber);
+  const high = Math.max(startNumber, endNumber);
+
+  return buildCalendarDays(monthIndex, year)
+    .filter((day) => day.state !== 'disabled')
+    .filter((day) => {
+      const dayNumber = dateToNumber({ day: day.label, monthIndex, year });
+
+      return dayNumber > low && dayNumber < high;
+    })
+    .map((day) => day.label);
 }
 
 export function DatePickerCalendarDay({
@@ -245,6 +305,7 @@ function DatePickerHeader({
   previousActive = false,
   onPrevious,
   onNext,
+  onTitleClick,
 }) {
   return (
     <div className="storybook-datepicker__header">
@@ -263,6 +324,7 @@ function DatePickerHeader({
       <button
         type="button"
         className="storybook-datepicker__title-button"
+        onClick={onTitleClick}
       >
         <Text
           as="span"
@@ -291,25 +353,35 @@ DatePickerHeader.propTypes = {
   previousActive: PropTypes.bool,
   onPrevious: PropTypes.func,
   onNext: PropTypes.func,
+  onTitleClick: PropTypes.func,
 };
 
 function CalendarMonth({
-  monthLabel = 'June 2024',
-  days = juneDays,
+  monthLabel,
+  monthIndex = getTodayDate().monthIndex,
+  year = getTodayDate().year,
+  days,
   selectedDays = ['8'],
-  today = '12',
+  today = '',
   rangeDays = [],
   previousActive = false,
+  onPrevious,
+  onNext,
+  onTitleClick,
   onDaySelect,
 }) {
+  const resolvedDays = days ?? buildCalendarDays(monthIndex, year);
   const selectedDaySet = new Set(selectedDays);
   const rangeDaySet = new Set(rangeDays);
 
   return (
     <div className="storybook-datepicker__calendar">
       <DatePickerHeader
-        label={monthLabel}
+        label={monthLabel ?? getMonthYearLabel(monthIndex, year)}
         previousActive={previousActive}
+        onPrevious={onPrevious}
+        onNext={onNext}
+        onTitleClick={onTitleClick}
       />
 
       <div className="storybook-datepicker__weekdays">
@@ -323,7 +395,7 @@ function CalendarMonth({
       </div>
 
       <div className="storybook-datepicker__day-grid">
-        {days.map((day, index) => {
+        {resolvedDays.map((day, index) => {
           const isSelected = selectedDaySet.has(day.label);
           const isOnRange = rangeDaySet.has(day.label);
           const state = isSelected
@@ -353,6 +425,8 @@ function CalendarMonth({
 
 CalendarMonth.propTypes = {
   monthLabel: PropTypes.string,
+  monthIndex: PropTypes.number,
+  year: PropTypes.number,
   days: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
     state: PropTypes.oneOf(['disabled']),
@@ -361,6 +435,9 @@ CalendarMonth.propTypes = {
   today: PropTypes.string,
   rangeDays: PropTypes.arrayOf(PropTypes.string),
   previousActive: PropTypes.bool,
+  onPrevious: PropTypes.func,
+  onNext: PropTypes.func,
+  onTitleClick: PropTypes.func,
   onDaySelect: PropTypes.func,
 };
 
@@ -397,63 +474,201 @@ CalendarYearGrid.propTypes = {
 
 export function DatePicker({
   type = 'single-date',
-  selectedDay = '8',
-  selectedMonth = 'Dec',
-  selectedYear = '2024',
-  rangeStart = '8',
-  rangeEnd = '12',
-  selectedPreset = 'Last month',
+  selectedDay,
+  selectedMonth,
+  selectedYear,
+  rangeStart,
+  rangeEnd,
+  selectedPreset = 'Today',
   onApply,
   onCancel,
   onSelect,
   className,
 }) {
   const normalizedType = normalizeType(type);
+  const todayDate = getTodayDate();
+  const initialMonthIndex = selectedMonth
+    ? getMonthIndex(selectedMonth)
+    : todayDate.monthIndex;
+  const initialYear = selectedYear !== undefined
+    ? Number(selectedYear) || todayDate.year
+    : todayDate.year;
+  const initialDay = selectedDay ?? todayDate.day;
+  const [view, setView] = useState(
+    normalizedType === 'month'
+      ? 'month'
+      : normalizedType === 'year' ? 'year' : 'day'
+  );
+  const [visibleMonthIndex, setVisibleMonthIndex] = useState(initialMonthIndex);
+  const [visibleYear, setVisibleYear] = useState(initialYear);
+  const [yearRangeStart, setYearRangeStart] = useState(
+    initialYear - (initialYear % 12)
+  );
+  const [selectedDate, setSelectedDate] = useState({
+    day: initialDay,
+    monthIndex: initialMonthIndex,
+    year: initialYear,
+  });
+  const [internalSelectedMonth, setInternalSelectedMonth] = useState(monthNames[initialMonthIndex]);
+  const [internalSelectedYear, setInternalSelectedYear] = useState(String(initialYear));
+  const [internalRange, setInternalRange] = useState([
+    { day: rangeStart ?? initialDay, monthIndex: initialMonthIndex, year: initialYear },
+    rangeEnd === undefined
+      ? null
+      : { day: rangeEnd, monthIndex: initialMonthIndex, year: initialYear },
+  ]);
+  const [internalPreset, setInternalPreset] = useState(selectedPreset);
   const isWide =
     normalizedType === 'with-presets' || normalizedType === 'dual-dates';
+  const emitSelect = (value, meta) => {
+    onSelect?.(value, meta);
+  };
+  const handleDaySelect = (day) => {
+    const nextDate = { day, monthIndex: visibleMonthIndex, year: visibleYear };
+
+    setSelectedDate(nextDate);
+    emitSelect(nextDate, { type: 'day' });
+  };
+  const handleRangeDaySelect = (day) => {
+    const nextDate = { day, monthIndex: visibleMonthIndex, year: visibleYear };
+
+    setInternalRange(([start, end]) => {
+      if (!start || (start && end)) {
+        return [nextDate, null];
+      }
+
+      return dateToNumber(nextDate) < dateToNumber(start)
+        ? [nextDate, start]
+        : [start, nextDate];
+    });
+    emitSelect(nextDate, { type: 'range-day' });
+  };
+  const handleMonthSelect = (month) => {
+    const nextMonthIndex = getMonthIndex(month);
+
+    setVisibleMonthIndex(nextMonthIndex);
+    setInternalSelectedMonth(month);
+    emitSelect(month, { type: 'month' });
+    setView('day');
+  };
+  const handleYearSelect = (year) => {
+    const nextYear = Number(year);
+
+    setVisibleYear(nextYear);
+    setInternalSelectedYear(year);
+    emitSelect(year, { type: 'year' });
+    setView('month');
+  };
+  const handlePresetSelect = (preset) => {
+    setInternalPreset(preset);
+    emitSelect(preset, { type: 'preset' });
+  };
+  const selectedDaysForVisibleMonth = isSameMonthYear(selectedDate, {
+    monthIndex: visibleMonthIndex,
+    year: visibleYear,
+  }) ? [selectedDate.day] : [];
+  const rangeStartValue = internalRange[0];
+  const rangeEndValue = internalRange[1];
+  const rangeSelectedDays = internalRange
+    .filter(Boolean)
+    .filter((date) => isSameMonthYear(date, {
+      monthIndex: visibleMonthIndex,
+      year: visibleYear,
+    }))
+    .map((date) => date.day);
+  const rangeDaysForVisibleMonth = getDateRangeDays(
+    rangeStartValue,
+    rangeEndValue,
+    visibleMonthIndex,
+    visibleYear
+  );
+  const goToPreviousMonth = () => {
+    setVisibleMonthIndex((currentMonth) => {
+      if (currentMonth > 0) {
+        return currentMonth - 1;
+      }
+
+      setVisibleYear((currentYear) => currentYear - 1);
+      return 11;
+    });
+  };
+  const goToNextMonth = () => {
+    setVisibleMonthIndex((currentMonth) => {
+      if (currentMonth < 11) {
+        return currentMonth + 1;
+      }
+
+      setVisibleYear((currentYear) => currentYear + 1);
+      return 0;
+    });
+  };
+  const goToPreviousYear = () => setVisibleYear((currentYear) => currentYear - 1);
+  const goToNextYear = () => setVisibleYear((currentYear) => currentYear + 1);
+  const goToPreviousYearRange = () => setYearRangeStart((currentYear) => currentYear - 12);
+  const goToNextYearRange = () => setYearRangeStart((currentYear) => currentYear + 12);
+  const renderMonthPanel = () => (
+    <div className="storybook-datepicker__panel storybook-datepicker__panel--fixed">
+      <DatePickerHeader
+        label={String(visibleYear)}
+        previousActive
+        onPrevious={goToPreviousYear}
+        onNext={goToNextYear}
+        onTitleClick={() => setView('year')}
+      />
+      <CalendarYearGrid
+        items={monthNames}
+        selectedItem={internalSelectedMonth}
+        todayItem={monthNames[todayDate.monthIndex]}
+        size="month"
+        onSelect={handleMonthSelect}
+      />
+    </div>
+  );
+  const renderYearPanel = () => {
+    const visibleYearItems = Array.from({ length: 12 }, (_, index) =>
+      String(yearRangeStart + index)
+    );
+
+    return (
+      <div className="storybook-datepicker__panel storybook-datepicker__panel--fixed">
+        <DatePickerHeader
+          label={getVisibleYearRange(yearRangeStart)}
+          onPrevious={goToPreviousYearRange}
+          onNext={goToNextYearRange}
+        />
+        <CalendarYearGrid
+          items={visibleYearItems}
+          selectedItem={internalSelectedYear}
+          todayItem={String(todayDate.year)}
+          size="year"
+          onSelect={handleYearSelect}
+        />
+      </div>
+    );
+  };
 
   const renderMainContent = () => {
-    if (normalizedType === 'month') {
-      return (
-        <div className="storybook-datepicker__panel storybook-datepicker__panel--fixed">
-          <DatePickerHeader
-            label={selectedYear}
-            previousActive
-          />
-          <CalendarYearGrid
-            items={monthNames}
-            selectedItem={selectedMonth}
-            todayItem="Jun"
-            size="month"
-            onSelect={onSelect}
-          />
-        </div>
-      );
+    if (view === 'month') {
+      return renderMonthPanel();
     }
 
-    if (normalizedType === 'year') {
-      return (
-        <div className="storybook-datepicker__panel storybook-datepicker__panel--fixed">
-          <DatePickerHeader label="2020 - 2031" />
-          <CalendarYearGrid
-            items={yearItems}
-            selectedItem={selectedYear}
-            todayItem="2026"
-            size="year"
-            onSelect={onSelect}
-          />
-        </div>
-      );
+    if (view === 'year') {
+      return renderYearPanel();
     }
 
     if (normalizedType === 'date-range') {
       return (
         <div className="storybook-datepicker__panel">
           <CalendarMonth
-            selectedDays={[rangeStart, rangeEnd]}
-            rangeDays={['9', '10', '11']}
-            today=""
-            onDaySelect={onSelect}
+            monthIndex={visibleMonthIndex}
+            year={visibleYear}
+            selectedDays={rangeSelectedDays}
+            rangeDays={rangeDaysForVisibleMonth}
+            today={getTodayForMonth(todayDate, visibleMonthIndex, visibleYear)}
+            onPrevious={goToPreviousMonth}
+            onNext={goToNextMonth}
+            onTitleClick={() => setView('month')}
+            onDaySelect={handleRangeDaySelect}
           />
         </div>
       );
@@ -467,27 +682,36 @@ export function DatePicker({
               <DatePickerListItem
                 key={item}
                 label={item}
-                selected={item === selectedPreset}
+                selected={item === internalPreset}
                 state={item === 'Last week' ? 'hover' : 'default'}
-                onClick={() => onSelect?.(item)}
+                onClick={() => handlePresetSelect(item)}
               />
             ))}
           </div>
           <div className="storybook-datepicker__wide-content">
             <div className="storybook-datepicker__dual-calendars">
               <CalendarMonth
-                selectedDays={['23']}
-                rangeDays={['24', '25', '26', '27', '28', '29', '30']}
-                today=""
-                onDaySelect={onSelect}
+                monthIndex={visibleMonthIndex}
+                year={visibleYear}
+                selectedDays={rangeSelectedDays}
+                rangeDays={rangeDaysForVisibleMonth}
+                today={getTodayForMonth(todayDate, visibleMonthIndex, visibleYear)}
+                onPrevious={goToPreviousMonth}
+                onNext={goToNextMonth}
+                onTitleClick={() => setView('month')}
+                onDaySelect={handleRangeDaySelect}
               />
               <CalendarMonth
-                monthLabel="July 2024"
-                days={julyDays}
-                selectedDays={['4']}
-                rangeDays={['1', '2', '3']}
-                today="29"
-                onDaySelect={onSelect}
+                monthIndex={(visibleMonthIndex + 1) % 12}
+                year={visibleMonthIndex === 11 ? visibleYear + 1 : visibleYear}
+                selectedDays={[]}
+                rangeDays={[]}
+                today={getTodayForMonth(
+                  todayDate,
+                  (visibleMonthIndex + 1) % 12,
+                  visibleMonthIndex === 11 ? visibleYear + 1 : visibleYear
+                )}
+                onDaySelect={handleRangeDaySelect}
               />
             </div>
             <div className="storybook-datepicker__bottom-panel">
@@ -529,18 +753,27 @@ export function DatePicker({
       return (
         <div className="storybook-datepicker__dual-calendars">
           <CalendarMonth
-            selectedDays={['23']}
-            rangeDays={['24', '25', '26', '27', '28', '29', '30']}
-            today=""
-            onDaySelect={onSelect}
+            monthIndex={visibleMonthIndex}
+            year={visibleYear}
+            selectedDays={rangeSelectedDays}
+            rangeDays={rangeDaysForVisibleMonth}
+            today={getTodayForMonth(todayDate, visibleMonthIndex, visibleYear)}
+            onPrevious={goToPreviousMonth}
+            onNext={goToNextMonth}
+            onTitleClick={() => setView('month')}
+            onDaySelect={handleRangeDaySelect}
           />
           <CalendarMonth
-            monthLabel="July 2024"
-            days={julyDays}
-            selectedDays={['4']}
-            rangeDays={['1', '2', '3']}
-            today="29"
-            onDaySelect={onSelect}
+            monthIndex={(visibleMonthIndex + 1) % 12}
+            year={visibleMonthIndex === 11 ? visibleYear + 1 : visibleYear}
+            selectedDays={[]}
+            rangeDays={[]}
+            today={getTodayForMonth(
+              todayDate,
+              (visibleMonthIndex + 1) % 12,
+              visibleMonthIndex === 11 ? visibleYear + 1 : visibleYear
+            )}
+            onDaySelect={handleRangeDaySelect}
           />
         </div>
       );
@@ -549,9 +782,14 @@ export function DatePicker({
     return (
       <div className="storybook-datepicker__panel">
         <CalendarMonth
-          selectedDays={[selectedDay]}
-          today="12"
-          onDaySelect={onSelect}
+          monthIndex={visibleMonthIndex}
+          year={visibleYear}
+          selectedDays={selectedDaysForVisibleMonth}
+          today={getTodayForMonth(todayDate, visibleMonthIndex, visibleYear)}
+          onPrevious={goToPreviousMonth}
+          onNext={goToNextMonth}
+          onTitleClick={() => setView('month')}
+          onDaySelect={handleDaySelect}
         />
       </div>
     );

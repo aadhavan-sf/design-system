@@ -5,6 +5,7 @@ import {
 } from './DatePicker';
 
 export default {
+  id: 'molecules-datepicker',
   title: 'Molecules/Date Picker',
   component: DatePicker,
   parameters: {
@@ -41,12 +42,7 @@ export default {
 export const Playground = {
   args: {
     type: 'single-date',
-    selectedDay: '8',
-    selectedMonth: 'Dec',
-    selectedYear: '2024',
-    rangeStart: '8',
-    rangeEnd: '12',
-    selectedPreset: 'Last month',
+    selectedPreset: 'Today',
   },
 };
 

@@ -6,6 +6,9 @@ Examples that belong here:
 
 - `Modal`
 - `TopNavigation`
+- `Sidebar`
+- `LeftPanel`
+- `Table`
 - `SettingsPanel`
 - `LayoutsPanel`
 

@@ -60,6 +60,9 @@ export default {
     secondaryButtonDestructive: {
       control: 'boolean',
     },
+    closeOnAction: {
+      control: 'boolean',
+    },
     primaryButtonProps: {
       table: {
         disable: true,
@@ -87,15 +90,16 @@ export const Playground = {
     secondaryButtonSize: 'large',
     secondaryButtonState: 'default',
     secondaryButtonDestructive: false,
+    closeOnAction: false,
   },
 };
 
 export const States = {
   render: () => (
     <div className="storybook-modal-story-grid">
-      <Modal state="error" actionCount={2} />
-      <Modal state="warning" actionCount={1} />
-      <Modal state="success" actionCount={1} />
+      <Modal state="error" actionCount={2} closeOnAction={false} />
+      <Modal state="warning" actionCount={1} closeOnAction={false} />
+      <Modal state="success" actionCount={1} closeOnAction={false} />
     </div>
   ),
 };

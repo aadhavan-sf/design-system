@@ -76,7 +76,7 @@
 
 .storybook-upload-dropzone--disabled,
 .storybook-upload-dropzone:disabled {
-  background: var(--neutral_100);
+  background: var(--neutral_50);
   color: var(--neutral_400);
   cursor: not-allowed;
 }

@@ -85,6 +85,23 @@ export const DropzoneStates = {
   ),
 };
 
+export const DisabledStates = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Disabled horizontal and vertical upload dropzones. Both use the disabled button state, neutral_50 surface, neutral_200 dashed border, and neutral_400 text/icon color.',
+      },
+    },
+  },
+  render: () => (
+    <div className="upload-file-story-stack">
+      <UploadFileBase layout="horizontal" state="disabled" />
+      <UploadFileBase layout="vertical" state="disabled" />
+    </div>
+  ),
+};
+
 export const UploadedItems = {
   render: () => (
     <div className="upload-file-story-stack">

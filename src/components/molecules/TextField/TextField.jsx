@@ -30,9 +30,23 @@ import './textfield.css';
 
 const EMPTY_OPTIONS = [];
 
+function formatCurrentDateValue(date = new Date()) {
+  return [
+    String(date.getDate()).padStart(2, '0'),
+    String(date.getMonth() + 1).padStart(2, '0'),
+    String(date.getFullYear()),
+  ].join('/');
+}
+
+function getFilledValue(type) {
+  return type === 'date-picker'
+    ? formatCurrentDateValue()
+    : filledValueByType[type] ?? '';
+}
+
 function getInitialTextValue(type, state) {
   return state === 'filled'
-    ? filledValueByType[type] ?? ''
+    ? getFilledValue(type)
     : '';
 }
 
@@ -91,6 +105,17 @@ function formatColorWithOpacity(color, opacity) {
   return opacity === 100
     ? color.toUpperCase()
     : `${color.toUpperCase()}${alphaHex}`;
+}
+
+function formatColorDisplayValue(colorValue) {
+  const normalizedColor = colorValue.toUpperCase();
+  const colorNames = {
+    '#131313': 'Black',
+  };
+
+  return colorNames[normalizedColor]
+    ? `${colorNames[normalizedColor]} (${normalizedColor})`
+    : normalizedColor;
 }
 
 export function TextField({
@@ -172,9 +197,12 @@ export function TextField({
   }, []);
 
   const colorValue = formatColorWithOpacity(color, opacity);
+  const colorDisplayValue = formatColorDisplayValue(colorValue);
   const hasInputValue = inputValue.length > 0;
   const hasSelectedOptions = selectedOptions.length > 0;
-  const hasColorValue = hasPickedColor || normalizedState === 'filled';
+  const hasColorValue =
+    hasPickedColor ||
+    ['filled', 'error', 'disabled'].includes(normalizedState);
 
   const hasValueByType = {
     input: hasInputValue,
@@ -216,7 +244,7 @@ export function TextField({
     }
 
     if (normalizedState === 'filled') {
-      return filledValueByType[normalizedType] ?? resolvedPlaceholder;
+      return getFilledValue(normalizedType) || resolvedPlaceholder;
     }
 
     return resolvedPlaceholder;
@@ -322,6 +350,7 @@ export function TextField({
           color={color}
           disabled={isDisabled}
           displayValue={colorValue}
+          fieldDisplayValue={colorDisplayValue}
           hasValue={hasValue}
           isOpen={openMenu === 'color-picker'}
           onColorChange={handleColorChange}
@@ -358,7 +387,7 @@ export function TextField({
       return (
         <SearchFields
           disabled={isDisabled}
-          hasValue={hasValue}
+          hasValue={hasInputValue}
           onChange={setInputValue}
           placeholder={resolvedPlaceholder}
           state={visualState}

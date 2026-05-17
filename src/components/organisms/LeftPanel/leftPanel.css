@@ -1,0 +1,429 @@
+.storybook-left-panel {
+  width: 284px;
+  height: 846px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: var(--spacing_6);
+
+  border: 1px solid var(--neutral_50);
+  border-radius: var(--spacing_6);
+
+  background: var(--neutral_00);
+
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.storybook-left-panel--theme-settings {
+  justify-content: flex-start;
+}
+
+.storybook-left-panel__body {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing_4);
+}
+
+.storybook-left-panel__header {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing_3);
+}
+
+.storybook-left-panel__title-row {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  gap: var(--spacing_3);
+}
+
+.storybook-left-panel__back {
+  width: 20px;
+  height: 20px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: var(--spacing_2);
+
+  background: transparent;
+  color: var(--neutral_900);
+
+  cursor: pointer;
+}
+
+.storybook-left-panel__back:focus-visible,
+.storybook-left-panel-add:focus-visible,
+.storybook-left-panel-footer__button:focus-visible,
+.storybook-left-panel-item:focus-visible,
+.storybook-left-panel-menu-item:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow_focus-brand);
+}
+
+.storybook-left-panel__title,
+.storybook-left-panel__page-title {
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.storybook-left-panel-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  padding: var(--spacing_1) var(--spacing_2);
+
+  border: 1px solid var(--neutral_200);
+  border-radius: var(--spacing_2);
+
+  background: var(--neutral_25);
+  color: var(--neutral_600);
+}
+
+.storybook-left-panel-status--active {
+  border-color: var(--success_200);
+  background: var(--success_25);
+  color: var(--success_600);
+}
+
+.storybook-left-panel-status__label {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.storybook-left-panel__divider {
+  width: 100%;
+  height: 1px;
+
+  flex-shrink: 0;
+
+  background: var(--neutral_100);
+}
+
+.storybook-left-panel__content,
+.storybook-left-panel__block-sections,
+.storybook-left-panel-theme {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing_6);
+}
+
+.storybook-left-panel__page-heading {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing_6);
+}
+
+.storybook-left-panel-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing_2);
+
+  flex-shrink: 0;
+
+  padding: var(--spacing_2) var(--spacing_3);
+
+  border: 1px solid var(--neutral_300);
+  border-radius: var(--spacing_2);
+
+  background: var(--neutral_00);
+  color: var(--neutral_700);
+
+  cursor: pointer;
+}
+
+.storybook-left-panel-add__icon {
+  flex-shrink: 0;
+}
+
+.storybook-left-panel-section {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing_4);
+}
+
+.storybook-left-panel-section__title {
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.storybook-left-panel-section__items,
+.storybook-left-panel-theme__items {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing_4);
+}
+
+.storybook-left-panel-item {
+  width: 100%;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing_2);
+
+  padding: var(--spacing_3) var(--spacing_2);
+
+  border: 1px solid transparent;
+  border-radius: var(--spacing_2);
+
+  background: transparent;
+  color: var(--neutral_700);
+
+  box-sizing: border-box;
+
+  font-family: var(--font_family_base);
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.storybook-left-panel-item:hover,
+.storybook-left-panel-item--hover {
+  justify-content: space-between;
+}
+
+.storybook-left-panel-item--focused {
+  background: var(--neutral_00);
+  box-shadow: var(--shadow_focus-brand);
+}
+
+.storybook-left-panel-item--pressed {
+  justify-content: space-between;
+
+  border-color: var(--brand_400);
+  background: var(--brand_25);
+  color: var(--brand_400);
+}
+
+.storybook-left-panel-item--pressed.storybook-left-panel-item--focused {
+  box-shadow: var(--shadow_focus-brand);
+}
+
+.storybook-left-panel-item:disabled,
+.storybook-left-panel-item--disabled {
+  background: var(--neutral_50);
+  color: var(--neutral_300);
+  cursor: not-allowed;
+}
+
+.storybook-left-panel-item--pressed:disabled,
+.storybook-left-panel-item--pressed.storybook-left-panel-item--disabled {
+  border-color: var(--brand_200);
+  background: var(--brand_25);
+  color: var(--brand_200);
+}
+
+.storybook-left-panel-item__main {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  gap: var(--spacing_2);
+
+  flex: 1 1 0;
+}
+
+.storybook-left-panel-item__leading-icon {
+  width: 16px;
+  height: 16px;
+
+  flex-shrink: 0;
+}
+
+.storybook-left-panel-item__label {
+  min-width: 0;
+
+  flex: 1 1 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.storybook-left-panel-item__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing_4);
+
+  flex-shrink: 0;
+}
+
+.storybook-left-panel-item__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: currentColor;
+}
+
+.storybook-left-panel-menu-item {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: var(--spacing_2);
+
+  padding: var(--spacing_3);
+
+  border: 1px solid var(--neutral_100);
+  border-radius: var(--spacing_2);
+
+  background: var(--neutral_00);
+  color: var(--neutral_600);
+
+  box-sizing: border-box;
+
+  font-family: var(--font_family_base);
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.storybook-left-panel-menu-item:hover,
+.storybook-left-panel-menu-item--hover {
+  background: var(--neutral_50);
+}
+
+.storybook-left-panel-menu-item--focused {
+  background: var(--neutral_00);
+  box-shadow: var(--shadow_focus-brand);
+}
+
+.storybook-left-panel-menu-item--pressed {
+  border-color: var(--brand_400);
+  background: var(--brand_25);
+  color: var(--brand_400);
+}
+
+.storybook-left-panel-menu-item--pressed.storybook-left-panel-menu-item--focused {
+  box-shadow: var(--shadow_focus-brand);
+}
+
+.storybook-left-panel-menu-item:disabled,
+.storybook-left-panel-menu-item--disabled {
+  background: var(--neutral_50);
+  color: var(--neutral_300);
+  cursor: not-allowed;
+}
+
+.storybook-left-panel-menu-item__label {
+  min-width: 0;
+
+  flex: 1 1 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.storybook-left-panel-footer {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing_2);
+}
+
+.storybook-left-panel-footer__divider {
+  width: 278px;
+  height: 1px;
+
+  background: var(--neutral_100);
+}
+
+.storybook-left-panel-footer__button {
+  width: 100%;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing_2);
+
+  padding: var(--spacing_2) var(--spacing_3);
+
+  border: 0;
+  border-radius: var(--spacing_2);
+
+  background: transparent;
+  color: var(--neutral_700);
+
+  cursor: pointer;
+}
+
+.storybook-left-panel-story-surface {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--spacing_3);
+
+  padding: var(--spacing_6);
+
+  background: var(--neutral_100);
+}
+
+.storybook-left-panel-item-story-grid {
+  display: grid;
+  grid-template-columns: 236px 236px;
+  gap: var(--spacing_16) 96px;
+
+  padding: var(--spacing_5);
+}
+
+.storybook-left-panel-status-story-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing_5);
+}
