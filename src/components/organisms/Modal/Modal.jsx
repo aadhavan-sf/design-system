@@ -6,7 +6,7 @@ import {
 } from '@phosphor-icons/react';
 
 import { Button } from '../../molecules/Button';
-import { Text } from '../../styling/Typography';
+import { Text } from '../../foundations/Typography';
 
 import './modal.css';
 

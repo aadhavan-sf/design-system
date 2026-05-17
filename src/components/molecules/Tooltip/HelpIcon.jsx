@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Question } from '@phosphor-icons/react';
-import { Text } from '../../styling/Typography';
+import { Text } from '../../foundations/Typography';
 
 import './helpIcon.css';
 

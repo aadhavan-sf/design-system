@@ -30,4 +30,4 @@ Use tokens in component CSS:
 }
 ```
 
-Storybook-facing foundation examples live under `src/components/styling`.
+Storybook-facing foundation examples live under `src/components/foundations`.

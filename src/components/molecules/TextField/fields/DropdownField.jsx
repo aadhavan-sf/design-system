@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { CaretUpDown } from '@phosphor-icons/react';
 
-import { DropdownList } from '../../../atoms/DropdownList';
-import { Text } from '../../../styling/Typography';
+import { DropdownList } from '../../DropdownList';
+import { Text } from '../../../foundations/Typography';
 import {
   getFieldClassName,
   getFieldTextClassName,

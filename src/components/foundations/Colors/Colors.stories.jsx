@@ -1,7 +1,7 @@
 import { ColorPalette } from './ColorPalette';
 
 export default {
-  title: 'Styling/Colors',
+  title: 'Foundations/Colors',
   component: ColorPalette,
   parameters: {
     layout: 'padded',

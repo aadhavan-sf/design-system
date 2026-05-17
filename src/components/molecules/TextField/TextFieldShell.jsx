@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { Text } from '../../styling/Typography';
+import { Text } from '../../foundations/Typography';
 import { HelpIcon } from '../Tooltip/HelpIcon';
 import { buildClassName } from './textField.constants';
 

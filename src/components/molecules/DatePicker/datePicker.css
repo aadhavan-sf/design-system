@@ -275,6 +275,56 @@ div.storybook-datepicker-day {
   box-sizing: border-box;
 }
 
+.storybook-datepicker__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--spacing_2) 14px;
+
+  border: 1px solid transparent;
+  border-radius: var(--spacing_2);
+
+  font-family: var(--font_family_base);
+
+  cursor: pointer;
+
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    color 160ms ease;
+}
+
+.storybook-datepicker__action--secondary {
+  border-color: var(--neutral_300);
+  background: transparent;
+  color: var(--neutral_700);
+}
+
+.storybook-datepicker__action--secondary:hover {
+  background: var(--neutral_50);
+  color: var(--neutral_800);
+}
+
+.storybook-datepicker__action--primary {
+  border-color: var(--brand_400);
+  background: var(--brand_400);
+  color: var(--neutral_00);
+  box-shadow: var(--shadow_xs);
+}
+
+.storybook-datepicker__action--primary:hover {
+  border-color: var(--brand_700);
+  background: var(--brand_700);
+  box-shadow: var(--shadow_sm);
+}
+
+.storybook-datepicker__action:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow_focus-brand);
+}
+
 .datepicker-story-row,
 .datepicker-story-grid,
 .datepicker-story-list-grid {

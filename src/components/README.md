@@ -4,11 +4,10 @@ Components are organized with an atomic design structure so a newcomer can under
 
 ## Structure
 
-- `styling`: Storybook-facing documentation for colors, spacing, shadows, and typography.
+- `foundations`: Storybook-facing documentation for typography, colors, spacing, and shadows.
 - `atoms`: simple standalone controls.
 - `molecules`: components made by combining atoms, labels, icons, validation, and interaction states.
 - `organisms`: larger reusable sections built from atoms and molecules.
-- `templates`: page-level layouts that arrange organisms and document composition patterns.
 
 Each component folder should contain:
 
@@ -36,6 +35,7 @@ Direct component imports are also fine when a file needs to keep the dependency 
 
 ```jsx
 import { Toggle } from '../components/atoms/Toggle';
+import { DatePicker } from '../components/molecules/DatePicker';
 ```
 
 ## Component Rules

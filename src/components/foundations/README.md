@@ -1,8 +1,8 @@
-# Styling Components
+# Foundations
 
-Styling components document foundational design tokens in Storybook.
+Foundation components document design tokens in Storybook.
 
-Current styling groups:
+Current foundation groups:
 
 - `Colors`: color token documentation.
 - `Spacing`: spacing token documentation.

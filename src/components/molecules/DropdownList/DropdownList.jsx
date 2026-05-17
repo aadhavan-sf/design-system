@@ -5,7 +5,7 @@ import {
   Plug,
 } from '@phosphor-icons/react';
 
-import { Text } from '../../styling/Typography';
+import { Text } from '../../foundations/Typography';
 
 import './dropdownList.css';
 

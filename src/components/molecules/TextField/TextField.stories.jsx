@@ -1,5 +1,5 @@
 import { TextField } from './TextField';
-import { Text } from '../../styling/Typography';
+import { Text } from '../../foundations/Typography';
 import {
   fieldTypeLabels,
   PUBLIC_FIELD_TYPES,

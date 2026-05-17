@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { CircleIcon } from '@phosphor-icons/react';
-import { Text } from '../../styling/Typography';
+import { Text } from '../../foundations/Typography';
 
 import './button.css';
 

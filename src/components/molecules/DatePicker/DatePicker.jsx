@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 
-import { Button } from '../Button';
-import { Text } from '../../styling/Typography';
+import { Text } from '../../foundations/Typography';
 
 import './datePicker.css';
 
@@ -492,18 +491,34 @@ export function DatePicker({
               />
             </div>
             <div className="storybook-datepicker__bottom-panel">
-              <Button
-                hierarchy="secondary"
-                size="small"
-                label="Cancel"
+              <button
+                type="button"
+                className="storybook-datepicker__action storybook-datepicker__action--secondary"
                 onClick={onCancel}
-              />
-              <Button
-                hierarchy="primary"
-                size="small"
-                label="Apply"
+              >
+                <Text
+                  as="span"
+                  variant="text-sm"
+                  weight="semibold"
+                  color="currentColor"
+                >
+                  Cancel
+                </Text>
+              </button>
+              <button
+                type="button"
+                className="storybook-datepicker__action storybook-datepicker__action--primary"
                 onClick={onApply}
-              />
+              >
+                <Text
+                  as="span"
+                  variant="text-sm"
+                  weight="semibold"
+                  color="currentColor"
+                >
+                  Apply
+                </Text>
+              </button>
             </div>
           </div>
         </>

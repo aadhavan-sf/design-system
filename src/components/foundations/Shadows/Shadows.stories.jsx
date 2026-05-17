@@ -1,7 +1,7 @@
 import { ShadowScale } from './ShadowScale';
 
 export default {
-  title: 'Styling/Shadows',
+  title: 'Foundations/Shadows',
   component: ShadowScale,
   parameters: {
     layout: 'padded',

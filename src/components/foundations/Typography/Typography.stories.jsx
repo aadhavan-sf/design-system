@@ -1,7 +1,7 @@
 import { Text } from './Typography';
 
 export default {
-  title: 'Styling/Typography',
+  title: 'Foundations/Typography',
   component: Text,
   parameters: {
     layout: 'padded',

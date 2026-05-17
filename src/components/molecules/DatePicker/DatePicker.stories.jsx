@@ -5,14 +5,14 @@ import {
 } from './DatePicker';
 
 export default {
-  title: 'Molecules/DatePicker',
+  title: 'Molecules/Date Picker',
   component: DatePicker,
   parameters: {
     layout: 'centered',
     docs: {
       description: {
         component:
-          'Date picker molecule built from the Figma calendar day, preset list item, and full date picker designs.',
+          'Date picker atom built from the Figma calendar day, preset list item, and full date picker designs.',
       },
     },
   },

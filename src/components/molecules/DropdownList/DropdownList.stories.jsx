@@ -18,7 +18,7 @@ const sampleItems = [
 ];
 
 export default {
-  title: 'Atoms/Dropdown List',
+  title: 'Molecules/Dropdown List',
   component: DropdownList,
   parameters: {
     layout: 'centered',
