@@ -12,6 +12,12 @@ export {
 } from './DatePicker/index.js';
 export { DropdownList } from './DropdownList/index.js';
 export {
+  IconLibrary,
+  IconLibraryGrid,
+  IconLibraryItem,
+  iconLibraryOptions,
+} from './IconLibrary/index.js';
+export {
   Pagination,
   PaginationButton,
 } from './Pagination/index.js';

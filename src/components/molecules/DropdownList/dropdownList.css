@@ -28,9 +28,13 @@
   cursor: pointer;
 }
 
-.storybook-dropdown-list__item:hover,
+.storybook-dropdown-list__item:hover {
+  background: var(--neutral_25);
+}
+
 .storybook-dropdown-list__item--active {
   background: var(--neutral_50);
+  color: var(--neutral_800);
 }
 
 .storybook-dropdown-list__item--active .storybook-dropdown-list__icon {

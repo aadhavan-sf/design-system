@@ -51,7 +51,14 @@ function getInitialTextValue(type, state) {
 }
 
 function getInitialSelections(type, state, options) {
-  if (state !== 'filled') {
+  const shouldPreselectMultiselect =
+    ['filled', 'error', 'disabled'].includes(state) &&
+    type === 'multiselect';
+  const shouldPreselectTwoLine =
+    ['filled', 'error', 'disabled'].includes(state) &&
+    type === 'multiselect-2-line';
+
+  if (state !== 'filled' && !shouldPreselectMultiselect && !shouldPreselectTwoLine) {
     return [];
   }
 

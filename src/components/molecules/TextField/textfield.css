@@ -80,6 +80,14 @@ button.storybook-textfield__field {
   cursor: pointer;
 }
 
+[role="button"].storybook-textfield__field {
+  cursor: pointer;
+}
+
+[aria-disabled="true"].storybook-textfield__field {
+  cursor: not-allowed;
+}
+
 .storybook-textfield__field::placeholder,
 .storybook-textfield__search-input::placeholder {
   font-family: var(--font_family_base);
@@ -128,7 +136,8 @@ button.storybook-textfield__field {
 .storybook-textfield__field-content {
   display: flex;
   align-items: center;
-  gap: var(--spacing_2);
+  gap: var(--spacing_1);
+  flex: 1 0 0;
 
   min-width: 0;
 }
@@ -180,6 +189,109 @@ button.storybook-textfield__field {
 .storybook-textfield__field--error .storybook-textfield__leading-icon,
 .storybook-textfield__field--error .storybook-textfield__trailing-icon {
   color: var(--error_600);
+}
+
+.storybook-textfield__field--multiselect-one-line {
+  gap: var(--spacing_2);
+  padding: var(--spacing_3);
+}
+
+.storybook-textfield__field--multiselect-one-line.storybook-textfield__field--disabled {
+  border-color: var(--neutral_200);
+  background: var(--neutral_25);
+}
+
+.storybook-textfield__field--multiselect-two-line {
+  height: 112px;
+  align-items: flex-start;
+  gap: var(--spacing_2);
+  padding: var(--spacing_3);
+
+  overflow: hidden;
+}
+
+.storybook-textfield__field--multiselect-two-line .storybook-textfield__trailing-icon {
+  margin-top: var(--spacing_0_5);
+}
+
+.storybook-textfield__field--multiselect-two-line .storybook-textfield__field-content {
+  align-items: flex-start;
+}
+
+.storybook-textfield__tag-list {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--spacing_1);
+}
+
+.storybook-textfield__field--multiselect-two-line .storybook-textfield__tag-list {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  max-height: 98px;
+
+  overflow: hidden;
+}
+
+.storybook-textfield__selected-chip {
+  min-width: 0;
+  max-width: 100%;
+  height: 30px;
+  flex: 0 1 auto;
+
+  justify-content: flex-start;
+  gap: var(--spacing_2);
+
+  padding: 7px var(--spacing_2);
+  border: 0;
+  border-radius: var(--spacing_2);
+  background: var(--neutral_50);
+
+  color: var(--neutral_600);
+}
+
+.storybook-textfield__selected-chip--first {
+  flex: 0 0 auto;
+}
+
+.storybook-textfield__field--multiselect-one-line .storybook-textfield__selected-chip:not(.storybook-textfield__selected-chip--first) {
+  flex: 1 1 0;
+}
+
+.storybook-textfield__field--multiselect-two-line .storybook-textfield__selected-chip {
+  flex: 0 1 calc((100% - var(--spacing_1)) / 2);
+  max-width: calc((100% - var(--spacing_1)) / 2);
+}
+
+.storybook-textfield__selected-chip .storybook-chip__label {
+  text-align: left;
+}
+
+.storybook-textfield__field--error .storybook-textfield__selected-chip {
+  color: var(--error_600);
+}
+
+.storybook-textfield__field--disabled .storybook-textfield__selected-chip {
+  background: var(--neutral_100);
+  color: var(--neutral_400);
+}
+
+.storybook-textfield__field--multiselect-two-line.storybook-textfield__field--disabled {
+  border-color: var(--neutral_200);
+  background: var(--neutral_25);
+}
+
+.storybook-textfield__field--multiselect-two-line.storybook-textfield__field--disabled .storybook-textfield__selected-chip {
+  height: 28px;
+  padding: var(--spacing_1) var(--spacing_2);
+  border-radius: var(--spacing_1);
+
+  background: var(--neutral_100);
+  color: var(--neutral_600);
 }
 
 .storybook-textfield__dropdown-wrapper,
@@ -293,19 +405,13 @@ button.storybook-textfield__field {
   resize: none;
 }
 
-.storybook-textfield--multiselect-2-line .storybook-textfield__field {
-  height: 112px;
-
-  align-items: flex-start;
-}
-
 .storybook-textfield__resize-mark {
   position: absolute;
-  right: var(--spacing_2);
-  bottom: var(--spacing_2);
+  right: 4px;
+  bottom: 4px;
 
-  width: 20px;
-  height: 20px;
+  width: 14px;
+  height: 14px;
 
   display: inline-flex;
   align-items: center;
@@ -318,6 +424,11 @@ button.storybook-textfield__field {
   color: var(--neutral_400);
 
   cursor: ns-resize;
+}
+
+.storybook-textfield__resize-mark svg {
+  transform: rotate(45deg);
+  transform-origin: center;
 }
 
 .storybook-textfield__resize-mark:disabled {

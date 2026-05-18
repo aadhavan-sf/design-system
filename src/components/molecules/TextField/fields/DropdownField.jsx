@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types';
-import { CaretUpDown } from '@phosphor-icons/react';
+import {
+  CaretUpDown,
+} from '@phosphor-icons/react';
 
+import { Chip } from '../../Chip';
 import { DropdownList } from '../../DropdownList';
 import { Text } from '../../../foundations/Typography';
 import {
@@ -28,6 +31,7 @@ export function DropdownField({
   hasValue,
   isOpen,
   multiple,
+  multiselectLayout = 'one-line',
   onOpenChange,
   onSelect,
   options,
@@ -56,16 +60,59 @@ export function DropdownField({
   const resolvedDropdownListVariant =
     dropdownListVariant ??
     (multiple ? 'checkbox-left' : withIcon ? 'icon-left' : 'check-right');
+  const selectedItems = selectedOptions.map((selectedValue) => {
+    const matchingItem = dropdownItems.find((item) => item.value === selectedValue);
 
-  return (
-    <div className="storybook-textfield__dropdown-wrapper">
-      <button
-        type="button"
-        disabled={disabled}
-        className={getFieldClassName({ state, hasValue })}
-        onClick={() => onOpenChange(!isOpen)}
-      >
-        <span className="storybook-textfield__field-content">
+    return {
+      label: matchingItem?.label ?? selectedValue,
+      value: selectedValue,
+    };
+  });
+  const visibleSelectedItems =
+    multiselectLayout === 'two-line' ? selectedItems : selectedItems.slice(0, 2);
+  const fieldClassName = getFieldClassName({
+    state,
+    hasValue,
+    className: multiple && `storybook-textfield__field--multiselect-${multiselectLayout}`,
+  });
+  const handleToggle = () => {
+    if (!disabled) {
+      onOpenChange(!isOpen);
+    }
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleToggle();
+    }
+  };
+  const renderFieldContent = () => (
+    <>
+      <span className="storybook-textfield__field-content">
+        {multiple && hasValue ? (
+          <span className="storybook-textfield__tag-list">
+            {visibleSelectedItems.map((item, index) => (
+              <Chip
+                key={item.value}
+                type="button"
+                label={item.label}
+                size="md"
+                shape="rounded"
+                icon="right"
+                state={disabled ? 'disabled' : 'default'}
+                disabled={disabled}
+                className={[
+                  'storybook-textfield__selected-chip',
+                  index === 0 && 'storybook-textfield__selected-chip--first',
+                ].filter(Boolean).join(' ')}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onSelect(item.value);
+                }}
+              />
+            ))}
+          </span>
+        ) : (
           <Text
             as="span"
             variant="text-sm"
@@ -75,14 +122,40 @@ export function DropdownField({
           >
             {displayValue}
           </Text>
-        </span>
+        )}
+      </span>
 
-        <CaretUpDown
-          className="storybook-textfield__trailing-icon"
-          size={20}
-          weight="regular"
-        />
-      </button>
+      <CaretUpDown
+        className="storybook-textfield__trailing-icon"
+        size={20}
+        weight="regular"
+      />
+    </>
+  );
+
+  return (
+    <div className="storybook-textfield__dropdown-wrapper">
+      {multiple ? (
+        <div
+          role="button"
+          tabIndex={disabled ? -1 : 0}
+          aria-disabled={disabled}
+          className={fieldClassName}
+          onClick={handleToggle}
+          onKeyDown={handleKeyDown}
+        >
+          {renderFieldContent()}
+        </div>
+      ) : (
+        <button
+          type="button"
+          disabled={disabled}
+          className={fieldClassName}
+          onClick={handleToggle}
+        >
+          {renderFieldContent()}
+        </button>
+      )}
 
       {isOpen && !disabled && dropdownItems.length > 0 && (
         <DropdownList
@@ -127,6 +200,7 @@ DropdownField.propTypes = {
   hasValue: PropTypes.bool.isRequired,
   isOpen: PropTypes.bool.isRequired,
   multiple: PropTypes.bool,
+  multiselectLayout: PropTypes.oneOf(['one-line', 'two-line']),
   onOpenChange: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(PropTypes.string).isRequired,

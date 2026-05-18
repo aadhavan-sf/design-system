@@ -72,7 +72,7 @@ export const filledValueByType = {
   'color-picker': '#131313',
   'date-picker': '16/05/2026',
   search: 'Search query',
-  paragraph: 'Name filled',
+  paragraph: 'This is the first line of text.\nThis is the second line of text.',
   'mobile-number': '98765 43210',
   multiselect: 'Phoenix Baker',
   'multiselect-2-line': 'Phoenix Baker, Olivia Rhye',

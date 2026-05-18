@@ -7,6 +7,7 @@ export function MultiselectOneLine(props) {
     <DropdownField
       {...props}
       multiple
+      multiselectLayout="one-line"
     />
   );
 }
@@ -16,6 +17,7 @@ MultiselectOneLine.propTypes = {
   displayValue: PropTypes.string.isRequired,
   hasValue: PropTypes.bool.isRequired,
   isOpen: PropTypes.bool.isRequired,
+  multiselectLayout: PropTypes.string,
   onOpenChange: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
   dropdownListItems: PropTypes.array,

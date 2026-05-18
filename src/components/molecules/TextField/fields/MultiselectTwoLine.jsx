@@ -7,6 +7,7 @@ export function MultiselectTwoLine(props) {
     <DropdownField
       {...props}
       multiple
+      multiselectLayout="two-line"
     />
   );
 }
@@ -16,6 +17,7 @@ MultiselectTwoLine.propTypes = {
   displayValue: PropTypes.string.isRequired,
   hasValue: PropTypes.bool.isRequired,
   isOpen: PropTypes.bool.isRequired,
+  multiselectLayout: PropTypes.string,
   onOpenChange: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
   dropdownListItems: PropTypes.array,
