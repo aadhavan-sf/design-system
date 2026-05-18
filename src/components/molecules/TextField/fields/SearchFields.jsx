@@ -39,7 +39,7 @@ export function SearchFields({
           className="storybook-textfield__clear-button"
           onClick={() => onChange('')}
         >
-          <X size={20} weight="bold" />
+          <X size={20} weight="regular" />
         </button>
       )}
     </div>

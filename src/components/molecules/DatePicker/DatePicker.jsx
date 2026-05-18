@@ -156,7 +156,7 @@ function buildCalendarDays(monthIndex, year) {
   const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
   const daysInPreviousMonth = new Date(year, monthIndex, 0).getDate();
   const leadingCount = firstDay.getDay();
-  const trailingCount = (7 - ((leadingCount + daysInMonth) % 7)) % 7;
+  const trailingCount = 42 - leadingCount - daysInMonth;
   const leadingDays = Array.from({ length: leadingCount }, (_, index) => ({
     label: String(daysInPreviousMonth - leadingCount + index + 1),
     state: 'disabled',

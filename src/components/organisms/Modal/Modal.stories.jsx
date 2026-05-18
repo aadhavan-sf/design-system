@@ -14,6 +14,10 @@ export default {
   },
   tags: ['autodocs'],
   argTypes: {
+    variant: {
+      control: 'select',
+      options: ['status', 'demo'],
+    },
     actionCount: {
       control: 'select',
       options: [1, 2],
@@ -63,6 +67,12 @@ export default {
     closeOnAction: {
       control: 'boolean',
     },
+    closeOnCloseClick: {
+      control: 'boolean',
+    },
+    hideCloseButton: {
+      control: 'boolean',
+    },
     primaryButtonProps: {
       table: {
         disable: true,
@@ -78,6 +88,7 @@ export default {
 
 export const Playground = {
   args: {
+    variant: 'status',
     actionCount: 2,
     state: 'error',
     primaryButtonHierarchy: 'primary',
@@ -91,6 +102,30 @@ export const Playground = {
     secondaryButtonState: 'default',
     secondaryButtonDestructive: false,
     closeOnAction: false,
+    closeOnCloseClick: false,
+    hideCloseButton: false,
+  },
+};
+
+export const DemoModal = {
+  args: {
+    actionCount: 2,
+    variant: 'demo',
+    title: 'Add menu Item',
+    primaryLabel: 'Submit',
+    secondaryLabel: 'Cancel',
+    primaryButtonHierarchy: 'primary',
+    primaryButtonIcon: 'none',
+    primaryButtonSize: 'large',
+    primaryButtonState: 'default',
+    primaryButtonDestructive: false,
+    secondaryButtonHierarchy: 'secondary',
+    secondaryButtonIcon: 'none',
+    secondaryButtonSize: 'large',
+    secondaryButtonState: 'default',
+    secondaryButtonDestructive: false,
+    closeOnAction: false,
+    closeOnCloseClick: false,
   },
 };
 

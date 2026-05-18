@@ -4,6 +4,7 @@ import {
   SealCheck,
   Warning,
   WarningCircle,
+  X,
 } from '@phosphor-icons/react';
 
 import { Button } from '../../molecules/Button';
@@ -36,10 +37,15 @@ const MODAL_CONTENT = {
 };
 
 export function Modal({
+  variant = 'status',
   actionCount = 2,
+  closeButtonLabel = 'Close modal',
   closeOnAction = true,
+  closeOnCloseClick = true,
   description,
   defaultOpen = true,
+  hideCloseButton = false,
+  onClose,
   onPrimaryAction,
   onOpenChange,
   onSecondaryAction,
@@ -68,7 +74,7 @@ export function Modal({
   const Icon = content.icon;
   const resolvedTitle = title ?? content.title;
   const resolvedDescription = description ?? content.description;
-  const resolvedPrimaryLabel = primaryLabel ?? content.primaryLabel;
+  const resolvedPrimaryLabel = primaryLabel ?? (variant === 'demo' ? 'Submit' : content.primaryLabel);
   const resolvedSecondaryLabel = secondaryLabel ?? content.secondaryLabel;
   const showSecondaryAction = actionCount === 2;
   const closeModal = () => {
@@ -95,8 +101,79 @@ export function Modal({
     }
   };
 
+  const handleCloseClick = (event) => {
+    onClose?.(event);
+
+    if (closeOnCloseClick) {
+      closeModal();
+    }
+  };
+
   if (!isOpen) {
     return null;
+  }
+
+  if (variant === 'demo') {
+    return (
+      <div className="storybook-modal__backdrop">
+        <section
+          aria-labelledby="storybook-modal-title"
+          aria-modal="true"
+          className="storybook-modal storybook-modal--demo"
+          role="dialog"
+        >
+          <div className="storybook-modal__demo-header">
+            <Text
+              as="h2"
+              id="storybook-modal-title"
+              variant="text-lg"
+              weight="semibold"
+              color="var(--neutral_900)"
+              className="storybook-modal__demo-title"
+            >
+              {title ?? 'Add menu Item'}
+            </Text>
+
+            {!hideCloseButton && (
+              <button
+                type="button"
+                aria-label={closeButtonLabel}
+                className="storybook-modal__close-button"
+                onClick={handleCloseClick}
+              >
+                <X size={24} weight="regular" />
+              </button>
+            )}
+          </div>
+
+          <div className="storybook-modal__actions storybook-modal__actions--demo">
+            {showSecondaryAction && (
+              <Button
+                destructive={secondaryButtonDestructive}
+                hierarchy={secondaryButtonHierarchy}
+                icon={secondaryButtonIcon}
+                label={resolvedSecondaryLabel}
+                size={secondaryButtonSize}
+                state={secondaryButtonState}
+                onClick={handleSecondaryAction}
+                {...secondaryButtonProps}
+              />
+            )}
+
+            <Button
+              destructive={primaryButtonDestructive}
+              hierarchy={primaryButtonHierarchy}
+              icon={primaryButtonIcon}
+              label={resolvedPrimaryLabel}
+              size={primaryButtonSize}
+              state={primaryButtonState}
+              onClick={handlePrimaryAction}
+              {...primaryButtonProps}
+            />
+          </div>
+        </section>
+      </div>
+    );
   }
 
   return (
@@ -169,10 +246,15 @@ export function Modal({
 }
 
 Modal.propTypes = {
+  variant: PropTypes.oneOf(['status', 'demo']),
   actionCount: PropTypes.oneOf([1, 2]),
+  closeButtonLabel: PropTypes.string,
   closeOnAction: PropTypes.bool,
+  closeOnCloseClick: PropTypes.bool,
   description: PropTypes.string,
   defaultOpen: PropTypes.bool,
+  hideCloseButton: PropTypes.bool,
+  onClose: PropTypes.func,
   onPrimaryAction: PropTypes.func,
   onOpenChange: PropTypes.func,
   onSecondaryAction: PropTypes.func,

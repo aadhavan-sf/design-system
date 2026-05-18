@@ -36,6 +36,7 @@ export default {
     onAddBlock: fn(),
     onBack: fn(),
     onFooterClick: fn(),
+    onInsertBlock: fn(),
     onItemChange: fn(),
   },
 };

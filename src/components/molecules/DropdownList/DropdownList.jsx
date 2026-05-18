@@ -54,7 +54,7 @@ function Control({ disabled, selected, variant }) {
         ])}
         aria-hidden="true"
       >
-        {selected && <Check size={12} weight="bold" />}
+        {selected && <Check size={12} weight="regular" />}
       </span>
     );
   }

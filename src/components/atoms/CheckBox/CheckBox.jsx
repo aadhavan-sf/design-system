@@ -91,12 +91,12 @@ export function CheckBox({
         {isIndeterminate ? (
           <Minus
             size={iconSize}
-            weight="bold"
+            weight="regular"
           />
         ) : (
           <Check
             size={iconSize}
-            weight="bold"
+            weight="regular"
           />
         )}
       </span>

@@ -53,7 +53,7 @@ export function TabItem({
     <House
       className="storybook-tab-item__icon"
       size={16}
-      weight={pressed ? 'fill' : 'regular'}
+      weight="regular"
     />
   ) : null;
 

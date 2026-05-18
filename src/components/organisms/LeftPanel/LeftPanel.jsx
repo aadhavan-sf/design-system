@@ -7,6 +7,7 @@ import {
   LockSimple,
   PencilSimple,
   Plus,
+  PlusCircle,
   Trash,
 } from '@phosphor-icons/react';
 
@@ -138,7 +139,8 @@ export function LeftPanelItem({
 }) {
   const resolvedState = getResolvedState(state);
   const isDisabled = resolvedState === 'disabled';
-  const hasActions = showActions ?? (pressed || resolvedState === 'hover');
+  const hasActions = showActions ?? !locked;
+  const forceShowActions = showActions === true;
   const LeadingIcon = locked ? LockSimple : DotsSixVertical;
 
   return (
@@ -149,6 +151,7 @@ export function LeftPanelItem({
         'storybook-left-panel-item',
         `storybook-left-panel-item--${resolvedState}`,
         pressed && 'storybook-left-panel-item--pressed',
+        forceShowActions && 'storybook-left-panel-item--actions-visible',
         className,
       ])}
       onClick={isDisabled ? undefined : onClick}
@@ -157,8 +160,8 @@ export function LeftPanelItem({
         <LeadingIcon
           aria-hidden="true"
           className="storybook-left-panel-item__leading-icon"
-          size={16}
-          weight="regular"
+          size={20}
+          weight={locked ? 'regular' : 'bold'}
         />
         <Text
           as="span"
@@ -173,24 +176,32 @@ export function LeftPanelItem({
       {hasActions && (
         <span className="storybook-left-panel-item__actions">
           <span
-            aria-hidden="true"
+            aria-label="Show block"
             className="storybook-left-panel-item__action"
+            role="button"
+            tabIndex={isDisabled ? -1 : 0}
             onClick={(event) => {
               event.stopPropagation();
-              onVisibilityClick?.();
+              if (!isDisabled) {
+                onVisibilityClick?.();
+              }
             }}
           >
-            <Eye size={16} weight="regular" />
+            <Eye size={20} weight="regular" />
           </span>
           <span
-            aria-hidden="true"
+            aria-label="Delete block"
             className="storybook-left-panel-item__action"
+            role="button"
+            tabIndex={isDisabled ? -1 : 0}
             onClick={(event) => {
               event.stopPropagation();
-              onDelete?.();
+              if (!isDisabled) {
+                onDelete?.();
+              }
             }}
           >
-            <Trash size={16} weight="regular" />
+            <Trash size={20} weight="regular" />
           </span>
         </span>
       )}
@@ -208,6 +219,34 @@ LeftPanelItem.propTypes = {
   onClick: PropTypes.func,
   onDelete: PropTypes.func,
   onVisibilityClick: PropTypes.func,
+};
+
+function LeftPanelInsertControl({
+  label = 'Add block here',
+  onClick,
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      className="storybook-left-panel-insert"
+      onClick={onClick}
+    >
+      <span className="storybook-left-panel-insert__line" />
+      <PlusCircle
+        aria-hidden="true"
+        className="storybook-left-panel-insert__icon"
+        size={16}
+        weight="regular"
+      />
+      <span className="storybook-left-panel-insert__line" />
+    </button>
+  );
+}
+
+LeftPanelInsertControl.propTypes = {
+  label: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 function LeftPanelMenuItem({
@@ -352,6 +391,7 @@ function BlockSection({
   items,
   selectedItemId,
   title,
+  onInsertBlock,
   onItemSelect,
 }) {
   return (
@@ -366,19 +406,32 @@ function BlockSection({
         {title}
       </Text>
       <div className="storybook-left-panel-section__items">
-        {items.map((item) => {
+        {items.map((item, index) => {
           const itemId = item.id ?? item.label;
           const isSelected = itemId === selectedItemId;
 
           return (
-            <LeftPanelItem
+            <div
               key={itemId}
-              label={item.label}
-              locked={item.locked}
-              pressed={isSelected}
-              state={item.state ?? 'default'}
-              onClick={() => onItemSelect?.(item, itemId)}
-            />
+              className="storybook-left-panel-section__item-group"
+            >
+              <LeftPanelItem
+                label={item.label}
+                locked={item.locked}
+                pressed={isSelected}
+                state={item.state ?? 'default'}
+                onClick={() => onItemSelect?.(item, itemId)}
+              />
+              {index < items.length - 1 && (
+                <LeftPanelInsertControl
+                  onClick={() => onInsertBlock?.({
+                    afterItem: item,
+                    afterItemId: itemId,
+                    index,
+                  })}
+                />
+              )}
+            </div>
           );
         })}
       </div>
@@ -395,6 +448,7 @@ BlockSection.propTypes = {
   })).isRequired,
   selectedItemId: PropTypes.string,
   title: PropTypes.string.isRequired,
+  onInsertBlock: PropTypes.func,
   onItemSelect: PropTypes.func,
 };
 
@@ -467,6 +521,7 @@ export function LeftPanel({
   onAddBlock,
   onBack,
   onFooterClick,
+  onInsertBlock,
   onItemChange,
 }) {
   const resolvedType = getResolvedType(type);
@@ -528,6 +583,7 @@ export function LeftPanel({
                     items={fixedItems}
                     selectedItemId={internalSelectedItemId}
                     title="Fixed"
+                    onInsertBlock={onInsertBlock}
                     onItemSelect={handleItemSelect}
                   />
                   <div className="storybook-left-panel__divider" />
@@ -537,6 +593,7 @@ export function LeftPanel({
                 items={scrollItems}
                 selectedItemId={internalSelectedItemId}
                 title="Scrolls"
+                onInsertBlock={onInsertBlock}
                 onItemSelect={handleItemSelect}
               />
             </div>
@@ -587,5 +644,6 @@ LeftPanel.propTypes = {
   onAddBlock: PropTypes.func,
   onBack: PropTypes.func,
   onFooterClick: PropTypes.func,
+  onInsertBlock: PropTypes.func,
   onItemChange: PropTypes.func,
 };

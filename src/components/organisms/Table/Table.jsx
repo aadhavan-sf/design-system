@@ -393,7 +393,7 @@ function ActionButtons({ actionIcon = 'eye' }) {
         <FirstIcon size={20} weight="regular" />
       </button>
       <button type="button" className="storybook-table-action" aria-label="More actions">
-        <DotsThreeVertical size={20} weight="regular" />
+        <DotsThreeVertical size={20} weight="bold" />
       </button>
     </span>
   );

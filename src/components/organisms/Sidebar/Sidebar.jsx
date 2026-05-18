@@ -79,12 +79,16 @@ function normalizeValue(value, aliases = {}) {
   return aliases[value] ?? value;
 }
 
-function renderSidebarIcon(icon, className = 'storybook-sidebar-item__icon') {
+function renderSidebarIcon(
+  icon,
+  className = 'storybook-sidebar-item__icon',
+  weight = 'regular'
+) {
   const iconProps = {
     'aria-hidden': true,
     className,
     size: 20,
-    weight: 'regular',
+    weight,
   };
 
   switch (icon) {
@@ -112,7 +116,12 @@ function renderSidebarIcon(icon, className = 'storybook-sidebar-item__icon') {
       return <UserPlus {...iconProps} />;
     case 'drag':
     default:
-      return <DotsSixVertical {...iconProps} />;
+      return (
+        <DotsSixVertical
+          {...iconProps}
+          weight="bold"
+        />
+      );
   }
 }
 

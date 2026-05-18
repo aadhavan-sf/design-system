@@ -25,6 +25,65 @@
   background: var(--neutral_00);
 }
 
+.storybook-modal--demo {
+  width: 480px;
+
+  flex-direction: column;
+  gap: var(--spacing_6);
+
+  border-radius: var(--spacing_4);
+}
+
+.storybook-modal__demo-header {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing_4);
+}
+
+.storybook-modal__demo-title {
+  min-width: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.storybook-modal__close-button {
+  width: 24px;
+  height: 24px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  padding: 0;
+
+  color: var(--neutral_600);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius_4, 4px);
+  cursor: pointer;
+
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.storybook-modal__close-button:hover {
+  color: var(--neutral_800);
+  background: var(--neutral_25);
+}
+
+.storybook-modal__close-button:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow_focus-neutral);
+}
+
 .storybook-modal__icon {
   width: 48px;
   height: 48px;
@@ -87,6 +146,10 @@
   align-items: center;
   justify-content: flex-end;
   gap: var(--spacing_4);
+}
+
+.storybook-modal__actions--demo {
+  width: 100%;
 }
 
 .storybook-modal-story-grid {
