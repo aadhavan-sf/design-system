@@ -4,10 +4,10 @@ import {
   CaretLeft,
   DotsSixVertical,
   Eye,
+  EyeSlash,
   LockSimple,
   PencilSimple,
   Plus,
-  PlusCircle,
   Trash,
 } from '@phosphor-icons/react';
 
@@ -127,6 +127,7 @@ ThemeStatus.propTypes = {
 };
 
 export function LeftPanelItem({
+  hidden = false,
   label = 'Imager Banner',
   locked = false,
   pressed = false,
@@ -142,6 +143,7 @@ export function LeftPanelItem({
   const hasActions = showActions ?? !locked;
   const forceShowActions = showActions === true;
   const LeadingIcon = locked ? LockSimple : DotsSixVertical;
+  const VisibilityIcon = hidden ? EyeSlash : Eye;
 
   return (
     <button
@@ -151,6 +153,7 @@ export function LeftPanelItem({
         'storybook-left-panel-item',
         `storybook-left-panel-item--${resolvedState}`,
         pressed && 'storybook-left-panel-item--pressed',
+        hidden && 'storybook-left-panel-item--hidden',
         forceShowActions && 'storybook-left-panel-item--actions-visible',
         className,
       ])}
@@ -176,8 +179,8 @@ export function LeftPanelItem({
       {hasActions && (
         <span className="storybook-left-panel-item__actions">
           <span
-            aria-label="Show block"
-            className="storybook-left-panel-item__action"
+            aria-label={hidden ? 'Show block' : 'Hide block'}
+            className="storybook-left-panel-item__action storybook-left-panel-item__action--visibility"
             role="button"
             tabIndex={isDisabled ? -1 : 0}
             onClick={(event) => {
@@ -187,11 +190,11 @@ export function LeftPanelItem({
               }
             }}
           >
-            <Eye size={20} weight="regular" />
+            <VisibilityIcon size={20} weight="regular" />
           </span>
           <span
             aria-label="Delete block"
-            className="storybook-left-panel-item__action"
+            className="storybook-left-panel-item__action storybook-left-panel-item__action--delete"
             role="button"
             tabIndex={isDisabled ? -1 : 0}
             onClick={(event) => {
@@ -210,6 +213,7 @@ export function LeftPanelItem({
 }
 
 LeftPanelItem.propTypes = {
+  hidden: PropTypes.bool,
   label: PropTypes.string,
   locked: PropTypes.bool,
   pressed: PropTypes.bool,
@@ -233,10 +237,10 @@ function LeftPanelInsertControl({
       onClick={onClick}
     >
       <span className="storybook-left-panel-insert__line" />
-      <PlusCircle
+      <Plus
         aria-hidden="true"
         className="storybook-left-panel-insert__icon"
-        size={16}
+        size={10}
         weight="regular"
       />
       <span className="storybook-left-panel-insert__line" />
@@ -388,9 +392,12 @@ FooterAction.propTypes = {
 };
 
 function BlockSection({
+  hiddenItemIds = [],
   items,
   selectedItemId,
   title,
+  onDeleteItem,
+  onHideItem,
   onInsertBlock,
   onItemSelect,
 }) {
@@ -409,6 +416,7 @@ function BlockSection({
         {items.map((item, index) => {
           const itemId = item.id ?? item.label;
           const isSelected = itemId === selectedItemId;
+          const isHidden = hiddenItemIds.includes(itemId);
 
           return (
             <div
@@ -416,10 +424,13 @@ function BlockSection({
               className="storybook-left-panel-section__item-group"
             >
               <LeftPanelItem
+                hidden={isHidden}
                 label={item.label}
                 locked={item.locked}
                 pressed={isSelected}
                 state={item.state ?? 'default'}
+                onDelete={() => onDeleteItem?.(item, itemId)}
+                onVisibilityClick={() => onHideItem?.(item, itemId)}
                 onClick={() => onItemSelect?.(item, itemId)}
               />
               {index < items.length - 1 && (
@@ -440,6 +451,7 @@ function BlockSection({
 }
 
 BlockSection.propTypes = {
+  hiddenItemIds: PropTypes.arrayOf(PropTypes.string),
   items: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
     label: PropTypes.string.isRequired,
@@ -448,6 +460,8 @@ BlockSection.propTypes = {
   })).isRequired,
   selectedItemId: PropTypes.string,
   title: PropTypes.string.isRequired,
+  onDeleteItem: PropTypes.func,
+  onHideItem: PropTypes.func,
   onInsertBlock: PropTypes.func,
   onItemSelect: PropTypes.func,
 };
@@ -531,10 +545,39 @@ export function LeftPanel({
     isThemeSettings ? 'app-styling' : 'custom-blocks-1'
   );
   const [internalSelectedItemId, setInternalSelectedItemId] = useState(initialSelectedItem);
+  const [deletedItemIds, setDeletedItemIds] = useState([]);
+  const [hiddenItemIds, setHiddenItemIds] = useState([]);
+  const visibleFixedItems = fixedItems.filter((item) => !deletedItemIds.includes(item.id ?? item.label));
+  const visibleScrollItems = scrollItems.filter((item) => !deletedItemIds.includes(item.id ?? item.label));
 
   const handleItemSelect = (item, itemId) => {
     setInternalSelectedItemId(itemId);
     onItemChange?.(item, itemId);
+  };
+
+  const handleDeleteItem = (item, itemId) => {
+    // Storybook docs behavior: deletion is session-local, so refreshing the page restores demo items.
+    setDeletedItemIds((currentIds) => (
+      currentIds.includes(itemId) ? currentIds : [...currentIds, itemId]
+    ));
+
+    setHiddenItemIds((currentIds) => currentIds.filter((currentId) => currentId !== itemId));
+
+    if (internalSelectedItemId === itemId) {
+      setInternalSelectedItemId(undefined);
+    }
+
+    onItemChange?.({ ...item, deleted: true }, itemId);
+  };
+
+  const handleHideItem = (item, itemId) => {
+    setHiddenItemIds((currentIds) => (
+      currentIds.includes(itemId)
+        ? currentIds.filter((currentId) => currentId !== itemId)
+        : [...currentIds, itemId]
+    ));
+
+    onItemChange?.({ ...item, hidden: !hiddenItemIds.includes(itemId) }, itemId);
   };
 
   return (
@@ -580,9 +623,12 @@ export function LeftPanel({
               {resolvedType === 'fixed-blocks' && (
                 <>
                   <BlockSection
-                    items={fixedItems}
+                    hiddenItemIds={hiddenItemIds}
+                    items={visibleFixedItems}
                     selectedItemId={internalSelectedItemId}
                     title="Fixed"
+                    onDeleteItem={handleDeleteItem}
+                    onHideItem={handleHideItem}
                     onInsertBlock={onInsertBlock}
                     onItemSelect={handleItemSelect}
                   />
@@ -590,9 +636,12 @@ export function LeftPanel({
                 </>
               )}
               <BlockSection
-                items={scrollItems}
+                hiddenItemIds={hiddenItemIds}
+                items={visibleScrollItems}
                 selectedItemId={internalSelectedItemId}
                 title="Scrolls"
+                onDeleteItem={handleDeleteItem}
+                onHideItem={handleHideItem}
                 onInsertBlock={onInsertBlock}
                 onItemSelect={handleItemSelect}
               />

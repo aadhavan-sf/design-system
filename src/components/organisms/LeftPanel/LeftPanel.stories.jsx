@@ -14,7 +14,7 @@ export default {
     docs: {
       description: {
         component:
-          'Left panel organism with block lists, fixed block areas, theme settings navigation, reusable left panel list items, and theme status chips.',
+          'Left panel organism with block lists, fixed block areas, theme settings navigation, reusable left panel list items, and theme status chips. In the docs preview, hiding an item toggles the hidden visual state and deleting an item removes it only for the current session; refreshing restores the demo data.',
       },
     },
   },
@@ -44,7 +44,12 @@ export default {
 export const Playground = {
   render: (args) => (
     <div className="storybook-left-panel-story-surface">
-      <LeftPanel {...args} />
+      <div className="storybook-left-panel-story-demo">
+        <LeftPanel {...args} />
+        <p className="storybook-left-panel-story-note">
+          Preview note: hide toggles the hidden state. Delete removes the item for this session only; refresh restores the demo list.
+        </p>
+      </div>
     </div>
   ),
   args: {

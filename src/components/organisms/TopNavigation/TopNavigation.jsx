@@ -31,12 +31,12 @@ function normalizeValue(value, aliases = {}) {
   return aliases[value] ?? value;
 }
 
-function renderIcon(icon) {
+function renderIcon(icon, weight = 'regular') {
   const iconProps = {
     'aria-hidden': true,
     className: 'storybook-top-nav-item__icon',
     size: 18,
-    weight: 'regular',
+    weight,
   };
 
   switch (icon) {
@@ -84,7 +84,7 @@ export function TopNavigationItem({
       ])}
       onClick={isDisabled ? undefined : onClick}
     >
-      {renderIcon(icon)}
+      {renderIcon(icon, pressed ? 'fill' : 'regular')}
       <Text
         as="span"
         variant="text-sm"

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   CaretUpDown,
+  CopySimple,
   CurrencyCircleDollar,
   DeviceMobileCamera,
   DeviceMobileSpeaker,
@@ -12,14 +13,17 @@ import {
   ListStar,
   PuzzlePiece,
   Repeat,
+  Scan,
   SignOut,
   UserPlus,
 } from '@phosphor-icons/react';
 
 import { Text } from '../../foundations/Typography';
+import { DropdownList } from '../../molecules/DropdownList';
 import superfansAvatar from './assets/superfans-avatar.png';
 import superfansLogo from './assets/superfans-logo.png';
 import superfansMark from './assets/superfans-mark.png';
+import sidebarPreviewQr from './assets/sidebar-preview-qr.png';
 
 import './sidebar.css';
 
@@ -38,6 +42,14 @@ const ICON_NAMES = [
   'repeat',
   'sign-out',
   'user-plus',
+];
+
+const DEFAULT_STORE_OPTIONS = [
+  { id: 'superfans', name: 'Superfans', code: '12023' },
+  { id: 'stellar-goods', name: 'Stellar Goods', code: '24018' },
+  { id: 'nova-outfitters', name: 'Nova Outfitters', code: '31842' },
+  { id: 'orbit-studio', name: 'Orbit Studio', code: '45109' },
+  { id: 'lumen-market', name: 'Lumen Market', code: '78631' },
 ];
 
 const DEFAULT_SECTIONS = [
@@ -190,7 +202,7 @@ export function SidebarItem({
       ])}
       onClick={isDisabled ? undefined : onClick}
     >
-      {renderSidebarIcon(icon)}
+      {renderSidebarIcon(icon, 'storybook-sidebar-item__icon', pressed ? 'fill' : 'regular')}
       {!isCollapsed && (
         <Text
           as="span"
@@ -282,11 +294,13 @@ export function Sidebar({
   avatarMeta = '12023',
   brandLabel = 'superfans',
   sections = DEFAULT_SECTIONS,
+  storeOptions = DEFAULT_STORE_OPTIONS,
   storePlaceholder = 'Search a Store',
   className,
   onItemChange,
   onPreview,
   onLogout,
+  onStoreChange,
 }) {
   const normalizedType = normalizeValue(type, {
     Expanded: 'expanded',
@@ -294,11 +308,91 @@ export function Sidebar({
   });
   const isCollapsed = normalizedType === 'collapsed';
   const [selectedItemId, setSelectedItemId] = useState(activeItemId);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isStoreDropdownOpen, setIsStoreDropdownOpen] = useState(false);
+  const [selectedStoreId, setSelectedStoreId] = useState(() => storeOptions[0]?.id);
+  const storeButtonRef = useRef(null);
+  const storeDropdownRef = useRef(null);
+  const previewButtonRef = useRef(null);
+  const previewPopoverRef = useRef(null);
+  const selectedStore =
+    storeOptions.find((store) => store.id === selectedStoreId) ?? storeOptions[0];
 
   const handleItemSelect = (item, itemId) => {
     setSelectedItemId(itemId);
     onItemChange?.(item, itemId);
   };
+
+  const handleStoreSelect = (item) => {
+    const nextStore = storeOptions.find((store) => store.id === item.value);
+
+    if (!nextStore) {
+      return;
+    }
+
+    setSelectedStoreId(nextStore.id);
+    setIsStoreDropdownOpen(false);
+    onStoreChange?.(nextStore);
+  };
+
+  const handlePreviewClick = () => {
+    setIsPreviewOpen((currentValue) => !currentValue);
+    onPreview?.();
+  };
+
+  useEffect(() => {
+    if (!isPreviewOpen) {
+      return undefined;
+    }
+
+    const handlePointerDown = (event) => {
+      const target = event.target;
+
+      if (
+        previewPopoverRef.current?.contains(target)
+        || previewButtonRef.current?.contains(target)
+      ) {
+        return;
+      }
+
+      setIsPreviewOpen(false);
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('touchstart', handlePointerDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('touchstart', handlePointerDown);
+    };
+  }, [isPreviewOpen]);
+
+  useEffect(() => {
+    if (!isStoreDropdownOpen) {
+      return undefined;
+    }
+
+    const handlePointerDown = (event) => {
+      const target = event.target;
+
+      if (
+        storeDropdownRef.current?.contains(target)
+        || storeButtonRef.current?.contains(target)
+      ) {
+        return;
+      }
+
+      setIsStoreDropdownOpen(false);
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('touchstart', handlePointerDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('touchstart', handlePointerDown);
+    };
+  }, [isStoreDropdownOpen]);
 
   return (
     <aside
@@ -320,26 +414,50 @@ export function Sidebar({
         </header>
 
         {!isCollapsed ? (
-          <button
-            type="button"
-            className="storybook-sidebar-store"
-          >
-            <Text
-              as="span"
-              variant="text-sm"
-              weight="regular"
-              color="var(--neutral_300)"
-              className="storybook-sidebar-store__label"
+          <div className="storybook-sidebar-store-control">
+            <button
+              ref={storeButtonRef}
+              type="button"
+              aria-expanded={isStoreDropdownOpen}
+              aria-controls="storybook-sidebar-store-dropdown"
+              className="storybook-sidebar-store"
+              onClick={() => setIsStoreDropdownOpen((currentValue) => !currentValue)}
             >
-              {storePlaceholder}
-            </Text>
-            <CaretUpDown
-              aria-hidden="true"
-              className="storybook-sidebar-store__icon"
-              size={20}
-              weight="regular"
-            />
-          </button>
+              <Text
+                as="span"
+                variant="text-sm"
+                weight="regular"
+                color={selectedStore ? 'var(--neutral_700)' : 'var(--neutral_300)'}
+                className="storybook-sidebar-store__label"
+              >
+                {selectedStore?.name ?? storePlaceholder}
+              </Text>
+              <CaretUpDown
+                aria-hidden="true"
+                className="storybook-sidebar-store__icon"
+                size={20}
+                weight="regular"
+              />
+            </button>
+
+            {isStoreDropdownOpen && (
+              <div
+                ref={storeDropdownRef}
+                id="storybook-sidebar-store-dropdown"
+                className="storybook-sidebar-store-dropdown"
+              >
+                <DropdownList
+                  items={storeOptions.map((store) => ({
+                    label: store.name,
+                    value: store.id,
+                  }))}
+                  selectedValues={selectedStore ? [selectedStore.id] : []}
+                  variant="check-right"
+                  onItemSelect={handleStoreSelect}
+                />
+              </div>
+            )}
+          </div>
         ) : (
           <button
             type="button"
@@ -382,7 +500,7 @@ export function Sidebar({
                 weight="bold"
                 color="var(--neutral_900)"
               >
-                {avatarLabel}
+                {selectedStore?.name ?? avatarLabel}
               </Text>
               <Text
                 as="span"
@@ -391,7 +509,7 @@ export function Sidebar({
                 color="var(--neutral_600)"
                 className="storybook-sidebar-account__meta"
               >
-                {avatarMeta}
+                {selectedStore?.code ?? avatarMeta}
               </Text>
             </div>
           )}
@@ -401,10 +519,13 @@ export function Sidebar({
 
         <div className="storybook-sidebar-actions">
           <button
+            ref={previewButtonRef}
             type="button"
             aria-label={isCollapsed ? 'Preview' : undefined}
+            aria-expanded={isPreviewOpen}
+            aria-controls="storybook-sidebar-preview-popover"
             className="storybook-sidebar-action"
-            onClick={onPreview}
+            onClick={handlePreviewClick}
           >
             {renderSidebarIcon('camera', 'storybook-sidebar-action__icon')}
             {!isCollapsed && (
@@ -422,7 +543,7 @@ export function Sidebar({
           {!isCollapsed && (
             <button
               type="button"
-              className="storybook-sidebar-action"
+              className="storybook-sidebar-action storybook-sidebar-action--destructive"
               onClick={onLogout}
             >
               {renderSidebarIcon('sign-out', 'storybook-sidebar-action__icon')}
@@ -438,6 +559,60 @@ export function Sidebar({
           )}
         </div>
       </footer>
+
+      {isPreviewOpen && (
+        <div
+          ref={previewPopoverRef}
+          id="storybook-sidebar-preview-popover"
+          className="storybook-sidebar-preview-popover"
+          role="dialog"
+          aria-label="App preview QR code"
+        >
+          <div className="storybook-sidebar-preview-popover__qr-frame">
+            <img
+              alt="QR code for app preview"
+              className="storybook-sidebar-preview-popover__qr"
+              src={sidebarPreviewQr}
+            />
+          </div>
+          <div className="storybook-sidebar-preview-popover__hint">
+            <Scan
+              aria-hidden="true"
+              className="storybook-sidebar-preview-popover__hint-icon"
+              size={20}
+              weight="regular"
+            />
+            <Text
+              as="span"
+              variant="text-xs"
+              weight="medium"
+              color="var(--neutral_600)"
+              className="storybook-sidebar-preview-popover__hint-text"
+            >
+              Scan QR to download the app to preview on mobile
+            </Text>
+          </div>
+          <button
+            type="button"
+            className="storybook-sidebar-preview-popover__copy"
+          >
+            <CopySimple
+              aria-hidden="true"
+              className="storybook-sidebar-preview-popover__copy-icon"
+              size={18}
+              weight="regular"
+            />
+            <Text
+              as="span"
+              variant="text-xs"
+              weight="semibold"
+              color="currentColor"
+            >
+              Copy link
+            </Text>
+          </button>
+        </div>
+      )}
     </aside>
   );
 }
@@ -460,9 +635,15 @@ Sidebar.propTypes = {
   avatarMeta: PropTypes.string,
   brandLabel: PropTypes.string,
   sections: PropTypes.arrayOf(sectionShape),
+  storeOptions: PropTypes.arrayOf(PropTypes.shape({
+    code: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })),
   storePlaceholder: PropTypes.string,
   className: PropTypes.string,
   onItemChange: PropTypes.func,
   onPreview: PropTypes.func,
   onLogout: PropTypes.func,
+  onStoreChange: PropTypes.func,
 };
