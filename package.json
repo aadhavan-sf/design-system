@@ -1,14 +1,14 @@
 {
-  "name": "design-system",
+  "name": "superfans-dashboard-ui-components",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://aadhavan-sf.github.io/design-system/",
+  "homepage": "https://aadhavan-sf.github.io/superfans-dashboard-ui-components/",
   "scripts": {
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "build-storybook": "storybook build && touch storybook-static/.nojekyll",
     "predeploy": "npm run build-storybook",
-    "deploy": "gh-pages -d storybook-static",
+    "deploy": "gh-pages -d storybook-static --dotfiles",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
