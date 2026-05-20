@@ -1,4 +1,4 @@
-# Supernova Design System
+# Superfans Dashboard UI Components
 
 React components, design tokens, and Storybook documentation for the Supernova web design system.
 
