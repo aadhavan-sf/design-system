@@ -186,7 +186,7 @@ export function LeftPanelItem({
         <Text
           as="span"
           variant="text-sm"
-          weight={pressed ? 'semibold' : 'medium'}
+          weight={pressed && !hidden ? 'semibold' : 'medium'}
           color="currentColor"
           className="storybook-left-panel-item__label"
         >

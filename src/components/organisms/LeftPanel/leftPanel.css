@@ -271,18 +271,18 @@
   color: var(--neutral_700);
 }
 
+.storybook-left-panel-item--hidden.storybook-left-panel-item--pressed {
+  border-color: transparent;
+  background: transparent;
+  color: var(--neutral_700);
+}
+
 .storybook-left-panel-item--hidden:hover,
 .storybook-left-panel-item--hidden.storybook-left-panel-item--hover,
 .storybook-left-panel-item--hidden.storybook-left-panel-item--pressed:hover,
 .storybook-left-panel-item--hidden.storybook-left-panel-item--pressed.storybook-left-panel-item--hover {
   border-color: transparent;
   background: var(--neutral_25);
-  color: var(--neutral_700);
-}
-
-.storybook-left-panel-item--hidden.storybook-left-panel-item--pressed {
-  border-color: transparent;
-  background: transparent;
   color: var(--neutral_700);
 }
 
