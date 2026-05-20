@@ -123,6 +123,12 @@
   flex-shrink: 0;
 
   color: var(--neutral_600);
+
+  transition: transform 160ms ease;
+}
+
+.storybook-sidebar-store:active .storybook-sidebar-store__icon {
+  transform: translateY(var(--spacing_0_5));
 }
 
 .storybook-sidebar-store-dropdown {
@@ -132,6 +138,9 @@
   top: calc(100% + var(--spacing_2));
   left: 0;
   z-index: 20;
+
+  animation: storybook-sidebar-popover-enter 150ms ease-out;
+  transform-origin: top center;
 }
 
 .storybook-sidebar-store-dropdown .storybook-dropdown-list {
@@ -281,6 +290,12 @@
   height: 20px;
 
   flex-shrink: 0;
+
+  transition: transform 160ms ease;
+}
+
+.storybook-sidebar-item:active .storybook-sidebar-item__icon--drag {
+  animation: storybook-sidebar-drag-handle-ready 220ms ease;
 }
 
 .storybook-sidebar-item__label {
@@ -381,6 +396,16 @@
   height: 18px;
 
   flex-shrink: 0;
+
+  transition: transform 180ms ease;
+}
+
+.storybook-sidebar-action:active .storybook-sidebar-action__icon {
+  transform: translateX(var(--spacing_0_5));
+}
+
+.storybook-sidebar-action--destructive:active .storybook-sidebar-action__icon {
+  animation: storybook-sidebar-destructive-shake 180ms ease;
 }
 
 .storybook-sidebar-preview-popover {
@@ -406,6 +431,55 @@
   box-shadow: var(--shadow_lg);
 
   box-sizing: border-box;
+
+  animation: storybook-sidebar-popover-enter 150ms ease-out;
+  transform-origin: bottom center;
+}
+
+@keyframes storybook-sidebar-popover-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(var(--spacing_1)) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes storybook-sidebar-destructive-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(calc(var(--spacing_0_5) * -1));
+  }
+
+  50% {
+    transform: translateX(var(--spacing_0_5));
+  }
+
+  75% {
+    transform: translateX(calc(var(--spacing_0_5) * -1));
+  }
+}
+
+@keyframes storybook-sidebar-drag-handle-ready {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  35% {
+    transform: translateY(calc(var(--spacing_0_5) * -1));
+  }
+
+  70% {
+    transform: translateY(var(--spacing_0_5));
+  }
 }
 
 .storybook-sidebar--collapsed .storybook-sidebar-preview-popover {

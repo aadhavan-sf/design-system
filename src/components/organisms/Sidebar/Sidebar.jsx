@@ -202,7 +202,10 @@ export function SidebarItem({
       ])}
       onClick={isDisabled ? undefined : onClick}
     >
-      {renderSidebarIcon(icon, 'storybook-sidebar-item__icon', pressed ? 'fill' : 'regular')}
+      {renderSidebarIcon(icon, buildClassName([
+        'storybook-sidebar-item__icon',
+        icon === 'drag' && 'storybook-sidebar-item__icon--drag',
+      ]), pressed ? 'fill' : 'regular')}
       {!isCollapsed && (
         <Text
           as="span"

@@ -26,6 +26,12 @@
   flex-shrink: 0;
 
   color: var(--neutral_700);
+
+  transition: transform 160ms ease;
+}
+
+.storybook-top-nav__segment:active .storybook-top-nav__separator {
+  transform: translateX(var(--spacing_0_5));
 }
 
 .storybook-top-nav-item {
@@ -92,6 +98,12 @@
 
 .storybook-top-nav-item__icon {
   flex-shrink: 0;
+
+  transition: transform 160ms ease;
+}
+
+.storybook-top-nav-item:active .storybook-top-nav-item__icon {
+  transform: translateY(calc(var(--spacing_0_5) * -1));
 }
 
 .storybook-top-nav-item__label {

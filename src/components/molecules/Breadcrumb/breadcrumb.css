@@ -64,6 +64,13 @@
   justify-content: center;
 
   color: var(--neutral_400);
+
+  transition: transform 160ms ease;
+}
+
+.storybook-breadcrumb-item:active + .storybook-breadcrumb-divider,
+.storybook-breadcrumb-divider:active {
+  transform: translateX(var(--spacing_0_5));
 }
 
 .storybook-breadcrumb-divider--small {

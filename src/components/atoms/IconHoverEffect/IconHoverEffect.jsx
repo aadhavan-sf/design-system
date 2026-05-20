@@ -116,6 +116,8 @@ export function IconHoverEffect({
         `storybook-icon-hover-effect--${normalizedType}`,
         `storybook-icon-hover-effect--${normalizedSize}`,
         `storybook-icon-hover-effect--${normalizedState}`,
+        normalizedType === 'destructive' && 'storybook-icon-hover-effect--trash-motion',
+        normalizedType !== 'destructive' && `storybook-icon-hover-effect--icon-${normalizedIcon}`,
         className,
       ])}
       onClick={onClick}

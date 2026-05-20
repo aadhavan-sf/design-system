@@ -11,6 +11,9 @@
 
   background: var(--neutral_00);
   box-shadow: var(--shadow_md);
+
+  animation: storybook-datepicker-enter 150ms ease-out;
+  transform-origin: top center;
 }
 
 .storybook-datepicker--wide {
@@ -72,6 +75,18 @@
 .storybook-datepicker__nav-button:hover,
 .storybook-datepicker__nav-button--active {
   background: var(--neutral_50);
+}
+
+.storybook-datepicker__nav-button svg {
+  transition: transform 160ms ease;
+}
+
+.storybook-datepicker__nav-button:first-child:active svg {
+  transform: translateX(calc(var(--spacing_0_5) * -1));
+}
+
+.storybook-datepicker__nav-button:last-child:active svg {
+  transform: translateX(var(--spacing_0_5));
 }
 
 .storybook-datepicker__nav-button:focus-visible,
@@ -238,6 +253,18 @@ div.storybook-datepicker-day {
 .storybook-datepicker-list-item--selected,
 .storybook-datepicker-list-item--selected:hover {
   background: var(--brand_400);
+}
+
+@keyframes storybook-datepicker-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(calc(var(--spacing_1) * -1)) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .storybook-datepicker__wide-content {

@@ -321,6 +321,12 @@ button.storybook-textfield__field {
   color: var(--neutral_700);
 
   cursor: pointer;
+
+  transition: transform 160ms ease;
+}
+
+.storybook-textfield__date-button:active:not(:disabled) {
+  transform: translateY(calc(var(--spacing_0_5) * -1));
 }
 
 .storybook-textfield__date-button--error {
@@ -346,6 +352,9 @@ button.storybook-textfield__field {
   top: calc(100% + var(--spacing_2));
   left: 0;
   z-index: 100;
+
+  animation: storybook-textfield-popover-enter 150ms ease-out;
+  transform-origin: top center;
 }
 
 .storybook-textfield__search-input {
@@ -384,6 +393,12 @@ button.storybook-textfield__field {
   color: var(--neutral_600);
 
   cursor: pointer;
+
+  transition: transform 160ms ease;
+}
+
+.storybook-textfield__clear-button:active {
+  transform: scale(0.92) rotate(8deg);
 }
 
 .storybook-textfield__clear-button:focus-visible {
@@ -482,6 +497,9 @@ button.storybook-textfield__field {
 
   background: var(--neutral_00);
   box-shadow: var(--shadow_sm);
+
+  animation: storybook-textfield-popover-enter 150ms ease-out;
+  transform-origin: top center;
 }
 
 .storybook-textfield__country-menu .storybook-dropdown-list {
@@ -549,6 +567,9 @@ button.storybook-textfield__field {
   box-shadow: var(--shadow_lg);
 
   box-sizing: border-box;
+
+  animation: storybook-textfield-popover-enter 150ms ease-out;
+  transform-origin: top center;
 }
 
 .storybook-textfield__colorpicker-input {
@@ -689,6 +710,18 @@ button.storybook-textfield__field {
 
   background: var(--neutral_00);
   box-shadow: var(--shadow_md);
+}
+
+@keyframes storybook-textfield-popover-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(calc(var(--spacing_1) * -1)) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .textfield-story-grid {

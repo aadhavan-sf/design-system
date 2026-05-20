@@ -276,10 +276,61 @@
   cursor: pointer;
 }
 
+.storybook-table-action svg,
+.storybook-table-icon-button svg {
+  transition: transform 180ms ease;
+}
+
 .storybook-table-action:hover,
 .storybook-table-icon-button:hover {
   background: var(--neutral_50);
   color: var(--neutral_800);
+}
+
+.storybook-table-action[aria-label="Edit"]:active svg {
+  transform: translateY(calc(var(--spacing_0_5) * -1)) rotate(-6deg);
+}
+
+.storybook-table-action[aria-label="View"] {
+  position: relative;
+}
+
+.storybook-table-action[aria-label="View"]::after {
+  content: "";
+
+  position: absolute;
+  inset: var(--spacing_1);
+
+  background: linear-gradient(
+    32deg,
+    transparent 46%,
+    currentColor 46%,
+    currentColor 54%,
+    transparent 54%
+  );
+
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+}
+
+.storybook-table-action[aria-label="View"]:active::after {
+  animation: storybook-table-eye-strike 180ms ease forwards;
+}
+
+@keyframes storybook-table-eye-strike {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+  }
+
+  45% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
 }
 
 .storybook-table-action:focus-visible,

@@ -9,6 +9,9 @@
   border-radius: var(--spacing_2);
   background: var(--neutral_00);
   box-shadow: var(--shadow_sm);
+
+  animation: storybook-dropdown-list-enter 140ms ease-out;
+  transform-origin: top center;
 }
 
 .storybook-dropdown-list__item {
@@ -26,6 +29,10 @@
 
   color: var(--neutral_600);
   cursor: pointer;
+
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
 }
 
 .storybook-dropdown-list__item:hover {
@@ -192,6 +199,20 @@
   border-radius: 999px;
   background: var(--neutral_00);
   box-shadow: var(--shadow_sm);
+
+  transition: transform 160ms ease;
+}
+
+@keyframes storybook-dropdown-list-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(calc(var(--spacing_1) * -1)) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .storybook-dropdown-list-story-grid {

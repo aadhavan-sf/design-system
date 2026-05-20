@@ -52,6 +52,12 @@
 
 .storybook-icon-library__preview-icon {
   flex-shrink: 0;
+
+  transition: transform 180ms ease;
+}
+
+.storybook-icon-library__icon-preview:active .storybook-icon-library__preview-icon {
+  transform: translateY(calc(var(--spacing_0_5) * -1));
 }
 
 .storybook-icon-library__select {
@@ -87,6 +93,12 @@
   flex-shrink: 0;
 
   color: var(--neutral_700);
+
+  transition: transform 160ms ease;
+}
+
+.storybook-icon-library__select:active .storybook-icon-library__caret {
+  transform: translateY(var(--spacing_0_5));
 }
 
 .storybook-icon-library-popover {
@@ -100,6 +112,9 @@
   border-radius: var(--spacing_2);
   background: var(--neutral_00);
   box-shadow: var(--shadow_md);
+
+  animation: storybook-icon-library-popover-enter 150ms ease-out;
+  transform-origin: top center;
 }
 
 .storybook-icon-library__dropdown-menu {
@@ -107,6 +122,21 @@
   z-index: 20;
   top: calc(100% + var(--spacing_2));
   left: 52px;
+
+  animation: storybook-icon-library-popover-enter 150ms ease-out;
+  transform-origin: top center;
+}
+
+@keyframes storybook-icon-library-popover-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(calc(var(--spacing_1) * -1)) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .storybook-icon-library__dropdown-menu .storybook-dropdown-list {

@@ -1,14 +1,7 @@
 import {
   ArrowsClockwise,
-  Bell,
-  Heart,
-  MagnifyingGlass,
   Plus,
-  ShoppingBag,
-  ShoppingCart,
-  Tag,
   Trash,
-  UserCircle,
 } from '@phosphor-icons/react';
 
 import { Toggle } from '../../atoms/Toggle';
@@ -19,6 +12,8 @@ import { LeftPanel } from '../../organisms/LeftPanel';
 import { Sidebar } from '../../organisms/Sidebar';
 import { TopNavigation } from '../../organisms/TopNavigation';
 
+import mobilePreviewImage from './assets/mobile-preview.png';
+import panelCardPreviewImage from './assets/panel-card-preview.png';
 import './homePage.css';
 
 const RIGHT_PANEL_IMAGES = [
@@ -27,73 +22,12 @@ const RIGHT_PANEL_IMAGES = [
 ];
 
 function PhonePreview() {
-  const navItems = [
-    { label: 'Home', icon: ShoppingBag },
-    { label: 'Cart', icon: ShoppingCart },
-    { label: 'Bestsellers', icon: Tag },
-    { label: 'Wishlist', icon: Heart },
-    { label: 'Account', icon: UserCircle },
-  ];
-
   return (
-    <div className="storybook-home-page-phone" aria-label="Mobile storefront preview">
-      <div className="storybook-home-page-phone__notch" />
-      <div className="storybook-home-page-phone__status">
-        <Text as="span" variant="text-xs" weight="semibold" color="var(--neutral_900)">
-          9:41
-        </Text>
-        <span className="storybook-home-page-phone__status-dots" aria-hidden="true" />
-      </div>
-
-      <div className="storybook-home-page-phone__toolbar">
-        <Bell size={16} weight="regular" />
-        <div className="storybook-home-page-phone__toolbar-actions">
-          <MagnifyingGlass size={16} weight="regular" />
-          <ShoppingCart size={16} weight="regular" />
-        </div>
-      </div>
-
-      <div className="storybook-home-page-category-row">
-        {['Running', 'The Jogger', 'Lifestyle'].map((label, index) => (
-          <div key={label} className="storybook-home-page-category">
-            <span className={`storybook-home-page-category__image storybook-home-page-category__image--${index + 1}`} />
-            <Text as="span" variant="text-xs" weight="medium" color="var(--neutral_900)">
-              {label}
-            </Text>
-          </div>
-        ))}
-      </div>
-
-      <div className="storybook-home-page-hero-image" aria-hidden="true">
-        <span className="storybook-home-page-shoe storybook-home-page-shoe--one" />
-        <span className="storybook-home-page-shoe storybook-home-page-shoe--two" />
-        <span className="storybook-home-page-shoe storybook-home-page-shoe--three" />
-        <span className="storybook-home-page-shoe storybook-home-page-shoe--four" />
-      </div>
-
-      <div className="storybook-home-page-phone__copy">
-        <Text as="span" variant="text-xs" weight="medium" color="var(--neutral_700)">
-          BESTSELLING FAVOURITES
-        </Text>
-        <Text as="h2" variant="text-lg" weight="semibold" color="var(--neutral_900)">
-          Back in Stock
-        </Text>
-        <Text as="p" variant="text-xs" weight="regular" color="var(--neutral_700)">
-          The wait is over. Your favorite Core Collection bestsellers are finally back in stock.
-        </Text>
-      </div>
-
-      <div className="storybook-home-page-phone__bottom-nav">
-        {navItems.map(({ label, icon: Icon }, index) => (
-          <span key={label} className="storybook-home-page-phone__nav-item">
-            <Icon size={16} weight={index === 0 ? 'fill' : 'regular'} />
-            <Text as="span" variant="text-xs" weight={index === 0 ? 'semibold' : 'medium'} color="currentColor">
-              {label}
-            </Text>
-          </span>
-        ))}
-      </div>
-    </div>
+    <img
+      className="storybook-home-page-phone"
+      src={mobilePreviewImage}
+      alt="Mobile storefront preview"
+    />
   );
 }
 
@@ -103,6 +37,12 @@ function RightPanelImageCard({ actionsVisible = false, enabled = false }) {
       <span className="storybook-home-page-right-card__drag" aria-hidden="true" />
       <div className="storybook-home-page-right-card__body">
         <div className="storybook-home-page-right-card__image">
+          <img
+            className="storybook-home-page-right-card__preview"
+            src={panelCardPreviewImage}
+            alt=""
+            aria-hidden="true"
+          />
           {actionsVisible && (
             <div className="storybook-home-page-right-card__actions">
               <button type="button" className="storybook-home-page-right-card__action" aria-label="Replace image">
