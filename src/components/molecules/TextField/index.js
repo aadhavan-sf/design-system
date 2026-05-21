@@ -1,1 +1,1 @@
-export { TextField } from './TextField.jsx';
+export { TextField } from './TextField';

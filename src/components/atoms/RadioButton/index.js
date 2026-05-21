@@ -1,1 +1,1 @@
-export { RadioButton } from './RadioButton.jsx';
+export { RadioButton } from './RadioButton';

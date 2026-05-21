@@ -2,5 +2,5 @@ export {
   IconLibrary,
   IconLibraryGrid,
   IconLibraryItem,
-} from './IconLibrary.jsx';
+} from './IconLibrary';
 export { iconLibraryOptions } from './iconLibrary.constants.js';

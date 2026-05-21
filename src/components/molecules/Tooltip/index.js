@@ -1,1 +1,1 @@
-export { HelpIcon, HelpIcon as Tooltip } from './HelpIcon.jsx';
+export { HelpIcon, HelpIcon as Tooltip } from './HelpIcon';

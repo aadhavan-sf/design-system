@@ -1,19 +1,63 @@
-// @ts-nocheck
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, type MouseEvent } from 'react';
 import {
   SealCheck,
   Warning,
   WarningCircle,
   X,
 } from '@phosphor-icons/react';
+import type { Icon } from '@phosphor-icons/react';
 
 import { Button } from '../../molecules/Button';
+import type { ButtonProps } from '../../molecules/Button/Button';
 import { Text } from '../../foundations/Typography';
 
 import './modal.css';
 
-const MODAL_CONTENT = {
+export type ModalVariant = 'status' | 'demo';
+export type ModalActionCount = 1 | 2;
+export type ModalState = 'error' | 'warning' | 'success';
+
+export type ModalProps = {
+  actionCount?: ModalActionCount;
+  closeButtonLabel?: string;
+  closeOnAction?: boolean;
+  closeOnCloseClick?: boolean;
+  defaultOpen?: boolean;
+  description?: string;
+  hideCloseButton?: boolean;
+  onClose?: (event: MouseEvent<HTMLButtonElement>) => void;
+  onOpenChange?: (open: boolean) => void;
+  onPrimaryAction?: (event: MouseEvent<HTMLButtonElement>) => void;
+  onSecondaryAction?: (event: MouseEvent<HTMLButtonElement>) => void;
+  open?: boolean;
+  primaryButtonDestructive?: ButtonProps['destructive'];
+  primaryButtonHierarchy?: ButtonProps['hierarchy'];
+  primaryButtonIcon?: ButtonProps['icon'];
+  primaryButtonProps?: ButtonProps;
+  primaryButtonSize?: ButtonProps['size'];
+  primaryButtonState?: ButtonProps['state'];
+  primaryLabel?: string;
+  secondaryButtonDestructive?: ButtonProps['destructive'];
+  secondaryButtonHierarchy?: ButtonProps['hierarchy'];
+  secondaryButtonIcon?: ButtonProps['icon'];
+  secondaryButtonProps?: ButtonProps;
+  secondaryButtonSize?: ButtonProps['size'];
+  secondaryButtonState?: ButtonProps['state'];
+  secondaryLabel?: string;
+  state?: ModalState;
+  title?: string;
+  variant?: ModalVariant;
+};
+
+type ModalContent = {
+  description: string;
+  icon: Icon;
+  primaryLabel: string;
+  secondaryLabel: string;
+  title: string;
+};
+
+const MODAL_CONTENT: Record<ModalState, ModalContent> = {
   error: {
     icon: WarningCircle,
     title: 'Are you sure you want to remove this language?',
@@ -67,7 +111,7 @@ export function Modal({
   secondaryLabel,
   state = 'error',
   title,
-}) {
+}: ModalProps) {
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isOpenControlled = typeof open === 'boolean';
   const isOpen = isOpenControlled ? open : internalOpen;
@@ -86,7 +130,7 @@ export function Modal({
     onOpenChange?.(false);
   };
 
-  const handlePrimaryAction = (event) => {
+  const handlePrimaryAction = (event: MouseEvent<HTMLButtonElement>) => {
     onPrimaryAction?.(event);
 
     if (closeOnAction) {
@@ -94,7 +138,7 @@ export function Modal({
     }
   };
 
-  const handleSecondaryAction = (event) => {
+  const handleSecondaryAction = (event: MouseEvent<HTMLButtonElement>) => {
     onSecondaryAction?.(event);
 
     if (closeOnAction) {
@@ -102,7 +146,7 @@ export function Modal({
     }
   };
 
-  const handleCloseClick = (event) => {
+  const handleCloseClick = (event: MouseEvent<HTMLButtonElement>) => {
     onClose?.(event);
 
     if (closeOnCloseClick) {
@@ -245,125 +289,3 @@ export function Modal({
     </div>
   );
 }
-
-Modal.propTypes = {
-  variant: PropTypes.oneOf(['status', 'demo']),
-  actionCount: PropTypes.oneOf([1, 2]),
-  closeButtonLabel: PropTypes.string,
-  closeOnAction: PropTypes.bool,
-  closeOnCloseClick: PropTypes.bool,
-  description: PropTypes.string,
-  defaultOpen: PropTypes.bool,
-  hideCloseButton: PropTypes.bool,
-  onClose: PropTypes.func,
-  onPrimaryAction: PropTypes.func,
-  onOpenChange: PropTypes.func,
-  onSecondaryAction: PropTypes.func,
-  open: PropTypes.bool,
-  primaryButtonDestructive: PropTypes.bool,
-  primaryButtonHierarchy: PropTypes.oneOf([
-    'primary',
-    'secondary',
-    'link-grey',
-    'link-color',
-  ]),
-  primaryButtonIcon: PropTypes.oneOf([
-    'none',
-    'left',
-    'right',
-    'only',
-  ]),
-  primaryButtonProps: PropTypes.shape({
-    destructive: PropTypes.bool,
-    hierarchy: PropTypes.oneOf([
-      'primary',
-      'secondary',
-      'link-grey',
-      'link-color',
-    ]),
-    icon: PropTypes.oneOf([
-      'none',
-      'left',
-      'right',
-      'only',
-    ]),
-    label: PropTypes.string,
-    size: PropTypes.oneOf([
-      'small',
-      'medium',
-      'large',
-      'xlarge',
-    ]),
-    state: PropTypes.oneOf([
-      'default',
-      'focus',
-      'disabled',
-    ]),
-  }),
-  primaryButtonSize: PropTypes.oneOf([
-    'small',
-    'medium',
-    'large',
-    'xlarge',
-  ]),
-  primaryButtonState: PropTypes.oneOf([
-    'default',
-    'focus',
-    'disabled',
-  ]),
-  primaryLabel: PropTypes.string,
-  secondaryButtonDestructive: PropTypes.bool,
-  secondaryButtonHierarchy: PropTypes.oneOf([
-    'primary',
-    'secondary',
-    'link-grey',
-    'link-color',
-  ]),
-  secondaryButtonIcon: PropTypes.oneOf([
-    'none',
-    'left',
-    'right',
-    'only',
-  ]),
-  secondaryButtonProps: PropTypes.shape({
-    destructive: PropTypes.bool,
-    hierarchy: PropTypes.oneOf([
-      'primary',
-      'secondary',
-      'link-grey',
-      'link-color',
-    ]),
-    icon: PropTypes.oneOf([
-      'none',
-      'left',
-      'right',
-      'only',
-    ]),
-    label: PropTypes.string,
-    size: PropTypes.oneOf([
-      'small',
-      'medium',
-      'large',
-      'xlarge',
-    ]),
-    state: PropTypes.oneOf([
-      'default',
-      'focus',
-      'disabled',
-    ]),
-  }),
-  secondaryButtonSize: PropTypes.oneOf([
-    'small',
-    'medium',
-    'large',
-    'xlarge',
-  ]),
-  secondaryButtonState: PropTypes.oneOf([
-    'default',
-    'focus',
-    'disabled',
-  ]),
-  secondaryLabel: PropTypes.string,
-  state: PropTypes.oneOf(['error', 'warning', 'success']),
-  title: PropTypes.string,
-};

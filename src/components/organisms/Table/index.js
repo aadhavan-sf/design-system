@@ -5,4 +5,4 @@ export {
   TableFilters,
   TableHeader,
   TableHeaderCell,
-} from './Table.jsx';
+} from './Table';

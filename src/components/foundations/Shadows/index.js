@@ -1,1 +1,1 @@
-export { ShadowScale } from './ShadowScale.jsx';
+export { ShadowScale } from './ShadowScale';

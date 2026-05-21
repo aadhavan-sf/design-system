@@ -1,1 +1,1 @@
-export { ColorPalette } from './ColorPalette.jsx';
+export { ColorPalette } from './ColorPalette';

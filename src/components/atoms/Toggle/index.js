@@ -1,1 +1,1 @@
-export { Toggle } from './Toggle.jsx';
+export { Toggle } from './Toggle';

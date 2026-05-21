@@ -1,6 +1,4 @@
-// @ts-nocheck
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import {
   CaretRight,
   Gear,
@@ -9,14 +7,50 @@ import {
   SquaresFour,
   Tag,
 } from '@phosphor-icons/react';
+import type { IconWeight } from '@phosphor-icons/react';
 
 import { Text } from '../../foundations/Typography';
 
 import './topNavigation.css';
 
-const ITEM_STATES = ['default', 'hover', 'focused', 'disabled'];
+export type TopNavigationItemState =
+  | 'default'
+  | 'hover'
+  | 'focused'
+  | 'disabled'
+  | 'Default'
+  | 'Hover'
+  | 'Focused'
+  | 'Disabled';
 
-const DEFAULT_ITEMS = [
+type TopNavigationIconName = 'cart' | 'gear' | 'home' | 'plp' | 'squares' | 'tag';
+
+export type TopNavigationItemConfig = {
+  label: string;
+  icon?: TopNavigationIconName;
+  disabled?: boolean;
+  state?: TopNavigationItemState;
+};
+
+export type TopNavigationItemProps = {
+  className?: string;
+  icon?: TopNavigationIconName;
+  label?: string;
+  onClick?: () => void;
+  pressed?: boolean;
+  state?: TopNavigationItemState;
+};
+
+export type TopNavigationProps = {
+  activeIndex?: number;
+  className?: string;
+  items?: Array<string | TopNavigationItemConfig>;
+  onItemChange?: (item: TopNavigationItemConfig, index: number) => void;
+};
+
+type ClassNamePart = string | false | null | undefined;
+
+const DEFAULT_ITEMS: TopNavigationItemConfig[] = [
   { label: 'Theme Settings', icon: 'gear' },
   { label: 'Home', icon: 'home' },
   { label: 'PLP', icon: 'plp' },
@@ -24,15 +58,18 @@ const DEFAULT_ITEMS = [
   { label: 'Cart', icon: 'cart' },
 ];
 
-function buildClassName(parts) {
+function buildClassName(parts: ClassNamePart[]) {
   return parts.filter(Boolean).join(' ');
 }
 
-function normalizeValue(value, aliases = {}) {
+function normalizeValue(
+  value: TopNavigationItemState,
+  aliases: Partial<Record<TopNavigationItemState, TopNavigationItemState>> = {},
+) {
   return aliases[value] ?? value;
 }
 
-function renderIcon(icon, weight = 'regular') {
+function renderIcon(icon: TopNavigationIconName, weight: IconWeight = 'regular') {
   const iconProps = {
     'aria-hidden': true,
     className: 'storybook-top-nav-item__icon',
@@ -63,7 +100,7 @@ export function TopNavigationItem({
   state = 'default',
   className,
   onClick,
-}) {
+}: TopNavigationItemProps) {
   const normalizedState = normalizeValue(state, {
     Default: 'default',
     Hover: 'hover',
@@ -99,24 +136,15 @@ export function TopNavigationItem({
   );
 }
 
-TopNavigationItem.propTypes = {
-  label: PropTypes.string,
-  icon: PropTypes.oneOf(['cart', 'gear', 'home', 'plp', 'squares', 'tag']),
-  pressed: PropTypes.bool,
-  state: PropTypes.oneOf([...ITEM_STATES, 'Default', 'Hover', 'Focused', 'Disabled']),
-  className: PropTypes.string,
-  onClick: PropTypes.func,
-};
-
 export function TopNavigation({
   items = DEFAULT_ITEMS,
   activeIndex = 1,
   className,
   onItemChange,
-}) {
+}: TopNavigationProps) {
   const [selectedIndex, setSelectedIndex] = useState(activeIndex);
 
-  const handleItemClick = (item, index) => {
+  const handleItemClick = (item: TopNavigationItemConfig, index: number) => {
     setSelectedIndex(index);
     onItemChange?.(item, index);
   };
@@ -127,7 +155,9 @@ export function TopNavigation({
       className={buildClassName(['storybook-top-nav', className])}
     >
       {items.map((item, index) => {
-        const normalizedItem = typeof item === 'string' ? { label: item } : item;
+        const normalizedItem: TopNavigationItemConfig = typeof item === 'string'
+          ? { label: item }
+          : item;
         const pressed = index === selectedIndex;
 
         return (
@@ -156,18 +186,3 @@ export function TopNavigation({
     </nav>
   );
 }
-
-TopNavigation.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      icon: PropTypes.oneOf(['cart', 'gear', 'home', 'plp', 'squares', 'tag']),
-      disabled: PropTypes.bool,
-      state: PropTypes.oneOf([...ITEM_STATES, 'Default', 'Hover', 'Focused', 'Disabled']),
-    }),
-  ])),
-  activeIndex: PropTypes.number,
-  className: PropTypes.string,
-  onItemChange: PropTypes.func,
-};

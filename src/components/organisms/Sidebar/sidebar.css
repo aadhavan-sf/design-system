@@ -396,7 +396,8 @@
   width: 189px;
 
   position: absolute;
-  right: 14px;
+  left: var(--spacing_4);
+  right: auto;
   bottom: 72px;
   z-index: 10;
 
@@ -417,7 +418,7 @@
   box-sizing: border-box;
 
   animation: storybook-sidebar-popover-enter 150ms ease-out;
-  transform-origin: bottom center;
+  transform-origin: bottom left;
 }
 
 @keyframes storybook-sidebar-popover-enter {

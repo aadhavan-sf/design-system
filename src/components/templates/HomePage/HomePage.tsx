@@ -48,7 +48,6 @@ type RightPanelProps = {
 
 const TemplateLeftPanel = LeftPanel as unknown as ComponentType<Record<string, unknown>>;
 const TemplateSidebar = Sidebar as unknown as ComponentType<Record<string, unknown>>;
-const TemplateTopNavigation = TopNavigation as unknown as ComponentType<Record<string, unknown>>;
 
 const scrollStyleOptions = [
   'Scroll with parent',
@@ -383,7 +382,7 @@ export function HomePage() {
       </div>
 
       <main className="storybook-home-page__canvas">
-        <TemplateTopNavigation />
+        <TopNavigation />
         <div className="storybook-home-page__preview-lane">
           <div className="storybook-home-page__collection-select">
             <TextField

@@ -1,1 +1,1 @@
-export { IconHoverEffect } from './IconHoverEffect.jsx';
+export { IconHoverEffect } from './IconHoverEffect';

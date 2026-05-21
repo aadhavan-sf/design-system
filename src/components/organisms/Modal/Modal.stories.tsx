@@ -1,7 +1,8 @@
-// @ts-nocheck
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { Modal } from './Modal';
 
-export default {
+const meta = {
   title: 'Organisms/Modal',
   component: Modal,
   parameters: {
@@ -85,9 +86,13 @@ export default {
       },
     },
   },
-};
+} satisfies Meta<typeof Modal>;
 
-export const Playground = {
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Playground: Story = {
   args: {
     variant: 'status',
     actionCount: 2,
@@ -108,7 +113,7 @@ export const Playground = {
   },
 };
 
-export const DemoModal = {
+export const DemoModal: Story = {
   args: {
     actionCount: 2,
     variant: 'demo',
@@ -130,7 +135,7 @@ export const DemoModal = {
   },
 };
 
-export const States = {
+export const States: Story = {
   render: () => (
     <div className="storybook-modal-story-grid">
       <Modal state="error" actionCount={2} closeOnAction={false} />

@@ -1,12 +1,13 @@
-// @ts-nocheck
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 
 import {
   TopNavigation,
   TopNavigationItem,
+  type TopNavigationItemState,
 } from './TopNavigation';
 
-export default {
+const meta = {
   title: 'Organisms/Top Navigation',
   component: TopNavigation,
   parameters: {
@@ -30,9 +31,13 @@ export default {
   args: {
     onItemChange: fn(),
   },
-};
+} satisfies Meta<typeof TopNavigation>;
 
-export const Playground = {
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Playground: Story = {
   render: (args) => (
     <div className="top-navigation-story-surface">
       <TopNavigation {...args} />
@@ -50,7 +55,7 @@ export const Playground = {
   },
 };
 
-export const Variant = {
+export const Variant: Story = {
   render: () => (
     <div className="top-navigation-story-surface">
       <TopNavigation />
@@ -58,17 +63,17 @@ export const Variant = {
   ),
 };
 
-export const ItemStates = {
+export const ItemStates: Story = {
   render: () => (
     <div className="top-navigation-item-story-grid">
-      {['default', 'hover', 'focused', 'disabled'].map((state) => (
+      {(['default', 'hover', 'focused', 'disabled'] satisfies TopNavigationItemState[]).map((state) => (
         <TopNavigationItem
           key={`unpressed-${state}`}
           label="Theme Settings"
           state={state}
         />
       ))}
-      {['default', 'hover', 'focused', 'disabled'].map((state) => (
+      {(['default', 'hover', 'focused', 'disabled'] satisfies TopNavigationItemState[]).map((state) => (
         <TopNavigationItem
           key={`pressed-${state}`}
           label="Theme Settings"

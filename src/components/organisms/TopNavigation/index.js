@@ -1,4 +1,4 @@
 export {
   TopNavigation,
   TopNavigationItem,
-} from './TopNavigation.jsx';
+} from './TopNavigation';

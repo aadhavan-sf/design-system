@@ -1,1 +1,1 @@
-export { Text } from './Typography.jsx';
+export { Text } from './Typography';

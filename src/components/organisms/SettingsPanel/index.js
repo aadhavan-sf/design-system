@@ -1,4 +1,4 @@
 export {
   SettingsPanel,
   SettingsPanelItem,
-} from './SettingsPanel.jsx';
+} from './SettingsPanel';

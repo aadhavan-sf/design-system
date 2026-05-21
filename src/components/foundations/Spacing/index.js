@@ -1,1 +1,1 @@
-export { SpacingScale } from './SpacingScale.jsx';
+export { SpacingScale } from './SpacingScale';

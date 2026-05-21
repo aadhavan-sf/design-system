@@ -1,1 +1,1 @@
-export { DropdownList } from './DropdownList.jsx';
+export { DropdownList } from './DropdownList';

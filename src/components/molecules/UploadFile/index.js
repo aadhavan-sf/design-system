@@ -3,4 +3,4 @@ export {
   UploadFile,
   UploadFileBase,
   UploadFileItem,
-} from './UploadFile.jsx';
+} from './UploadFile';
