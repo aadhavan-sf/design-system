@@ -123,12 +123,6 @@
   flex-shrink: 0;
 
   color: var(--neutral_600);
-
-  transition: transform 160ms ease;
-}
-
-.storybook-sidebar-store:active .storybook-sidebar-store__icon {
-  transform: translateY(var(--spacing_0_5));
 }
 
 .storybook-sidebar-store-dropdown {
@@ -396,16 +390,6 @@
   height: 18px;
 
   flex-shrink: 0;
-
-  transition: transform 180ms ease;
-}
-
-.storybook-sidebar-action:active .storybook-sidebar-action__icon {
-  transform: translateX(var(--spacing_0_5));
-}
-
-.storybook-sidebar-action--destructive:active .storybook-sidebar-action__icon {
-  animation: storybook-sidebar-destructive-shake 180ms ease;
 }
 
 .storybook-sidebar-preview-popover {

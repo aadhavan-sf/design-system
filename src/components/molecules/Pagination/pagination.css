@@ -132,16 +132,6 @@
 
 .storybook-pagination-button__icon {
   flex-shrink: 0;
-
-  transition: transform 160ms ease;
-}
-
-.storybook-pagination-button--leading:active .storybook-pagination-button__icon {
-  transform: translateX(calc(var(--spacing_0_5) * -1));
-}
-
-.storybook-pagination-button--trailing:active .storybook-pagination-button__icon {
-  transform: translateX(var(--spacing_0_5));
 }
 
 .storybook-pagination-button__label {

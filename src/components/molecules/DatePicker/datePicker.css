@@ -77,18 +77,6 @@
   background: var(--neutral_50);
 }
 
-.storybook-datepicker__nav-button svg {
-  transition: transform 160ms ease;
-}
-
-.storybook-datepicker__nav-button:first-child:active svg {
-  transform: translateX(calc(var(--spacing_0_5) * -1));
-}
-
-.storybook-datepicker__nav-button:last-child:active svg {
-  transform: translateX(var(--spacing_0_5));
-}
-
 .storybook-datepicker__nav-button:focus-visible,
 .storybook-datepicker__title-button:focus-visible,
 .storybook-datepicker-day:focus-visible,

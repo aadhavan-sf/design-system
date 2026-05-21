@@ -6,6 +6,10 @@
   gap: var(--spacing_1);
 }
 
+.storybook-textfield--fluid {
+  width: 100%;
+}
+
 .storybook-textfield__header {
   display: flex;
   align-items: center;
@@ -321,12 +325,6 @@ button.storybook-textfield__field {
   color: var(--neutral_700);
 
   cursor: pointer;
-
-  transition: transform 160ms ease;
-}
-
-.storybook-textfield__date-button:active:not(:disabled) {
-  transform: translateY(calc(var(--spacing_0_5) * -1));
 }
 
 .storybook-textfield__date-button--error {
@@ -393,12 +391,6 @@ button.storybook-textfield__field {
   color: var(--neutral_600);
 
   cursor: pointer;
-
-  transition: transform 160ms ease;
-}
-
-.storybook-textfield__clear-button:active {
-  transform: scale(0.92) rotate(8deg);
 }
 
 .storybook-textfield__clear-button:focus-visible {

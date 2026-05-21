@@ -31,6 +31,8 @@ const preview = {
           ],
           'Organisms',
           ['Modal', 'Top Navigation', 'Sidebar', 'Left Panel', 'Table', 'Settings Panel', 'Layouts Panel'],
+          'Templates',
+          ['Home Page'],
           'Foundations',
           ['Typography', 'Colors', 'Spacing', 'Shadows'],
         ],

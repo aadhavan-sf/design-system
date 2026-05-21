@@ -147,6 +147,7 @@ export function TextField({
   datePickerType = 'single-date',
   dropdownListItems,
   dropdownListVariant,
+  fluid = false,
   onSelectedOptionsChange,
   options = EMPTY_OPTIONS,
   selectedOptions: controlledSelectedOptions,
@@ -458,6 +459,7 @@ export function TextField({
         label={label}
         labelText={labelText}
         tooltip={tooltip}
+        className={fluid ? 'storybook-textfield--fluid' : undefined}
         tooltipClassName={tooltipClassName}
         tooltipDescription={tooltipDescription}
         tooltipOpen={tooltipOpen}
@@ -542,6 +544,7 @@ TextField.propTypes = {
     'check-right',
     'text',
   ]),
+  fluid: PropTypes.bool,
   onSelectedOptionsChange: PropTypes.func,
   options: PropTypes.arrayOf(PropTypes.string),
   selectedOptions: PropTypes.arrayOf(PropTypes.string),

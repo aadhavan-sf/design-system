@@ -276,19 +276,10 @@
   cursor: pointer;
 }
 
-.storybook-table-action svg,
-.storybook-table-icon-button svg {
-  transition: transform 180ms ease;
-}
-
 .storybook-table-action:hover,
 .storybook-table-icon-button:hover {
   background: var(--neutral_50);
   color: var(--neutral_800);
-}
-
-.storybook-table-action[aria-label="Edit"]:active svg {
-  transform: translateY(calc(var(--spacing_0_5) * -1)) rotate(-6deg);
 }
 
 .storybook-table-action[aria-label="View"] {

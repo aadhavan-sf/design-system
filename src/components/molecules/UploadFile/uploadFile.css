@@ -233,10 +233,6 @@
     transform 160ms ease;
 }
 
-.storybook-upload-action svg {
-  transition: transform 180ms ease;
-}
-
 .storybook-upload-action:first-child {
   padding: var(--spacing_2) 14px;
   border: 1px solid var(--neutral_300);
@@ -252,6 +248,10 @@
   color: var(--error_600);
 }
 
+.storybook-upload-action--destructive svg {
+  transition: transform 180ms ease;
+}
+
 .storybook-upload-action--destructive.storybook-upload-action--hover,
 .storybook-upload-action--destructive:hover {
   color: var(--error_700);
@@ -259,10 +259,6 @@
 
 .storybook-upload-action--destructive:active svg {
   animation: storybook-upload-trash-shake 180ms ease;
-}
-
-.storybook-upload-action:not(.storybook-upload-action--destructive):active svg {
-  transform: translateY(calc(var(--spacing_0_5) * -1)) rotate(-4deg);
 }
 
 .storybook-upload-action:focus-visible {

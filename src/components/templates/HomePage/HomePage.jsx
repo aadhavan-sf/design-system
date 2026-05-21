@@ -107,6 +107,7 @@ function VisibilityOption({
         size="sm"
         pressed={checked}
         aria-label={label}
+        className="storybook-home-page-visibility-option__radio"
         tabIndex={-1}
       />
       <Text
@@ -265,6 +266,7 @@ function RightPanel({
 
       <TextField
         type="dropdown"
+        fluid
         labelText="Scroll Style"
         placeholder="Scroll with parent"
         options={scrollStyleOptions}
@@ -318,10 +320,14 @@ export function HomePage() {
 
   return (
     <div className="storybook-home-page">
-      <Sidebar activeItemId="active-theme" />
+      <Sidebar
+        activeItemId="active-theme"
+        className="storybook-home-page__sidebar"
+      />
 
       <div className="storybook-home-page__left-panel">
         <LeftPanel
+          className="storybook-home-page__left-panel-surface"
           type="fixed-blocks"
           title="Version 1"
           status="draft"
@@ -345,6 +351,7 @@ export function HomePage() {
           <div className="storybook-home-page__collection-select">
             <TextField
               type="dropdown"
+              fluid
               label={false}
               placeholder="Mens Collection"
               options={['Mens Collection', 'Womens Collection', 'Lifestyle']}
@@ -356,10 +363,16 @@ export function HomePage() {
           </div>
           <div className="storybook-home-page__preview-stack">
             <PhonePreview />
-            <Text as="span" variant="text-xs" weight="regular" color="var(--neutral_600)">
-              Last saved: {lastSavedAt}
-            </Text>
           </div>
+          <Text
+            as="span"
+            variant="text-xs"
+            weight="regular"
+            color="var(--neutral_600)"
+            className="storybook-home-page__last-saved"
+          >
+            Last saved: {lastSavedAt}
+          </Text>
         </div>
       </main>
 

@@ -52,12 +52,6 @@
 
 .storybook-icon-library__preview-icon {
   flex-shrink: 0;
-
-  transition: transform 180ms ease;
-}
-
-.storybook-icon-library__icon-preview:active .storybook-icon-library__preview-icon {
-  transform: translateY(calc(var(--spacing_0_5) * -1));
 }
 
 .storybook-icon-library__select {
@@ -93,12 +87,6 @@
   flex-shrink: 0;
 
   color: var(--neutral_700);
-
-  transition: transform 160ms ease;
-}
-
-.storybook-icon-library__select:active .storybook-icon-library__caret {
-  transform: translateY(var(--spacing_0_5));
 }
 
 .storybook-icon-library-popover {
