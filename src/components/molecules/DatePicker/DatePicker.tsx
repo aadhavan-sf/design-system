@@ -397,8 +397,9 @@ function CalendarMonth({
 
       <div className="storybook-datepicker__day-grid">
         {resolvedDays.map((day, index) => {
-          const isSelected = selectedDaySet.has(day.label);
-          const isOnRange = rangeDaySet.has(day.label);
+          const isDisabled = day.state === 'disabled';
+          const isSelected = !isDisabled && selectedDaySet.has(day.label);
+          const isOnRange = !isDisabled && rangeDaySet.has(day.label);
           const state = isSelected
             ? 'selected'
             : isOnRange
@@ -410,9 +411,9 @@ function CalendarMonth({
               key={`${day.label}-${index}`}
               label={day.label}
               state={state}
-              today={day.label === today}
+              today={!isDisabled && day.label === today}
               onClick={() => {
-                if (state !== 'disabled') {
+                if (!isDisabled) {
                   onDaySelect?.(day.label);
                 }
               }}
