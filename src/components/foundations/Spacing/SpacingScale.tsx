@@ -54,12 +54,12 @@ export function SpacingScale({ showCssVariable = true }: SpacingScaleProps) {
       </div>
 
       <div className="ds-spacing__preview" aria-label="Spacing examples">
-        <div style={{ gap: typedSpacing[2], padding: typedSpacing[3] }}>
+        <div className="gap-2 p-3">
           <Text as="span" variant="text-sm" weight="medium">gap 2</Text>
           <Text as="span" variant="text-sm" weight="medium">padding 3</Text>
           <Text as="span" variant="text-sm" weight="medium">space 4</Text>
         </div>
-        <div style={{ gap: typedSpacing[4], padding: typedSpacing[6] }}>
+        <div className="gap-4 p-6">
           <Text as="span" variant="text-sm" weight="medium">gap 4</Text>
           <Text as="span" variant="text-sm" weight="medium">padding 6</Text>
           <Text as="span" variant="text-sm" weight="medium">space 8</Text>

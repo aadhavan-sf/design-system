@@ -1,73 +1,55 @@
 .ds-shadows {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_6);
-  font-family: var(--font_family_base);
-  color: var(--ds-text-strong, var(--neutral_900));
+  @apply gap-6 font-sans text-ds-text-strong;
 }
 
 .ds-shadows__header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: var(--spacing_4);
+  @apply gap-4;
 }
 
 .ds-shadows__eyebrow {
-  color: var(--brand_600);
-  font-size: var(--type-text-sm-size);
-  font-weight: 600;
-  line-height: var(--type-text-sm-line);
+  @apply text-ds-text-sm font-semibold text-brand-600;
 }
 
 .ds-shadows__title {
-  margin: var(--spacing_1) 0 0;
-  color: var(--ds-text-strong, var(--neutral_900));
-  font-size: var(--type-display-xs-size);
-  line-height: var(--type-display-xs-line);
-  font-weight: 600;
+  @apply mt-1 text-ds-display-xs font-semibold text-ds-text-strong;
 }
 
 .ds-shadows__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--spacing_5);
+  @apply gap-5;
 }
 
 .ds-shadow-card {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_4);
-  padding: var(--spacing_4);
   border: 1px solid var(--ds-border, var(--neutral_200));
-  border-radius: var(--radius_8);
-  background: var(--ds-surface, var(--neutral_00));
+  @apply gap-4 rounded-ds border-ds-border bg-ds-surface p-4;
 }
 
 .ds-shadow-card__preview {
   min-height: 112px;
   border: 1px solid var(--ds-border, var(--neutral_200));
-  border-radius: var(--radius_8);
-  background: var(--neutral_00);
+  @apply rounded-ds border-ds-border bg-neutral-0;
 }
 
 .ds-shadow-card__meta {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_2);
+  @apply gap-2;
 }
 
 .ds-shadow-card__name {
-  color: var(--ds-text-strong, var(--neutral_900));
-  font-size: var(--type-text-lg-size);
-  font-weight: 600;
-  line-height: var(--type-text-lg-line);
+  @apply text-ds-text-lg font-semibold text-ds-text-strong;
 }
 
 .ds-shadow-card__value {
-  color: var(--ds-text-muted, var(--neutral_600));
-  font-size: var(--type-text-xs-size);
-  line-height: var(--type-text-xs-line);
+  @apply text-ds-text-xs text-ds-text-muted;
 }
 
 @media (max-width: 640px) {

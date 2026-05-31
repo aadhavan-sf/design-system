@@ -11,6 +11,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        ds: {
+          surface: 'var(--ds-surface, var(--neutral_00))',
+          'surface-subtle': 'var(--ds-surface-subtle, var(--neutral_25))',
+          border: 'var(--ds-border, var(--neutral_200))',
+          'text-strong': 'var(--ds-text-strong, var(--neutral_900))',
+          text: 'var(--ds-text, var(--neutral_700))',
+          'text-muted': 'var(--ds-text-muted, var(--neutral_600))',
+        },
         brand: {
           25: 'var(--brand_25)',
           50: 'var(--brand_50)',
@@ -72,12 +80,27 @@ module.exports = {
         24: 'var(--spacing_24)',
         32: 'var(--spacing_32)',
       },
+      fontFamily: {
+        sans: ['var(--font_family_base)'],
+      },
+      fontSize: {
+        'ds-display-xs': ['var(--type-display-xs-size)', { lineHeight: 'var(--type-display-xs-line)' }],
+        'ds-text-lg': ['var(--type-text-lg-size)', { lineHeight: 'var(--type-text-lg-line)' }],
+        'ds-text-md': ['var(--type-text-md-size)', { lineHeight: 'var(--type-text-md-line)' }],
+        'ds-text-sm': ['var(--type-text-sm-size)', { lineHeight: 'var(--type-text-sm-line)' }],
+        'ds-text-xs': ['var(--type-text-xs-size)', { lineHeight: 'var(--type-text-xs-line)' }],
+      },
       borderRadius: {
         1: 'var(--spacing_1)',
+        3: 'var(--spacing_3)',
+        ds: 'var(--radius_8)',
       },
       boxShadow: {
         xs: 'var(--shadow_xs)',
         sm: 'var(--shadow_sm)',
+        md: 'var(--shadow_md)',
+        lg: 'var(--shadow_lg)',
+        xl: 'var(--shadow_xl)',
         'focus-brand': 'var(--shadow_focus-brand)',
         'focus-neutral': 'var(--shadow_focus-neutral)',
         'focus-error': 'var(--shadow_focus-error)',
