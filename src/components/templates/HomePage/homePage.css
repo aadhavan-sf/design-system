@@ -122,7 +122,7 @@
   height: auto;
   display: block;
   object-fit: contain;
-  @apply shadow-3xl;
+  filter: drop-shadow(0 32px 52px rgba(10, 13, 18, 0.14));
 }
 
 .storybook-home-page__preview-lane {
