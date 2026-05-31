@@ -3,6 +3,8 @@
 @import './styling/theme/spacing.css';
 @import './styling/theme/shadows.css';
 
+@tailwind utilities;
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;

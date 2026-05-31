@@ -3,12 +3,10 @@
   align-items: center;
   justify-content: center;
 
-  padding: 0;
+  @apply border-neutral-300 bg-neutral-0 p-0;
 
   border: 1px solid var(--neutral_300);
   border-radius: 4px;
-
-  background: var(--neutral_00);
 
   cursor: pointer;
 
@@ -19,8 +17,9 @@
 }
 
 .storybook-checkbox:focus-visible {
+  @apply shadow-focus-brand;
+
   outline: none;
-  box-shadow: var(--shadow_focus-brand);
 }
 
 .storybook-checkbox:disabled {
@@ -42,7 +41,7 @@
   align-items: center;
   justify-content: center;
 
-  color: var(--neutral_00);
+  @apply text-neutral-0;
 
   opacity: 0;
 
@@ -50,8 +49,7 @@
 }
 
 .storybook-checkbox--active {
-  border-color: var(--brand_400);
-  background: var(--brand_400);
+  @apply border-brand-400 bg-brand-400;
 }
 
 .storybook-checkbox--active .storybook-checkbox__icon {
@@ -59,30 +57,27 @@
 }
 
 .storybook-checkbox--hover {
-  border-color: var(--brand_400);
+  @apply border-brand-400;
 }
 
 .storybook-checkbox--hover.storybook-checkbox--active {
-  border-color: var(--brand_400);
-  background: var(--brand_400);
+  @apply border-brand-400 bg-brand-400;
 }
 
 .storybook-checkbox--focus {
-  box-shadow: var(--shadow_focus-brand);
+  @apply shadow-focus-brand;
 }
 
 .storybook-checkbox--disabled {
-  border-color: var(--neutral_200);
-  background: var(--neutral_50);
+  @apply border-neutral-200 bg-neutral-50;
 }
 
 .storybook-checkbox--disabled.storybook-checkbox--active {
-  border-color: var(--brand_100);
-  background: var(--brand_100);
+  @apply border-brand-100 bg-brand-100;
 }
 
 .storybook-checkbox--disabled .storybook-checkbox__icon {
-  color: var(--neutral_00);
+  @apply text-neutral-0;
 }
 
 .checkbox-story-row,
@@ -92,10 +87,10 @@
 }
 
 .checkbox-story-row {
-  gap: var(--spacing_12);
+  @apply gap-12;
 }
 
 .checkbox-story-stack {
   flex-direction: column;
-  gap: var(--spacing_8);
+  @apply gap-8;
 }

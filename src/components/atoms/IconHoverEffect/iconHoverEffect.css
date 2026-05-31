@@ -3,13 +3,10 @@
   align-items: center;
   justify-content: center;
 
-  padding: var(--spacing_1);
+  @apply bg-transparent p-1 text-neutral-600;
 
   border: 0;
   border-radius: var(--spacing_1);
-
-  background: transparent;
-  color: var(--neutral_600);
 
   cursor: pointer;
 
@@ -22,25 +19,26 @@
 
 .storybook-icon-hover-effect:hover,
 .storybook-icon-hover-effect--hover {
-  background: var(--neutral_50);
+  @apply bg-neutral-50;
 }
 
 .storybook-icon-hover-effect--destructive {
-  color: var(--error_600);
+  @apply text-error-600;
 }
 
 .storybook-icon-hover-effect--destructive:hover,
 .storybook-icon-hover-effect--destructive.storybook-icon-hover-effect--hover {
-  background: var(--error_50);
+  @apply bg-error-50;
 }
 
 .storybook-icon-hover-effect:focus-visible {
+  @apply shadow-focus-neutral;
+
   outline: none;
-  box-shadow: var(--shadow_focus-neutral);
 }
 
 .storybook-icon-hover-effect--destructive:focus-visible {
-  box-shadow: var(--shadow_focus-error);
+  @apply shadow-focus-error;
 }
 
 .storybook-icon-hover-effect__icon {
@@ -55,7 +53,7 @@
   content: "";
 
   position: absolute;
-  inset: var(--spacing_1);
+  @apply inset-1;
 
   background: linear-gradient(
     32deg,
@@ -115,11 +113,11 @@
 .icon-hover-effect-story-stack {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_6);
+  @apply gap-6;
 }
 
 .icon-hover-effect-story-row {
   display: flex;
   align-items: center;
-  gap: var(--spacing_6);
+  @apply gap-6;
 }

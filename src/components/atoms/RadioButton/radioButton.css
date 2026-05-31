@@ -3,12 +3,10 @@
   align-items: center;
   justify-content: center;
 
-  padding: 0;
+  @apply border-neutral-300 bg-neutral-0 p-0;
 
   border: 1px solid var(--neutral_300);
   border-radius: 999px;
-
-  background: var(--neutral_00);
 
   cursor: pointer;
 
@@ -19,8 +17,9 @@
 }
 
 .storybook-radio:focus-visible {
+  @apply shadow-focus-brand;
+
   outline: none;
-  box-shadow: var(--shadow_focus-brand);
 }
 
 .storybook-radio:disabled {
@@ -41,7 +40,7 @@
   display: block;
 
   border-radius: 999px;
-  background: var(--brand_400);
+  @apply bg-brand-400;
 
   opacity: 0;
 
@@ -59,8 +58,7 @@
 }
 
 .storybook-radio--pressed {
-  border-color: var(--brand_400);
-  background: var(--brand_50);
+  @apply border-brand-400 bg-brand-50;
 }
 
 .storybook-radio--pressed .storybook-radio__dot {
@@ -68,30 +66,27 @@
 }
 
 .storybook-radio--hover {
-  border-color: var(--brand_400);
+  @apply border-brand-400;
 }
 
 .storybook-radio--hover.storybook-radio--pressed {
-  border-color: var(--brand_400);
-  background: var(--brand_50);
+  @apply border-brand-400 bg-brand-50;
 }
 
 .storybook-radio--focus {
-  box-shadow: var(--shadow_focus-brand);
+  @apply shadow-focus-brand;
 }
 
 .storybook-radio--disabled {
-  border-color: var(--neutral_200);
-  background: var(--neutral_50);
+  @apply border-neutral-200 bg-neutral-50;
 }
 
 .storybook-radio--disabled.storybook-radio--pressed {
-  border-color: var(--brand_100);
-  background: var(--brand_25);
+  @apply border-brand-100 bg-brand-25;
 }
 
 .storybook-radio--disabled .storybook-radio__dot {
-  background: var(--brand_100);
+  @apply bg-brand-100;
 }
 
 .radio-story-row,
@@ -101,10 +96,10 @@
 }
 
 .radio-story-row {
-  gap: var(--spacing_12);
+  @apply gap-12;
 }
 
 .radio-story-stack {
   flex-direction: column;
-  gap: var(--spacing_8);
+  @apply gap-8;
 }

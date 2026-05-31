@@ -4,12 +4,10 @@
   display: inline-flex;
   align-items: center;
 
-  padding: var(--spacing_0_5);
+  @apply bg-neutral-100 p-0.5;
 
   border: 0;
   border-radius: 999px;
-
-  background: var(--neutral_100);
 
   cursor: pointer;
 
@@ -19,8 +17,9 @@
 }
 
 .storybook-toggle:focus-visible {
+  @apply shadow-focus-brand;
+
   outline: none;
-  box-shadow: var(--shadow_focus-brand);
 }
 
 .storybook-toggle:disabled {
@@ -41,9 +40,8 @@
   display: block;
 
   border-radius: 999px;
-  background: var(--neutral_00);
+  @apply bg-neutral-0 shadow-sm;
 
-  box-shadow: var(--shadow_sm);
 
   transition: transform 160ms ease;
 }
@@ -59,7 +57,7 @@
 }
 
 .storybook-toggle--pressed {
-  background: var(--brand_400);
+  @apply bg-brand-400;
 }
 
 .storybook-toggle--sm.storybook-toggle--pressed
@@ -73,27 +71,27 @@
 }
 
 .storybook-toggle--hover {
-  background: var(--neutral_200);
+  @apply bg-neutral-200;
 }
 
 .storybook-toggle--hover.storybook-toggle--pressed {
-  background: var(--brand_400);
+  @apply bg-brand-400;
 }
 
 .storybook-toggle--focus {
-  box-shadow: var(--shadow_focus-brand);
+  @apply shadow-focus-brand;
 }
 
 .storybook-toggle--disabled {
-  background: var(--neutral_50);
+  @apply bg-neutral-50;
 }
 
 .storybook-toggle--disabled.storybook-toggle--pressed {
-  background: var(--brand_100);
+  @apply bg-brand-100;
 }
 
 .storybook-toggle--disabled .storybook-toggle__thumb {
-  box-shadow: var(--shadow_xs);
+  @apply shadow-xs;
 }
 
 .toggle-story-row,
@@ -103,10 +101,10 @@
 }
 
 .toggle-story-row {
-  gap: var(--spacing_12);
+  @apply gap-12;
 }
 
 .toggle-story-stack {
   flex-direction: column;
-  gap: var(--spacing_8);
+  @apply gap-8;
 }
