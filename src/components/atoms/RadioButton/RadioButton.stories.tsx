@@ -77,7 +77,7 @@ export const Playground: Story = {
 
 export const Sizes: Story = {
   render: () => (
-    <div className="flex items-center gap-12">
+    <div className="radio-story-row">
       <RadioButton size="sm" />
       <RadioButton size="sm" defaultPressed />
       <RadioButton size="mid" />
@@ -88,9 +88,9 @@ export const Sizes: Story = {
 
 export const States: Story = {
   render: () => (
-    <div className="flex flex-col items-center gap-8">
+    <div className="radio-story-stack">
       {states.map((state) => (
-        <div key={state} className="flex items-center gap-12">
+        <div key={state} className="radio-story-row">
           <RadioButton size="sm" state={state} />
           <RadioButton size="sm" state={state} defaultPressed />
           <RadioButton size="mid" state={state} />

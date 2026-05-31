@@ -3,7 +3,6 @@ import {
   Pagination,
   PaginationButton,
 } from './Pagination';
-import './pagination.css';
 
 export default {
   title: 'Molecules/Pagination',

@@ -19,6 +19,8 @@ import {
   smallPickerOptions,
 } from './iconLibrary.constants';
 
+import './iconLibrary.css';
+
 const ITEM_STATES = ['default', 'hover', 'focused', 'disabled'];
 const ITEM_SIZES = ['sm', 'md'];
 const LIBRARY_STATES = ['default', 'dropdown-upload-icon', 'uploaded-icon'];
@@ -53,23 +55,6 @@ function getMergedOptions(...optionGroups) {
 
 function getIconItemSize(size) {
   return size === 'md' ? 20 : 15;
-}
-
-function getIconItemClassName({ className, normalizedSize, normalizedState, pressed }) {
-  return buildClassName([
-    'inline-flex shrink-0 cursor-pointer items-center justify-center border-0 bg-neutral-00 text-neutral-600 enabled:hover:bg-neutral-50 disabled:cursor-not-allowed disabled:bg-neutral-50 disabled:text-neutral-300',
-    normalizedSize === 'sm'
-      ? 'h-6 w-6 rounded-[3.692px] p-[4.5px]'
-      : 'h-8 w-8 rounded-[4.923px] p-[6px]',
-    normalizedState === 'hover' && 'bg-neutral-50',
-    normalizedState === 'focused' && 'bg-neutral-00 shadow-focus-primary-inset',
-    pressed && 'border border-solid border-primary-100 bg-primary-25 text-primary-400',
-    pressed && normalizedSize === 'sm' && 'rounded-[3px] border-[0.75px]',
-    pressed && normalizedSize === 'md' && 'rounded-1',
-    pressed && normalizedState === 'focused' && 'bg-primary-25',
-    pressed && normalizedState === 'disabled' && 'border-primary-100 bg-primary-25 text-primary-100',
-    className,
-  ]);
 }
 
 function IconGlyph({
@@ -120,11 +105,17 @@ export function IconLibraryItem({
       aria-pressed={pressed}
       aria-label={ariaLabel ?? 'Select icon'}
       disabled={normalizedState === 'disabled'}
-      className={getIconItemClassName({ className, normalizedSize, normalizedState, pressed })}
+      className={buildClassName([
+        'storybook-icon-library-item',
+        `storybook-icon-library-item--${normalizedSize}`,
+        `storybook-icon-library-item--${normalizedState}`,
+        pressed && 'storybook-icon-library-item--pressed',
+        className,
+      ])}
       onClick={onClick}
     >
       <IconGlyph
-        className="shrink-0"
+        className="storybook-icon-library-item__icon"
         icon={icon}
         size={getIconItemSize(normalizedSize)}
       />
@@ -169,11 +160,11 @@ export function IconLibraryGrid({
   return (
     <div
       className={buildClassName([
-        'flex w-[400px] items-start justify-end gap-2 rounded-2 border border-solid border-neutral-200 bg-neutral-00 p-3',
+        'storybook-icon-library-grid',
         className,
       ])}
     >
-      <div className="flex min-w-0 flex-1 basis-0 flex-wrap content-start items-center gap-x-4 gap-y-3">
+      <div className="storybook-icon-library-grid__icons">
         {iconOptions.map((option) => (
           <IconLibraryItem
             key={option.value}
@@ -186,7 +177,7 @@ export function IconLibraryGrid({
         ))}
       </div>
       <span
-        className="h-[60px] w-2 shrink-0 rounded-2 bg-neutral-100"
+        className="storybook-icon-library-grid__scrollbar"
         aria-hidden="true"
       />
     </div>
@@ -213,16 +204,16 @@ function IconUploadDropzone({
   return (
     <button
       type="button"
-      className="flex w-full cursor-pointer items-start gap-2 rounded-2 border border-dashed border-neutral-200 bg-neutral-00 p-3 text-neutral-900 enabled:hover:bg-neutral-25 focus-visible:outline-none focus-visible:shadow-focus-primary-inset"
+      className="storybook-icon-library-upload"
       onClick={() => inputRef.current?.click()}
     >
       <MonitorArrowUp
         aria-hidden="true"
-        className="shrink-0 text-primary-400"
+        className="storybook-icon-library-upload__icon"
         size={24}
         weight="regular"
       />
-      <span className="flex min-w-0 flex-col gap-1 text-left">
+      <span className="storybook-icon-library-upload__copy">
         <Text
           as="span"
           variant="text-sm"
@@ -244,7 +235,7 @@ function IconUploadDropzone({
         ref={inputRef}
         type="file"
         accept=".svg,.png,image/svg+xml,image/png"
-        className="absolute h-px w-px overflow-hidden whitespace-nowrap [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
+        className="storybook-icon-library-upload__input"
         onChange={(event) => onUpload?.(event.target.files?.[0] ?? null)}
       />
     </button>
@@ -272,18 +263,18 @@ function IconPickerPopover({
   const isUploadedState = normalizedState === 'uploaded-icon';
 
   return (
-    <div className="flex w-[216px] flex-col gap-4 rounded-2 bg-neutral-00 p-4 shadow-md">
+    <div className="storybook-icon-library-popover">
       <Text
         as="p"
         variant="text-xs"
         weight="medium"
         color="var(--neutral_600)"
-        className="m-0"
+        className="storybook-icon-library-popover__title"
       >
         Choose Icon
       </Text>
 
-      <div className="flex items-center gap-2">
+      <div className="storybook-icon-library-popover__choices">
         {(isUploadedState ? [
           { value: 'bell', label: 'Notifications', icon: Bell },
           { value: 'bell-ringing', label: 'Notifications ringing', icon: BellRinging },
@@ -300,28 +291,28 @@ function IconPickerPopover({
         ))}
       </div>
 
-      <div className="relative flex h-4 w-full items-center justify-center">
-        <span className="absolute inset-x-0 top-1/2 h-px bg-neutral-200" />
+      <div className="storybook-icon-library-separator">
+        <span className="storybook-icon-library-separator__line" />
         <Text
           as="span"
           variant="text-xs"
           weight="medium"
           color="var(--neutral_200)"
-          className="relative z-[1] bg-neutral-00 px-1 tracking-[0.2em]"
+          className="storybook-icon-library-separator__label"
         >
           OR
         </Text>
       </div>
 
       {isUploadedState ? (
-        <div className="flex items-center justify-between gap-2">
+        <div className="storybook-icon-library-uploaded">
           <IconLibraryItem
             ariaLabel="Uploaded icon"
             icon={uploadedIcon}
             pressed
             size="md"
           />
-          <span className="inline-flex items-center gap-2">
+          <span className="storybook-icon-library-uploaded__actions">
             <IconHoverEffect
               ariaLabel="Replace uploaded icon"
               icon="repeat"
@@ -433,7 +424,7 @@ export function IconLibrary({
   return (
     <div
       className={buildClassName([
-        'relative flex w-[216px] flex-col gap-3',
+        'storybook-icon-library',
         className,
       ])}
     >
@@ -442,28 +433,28 @@ export function IconLibrary({
         variant="text-sm"
         weight="medium"
         color="var(--neutral_600)"
-        className="block"
+        className="storybook-icon-library__label"
       >
         {label}
       </Text>
 
-      <div className="flex items-center gap-2">
+      <div className="storybook-icon-library__field-row">
         <button
           type="button"
-          className="box-border inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-2 border border-solid border-neutral-200 bg-neutral-00 p-0 text-neutral-700 enabled:hover:bg-neutral-25 focus-visible:outline-none focus-visible:shadow-focus-primary-inset"
+          className="storybook-icon-library__icon-preview"
           aria-label="Choose icon"
           aria-expanded={isPickerOpen}
           onClick={() => togglePanel('picker')}
         >
           <IconGlyph
-            className="shrink-0"
+            className="storybook-icon-library__preview-icon"
             icon={SelectedIcon}
             size={20}
           />
         </button>
         <button
           type="button"
-          className="box-border inline-flex h-11 min-w-0 flex-1 basis-0 cursor-pointer items-center justify-between gap-2 rounded-2 border border-solid border-neutral-200 bg-neutral-00 px-[14px] py-3 text-neutral-700 enabled:hover:bg-neutral-25 focus-visible:outline-none focus-visible:shadow-focus-primary-inset"
+          className="storybook-icon-library__select"
           aria-expanded={isDropdownOpen}
           onClick={() => togglePanel('dropdown')}
         >
@@ -472,13 +463,13 @@ export function IconLibrary({
             variant="text-sm"
             weight="medium"
             color="var(--neutral_700)"
-            className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
+            className="storybook-icon-library__select-label"
           >
             {displayLabel}
           </Text>
           <CaretUpDown
             aria-hidden="true"
-            className="shrink-0 text-neutral-700"
+            className="storybook-icon-library__caret"
             size={20}
             weight="regular"
           />
@@ -498,9 +489,8 @@ export function IconLibrary({
       )}
 
       {isDropdownOpen && (
-        <div className="absolute left-[52px] top-[calc(100%+8px)] z-20">
+        <div className="storybook-icon-library__dropdown-menu">
           <DropdownList
-            className="w-[164px]"
             items={iconLibraryDropdownOptions}
             selectedValues={[resolvedCategoryValue]}
             variant="text"

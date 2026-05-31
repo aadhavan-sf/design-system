@@ -3,8 +3,6 @@
 @import './styling/theme/spacing.css';
 @import './styling/theme/shadows.css';
 
-@tailwind utilities;
-
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -95,6 +93,13 @@ body {
   --ds-text-muted: var(--neutral_600);
   color: var(--neutral_900);
   color-scheme: light;
+}
+
+.sbdocs .ds-text,
+.sbdocs-wrapper .ds-text,
+.sbdocs-content .ds-text,
+.docs-story .ds-text {
+  color: var(--neutral_900);
 }
 
 #root {

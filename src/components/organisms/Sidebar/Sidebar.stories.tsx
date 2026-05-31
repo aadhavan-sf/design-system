@@ -5,7 +5,6 @@ import {
   Sidebar,
   SidebarItem,
 } from './Sidebar';
-import './sidebar.css';
 
 export default {
   title: 'Organisms/Sidebar',

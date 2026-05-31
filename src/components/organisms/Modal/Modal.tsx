@@ -11,6 +11,8 @@ import { Button } from '../../molecules/Button';
 import type { ButtonProps } from '../../molecules/Button/Button';
 import { Text } from '../../foundations/Typography';
 
+import './modal.css';
+
 export type ModalVariant = 'status' | 'demo';
 export type ModalActionCount = 1 | 2;
 export type ModalState = 'error' | 'warning' | 'success';
@@ -158,21 +160,21 @@ export function Modal({
 
   if (variant === 'demo') {
     return (
-      <div className="flex min-h-[360px] min-w-full items-center justify-center bg-neutral-100/70 p-10">
+      <div className="storybook-modal__backdrop">
         <section
           aria-labelledby="storybook-modal-title"
           aria-modal="true"
-          className="flex w-[480px] flex-col items-start gap-6 overflow-hidden rounded-4 bg-neutral-00 p-6"
+          className="storybook-modal storybook-modal--demo"
           role="dialog"
         >
-          <div className="flex w-full items-center justify-between gap-4">
+          <div className="storybook-modal__demo-header">
             <Text
               as="h2"
               id="storybook-modal-title"
               variant="text-lg"
               weight="semibold"
               color="var(--neutral_900)"
-              className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
+              className="storybook-modal__demo-title"
             >
               {title ?? 'Add menu Item'}
             </Text>
@@ -181,7 +183,7 @@ export function Modal({
               <button
                 type="button"
                 aria-label={closeButtonLabel}
-                className="inline-flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-1 border-0 bg-transparent p-0 text-neutral-600 transition-[background-color,color,box-shadow] duration-[160ms] enabled:hover:bg-neutral-25 enabled:hover:text-neutral-800 focus-visible:outline-none focus-visible:shadow-focus-neutral"
+                className="storybook-modal__close-button"
                 onClick={handleCloseClick}
               >
                 <X size={24} weight="regular" />
@@ -189,7 +191,7 @@ export function Modal({
             )}
           </div>
 
-          <div className="flex w-full items-center justify-end gap-4">
+          <div className="storybook-modal__actions storybook-modal__actions--demo">
             {showSecondaryAction && (
               <Button
                 destructive={secondaryButtonDestructive}
@@ -220,34 +222,27 @@ export function Modal({
   }
 
   return (
-    <div className="flex min-h-[360px] min-w-full items-center justify-center bg-neutral-100/70 p-10">
+    <div className="storybook-modal__backdrop">
       <section
         aria-labelledby="storybook-modal-title"
         aria-describedby="storybook-modal-description"
         aria-modal="true"
-        className="flex w-[540px] items-start gap-4 overflow-hidden rounded-4 bg-neutral-00 p-6"
+        className="storybook-modal"
         role="dialog"
       >
-        <div
-          className={[
-            'box-border inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-10 p-2',
-            state === 'error' && 'bg-error-50 text-error-600',
-            state === 'warning' && 'bg-warning-50 text-warning-600',
-            state === 'success' && 'bg-success-50 text-success-600',
-          ].filter(Boolean).join(' ')}
-        >
+        <div className={`storybook-modal__icon storybook-modal__icon--${state}`}>
           <Icon size={24} weight="regular" />
         </div>
 
-        <div className="flex min-w-0 flex-1 basis-0 flex-col gap-8">
-          <div className="flex flex-col gap-2">
+        <div className="storybook-modal__content">
+          <div className="storybook-modal__copy">
             <Text
               as="h2"
               id="storybook-modal-title"
               variant="text-lg"
               weight="semibold"
               color="var(--neutral_900)"
-              className="w-full overflow-hidden text-ellipsis whitespace-nowrap"
+              className="storybook-modal__title"
             >
               {resolvedTitle}
             </Text>
@@ -258,13 +253,13 @@ export function Modal({
               variant="text-sm"
               weight="regular"
               color="var(--neutral_600)"
-              className="w-full"
+              className="storybook-modal__description"
             >
               {resolvedDescription}
             </Text>
           </div>
 
-          <div className="flex items-center justify-end gap-4">
+          <div className="storybook-modal__actions">
             {showSecondaryAction && (
               <Button
                 destructive={secondaryButtonDestructive}

@@ -18,6 +18,8 @@ import {
 
 import { Text } from '../../foundations/Typography';
 
+import './leftPanel.css';
+
 const PANEL_TYPES = ['blocks', 'fixed-blocks', 'theme-settings'];
 const ITEM_STATES = ['default', 'hover', 'focused', 'disabled'];
 const STATUS_OPTIONS = ['draft', 'active'];
@@ -106,8 +108,8 @@ export function ThemeStatus({
   return (
     <span
       className={buildClassName([
-        'inline-flex shrink-0 items-center justify-center rounded-2 border border-solid border-neutral-200 bg-neutral-25 px-2 py-1 text-neutral-600',
-        isActive && 'border-success-200 bg-success-25 text-success-600',
+        'storybook-left-panel-status',
+        `storybook-left-panel-status--${resolvedStatus}`,
         className,
       ])}
     >
@@ -116,7 +118,7 @@ export function ThemeStatus({
         variant="text-xs"
         weight="medium"
         color="currentColor"
-        className="overflow-hidden text-ellipsis whitespace-nowrap"
+        className="storybook-left-panel-status__label"
       >
         {isActive ? 'Active' : 'Draft'}
       </Text>
@@ -161,33 +163,22 @@ export function LeftPanelItem({
       type="button"
       disabled={isDisabled}
       className={buildClassName([
-        'group relative box-border flex h-11 w-full cursor-pointer items-center justify-center rounded-2 border border-solid border-transparent bg-transparent px-2 py-3 text-left font-sans text-neutral-700 transition-[background-color,border-color,color,box-shadow,opacity,transform] duration-[160ms] enabled:hover:justify-between enabled:hover:bg-neutral-25 focus-visible:outline-none focus-visible:shadow-focus-brand disabled:cursor-not-allowed disabled:bg-neutral-50 disabled:text-neutral-300',
-        resolvedState === 'hover' && 'justify-between bg-neutral-25',
-        resolvedState === 'focused' && 'bg-neutral-00 shadow-focus-brand',
-        pressed && !hidden && 'justify-between border-primary-400 bg-primary-25 text-primary-400 enabled:hover:bg-primary-25',
-        hidden && 'justify-between border-transparent bg-transparent text-neutral-700 enabled:hover:bg-neutral-25 enabled:hover:text-neutral-700',
-        deleting && 'pointer-events-none -translate-x-2 scale-[0.98] opacity-0',
-        dragging && 'pointer-events-none z-[3] cursor-grabbing border-primary-400 bg-primary-25 text-primary-400 shadow-lg',
-        isDisabled && pressed && 'border-primary-200 bg-primary-25 text-primary-200',
+        'storybook-left-panel-item',
+        `storybook-left-panel-item--${resolvedState}`,
+        pressed && 'storybook-left-panel-item--pressed',
+        hidden && 'storybook-left-panel-item--hidden',
+        deleting && 'storybook-left-panel-item--deleting',
+        dragging && 'storybook-left-panel-item--dragging',
+        forceShowActions && 'storybook-left-panel-item--actions-visible',
         className,
       ])}
-      style={dragging ? { transform: `translateY(${dragOffsetY}px)` } : undefined}
+      style={dragging ? { '--left-panel-drag-offset': `${dragOffsetY}px` } : undefined}
       onClick={isDisabled ? undefined : onClick}
     >
-      <span
-        className={buildClassName([
-          'flex min-w-0 flex-1 basis-0 items-center gap-2',
-          (forceShowActions || deleting || hidden || resolvedState === 'hover') && 'max-w-[calc(100%-60px)] overflow-hidden',
-          'group-hover:max-w-[calc(100%-60px)] group-hover:overflow-hidden',
-        ])}
-      >
+      <span className="storybook-left-panel-item__main">
         <LeadingIcon
           aria-hidden="true"
-          className={buildClassName([
-            'h-5 w-5 shrink-0 transition-[color,transform] duration-[160ms]',
-            !locked && 'cursor-grab touch-none active:cursor-grabbing',
-            dragging && 'cursor-grabbing',
-          ])}
+          className="storybook-left-panel-item__leading-icon"
           data-drag-handle={!locked ? 'true' : undefined}
           size={20}
           weight={locked ? 'regular' : 'bold'}
@@ -198,27 +189,22 @@ export function LeftPanelItem({
           variant="text-sm"
           weight={pressed && !hidden ? 'semibold' : 'medium'}
           color="currentColor"
-          className="min-w-0 flex-1 basis-0 overflow-hidden text-ellipsis whitespace-nowrap"
+          className="storybook-left-panel-item__label"
         >
           {label}
         </Text>
       </span>
       {hasActions && (
-        <span
-          className={buildClassName([
-            'absolute right-2 inline-flex w-[52px] flex-none translate-x-3 items-center justify-end gap-3 text-neutral-500 opacity-0 pointer-events-none transition-[opacity,transform,width] duration-[180ms]',
-            'group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto',
-            (forceShowActions || deleting || resolvedState === 'hover') && 'translate-x-0 opacity-100 pointer-events-auto',
-            pressed && !hidden && 'text-primary-400',
-            hidden && 'w-5 translate-x-0 gap-0 text-neutral-600 opacity-100 pointer-events-auto group-hover:w-[52px] group-hover:gap-3 group-focus-within:w-[52px] group-focus-within:gap-3',
-            isDisabled && 'translate-x-3 text-neutral-300 opacity-0 pointer-events-none',
-          ])}
-        >
+        <span className="storybook-left-panel-item__actions">
           <span
             aria-label={hidden ? 'Show block' : 'Hide block'}
             className={buildClassName([
-              'relative inline-flex h-5 w-5 cursor-pointer items-center justify-center rounded-1 text-current transition-[color,opacity,transform] duration-[160ms]',
-              visibilityAnimating && 'scale-95',
+              'storybook-left-panel-item__action',
+              'storybook-left-panel-item__action--visibility',
+              visibilityAnimating && 'storybook-left-panel-item__action--visibility-animating',
+              visibilityAnimating &&
+                visibilityAnimationDirection === 'show' &&
+                'storybook-left-panel-item__action--visibility-restoring',
             ])}
             role="button"
             tabIndex={isDisabled ? -1 : 0}
@@ -233,11 +219,7 @@ export function LeftPanelItem({
           </span>
           <span
             aria-label="Delete block"
-            className={buildClassName([
-              'inline-flex h-5 w-5 cursor-pointer items-center justify-center rounded-1 text-current transition-[opacity,transform,width] duration-[160ms]',
-              hidden && 'w-0 translate-x-2 overflow-hidden opacity-0 pointer-events-none group-hover:w-5 group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:w-5 group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto',
-              deleting && 'rotate-6',
-            ])}
+            className="storybook-left-panel-item__action storybook-left-panel-item__action--delete"
             role="button"
             tabIndex={isDisabled ? -1 : 0}
             onClick={(event) => {
@@ -282,17 +264,17 @@ function LeftPanelInsertControl({
     <button
       type="button"
       aria-label={label}
-      className="flex h-4 w-full cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-primary-400 opacity-0 transition-[opacity,transform] duration-[160ms] hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none"
+      className="storybook-left-panel-insert"
       onClick={onClick}
     >
-      <span className="h-0.5 flex-1 bg-current" />
+      <span className="storybook-left-panel-insert__line" />
       <Plus
         aria-hidden="true"
-        className="box-border h-4 w-4 shrink-0 rounded-pill bg-primary-400 p-[3px] text-neutral-00"
+        className="storybook-left-panel-insert__icon"
         size={10}
         weight="regular"
       />
-      <span className="h-0.5 flex-1 bg-current" />
+      <span className="storybook-left-panel-insert__line" />
     </button>
   );
 }
@@ -316,10 +298,9 @@ function LeftPanelMenuItem({
       type="button"
       disabled={isDisabled}
       className={buildClassName([
-        'box-border flex w-full cursor-pointer items-center gap-2 rounded-2 border border-solid border-neutral-100 bg-neutral-00 p-3 text-left font-sans text-neutral-600 transition-[background-color,border-color,color,box-shadow] duration-[160ms] enabled:hover:bg-neutral-50 focus-visible:outline-none focus-visible:shadow-focus-brand disabled:cursor-not-allowed disabled:bg-neutral-50 disabled:text-neutral-300',
-        resolvedState === 'hover' && 'bg-neutral-50',
-        resolvedState === 'focused' && 'bg-neutral-00 shadow-focus-brand',
-        pressed && 'border-primary-400 bg-primary-25 text-primary-400',
+        'storybook-left-panel-menu-item',
+        `storybook-left-panel-menu-item--${resolvedState}`,
+        pressed && 'storybook-left-panel-menu-item--pressed',
       ])}
       onClick={isDisabled ? undefined : onClick}
     >
@@ -328,7 +309,7 @@ function LeftPanelMenuItem({
         variant="text-md"
         weight={pressed ? 'semibold' : 'medium'}
         color="currentColor"
-        className="min-w-0 flex-1 basis-0 overflow-hidden text-ellipsis whitespace-nowrap"
+        className="storybook-left-panel-menu-item__label"
       >
         {label}
       </Text>
@@ -349,12 +330,12 @@ function PanelHeader({
   onBack,
 }) {
   return (
-    <header className="flex w-full items-center justify-between gap-3">
-      <div className="flex min-w-0 items-center gap-3">
+    <header className="storybook-left-panel__header">
+      <div className="storybook-left-panel__title-row">
         <button
           type="button"
           aria-label="Go back"
-          className="inline-flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-2 border-0 bg-transparent p-0 text-neutral-900 focus-visible:outline-none focus-visible:shadow-focus-brand"
+          className="storybook-left-panel__back"
           onClick={onBack}
         >
           <CaretLeft size={20} weight="regular" />
@@ -364,7 +345,7 @@ function PanelHeader({
           variant="text-md"
           weight="semibold"
           color="var(--neutral_900)"
-          className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
+          className="storybook-left-panel__title"
         >
           {title}
         </Text>
@@ -384,12 +365,12 @@ function AddBlockButton({ onClick }) {
   return (
     <button
       type="button"
-      className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-2 border border-solid border-neutral-300 bg-neutral-00 px-3 py-2 text-neutral-700 focus-visible:outline-none focus-visible:shadow-focus-brand"
+      className="storybook-left-panel-add"
       onClick={onClick}
     >
       <Plus
         aria-hidden="true"
-        className="shrink-0"
+        className="storybook-left-panel-add__icon"
         size={20}
         weight="regular"
       />
@@ -411,11 +392,11 @@ AddBlockButton.propTypes = {
 
 function FooterAction({ label, onClick }) {
   return (
-    <footer className="-mx-6 flex w-[calc(100%+48px)] flex-col items-center gap-2">
-      <span className="h-px w-full bg-neutral-100" />
+    <footer className="storybook-left-panel-footer">
+      <span className="storybook-left-panel-footer__divider" />
       <button
         type="button"
-        className="inline-flex w-[calc(100%-48px)] cursor-pointer items-center justify-center gap-2 rounded-2 border-0 bg-transparent px-3 py-2 text-neutral-700 focus-visible:outline-none focus-visible:shadow-focus-brand"
+        className="storybook-left-panel-footer__button"
         onClick={onClick}
       >
         <PencilSimple
@@ -462,18 +443,18 @@ function BlockSection({
   const sectionKey = title.toLowerCase();
 
   return (
-    <section className="flex w-full flex-col gap-4">
+    <section className="storybook-left-panel-section">
       <Text
         as="h3"
         variant="text-xs"
         weight="regular"
         color="var(--neutral_700)"
-        className="uppercase tracking-[0.2em]"
+        className="storybook-left-panel-section__title"
       >
         {title}
       </Text>
       <div
-        className="flex w-full flex-col"
+        className="storybook-left-panel-section__items"
         ref={(node) => setSectionRef?.(sectionKey, node)}
       >
         {items.map((item, index) => {
@@ -488,7 +469,7 @@ function BlockSection({
           return (
             <div
               key={itemId}
-              className="flex w-full flex-col transition-transform duration-[180ms]"
+              className="storybook-left-panel-section__item-group"
               ref={(node) => getItemRef?.(sectionKey, itemId, node)}
             >
               <LeftPanelItem
@@ -558,22 +539,22 @@ function ThemeSettingsContent({
   onItemSelect,
 }) {
   return (
-    <div className="flex w-full flex-col gap-6">
+    <div className="storybook-left-panel-theme">
       {sections.map((section) => (
         <section
           key={section.title}
-          className="flex w-full flex-col gap-4"
+          className="storybook-left-panel-section"
         >
           <Text
             as="h3"
             variant="text-xs"
             weight="regular"
             color="var(--neutral_700)"
-            className="uppercase tracking-[0.2em]"
+            className="storybook-left-panel-section__title"
           >
             {section.title}
           </Text>
-          <div className="flex w-full flex-col gap-4">
+          <div className="storybook-left-panel-theme__items">
             {section.items.map((item) => {
               const itemId = item.id ?? item.label;
 
@@ -888,28 +869,28 @@ export function LeftPanel({
     <aside
       aria-label={resolvedPageTitle}
       className={buildClassName([
-        'box-border flex h-[846px] w-[284px] flex-col overflow-hidden rounded-6 border border-solid border-neutral-100 bg-neutral-00 p-6',
-        isThemeSettings ? 'justify-start' : 'justify-between',
+        'storybook-left-panel',
+        `storybook-left-panel--${resolvedType}`,
         className,
       ])}
     >
-      <div className="flex w-full flex-col gap-4">
+      <div className="storybook-left-panel__body">
         <PanelHeader
           status={status}
           title={title}
           onBack={onBack}
         />
 
-        <div className="h-px w-full shrink-0 bg-neutral-100" />
+        <div className="storybook-left-panel__divider" />
 
-        <main className="flex w-full flex-col gap-6">
-          <div className="flex w-full items-center justify-between gap-6">
+        <main className="storybook-left-panel__content">
+          <div className="storybook-left-panel__page-heading">
             <Text
               as="h2"
               variant="text-md"
               weight="semibold"
               color="var(--neutral_900)"
-              className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
+              className="storybook-left-panel__page-title"
             >
               {resolvedPageTitle}
             </Text>
@@ -923,7 +904,7 @@ export function LeftPanel({
               onItemSelect={handleItemSelect}
             />
           ) : (
-            <div className="flex w-full flex-col gap-6">
+            <div className="storybook-left-panel__block-sections">
               {resolvedType === 'fixed-blocks' && (
                 <>
                   <BlockSection
@@ -944,7 +925,7 @@ export function LeftPanel({
                     onItemSelect={handleItemSelect}
                     setSectionRef={setSectionRef}
                   />
-                  <div className="h-px w-full shrink-0 bg-neutral-100" />
+                  <div className="storybook-left-panel__divider" />
                 </>
               )}
               <BlockSection

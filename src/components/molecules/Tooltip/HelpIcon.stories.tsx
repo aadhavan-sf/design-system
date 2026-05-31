@@ -1,6 +1,5 @@
 // @ts-nocheck
 import { HelpIcon } from './HelpIcon';
-import './helpIcon.css';
 
 const placements = [
   'Top no arrow',

@@ -47,3 +47,79 @@
   --type-text-xs-line: 16px;
   --type-text-xs-letter: 0em;
 }
+
+.ds-text {
+  font-family: var(--font_family_base);
+  margin: 0;
+  color: var(--ds-text-strong, var(--neutral_900));
+}
+
+.ds-text--display-2xl {
+  font-size: var(--type-display-2xl-size);
+  line-height: var(--type-display-2xl-line);
+  letter-spacing: var(--type-display-2xl-letter);
+}
+.ds-text--display-xl {
+  font-size: var(--type-display-xl-size);
+  line-height: var(--type-display-xl-line);
+  letter-spacing: var(--type-display-xl-letter);
+}
+.ds-text--display-lg {
+  font-size: var(--type-display-lg-size);
+  line-height: var(--type-display-lg-line);
+  letter-spacing: var(--type-display-lg-letter);
+}
+.ds-text--display-md {
+  font-size: var(--type-display-md-size);
+  line-height: var(--type-display-md-line);
+  letter-spacing: var(--type-display-md-letter);
+}
+.ds-text--display-sm {
+  font-size: var(--type-display-sm-size);
+  line-height: var(--type-display-sm-line);
+  letter-spacing: var(--type-display-sm-letter);
+}
+.ds-text--display-xs {
+  font-size: var(--type-display-xs-size);
+  line-height: var(--type-display-xs-line);
+  letter-spacing: var(--type-display-xs-letter);
+}
+
+.ds-text--text-xl {
+  font-size: var(--type-text-xl-size);
+  line-height: var(--type-text-xl-line);
+  letter-spacing: var(--type-text-xl-letter);
+}
+.ds-text--text-lg {
+  font-size: var(--type-text-lg-size);
+  line-height: var(--type-text-lg-line);
+  letter-spacing: var(--type-text-lg-letter);
+}
+.ds-text--text-md {
+  font-size: var(--type-text-md-size);
+  line-height: var(--type-text-md-line);
+  letter-spacing: var(--type-text-md-letter);
+}
+.ds-text--text-sm {
+  font-size: var(--type-text-sm-size);
+  line-height: var(--type-text-sm-line);
+  letter-spacing: var(--type-text-sm-letter);
+}
+.ds-text--text-xs {
+  font-size: var(--type-text-xs-size);
+  line-height: var(--type-text-xs-line);
+  letter-spacing: var(--type-text-xs-letter);
+}
+
+.ds-text--regular {
+  font-weight: 400;
+}
+.ds-text--medium {
+  font-weight: 500;
+}
+.ds-text--semibold {
+  font-weight: 600;
+}
+.ds-text--bold {
+  font-weight: 700;
+}

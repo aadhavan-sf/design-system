@@ -4,7 +4,6 @@ import {
   DatePickerCalendarDay,
   DatePickerListItem,
 } from './DatePicker';
-import './datePicker.css';
 
 export default {
   id: 'molecules-datepicker',

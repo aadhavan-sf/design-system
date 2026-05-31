@@ -1,6 +1,5 @@
 // @ts-nocheck
 import { DropdownList } from './DropdownList';
-import './dropdownList.css';
 
 const variants = [
   'icon-left',

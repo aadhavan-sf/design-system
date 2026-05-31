@@ -26,6 +26,8 @@ import superfansLogo from './assets/superfans-logo.png';
 import superfansMark from './assets/superfans-mark.png';
 import sidebarPreviewQr from './assets/sidebar-preview-qr.png';
 
+import './sidebar.css';
+
 const SIDEBAR_TYPES = ['expanded', 'collapsed'];
 const ITEM_STATES = ['default', 'hover', 'focused', 'disabled'];
 const ICON_NAMES = [
@@ -92,7 +94,7 @@ function normalizeValue(value, aliases = {}) {
 
 function renderSidebarIcon(
   icon,
-  className = 'h-5 w-5 shrink-0',
+  className = 'storybook-sidebar-item__icon',
   weight = 'regular'
 ) {
   const iconProps = {
@@ -149,11 +151,9 @@ function SuperfansBrand({
     <img
       alt={alt}
       className={buildClassName([
-        'block shrink-0 object-contain',
-        variant === 'logo' && 'h-6 w-[151px]',
-        variant === 'mark' && 'h-6 w-[26px]',
-        variant === 'avatar' && 'h-[38px] w-[38px] rounded-2',
-        compact && variant === 'avatar' && 'h-9 w-9',
+        'storybook-sidebar-brand-image',
+        `storybook-sidebar-brand-image--${variant}`,
+        compact && 'storybook-sidebar-logo-mark--compact',
       ])}
       src={imageSrc}
     />
@@ -195,18 +195,17 @@ export function SidebarItem({
       aria-label={isCollapsed ? label : undefined}
       disabled={isDisabled}
       className={buildClassName([
-        'inline-flex cursor-pointer items-center gap-2 rounded-2 border-0 bg-transparent p-2 text-left font-sans text-neutral-700 transition-[background-color,color,box-shadow] duration-[160ms] enabled:hover:bg-neutral-50 focus-visible:outline-none focus-visible:shadow-focus-brand disabled:cursor-not-allowed disabled:bg-neutral-50 disabled:text-neutral-300',
-        isCollapsed ? 'h-9 w-9 justify-center gap-0' : 'w-full',
-        normalizedState === 'hover' && 'bg-neutral-50',
-        normalizedState === 'focused' && 'bg-neutral-00 shadow-focus-brand',
-        pressed && 'bg-primary-400 text-neutral-00 enabled:hover:bg-primary-400',
-        pressed && isDisabled && 'bg-primary-100 text-neutral-00',
+        'storybook-sidebar-item',
+        `storybook-sidebar-item--${normalizedType}`,
+        `storybook-sidebar-item--${normalizedState}`,
+        pressed && 'storybook-sidebar-item--pressed',
         className,
       ])}
       onClick={isDisabled ? undefined : onClick}
     >
       {renderSidebarIcon(icon, buildClassName([
-        'h-5 w-5 shrink-0',
+        'storybook-sidebar-item__icon',
+        icon === 'drag' && 'storybook-sidebar-item__icon--drag',
       ]), pressed ? 'fill' : 'regular')}
       {!isCollapsed && (
         <Text
@@ -214,7 +213,7 @@ export function SidebarItem({
           variant="text-sm"
           weight={pressed ? 'semibold' : 'medium'}
           color="currentColor"
-          className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap"
+          className="storybook-sidebar-item__label"
         >
           {label}
         </Text>
@@ -243,7 +242,7 @@ function SidebarSection({
   return (
     <section
       aria-label={title}
-      className="flex w-full flex-col gap-2"
+      className="storybook-sidebar-section"
     >
       {!collapsed && (
         <Text
@@ -251,12 +250,12 @@ function SidebarSection({
           variant="text-xs"
           weight="medium"
           color="var(--neutral_600)"
-          className="w-full uppercase tracking-[0.2em]"
+          className="storybook-sidebar-section__title"
         >
           {title}
         </Text>
       )}
-      <div className={buildClassName(['flex w-full flex-col', collapsed && 'items-center'])}>
+      <div className="storybook-sidebar-section__items">
         {items.map((item) => {
           const itemId = item.id ?? item.label;
           const isActive = itemId === activeItemId;
@@ -402,14 +401,14 @@ export function Sidebar({
   return (
     <aside
       className={buildClassName([
-        'relative box-border flex h-[952px] flex-col justify-between border-r border-solid border-neutral-100 bg-neutral-00 font-sans',
-        isCollapsed ? 'w-[60px]' : 'w-[216px]',
+        'storybook-sidebar',
+        `storybook-sidebar--${normalizedType}`,
         className,
       ])}
     >
-      <div className="flex flex-col gap-6 pt-6">
-        <header className={buildClassName(['flex items-center', isCollapsed ? 'justify-center p-0' : 'px-5 pl-3'])}>
-          <div className="inline-flex items-center px-1 py-3">
+      <div className="storybook-sidebar__main">
+        <header className="storybook-sidebar__header">
+          <div className="storybook-sidebar-logo">
             <SuperfansBrand
               alt={isCollapsed ? brandLabel : `${brandLabel} logo`}
               compact={isCollapsed}
@@ -419,13 +418,13 @@ export function Sidebar({
         </header>
 
         {!isCollapsed ? (
-          <div className="relative mx-4">
+          <div className="storybook-sidebar-store-control">
             <button
               ref={storeButtonRef}
               type="button"
               aria-expanded={isStoreDropdownOpen}
               aria-controls="storybook-sidebar-store-dropdown"
-              className="box-border flex h-11 w-full cursor-pointer items-center justify-between gap-2 rounded-2 border border-solid border-neutral-200 bg-neutral-00 px-[14px] py-2.5 focus-visible:outline-none focus-visible:shadow-focus-brand"
+              className="storybook-sidebar-store"
               onClick={() => setIsStoreDropdownOpen((currentValue) => !currentValue)}
             >
               <Text
@@ -433,13 +432,13 @@ export function Sidebar({
                 variant="text-sm"
                 weight="regular"
                 color={selectedStore ? 'var(--neutral_700)' : 'var(--neutral_300)'}
-                className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
+                className="storybook-sidebar-store__label"
               >
                 {selectedStore?.name ?? storePlaceholder}
               </Text>
               <CaretUpDown
                 aria-hidden="true"
-                className="shrink-0 text-neutral-600"
+                className="storybook-sidebar-store__icon"
                 size={20}
                 weight="regular"
               />
@@ -449,10 +448,9 @@ export function Sidebar({
               <div
                 ref={storeDropdownRef}
                 id="storybook-sidebar-store-dropdown"
-                className="absolute left-0 top-[calc(100%+8px)] z-20 w-full"
+                className="storybook-sidebar-store-dropdown"
               >
                 <DropdownList
-                  className="w-full"
                   items={storeOptions.map((store) => ({
                     label: store.name,
                     value: store.id,
@@ -468,15 +466,15 @@ export function Sidebar({
           <button
             type="button"
             aria-label="Switch store"
-            className="inline-flex cursor-pointer items-center justify-center self-center rounded-2 border border-solid border-neutral-100 bg-neutral-00 p-2 text-neutral-600 focus-visible:outline-none focus-visible:shadow-focus-brand"
+            className="storybook-sidebar-icon-button storybook-sidebar-icon-button--header"
           >
-            {renderSidebarIcon('repeat', 'h-[18px] w-[18px]')}
+            {renderSidebarIcon('repeat', 'storybook-sidebar-icon-button__icon')}
           </button>
         )}
 
         <nav
           aria-label="Sidebar navigation"
-          className={buildClassName(['flex flex-col gap-6', isCollapsed ? 'items-center px-3' : 'px-4'])}
+          className="storybook-sidebar__nav"
         >
           {sections.map((section) => (
             <SidebarSection
@@ -491,15 +489,15 @@ export function Sidebar({
         </nav>
       </div>
 
-      <footer className={buildClassName(['flex flex-col gap-4 pb-6', isCollapsed ? 'items-center justify-center px-3' : 'px-4'])}>
-        <div className="flex items-center gap-3">
+      <footer className="storybook-sidebar__footer">
+        <div className="storybook-sidebar-account">
           <SuperfansBrand
             alt=""
             compact
             variant="avatar"
           />
           {!isCollapsed && (
-            <div className="flex flex-col">
+            <div className="storybook-sidebar-account__copy">
               <Text
                 as="span"
                 variant="text-sm"
@@ -513,7 +511,7 @@ export function Sidebar({
                 variant="text-xs"
                 weight="regular"
                 color="var(--neutral_600)"
-                className="tracking-[0.2em]"
+                className="storybook-sidebar-account__meta"
               >
                 {selectedStore?.code ?? avatarMeta}
               </Text>
@@ -521,19 +519,19 @@ export function Sidebar({
           )}
         </div>
 
-        <span className="h-px w-full bg-neutral-100" />
+        <span className="storybook-sidebar__divider" />
 
-        <div className={buildClassName(['flex items-center gap-3', isCollapsed ? 'justify-center' : 'justify-between'])}>
+        <div className="storybook-sidebar-actions">
           <button
             ref={previewButtonRef}
             type="button"
             aria-label={isCollapsed ? 'Preview' : undefined}
             aria-expanded={isPreviewOpen}
             aria-controls="storybook-sidebar-preview-popover"
-            className="inline-flex cursor-pointer items-center justify-center gap-1 rounded-2 border border-solid border-neutral-100 bg-neutral-00 px-[10px] py-2 text-neutral-600 transition-[background-color,border-color,color] duration-[160ms] enabled:hover:border-neutral-100 enabled:hover:bg-neutral-25 enabled:hover:text-neutral-600 focus-visible:outline-none focus-visible:shadow-focus-brand"
+            className="storybook-sidebar-action"
             onClick={handlePreviewClick}
           >
-            {renderSidebarIcon('camera', 'h-[18px] w-[18px] shrink-0')}
+            {renderSidebarIcon('camera', 'storybook-sidebar-action__icon')}
             {!isCollapsed && (
               <Text
                 as="span"
@@ -549,10 +547,10 @@ export function Sidebar({
           {!isCollapsed && (
             <button
               type="button"
-              className="inline-flex cursor-pointer items-center justify-center gap-1 rounded-2 border border-solid border-neutral-100 bg-neutral-00 px-[10px] py-2 text-neutral-600 transition-[background-color,border-color,color] duration-[160ms] enabled:hover:border-error-600 enabled:hover:bg-error-25 enabled:hover:text-error-600 focus-visible:outline-none focus-visible:shadow-focus-brand"
+              className="storybook-sidebar-action storybook-sidebar-action--destructive"
               onClick={onLogout}
             >
-              {renderSidebarIcon('sign-out', 'h-[18px] w-[18px] shrink-0')}
+              {renderSidebarIcon('sign-out', 'storybook-sidebar-action__icon')}
               <Text
                 as="span"
                 variant="text-xs"
@@ -570,24 +568,21 @@ export function Sidebar({
         <div
           ref={previewPopoverRef}
           id="storybook-sidebar-preview-popover"
-          className={buildClassName([
-            'absolute z-10 box-border flex w-[189px] flex-col items-center justify-center gap-2 rounded-4 border border-solid border-neutral-100 bg-neutral-00 p-3 shadow-lg',
-            isCollapsed ? 'bottom-6 left-[calc(100%+12px)]' : 'bottom-[72px] left-4',
-          ])}
+          className="storybook-sidebar-preview-popover"
           role="dialog"
           aria-label="App preview QR code"
         >
-          <div className="flex w-full items-center justify-center overflow-hidden rounded-2">
+          <div className="storybook-sidebar-preview-popover__qr-frame">
             <img
               alt="QR code for app preview"
-              className="block h-[165px] w-[165px] object-cover opacity-70"
+              className="storybook-sidebar-preview-popover__qr"
               src={sidebarPreviewQr}
             />
           </div>
-          <div className="flex w-full items-center gap-1 text-neutral-600">
+          <div className="storybook-sidebar-preview-popover__hint">
             <Scan
               aria-hidden="true"
-              className="shrink-0"
+              className="storybook-sidebar-preview-popover__hint-icon"
               size={20}
               weight="regular"
             />
@@ -596,18 +591,18 @@ export function Sidebar({
               variant="text-xs"
               weight="medium"
               color="var(--neutral_600)"
-              className="min-w-0 flex-1"
+              className="storybook-sidebar-preview-popover__hint-text"
             >
               Scan QR to download the app to preview on mobile
             </Text>
           </div>
           <button
             type="button"
-            className="inline-flex w-full cursor-pointer items-center justify-center gap-1 rounded-2 border border-solid border-neutral-100 bg-neutral-00 p-2 font-sans text-neutral-600 transition-[background-color,border-color,box-shadow] duration-[160ms] enabled:hover:bg-neutral-25 focus-visible:outline-none focus-visible:shadow-focus-brand"
+            className="storybook-sidebar-preview-popover__copy"
           >
             <CopySimple
               aria-hidden="true"
-              className="shrink-0"
+              className="storybook-sidebar-preview-popover__copy-icon"
               size={18}
               weight="regular"
             />

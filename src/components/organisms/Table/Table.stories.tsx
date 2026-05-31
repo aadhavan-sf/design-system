@@ -7,7 +7,6 @@ import {
   TableHeader,
   TableHeaderCell,
 } from './Table';
-import './table.css';
 
 export default {
   title: 'Organisms/Table',

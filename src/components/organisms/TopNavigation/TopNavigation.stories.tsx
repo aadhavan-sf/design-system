@@ -6,7 +6,6 @@ import {
   TopNavigationItem,
   type TopNavigationItemState,
 } from './TopNavigation';
-import './topNavigation.css';
 
 const meta = {
   title: 'Organisms/Top Navigation',

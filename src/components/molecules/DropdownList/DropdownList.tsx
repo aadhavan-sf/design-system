@@ -6,6 +6,8 @@ import {
 
 import { Text } from '../../foundations/Typography';
 
+import './dropdownList.css';
+
 const DEFAULT_ITEMS = [
   { label: 'Head Content Editor' },
   { label: 'Head Content Editor', active: true, selected: true },
@@ -45,10 +47,9 @@ function Control({ disabled, selected, variant }: { disabled: boolean; selected:
     return (
       <span
         className={buildClassName([
-          'inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-1 border border-solid border-neutral-300 bg-neutral-00 text-neutral-00',
-          selected && 'border-primary-400 bg-primary-400',
-          disabled && 'border-neutral-200 bg-neutral-25 text-neutral-00',
-          selected && disabled && 'border-primary-100 bg-primary-100',
+          'storybook-dropdown-list__checkbox',
+          selected && 'storybook-dropdown-list__checkbox--checked',
+          disabled && 'storybook-dropdown-list__checkbox--disabled',
         ])}
         aria-hidden="true"
       >
@@ -61,20 +62,13 @@ function Control({ disabled, selected, variant }: { disabled: boolean; selected:
     return (
       <span
         className={buildClassName([
-          'inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-pill border border-solid border-neutral-300 bg-neutral-00',
-          selected && 'border-primary-400 bg-primary-50',
-          disabled && 'border-neutral-200 bg-neutral-25',
-          selected && disabled && 'border-primary-100 bg-primary-25',
+          'storybook-dropdown-list__radio',
+          selected && 'storybook-dropdown-list__radio--checked',
+          disabled && 'storybook-dropdown-list__radio--disabled',
         ])}
         aria-hidden="true"
       >
-        <span
-          className={buildClassName([
-            'h-[6px] w-[6px] rounded-pill bg-transparent',
-            selected && 'bg-primary-400',
-            disabled && 'bg-primary-100',
-          ])}
-        />
+        <span className="storybook-dropdown-list__radio-dot" />
       </span>
     );
   }
@@ -83,14 +77,13 @@ function Control({ disabled, selected, variant }: { disabled: boolean; selected:
     return (
       <span
         className={buildClassName([
-          'inline-flex h-5 w-9 shrink-0 items-center rounded-pill bg-neutral-100 p-0.5',
-          selected && 'justify-end bg-primary-400',
-          disabled && 'bg-neutral-50',
-          selected && disabled && 'bg-primary-100',
+          'storybook-dropdown-list__toggle',
+          selected && 'storybook-dropdown-list__toggle--checked',
+          disabled && 'storybook-dropdown-list__toggle--disabled',
         ])}
         aria-hidden="true"
       >
-        <span className="h-4 w-4 rounded-pill bg-neutral-00 shadow-sm" />
+        <span className="storybook-dropdown-list__toggle-thumb" />
       </span>
     );
   }
@@ -99,7 +92,6 @@ function Control({ disabled, selected, variant }: { disabled: boolean; selected:
 }
 
 export function DropdownList({
-  className,
   items = DEFAULT_ITEMS,
   selectedValues,
   variant = 'icon-left',
@@ -145,8 +137,8 @@ export function DropdownList({
   return (
     <div
       className={buildClassName([
-        'flex w-60 flex-col items-stretch overflow-hidden rounded-2 bg-neutral-00 shadow-sm',
-        className,
+        'storybook-dropdown-list',
+        `storybook-dropdown-list--${variant}`,
       ])}
     >
       {items.map((item, index) => {
@@ -168,16 +160,16 @@ export function DropdownList({
             type="button"
             disabled={Boolean(isDisabled)}
             className={buildClassName([
-              'flex min-h-11 w-full cursor-pointer items-center gap-2 border-0 bg-transparent px-4 py-3 text-neutral-600 transition-[background-color,color] duration-[140ms] enabled:hover:bg-neutral-25',
-              isActive && 'bg-neutral-50 text-neutral-800 [&_.storybook-dropdown-list__icon]:text-primary-400',
-              isDisabled && 'cursor-not-allowed text-neutral-300 enabled:hover:bg-transparent',
-              isDestructive && 'text-error-600',
+              'storybook-dropdown-list__item',
+              isActive && 'storybook-dropdown-list__item--active',
+              isDisabled && 'storybook-dropdown-list__item--disabled',
+              isDestructive && 'storybook-dropdown-list__item--destructive',
             ])}
             onClick={() => handleItemClick(item, index)}
           >
             {variant === 'icon-left' && (
               <Plug
-                className="storybook-dropdown-list__icon shrink-0"
+                className="storybook-dropdown-list__icon"
                 size={16}
                 weight="regular"
               />
@@ -193,7 +185,7 @@ export function DropdownList({
 
             {prefix && (
               <span
-                className="inline-flex w-5 shrink-0 items-center justify-center text-sm leading-normal"
+                className="storybook-dropdown-list__prefix"
                 aria-hidden="true"
               >
                 {prefix}
@@ -205,7 +197,7 @@ export function DropdownList({
               variant="text-sm"
               weight="regular"
               color="currentColor"
-              className="min-w-px flex-1 basis-0 overflow-hidden text-left text-ellipsis whitespace-nowrap"
+              className="storybook-dropdown-list__label"
             >
               {label}
             </Text>
@@ -220,7 +212,7 @@ export function DropdownList({
 
             {variant === 'icon-right' && (
               <Plug
-                className="storybook-dropdown-list__icon shrink-0"
+                className="storybook-dropdown-list__icon"
                 size={16}
                 weight="regular"
               />
@@ -228,7 +220,7 @@ export function DropdownList({
 
             {variant === 'check-right' && isSelected && (
               <Check
-                className="storybook-dropdown-list__icon shrink-0"
+                className="storybook-dropdown-list__icon"
                 size={16}
                 weight="regular"
               />
@@ -256,7 +248,6 @@ export type DropdownListItem =
     };
 
 export interface DropdownListProps {
-  className?: string;
   items?: DropdownListItem[];
   selectedValues?: string[];
   variant?: DropdownListVariant;

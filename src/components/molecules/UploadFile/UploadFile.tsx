@@ -17,6 +17,8 @@ import {
 
 import { Text } from '../../foundations/Typography';
 
+import './uploadFile.css';
+
 export type UploadLayout =
   | 'horizontal'
   | 'vertical'
@@ -119,24 +121,6 @@ function buildClassName(parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(' ');
 }
 
-const tileSizeClassNames: Record<NormalizedTileSize, string> = {
-  square: 'h-[72px] w-[72px]',
-  iphone: 'h-[155px] w-[72px]',
-  ipad: 'h-[104px] w-[72px]',
-  android: 'h-[158px] w-[72px]',
-};
-
-const generatedImageBackgrounds = [
-  'linear-gradient(180deg, rgba(247, 244, 254, 0.18) 0%, rgba(13, 9, 21, 0.2) 100%), radial-gradient(circle at 58% 66%, rgba(255, 205, 165, 0.85) 0 14%, transparent 15%), linear-gradient(135deg, #11071c 0%, #1c1430 40%, #bda7f6 41%, #efe7ff 100%)',
-  'linear-gradient(180deg, rgba(13, 9, 21, 0.1), rgba(13, 9, 21, 0.5)), radial-gradient(circle at 45% 72%, #c47f57 0 13%, transparent 14%), linear-gradient(160deg, #f3f0ff 0%, #d9cdfb 46%, #0d0915 47%)',
-  'linear-gradient(180deg, rgba(13, 9, 21, 0), rgba(13, 9, 21, 0.3)), linear-gradient(90deg, #f7f4fe 0 35%, #0d0915 36% 72%, #d2c5fb 73%)',
-  'linear-gradient(180deg, rgba(13, 9, 21, 0), rgba(13, 9, 21, 0.4)), repeating-linear-gradient(90deg, #ffffff 0 12px, #e1d9fb 12px 24px, #0d0915 24px 36px)',
-  'linear-gradient(180deg, rgba(13, 9, 21, 0), rgba(13, 9, 21, 0.5)), radial-gradient(circle at 50% 36%, #323234 0 20%, transparent 21%), linear-gradient(145deg, #ffffff 0%, #d7c7fb 100%)',
-  'linear-gradient(180deg, rgba(13, 9, 21, 0), rgba(13, 9, 21, 0.35)), linear-gradient(135deg, #0d0915 0%, #35165f 44%, #f7f4fe 45% 100%)',
-  'linear-gradient(180deg, rgba(13, 9, 21, 0), rgba(13, 9, 21, 0.5)), repeating-linear-gradient(0deg, #f7f4fe 0 18px, #d8c9fb 18px 36px, #0d0915 36px 54px)',
-  'linear-gradient(180deg, rgba(13, 9, 21, 0.05), rgba(13, 9, 21, 0.45)), linear-gradient(135deg, #ffffff 0 30%, #915ee9 31% 48%, #0d0915 49%)',
-];
-
 function normalizeValue<T extends string>(value: string | undefined, aliases: Record<string, T> = {}) {
   if (value === undefined) {
     return undefined;
@@ -203,49 +187,37 @@ export function ImageAspectRatio({
     Uploader: 'uploader',
   }) as NormalizedTileType;
   const isUploader = normalizedType === 'uploader';
-  const imageStyle = {
-    backgroundImage: imageUrl
-      ? `url(${imageUrl})`
-      : generatedImageBackgrounds[index % generatedImageBackgrounds.length],
-  };
+  const imageStyle = imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined;
 
   return (
     <div
       className={buildClassName([
-        'relative shrink-0 overflow-hidden box-border border border-solid border-neutral-200 rounded-1',
-        tileSizeClassNames[normalizedSize],
-        isUploader && 'inline-flex items-center justify-center rounded-2 border-dashed bg-neutral-00 text-primary-400',
+        'storybook-upload-tile',
+        `storybook-upload-tile--${normalizedSize}`,
+        `storybook-upload-tile--${normalizedStatus}`,
+        `storybook-upload-tile--${normalizedType}`,
         className,
       ])}
     >
       {isUploader ? (
         <Plus
           aria-hidden="true"
-          className="text-primary-400"
+          className="storybook-upload-tile__plus"
           size={32}
           weight="regular"
         />
       ) : (
         <>
           <div
-            className={buildClassName([
-              'h-full w-full bg-primary-100 bg-cover bg-center',
-              normalizedStatus === 'loader' && 'blur-[2px]',
-            ])}
+            className="storybook-upload-tile__image"
+            data-image-index={index % 8}
             style={imageStyle}
           />
-          {normalizedStatus !== 'default' && (
-            <span
-              className={buildClassName([
-                'absolute inset-0 bg-black/20',
-                normalizedStatus === 'loader' && 'bg-black/30',
-              ])}
-            />
-          )}
+          {normalizedStatus !== 'default' && <span className="storybook-upload-tile__scrim" />}
           {normalizedStatus === 'loader' && (
             <CircleNotch
               aria-hidden="true"
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 animate-spin text-neutral-00"
+              className="storybook-upload-tile__loader"
               size={24}
               weight="regular"
             />
@@ -297,12 +269,9 @@ export function UploadFileBase({
       type="button"
       disabled={isDisabled}
       className={buildClassName([
-        'group flex w-[500px] box-border cursor-pointer border border-dashed border-neutral-200 bg-neutral-00 text-left font-sans text-neutral-900 transition-[background-color,box-shadow,color] duration-[160ms] enabled:hover:bg-neutral-25 disabled:cursor-not-allowed disabled:bg-neutral-50 disabled:text-neutral-400 focus-visible:bg-neutral-00 focus-visible:outline-none focus-visible:shadow-focus-primary-inset',
-        normalizedLayout === 'horizontal' && 'items-start gap-3 rounded-2 p-4',
-        normalizedLayout === 'vertical' && 'min-h-32 flex-col items-center justify-center gap-4 rounded-2 px-[54px] py-6 text-center',
-        visualState === 'hover' && 'bg-neutral-25',
-        visualState === 'focus' && 'bg-neutral-00 shadow-focus-primary-inset',
-        visualState === 'disabled' && 'cursor-not-allowed bg-neutral-50 text-neutral-400',
+        'storybook-upload-dropzone',
+        `storybook-upload-dropzone--${normalizedLayout}`,
+        `storybook-upload-dropzone--${visualState}`,
         className,
       ])}
       onClick={isDisabled ? undefined : onBrowse}
@@ -315,23 +284,17 @@ export function UploadFileBase({
     >
       <MonitorArrowUp
         aria-hidden="true"
-        className="shrink-0 text-primary-400 group-disabled:text-neutral-400"
+        className="storybook-upload-dropzone__icon"
         size={24}
         weight="regular"
       />
-      <span
-        className={buildClassName([
-          'flex min-w-0 flex-col gap-1',
-          normalizedLayout === 'horizontal' && 'w-[252px]',
-          normalizedLayout === 'vertical' && 'items-center',
-        ])}
-      >
+      <span className="storybook-upload-dropzone__copy">
         <Text
           as="span"
           variant="text-md"
           weight="medium"
           color="currentColor"
-          className="whitespace-nowrap"
+          className="storybook-upload-dropzone__title"
         >
           {title}
         </Text>
@@ -340,8 +303,8 @@ export function UploadFileBase({
             as="span"
             variant="text-sm"
             weight="regular"
-            color={isDisabled ? 'currentColor' : 'var(--neutral_600)'}
-            className="whitespace-nowrap"
+            color="currentColor"
+            className="storybook-upload-dropzone__description"
           >
             {description}
           </Text>
@@ -364,11 +327,9 @@ function UploadActionButton({
     <button
       type="button"
       className={buildClassName([
-        'inline-flex cursor-pointer items-center justify-center gap-2 rounded-2 border-0 bg-transparent p-0 text-neutral-700 transition-[background-color,color] duration-[160ms] focus-visible:outline-none focus-visible:shadow-focus-primary-inset',
-        !destructive && 'border border-solid border-neutral-300 px-[14px] py-2 enabled:hover:bg-neutral-50 enabled:hover:text-neutral-800',
-        !destructive && hover && 'bg-neutral-50 text-neutral-800',
-        destructive && 'text-error-600 enabled:hover:text-error-700',
-        destructive && hover && 'text-error-700',
+        'storybook-upload-action',
+        destructive && 'storybook-upload-action--destructive',
+        hover && 'storybook-upload-action--hover',
       ])}
       onClick={onClick}
     >
@@ -422,8 +383,8 @@ export function UploadFileItem({
 
   if (isMultiple) {
     return (
-      <div className={buildClassName(['box-border flex w-[500px] flex-col rounded-2 border border-solid border-neutral-200 bg-neutral-00 p-3', className])}>
-        <div className="flex flex-wrap items-center gap-2">
+      <div className={buildClassName(['storybook-upload-item', 'storybook-upload-item--multiple', className])}>
+        <div className="storybook-upload-grid">
           {Array.from({ length: tileCount }).map((_, index) => (
             <ImageAspectRatio
               key={`image-${index}`}
@@ -449,21 +410,23 @@ export function UploadFileItem({
   return (
     <div
       className={buildClassName([
-        'box-border flex min-h-[110px] w-[500px] items-start gap-4 overflow-hidden rounded-2 border border-solid border-neutral-200 bg-neutral-25 p-3',
+        'storybook-upload-item',
+        'storybook-upload-item--single',
+        normalizedState === 'completed-hover' && 'storybook-upload-item--hover',
         className,
       ])}
     >
-      <div className="h-[86px] w-[86px] shrink-0 overflow-hidden rounded-2 border border-solid border-neutral-200 bg-neutral-200">
-        <div className="h-full w-full bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(12,18,32,0.58)_100%),linear-gradient(145deg,#d2e6f6_0%,#7189a5_42%,#1f2937_100%)]" />
+      <div className="storybook-upload-item__thumbnail">
+        <div className="storybook-upload-item__thumbnail-image" />
       </div>
-      <div className="flex min-h-[86px] min-w-0 flex-1 basis-0 flex-col justify-center gap-2">
-        <div className="flex flex-col gap-1">
+      <div className="storybook-upload-item__content">
+        <div className="storybook-upload-item__copy">
           <Text
             as="span"
             variant="text-sm"
             weight="medium"
             color="var(--neutral_900)"
-            className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap"
+            className="storybook-upload-item__name"
           >
             {displayedFile.name}
           </Text>
@@ -476,7 +439,7 @@ export function UploadFileItem({
             {displayedFile.size}
           </Text>
         </div>
-        <div className="flex items-center justify-between gap-3">
+        <div className="storybook-upload-item__actions">
           <UploadActionButton
             hover={normalizedState === 'completed-hover'}
             icon={Repeat}
@@ -563,14 +526,15 @@ export function UploadFile({
   return (
     <div
       className={buildClassName([
-        'flex w-[500px] flex-col gap-2',
+        'storybook-upload-file',
+        `storybook-upload-file--${normalizedLayout}`,
         className,
       ])}
     >
       <input
         ref={inputRef}
         accept={accept}
-        className="absolute h-px w-px overflow-hidden whitespace-nowrap [clip-path:inset(50%)] [clip:rect(0_0_0_0)]"
+        className="storybook-upload-file__input"
         disabled={disabled}
         multiple={multiple ?? isMultiple}
         type="file"

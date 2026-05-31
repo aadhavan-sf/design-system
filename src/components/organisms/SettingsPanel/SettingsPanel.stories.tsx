@@ -5,7 +5,6 @@ import {
   SettingsPanel,
   SettingsPanelItem,
 } from './SettingsPanel';
-import './settingsPanel.css';
 
 export default {
   title: 'Organisms/Settings Panel',

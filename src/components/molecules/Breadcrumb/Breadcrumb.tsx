@@ -3,6 +3,8 @@ import { CaretRight, House } from '@phosphor-icons/react';
 
 import { Text } from '../../foundations/Typography';
 
+import './breadcrumb.css';
+
 export type BreadcrumbSize = 'base' | 'small' | 'Base' | 'S' | 'Small';
 export type BreadcrumbDividerType = 'arrow' | 'slash' | 'Arrow' | 'Slash';
 export type BreadcrumbItemState = string;
@@ -91,8 +93,8 @@ export function BreadcrumbDivider({
   return (
     <span
       className={buildClassName([
-        'inline-flex items-center justify-center text-neutral-400',
-        normalizedSize === 'small' ? 'h-3 w-3' : 'h-4 w-4',
+        'storybook-breadcrumb-divider',
+        `storybook-breadcrumb-divider--${normalizedSize}`,
         className,
       ])}
       aria-hidden="true"
@@ -148,7 +150,8 @@ export function BreadcrumbItem({
   return (
     <span
       className={buildClassName([
-        'inline-flex items-center justify-center gap-1',
+        'storybook-breadcrumb-item',
+        `storybook-breadcrumb-item--${normalizedSize}`,
         className,
       ])}
     >
@@ -157,17 +160,14 @@ export function BreadcrumbItem({
         href={href}
         aria-current={isCurrent ? 'page' : undefined}
         className={buildClassName([
-          'inline-flex cursor-pointer items-center justify-center gap-1 rounded-1 border-0 bg-transparent px-1 font-sans text-neutral-400 no-underline',
-          'hover:rounded-none hover:border-b hover:border-solid hover:border-neutral-400 focus-visible:outline-none focus-visible:shadow-focus-primary-inset',
-          normalizedState === 'hover' && 'rounded-none border-b border-solid border-neutral-400',
-          normalizedState === 'focus' && 'shadow-focus-primary-inset',
-          normalizedState === 'current' && 'text-neutral-900',
+          'storybook-breadcrumb-item__label',
+          `storybook-breadcrumb-item__label--${normalizedState}`,
         ])}
         onClick={onClick}
       >
         {homeIcon && (
           <House
-            className="shrink-0"
+            className="storybook-breadcrumb-item__icon"
             size={getIconSize(normalizedSize)}
             weight="regular"
           />
@@ -212,8 +212,8 @@ export function Breadcrumb({
   return (
     <nav
       className={buildClassName([
-        'inline-flex items-center',
-        normalizedSize === 'small' ? 'gap-0.5' : 'gap-1',
+        'storybook-breadcrumb',
+        `storybook-breadcrumb--${normalizedSize}`,
         className,
       ])}
       aria-label="Breadcrumb"

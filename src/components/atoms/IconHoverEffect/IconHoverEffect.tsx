@@ -67,7 +67,7 @@ function renderIcon({
 }) {
   const iconProps: IconProps = {
     'aria-hidden': true,
-    className: 'storybook-icon-hover-effect__icon shrink-0',
+    className: 'storybook-icon-hover-effect__icon',
     size: getIconSize(size),
     weight: 'regular',
   };
@@ -135,12 +135,10 @@ export function IconHoverEffect({
       type="button"
       aria-label={resolvedAriaLabel}
       className={buildClassName([
-        'storybook-icon-hover-effect inline-flex cursor-pointer items-center justify-center rounded-1 border-0 bg-transparent p-1 transition-[background-color,color,box-shadow,transform] duration-[160ms] focus-visible:outline-none',
-        normalizedType === 'destructive'
-          ? 'text-error-600 hover:bg-error-50 focus-visible:shadow-focus-error'
-          : 'text-neutral-600 hover:bg-neutral-50 focus-visible:shadow-focus-neutral',
-        normalizedType === 'destructive' && normalizedState === 'hover' && 'bg-error-50',
-        normalizedType !== 'destructive' && normalizedState === 'hover' && 'bg-neutral-50',
+        'storybook-icon-hover-effect',
+        `storybook-icon-hover-effect--${normalizedType}`,
+        `storybook-icon-hover-effect--${normalizedSize}`,
+        `storybook-icon-hover-effect--${normalizedState}`,
         normalizedType === 'destructive' && 'storybook-icon-hover-effect--trash-motion',
         normalizedType !== 'destructive' && `storybook-icon-hover-effect--icon-${normalizedIcon}`,
         className,

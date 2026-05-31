@@ -4,6 +4,8 @@ import {
   useState,
 } from 'react';
 
+import './toggle.css';
+
 export type ToggleSize = 'sm' | 'mid';
 export type ToggleState = 'default' | 'hover' | 'focus' | 'disabled';
 
@@ -14,10 +16,6 @@ export interface ToggleProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   defaultPressed?: boolean;
   onPressedChange?: (pressed: boolean) => void;
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-}
-
-function buildClassName(parts: Array<string | false | null | undefined>) {
-  return parts.filter(Boolean).join(' ');
 }
 
 export function Toggle({
@@ -57,40 +55,25 @@ export function Toggle({
     onClick?.(event);
   };
 
-  const buttonClassName = buildClassName([
-    'relative inline-flex cursor-pointer items-center rounded-pill border-0 p-0.5 transition-[background-color,box-shadow] duration-[160ms] focus-visible:outline-none focus-visible:shadow-focus-brand disabled:cursor-not-allowed',
-    size === 'mid' ? 'h-6 w-11' : 'h-5 w-9',
-    isDisabled
-      ? isPressed
-        ? 'bg-primary-100'
-        : 'bg-neutral-50'
-      : isPressed
-        ? 'bg-primary-400'
-        : state === 'hover'
-          ? 'bg-neutral-200'
-          : 'bg-neutral-100',
-    state === 'focus' && 'shadow-focus-brand',
-    className,
-  ]);
-
   return (
     <button
       type="button"
       role="switch"
       aria-checked={isPressed}
       disabled={isDisabled}
-      className={buttonClassName}
+      className={[
+        'storybook-toggle',
+        `storybook-toggle--${size}`,
+        `storybook-toggle--${state}`,
+        isPressed && 'storybook-toggle--pressed',
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
       {...props}
       onClick={handleClick}
     >
-      <span
-        className={buildClassName([
-          'block rounded-pill bg-neutral-0 transition-transform duration-[160ms]',
-          isDisabled ? 'shadow-xs' : 'shadow-sm',
-          size === 'mid' ? 'h-5 w-5' : 'h-4 w-4',
-          isPressed && (size === 'mid' ? 'translate-x-5' : 'translate-x-4'),
-        ])}
-      />
+      <span className="storybook-toggle__thumb" />
     </button>
   );
 }

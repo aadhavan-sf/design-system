@@ -56,7 +56,7 @@ export const Playground: Story = {
 
 export const Scale: Story = {
   render: () => (
-    <div className="flex flex-col gap-4">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <Text as="div" variant="display-2xl" weight="regular">
         Display 2xl / Regular
       </Text>

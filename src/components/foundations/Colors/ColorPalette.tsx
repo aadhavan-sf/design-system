@@ -1,5 +1,6 @@
 import { Text } from '../Typography';
 import { colorHex } from '../../../styling/theme/colors';
+import './colorPalette.css';
 
 type ColorGroup = 'neutral' | 'brand' | 'error' | 'warning' | 'success';
 type ColorStep = number | string;
@@ -36,23 +37,14 @@ function Swatch({ group, step, hex, showHex }: SwatchProps) {
     group === 'neutral' && step === 0 ? '--neutral_00' : `--${group}_${String(step)}`;
 
   return (
-    <div
-      className="overflow-hidden rounded-3 border border-solid border-[var(--ds-border)] bg-[var(--ds-surface)] shadow-lg"
-      title={`${group} ${step}`}
-    >
-      <div className="h-20 w-full" style={{ backgroundColor: `var(${cssVar})` }} />
-      <div className="flex flex-col gap-0.5 px-3 pb-3">
-        <Text as="span" variant="text-lg" weight="medium">
+    <div className="ds-swatch" title={`${group} ${step}`}>
+      <div className="ds-swatch__chip" style={{ backgroundColor: `var(${cssVar})` }} />
+      <div className="ds-swatch__meta">
+        <Text as="span" variant="text-lg" weight="medium" className="ds-swatch__name">
           {step}
         </Text>
         {showHex ? (
-          <Text
-            as="span"
-            variant="text-md"
-            weight="regular"
-            color="var(--neutral_500)"
-            className="uppercase"
-          >
+          <Text as="span" variant="text-md" weight="regular" color="var(--neutral_500)" className="ds-swatch__hex">
             {hex}
           </Text>
         ) : null}
@@ -63,23 +55,14 @@ function Swatch({ group, step, hex, showHex }: SwatchProps) {
 
 function SpecialSwatch({ name, cssVar, hex, showHex }: SpecialSwatchProps) {
   return (
-    <div
-      className="overflow-hidden rounded-3 border border-solid border-[var(--ds-border)] bg-[var(--ds-surface)] shadow-lg"
-      title={name}
-    >
-      <div className="h-20 w-full" style={{ backgroundColor: `var(${cssVar})` }} />
-      <div className="flex flex-col gap-0.5 px-3 pb-3">
-        <Text as="span" variant="text-lg" weight="medium">
+    <div className="ds-swatch" title={name}>
+      <div className="ds-swatch__chip" style={{ backgroundColor: `var(${cssVar})` }} />
+      <div className="ds-swatch__meta">
+        <Text as="span" variant="text-lg" weight="medium" className="ds-swatch__name">
           {name}
         </Text>
         {showHex ? (
-          <Text
-            as="span"
-            variant="text-md"
-            weight="regular"
-            color="var(--neutral_500)"
-            className="uppercase"
-          >
+          <Text as="span" variant="text-md" weight="regular" color="var(--neutral_500)" className="ds-swatch__hex">
             {hex}
           </Text>
         ) : null}
@@ -90,20 +73,20 @@ function SpecialSwatch({ name, cssVar, hex, showHex }: SpecialSwatchProps) {
 
 export function ColorPalette({ showHex = true }: ColorPaletteProps) {
   return (
-    <div className="flex flex-col gap-6 font-sans">
+    <div className="ds-palette">
       <Section title="Neutral" group="neutral" steps={[0, 25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]} showHex={showHex} />
       <Section title="Brand" group="brand" steps={[25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900]} showHex={showHex} />
       <Section title="Error" group="error" steps={[25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900]} showHex={showHex} />
       <Section title="Warning" group="warning" steps={[25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900]} showHex={showHex} />
       <Section title="Success" group="success" steps={[25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900]} showHex={showHex} />
 
-      <div>
-        <div className="mb-2 flex items-baseline justify-between">
-          <Text as="h2" variant="text-lg" weight="semibold">
+      <div className="ds-section">
+        <div className="ds-section__header">
+          <Text as="h2" variant="text-lg" weight="semibold" className="ds-section__title">
             Special Colors
           </Text>
         </div>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,160px))] gap-4">
+        <div className="ds-section__grid">
           <SpecialSwatch name="off-white" cssVar="--off-white" hex={colorHex.special.offwhite} showHex={showHex} />
           <SpecialSwatch name="lightening" cssVar="--lightening" hex={colorHex.special.lightening} showHex={showHex} />
           <SpecialSwatch name="midnight-black" cssVar="--midnight-black" hex={colorHex.special.midnightBlack} showHex={showHex} />
@@ -115,13 +98,13 @@ export function ColorPalette({ showHex = true }: ColorPaletteProps) {
 
 function Section({ title, group, steps, showHex }: SectionProps) {
   return (
-    <div>
-      <div className="mb-2 flex items-baseline justify-between">
-        <Text as="h2" variant="text-lg" weight="semibold">
+    <div className="ds-section">
+      <div className="ds-section__header">
+        <Text as="h2" variant="text-lg" weight="semibold" className="ds-section__title">
           {title}
         </Text>
       </div>
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,160px))] gap-4">
+      <div className="ds-section__grid">
         {steps.map((step) => (
           <Swatch
             key={`${group}-${step}`}

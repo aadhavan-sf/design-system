@@ -3,6 +3,8 @@ import { ArrowLeft, ArrowRight } from '@phosphor-icons/react';
 
 import { Text } from '../../foundations/Typography';
 
+import './pagination.css';
+
 export type PaginationButtonHierarchy = 'leading' | 'middle' | 'trailing' | 'Leading' | 'Middle' | 'Trailing';
 export type PaginationButtonIcon = 'false' | 'only' | 'true' | 'False' | 'Only' | 'True';
 export type PaginationButtonState = 'default' | 'active-hover' | 'focused' | 'Default' | 'Active/hover' | 'Focused';
@@ -78,7 +80,7 @@ function getDisplayLabel({ hierarchy, icon, label }: { hierarchy: NormalizedHier
 }
 
 function PaginationDivider() {
-  return <span className="h-10 w-px shrink-0 bg-neutral-200" aria-hidden="true" />;
+  return <span className="storybook-pagination__divider" aria-hidden="true" />;
 }
 
 export function PaginationButton({
@@ -120,20 +122,18 @@ export function PaginationButton({
     <button
       type="button"
       className={buildClassName([
-        'inline-flex h-10 min-w-10 cursor-pointer items-center justify-center gap-2 border border-solid border-neutral-200 bg-neutral-0 box-border px-4 py-2.5 font-sans text-neutral-700 transition-[background-color,color,box-shadow] duration-[160ms] hover:bg-neutral-50 hover:text-neutral-900 disabled:cursor-not-allowed disabled:bg-neutral-0 disabled:text-neutral-300 disabled:hover:bg-neutral-0 disabled:hover:text-neutral-300 focus-visible:z-[1] focus-visible:bg-neutral-50 focus-visible:text-neutral-900 focus-visible:shadow-focus-brand focus-visible:outline-none',
-        normalizedHierarchy === 'leading' && 'rounded-l-2 rounded-r-none',
-        normalizedHierarchy === 'middle' && 'w-10 flex-col border-l-0 border-r-0',
-        normalizedHierarchy === 'trailing' && 'rounded-l-none rounded-r-2',
-        isIconOnly && 'w-10 px-2.5',
-        isActive && 'bg-neutral-50 text-neutral-900',
-        normalizedState === 'focused' && 'z-[1] bg-neutral-50 text-neutral-900 shadow-focus-brand',
+        'storybook-pagination-button',
+        `storybook-pagination-button--${normalizedHierarchy}`,
+        isIconOnly && 'storybook-pagination-button--icon-only',
+        isActive && 'storybook-pagination-button--active',
+        normalizedState === 'focused' && 'storybook-pagination-button--focused',
         className,
       ])}
       {...props}
     >
       {hasIcon && normalizedHierarchy === 'leading' && (
         <ArrowLeft
-          className="shrink-0"
+          className="storybook-pagination-button__icon"
           size={20}
           weight="regular"
         />
@@ -144,14 +144,14 @@ export function PaginationButton({
           variant="text-sm"
           weight="medium"
           color="currentColor"
-          className="whitespace-nowrap"
+          className="storybook-pagination-button__label"
         >
           {displayLabel}
         </Text>
       )}
       {hasIcon && normalizedHierarchy === 'trailing' && (
         <ArrowRight
-          className="shrink-0"
+          className="storybook-pagination-button__icon"
           size={20}
           weight="regular"
         />
@@ -236,16 +236,14 @@ export function Pagination({
   return (
     <nav
       className={buildClassName([
-        'flex w-full min-w-0 max-w-[1216px] items-center overflow-x-auto overflow-y-visible border-t border-solid border-neutral-200 px-6 pb-4 pt-3 box-border',
-        normalizedBreakpoint === 'mobile' && 'max-w-[375px]',
-        normalizedAlignment === 'left' && 'justify-start',
-        normalizedAlignment === 'center' && 'justify-center',
-        normalizedAlignment === 'right' && 'justify-end',
+        'storybook-pagination',
+        `storybook-pagination--${normalizedAlignment}`,
+        `storybook-pagination--${normalizedBreakpoint}`,
         className,
       ])}
       aria-label="Pagination"
     >
-      <div className="inline-flex flex-none items-stretch">
+      <div className="storybook-pagination__group">
         <PaginationButton
           hierarchy="leading"
           icon={isMobile ? 'only' : 'true'}
@@ -258,7 +256,7 @@ export function Pagination({
         {displayedPages.map((page, index) => (
           <span
             key={`${page}-${index}`}
-            className="inline-flex items-stretch"
+            className="storybook-pagination__item"
           >
             <PaginationDivider />
             <PaginationButton

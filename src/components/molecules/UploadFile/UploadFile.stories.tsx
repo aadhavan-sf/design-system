@@ -7,7 +7,6 @@ import {
   UploadFileBase,
   UploadFileItem,
 } from './UploadFile';
-import './uploadFile.css';
 
 export default {
   title: 'Molecules/Upload File',
