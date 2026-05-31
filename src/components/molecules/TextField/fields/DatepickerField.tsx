@@ -6,6 +6,21 @@ import { getFieldClassName } from '../textFieldState';
 
 const TextFieldDatePicker = DatePicker as unknown as ComponentType<Record<string, unknown>>;
 
+const MONTH_NAMES = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+] as const;
+
 export type DatePickerSelectMeta = {
   type?: string;
 };
@@ -52,6 +67,35 @@ function formatSelectedDate(value: DatePickerSelectValue) {
   return formatDateParts(value, today.getMonth(), today.getFullYear());
 }
 
+function getDatePickerSelectionFromValue(value: string) {
+  const match = value.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+
+  if (!match) {
+    return null;
+  }
+
+  const [, dayValue, monthValue, yearValue] = match;
+  const day = Number(dayValue);
+  const month = Number(monthValue);
+  const year = Number(yearValue);
+  const isValidDate =
+    day >= 1 &&
+    day <= 31 &&
+    month >= 1 &&
+    month <= 12 &&
+    year >= 1000;
+
+  if (!isValidDate) {
+    return null;
+  }
+
+  return {
+    selectedDay: String(day),
+    selectedMonth: MONTH_NAMES[month - 1],
+    selectedYear: String(year),
+  };
+}
+
 function buildClassName(parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(' ');
 }
@@ -68,6 +112,8 @@ export function DatepickerField({
   state,
   value,
 }: DatepickerFieldProps) {
+  const selectedDatePickerProps = getDatePickerSelectionFromValue(value);
+
   const handleOpen = () => {
     if (!disabled) {
       onOpenChange(true);
@@ -123,6 +169,7 @@ export function DatepickerField({
           <TextFieldDatePicker
             type={datePickerType}
             {...datePickerProps}
+            {...selectedDatePickerProps}
             onSelect={handleDateSelect}
           />
         </div>
