@@ -29,8 +29,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  border: 1px solid var(--ds-border, var(--neutral_200));
-  @apply rounded-ds border-ds-border bg-ds-surface-subtle;
+  @apply rounded-ds border border-ds-border bg-ds-surface-subtle;
 }
 
 .ds-spacing__preview span {
@@ -51,8 +50,7 @@
   grid-template-columns: minmax(160px, 220px) minmax(140px, 1fr) 64px;
   align-items: center;
   min-height: 56px;
-  border: 1px solid var(--ds-border, var(--neutral_200));
-  @apply gap-4 rounded-ds border-ds-border bg-ds-surface px-3 py-2;
+  @apply gap-4 rounded-ds border border-ds-border bg-ds-surface px-3 py-2;
 }
 
 .ds-spacing-row__label {

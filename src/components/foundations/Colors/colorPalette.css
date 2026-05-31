@@ -22,9 +22,8 @@
 }
 
 .ds-swatch {
-  border: 1px solid var(--ds-border, var(--neutral_200));
   overflow: hidden;
-  @apply rounded-3 border-ds-border bg-ds-surface shadow-lg;
+  @apply rounded-3 border border-ds-border bg-ds-surface shadow-lg;
 }
 
 .ds-swatch__chip {

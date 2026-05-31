@@ -49,77 +49,53 @@
 }
 
 .ds-text {
-  font-family: var(--font_family_base);
-  margin: 0;
-  color: var(--ds-text-strong, var(--neutral_900));
+  @apply m-0 font-sans text-ds-text-strong;
 }
 
 .ds-text--display-2xl {
-  font-size: var(--type-display-2xl-size);
-  line-height: var(--type-display-2xl-line);
-  letter-spacing: var(--type-display-2xl-letter);
+  @apply text-ds-display-2xl;
 }
 .ds-text--display-xl {
-  font-size: var(--type-display-xl-size);
-  line-height: var(--type-display-xl-line);
-  letter-spacing: var(--type-display-xl-letter);
+  @apply text-ds-display-xl;
 }
 .ds-text--display-lg {
-  font-size: var(--type-display-lg-size);
-  line-height: var(--type-display-lg-line);
-  letter-spacing: var(--type-display-lg-letter);
+  @apply text-ds-display-lg;
 }
 .ds-text--display-md {
-  font-size: var(--type-display-md-size);
-  line-height: var(--type-display-md-line);
-  letter-spacing: var(--type-display-md-letter);
+  @apply text-ds-display-md;
 }
 .ds-text--display-sm {
-  font-size: var(--type-display-sm-size);
-  line-height: var(--type-display-sm-line);
-  letter-spacing: var(--type-display-sm-letter);
+  @apply text-ds-display-sm;
 }
 .ds-text--display-xs {
-  font-size: var(--type-display-xs-size);
-  line-height: var(--type-display-xs-line);
-  letter-spacing: var(--type-display-xs-letter);
+  @apply text-ds-display-xs;
 }
 
 .ds-text--text-xl {
-  font-size: var(--type-text-xl-size);
-  line-height: var(--type-text-xl-line);
-  letter-spacing: var(--type-text-xl-letter);
+  @apply text-ds-text-xl;
 }
 .ds-text--text-lg {
-  font-size: var(--type-text-lg-size);
-  line-height: var(--type-text-lg-line);
-  letter-spacing: var(--type-text-lg-letter);
+  @apply text-ds-text-lg;
 }
 .ds-text--text-md {
-  font-size: var(--type-text-md-size);
-  line-height: var(--type-text-md-line);
-  letter-spacing: var(--type-text-md-letter);
+  @apply text-ds-text-md;
 }
 .ds-text--text-sm {
-  font-size: var(--type-text-sm-size);
-  line-height: var(--type-text-sm-line);
-  letter-spacing: var(--type-text-sm-letter);
+  @apply text-ds-text-sm;
 }
 .ds-text--text-xs {
-  font-size: var(--type-text-xs-size);
-  line-height: var(--type-text-xs-line);
-  letter-spacing: var(--type-text-xs-letter);
+  @apply text-ds-text-xs;
 }
 
 .ds-text--regular {
-  font-weight: 400;
+  @apply font-normal;
 }
 .ds-text--medium {
-  font-weight: 500;
+  @apply font-medium;
 }
 .ds-text--semibold {
-  font-weight: 600;
+  @apply font-semibold;
 }
 .ds-text--bold {
-  font-weight: 700;
+  @apply font-bold;
 }

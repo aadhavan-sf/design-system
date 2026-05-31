@@ -28,14 +28,12 @@
 .ds-shadow-card {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--ds-border, var(--neutral_200));
-  @apply gap-4 rounded-ds border-ds-border bg-ds-surface p-4;
+  @apply gap-4 rounded-ds border border-ds-border bg-ds-surface p-4;
 }
 
 .ds-shadow-card__preview {
   min-height: 112px;
-  border: 1px solid var(--ds-border, var(--neutral_200));
-  @apply rounded-ds border-ds-border bg-neutral-0;
+  @apply rounded-ds border border-ds-border bg-neutral-0;
 }
 
 .ds-shadow-card__meta {
