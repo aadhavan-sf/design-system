@@ -3,10 +3,9 @@
   align-items: center;
   justify-content: center;
 
-  @apply bg-transparent p-1 text-neutral-600;
+  @apply rounded-1 bg-transparent p-1 text-neutral-600;
 
   border: 0;
-  border-radius: var(--spacing_1);
 
   cursor: pointer;
 

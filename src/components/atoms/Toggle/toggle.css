@@ -4,10 +4,9 @@
   display: inline-flex;
   align-items: center;
 
-  @apply bg-neutral-100 p-0.5;
+  @apply rounded-full bg-neutral-100 p-0.5;
 
   border: 0;
-  border-radius: 999px;
 
   cursor: pointer;
 
@@ -39,8 +38,7 @@
 .storybook-toggle__thumb {
   display: block;
 
-  border-radius: 999px;
-  @apply bg-neutral-0 shadow-sm;
+  @apply rounded-full bg-neutral-0 shadow-sm;
 
 
   transition: transform 160ms ease;
