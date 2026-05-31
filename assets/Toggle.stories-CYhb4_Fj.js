@@ -1,0 +1,24 @@
+import{a as e,n as t}from"./chunk-DnJy8xQt.js";import{a as n}from"./iframe-BQTwm-GU.js";import{t as r}from"./jsx-runtime-DxP0NviS.js";function i(e){return e.filter(Boolean).join(` `)}function a({size:e=`sm`,state:t=`default`,pressed:n,defaultPressed:r=!1,onPressedChange:a,onClick:c,className:l,...u}){let[d,f]=(0,o.useState)(r),p=typeof n==`boolean`,m=p?n:d,h=t===`disabled`,g=e=>{if(h)return;let t=!m;p||f(t),a?.(t),c?.(e)};return(0,s.jsx)(`button`,{type:`button`,role:`switch`,"aria-checked":m,disabled:h,className:i([`relative inline-flex cursor-pointer items-center rounded-pill border-0 p-0.5 transition-[background-color,box-shadow] duration-[160ms] focus-visible:outline-none focus-visible:shadow-focus-brand disabled:cursor-not-allowed`,e===`mid`?`h-6 w-11`:`h-5 w-9`,h?m?`bg-primary-100`:`bg-neutral-50`:m?`bg-primary-400`:t===`hover`?`bg-neutral-200`:`bg-neutral-100`,t===`focus`&&`shadow-focus-brand`,l]),...u,onClick:g,children:(0,s.jsx)(`span`,{className:i([`block rounded-pill bg-neutral-0 transition-transform duration-[160ms]`,h?`shadow-xs`:`shadow-sm`,e===`mid`?`h-5 w-5`:`h-4 w-4`,m&&(e===`mid`?`translate-x-5`:`translate-x-4`)])})})}var o,s,c=t((()=>{o=e(n(),1),s=r(),a.__docgenInfo={description:``,methods:[],displayName:`Toggle`,props:{size:{required:!1,tsType:{name:`union`,raw:`'sm' | 'mid'`,elements:[{name:`literal`,value:`'sm'`},{name:`literal`,value:`'mid'`}]},description:``,defaultValue:{value:`'sm'`,computed:!1}},state:{required:!1,tsType:{name:`union`,raw:`'default' | 'hover' | 'focus' | 'disabled'`,elements:[{name:`literal`,value:`'default'`},{name:`literal`,value:`'hover'`},{name:`literal`,value:`'focus'`},{name:`literal`,value:`'disabled'`}]},description:``,defaultValue:{value:`'default'`,computed:!1}},pressed:{required:!1,tsType:{name:`boolean`},description:``},defaultPressed:{required:!1,tsType:{name:`boolean`},description:``,defaultValue:{value:`false`,computed:!1}},onPressedChange:{required:!1,tsType:{name:`signature`,type:`function`,raw:`(pressed: boolean) => void`,signature:{arguments:[{type:{name:`boolean`},name:`pressed`}],return:{name:`void`}}},description:``},onClick:{required:!1,tsType:{name:`signature`,type:`function`,raw:`(event: MouseEvent<HTMLButtonElement>) => void`,signature:{arguments:[{type:{name:`MouseEvent`,elements:[{name:`HTMLButtonElement`}],raw:`MouseEvent<HTMLButtonElement>`},name:`event`}],return:{name:`void`}}},description:``}},composes:[`Omit`]}}));function l(e){let[t,n]=(0,u.useState)(!!e.pressed);return(0,d.jsx)(a,{...e,pressed:t,onPressedChange:t=>{n(t),e.onPressedChange?.(t)}})}var u,d,f,p,m,h,g,_;t((()=>{u=e(n(),1),c(),d=r(),f=[`default`,`hover`,`focus`,`disabled`],p={title:`Atoms/Toggle`,component:a,parameters:{layout:`centered`},tags:[`autodocs`],argTypes:{state:{control:`select`,options:f},size:{control:`select`,options:[`sm`,`mid`]},pressed:{control:`boolean`}}},m={render:e=>(0,d.jsx)(l,{...e},`${e.pressed}`),args:{state:`default`,size:`sm`,pressed:!1}},h={render:()=>(0,d.jsxs)(`div`,{className:`flex items-center gap-12`,children:[(0,d.jsx)(a,{size:`sm`}),(0,d.jsx)(a,{size:`sm`,defaultPressed:!0}),(0,d.jsx)(a,{size:`mid`}),(0,d.jsx)(a,{size:`mid`,defaultPressed:!0})]})},g={render:()=>(0,d.jsx)(`div`,{className:`flex flex-col items-center gap-8`,children:f.map(e=>(0,d.jsxs)(`div`,{className:`flex items-center gap-12`,children:[(0,d.jsx)(a,{size:`sm`,state:e}),(0,d.jsx)(a,{size:`sm`,state:e,defaultPressed:!0}),(0,d.jsx)(a,{size:`mid`,state:e}),(0,d.jsx)(a,{size:`mid`,state:e,defaultPressed:!0})]},e))})},m.parameters={...m.parameters,docs:{...m.parameters?.docs,source:{originalSource:`{
+  render: args => <TogglePlayground key={\`\${args.pressed}\`} {...args} />,
+  args: {
+    state: 'default',
+    size: 'sm',
+    pressed: false
+  }
+}`,...m.parameters?.docs?.source}}},h.parameters={...h.parameters,docs:{...h.parameters?.docs,source:{originalSource:`{
+  render: () => <div className="flex items-center gap-12">
+      <Toggle size="sm" />
+      <Toggle size="sm" defaultPressed />
+      <Toggle size="mid" />
+      <Toggle size="mid" defaultPressed />
+    </div>
+}`,...h.parameters?.docs?.source}}},g.parameters={...g.parameters,docs:{...g.parameters?.docs,source:{originalSource:`{
+  render: () => <div className="flex flex-col items-center gap-8">
+      {states.map(state => <div key={state} className="flex items-center gap-12">
+          <Toggle size="sm" state={state} />
+          <Toggle size="sm" state={state} defaultPressed />
+          <Toggle size="mid" state={state} />
+          <Toggle size="mid" state={state} defaultPressed />
+        </div>)}
+    </div>
+}`,...g.parameters?.docs?.source}}},_=[`Playground`,`Sizes`,`States`]}))();export{m as Playground,h as Sizes,g as States,_ as __namedExportsOrder,p as default};
