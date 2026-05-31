@@ -6,20 +6,20 @@
 
   width: var(--slider-width);
 
-  color: var(--neutral_800);
+  @apply text-neutral-800;
 }
 
 .storybook-slider--labels-top,
 .storybook-slider--labels-bottom {
-  padding: var(--spacing_8) 0;
+  @apply py-8;
 }
 
 .storybook-slider--labels-top {
-  padding-top: var(--spacing_10);
+  @apply pt-10;
 }
 
 .storybook-slider--labels-bottom {
-  padding-bottom: var(--spacing_10);
+  @apply pb-10;
 }
 
 .storybook-slider__control {
@@ -45,11 +45,11 @@
   right: 0;
   left: 0;
 
-  background: var(--neutral_100);
+  @apply bg-neutral-100;
 }
 
 .storybook-slider__progress {
-  background: var(--brand_400);
+  @apply bg-brand-400;
 }
 
 .storybook-slider__steps {
@@ -74,13 +74,13 @@
 
   border-radius: 50%;
 
-  background: var(--neutral_400);
+  @apply bg-neutral-400;
 
   transform: translateX(-50%);
 }
 
 .storybook-slider__step--active {
-  background: var(--neutral_00);
+  @apply bg-neutral-0;
 }
 
 .storybook-slider__thumb {
@@ -94,9 +94,7 @@
   border: 2px solid var(--brand_400);
   border-radius: 50%;
 
-  background: var(--neutral_00);
-
-  box-shadow: var(--shadow_md);
+  @apply bg-neutral-0 shadow-md;
 
   transform: translate(-50%, -50%);
   pointer-events: none;
@@ -112,7 +110,7 @@
 
   border-radius: 50%;
 
-  background: var(--brand_400);
+  @apply bg-brand-400;
 
   transform: translate(-50%, -50%);
 
@@ -147,6 +145,7 @@
 
 .storybook-slider__control:has(.storybook-slider__input:focus-visible)
 .storybook-slider__thumb {
+  @apply shadow-focus-brand;
   box-shadow: var(--shadow_md), var(--shadow_focus-brand);
 }
 
@@ -159,20 +158,20 @@
 }
 
 .storybook-slider--disabled .storybook-slider__rail {
-  background: var(--neutral_50);
+  @apply bg-neutral-50;
 }
 
 .storybook-slider--disabled .storybook-slider__progress {
-  background: var(--brand_100);
+  @apply bg-brand-100;
 }
 
 .storybook-slider--disabled .storybook-slider__thumb {
   border-color: var(--brand_100);
-  box-shadow: var(--shadow_xs);
+  @apply border-brand-100 shadow-xs;
 }
 
 .storybook-slider--disabled.storybook-slider--dotted .storybook-slider__thumb::after {
-  background: var(--brand_100);
+  @apply bg-brand-100;
 }
 
 .storybook-slider__value-label {
@@ -223,11 +222,11 @@
 
   min-width: 40px;
   height: 36px;
-  padding: var(--spacing_2) var(--spacing_3);
+  @apply px-3 py-2;
 
   border-radius: var(--spacing_2);
 
-  background: var(--neutral_00);
+  @apply bg-neutral-0;
 
   box-sizing: border-box;
   white-space: nowrap;
@@ -239,7 +238,7 @@
 
   overflow: hidden;
 
-  color: var(--neutral_00);
+  @apply text-neutral-0;
 }
 
 .storybook-slider__floating-label-arrow::before {
@@ -263,18 +262,18 @@
 .slider-story-stack {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_12);
+  @apply gap-12;
 }
 
 .slider-story-row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing_12) var(--spacing_16);
+  @apply gap-x-16 gap-y-12;
   align-items: flex-start;
 }
 
 .slider-story-column {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_8);
+  @apply gap-8;
 }

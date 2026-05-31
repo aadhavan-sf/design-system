@@ -1,36 +1,34 @@
 .storybook-breadcrumb {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing_1);
+  @apply gap-1;
 }
 
 .storybook-breadcrumb--small {
-  gap: var(--spacing_0_5);
+  @apply gap-0.5;
 }
 
 .storybook-breadcrumb-item {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing_1);
+  @apply gap-1;
 }
 
 .storybook-breadcrumb-item__label {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing_1);
+  @apply gap-1;
 
-  padding: 0 var(--spacing_1);
+  @apply px-1;
 
   border: 0;
   border-radius: var(--spacing_1);
 
   background: transparent;
-  color: var(--neutral_400);
-
-  font-family: var(--font_family_base);
   text-decoration: none;
+  @apply font-sans text-neutral-400;
 
   cursor: pointer;
 }
@@ -48,7 +46,7 @@
 }
 
 .storybook-breadcrumb-item__label--current {
-  color: var(--neutral_900);
+  @apply text-neutral-900;
 }
 
 .storybook-breadcrumb-item__icon {
@@ -63,7 +61,7 @@
   align-items: center;
   justify-content: center;
 
-  color: var(--neutral_400);
+  @apply text-neutral-400;
 }
 
 .storybook-breadcrumb-divider--small {
@@ -75,7 +73,7 @@
 .breadcrumb-story-row,
 .breadcrumb-story-grid {
   display: flex;
-  gap: var(--spacing_5);
+  @apply gap-5;
 }
 
 .breadcrumb-story-stack {

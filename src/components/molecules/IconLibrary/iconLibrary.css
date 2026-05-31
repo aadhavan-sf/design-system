@@ -5,7 +5,7 @@
 
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_3);
+  @apply gap-3;
 }
 
 .storybook-icon-library__label {
@@ -15,7 +15,7 @@
 .storybook-icon-library__field-row {
   display: flex;
   align-items: center;
-  gap: var(--spacing_2);
+  @apply gap-2;
 }
 
 .storybook-icon-library__icon-preview,
@@ -28,7 +28,7 @@
   box-sizing: border-box;
   border: 1px solid var(--neutral_200);
   border-radius: var(--spacing_2);
-  background: var(--neutral_00);
+  @apply bg-neutral-0;
 }
 
 .storybook-icon-library__icon-preview {
@@ -37,17 +37,17 @@
   justify-content: center;
   padding: 0;
 
-  color: var(--neutral_700);
+  @apply text-neutral-700;
   cursor: pointer;
 }
 
 .storybook-icon-library__icon-preview:hover {
-  background: var(--neutral_25);
+  @apply bg-neutral-25;
 }
 
 .storybook-icon-library__icon-preview:focus-visible {
   outline: none;
-  box-shadow: var(--shadow_focus-brand);
+  @apply shadow-focus-brand;
 }
 
 .storybook-icon-library__preview-icon {
@@ -58,21 +58,21 @@
   flex: 1 0 0;
   min-width: 0;
   justify-content: space-between;
-  gap: var(--spacing_2);
+  @apply gap-2;
 
   padding: var(--spacing_3) 14px;
 
-  color: var(--neutral_700);
   cursor: pointer;
+  @apply text-neutral-700;
 }
 
 .storybook-icon-library__select:hover {
-  background: var(--neutral_25);
+  @apply bg-neutral-25;
 }
 
 .storybook-icon-library__select:focus-visible {
   outline: none;
-  box-shadow: var(--shadow_focus-brand);
+  @apply shadow-focus-brand;
 }
 
 .storybook-icon-library__select-label {
@@ -86,7 +86,7 @@
 .storybook-icon-library__caret {
   flex-shrink: 0;
 
-  color: var(--neutral_700);
+  @apply text-neutral-700;
 }
 
 .storybook-icon-library-popover {
@@ -94,12 +94,9 @@
 
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_4);
+  @apply gap-4;
 
-  padding: var(--spacing_4);
-  border-radius: var(--spacing_2);
-  background: var(--neutral_00);
-  box-shadow: var(--shadow_md);
+  @apply rounded-2 bg-neutral-0 p-4 shadow-md;
 
   animation: storybook-icon-library-popover-enter 150ms ease-out;
   transform-origin: top center;
@@ -138,7 +135,7 @@
 .storybook-icon-library-popover__choices {
   display: flex;
   align-items: center;
-  gap: var(--spacing_2);
+  @apply gap-2;
 }
 
 .storybook-icon-library-separator {
@@ -167,8 +164,7 @@
   position: relative;
   z-index: 1;
 
-  padding: 0 var(--spacing_1);
-  background: var(--neutral_00);
+  @apply bg-neutral-0 px-1;
 
   letter-spacing: 0.2em;
 }
@@ -178,30 +174,28 @@
 
   display: flex;
   align-items: flex-start;
-  gap: var(--spacing_2);
+  @apply gap-2;
 
-  padding: var(--spacing_3);
+  @apply p-3;
   border: 1px dashed var(--neutral_200);
   border-radius: var(--spacing_2);
-  background: var(--neutral_00);
-
-  color: var(--neutral_900);
+  @apply bg-neutral-0 text-neutral-900;
   cursor: pointer;
 }
 
 .storybook-icon-library-upload:hover {
-  background: var(--neutral_25);
+  @apply bg-neutral-25;
 }
 
 .storybook-icon-library-upload:focus-visible {
   outline: none;
-  box-shadow: var(--shadow_focus-brand);
+  @apply shadow-focus-brand;
 }
 
 .storybook-icon-library-upload__icon {
   flex-shrink: 0;
 
-  color: var(--brand_400);
+  @apply text-brand-400;
 }
 
 .storybook-icon-library-upload__copy {
@@ -209,7 +203,7 @@
 
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_1);
+  @apply gap-1;
 
   text-align: left;
 }
@@ -231,7 +225,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing_2);
+  @apply gap-2;
 }
 
 .storybook-icon-library-uploaded__actions {
@@ -248,9 +242,7 @@
   justify-content: center;
 
   border: 0;
-  background: var(--neutral_00);
-
-  color: var(--neutral_600);
+  @apply bg-neutral-0 text-neutral-600;
   cursor: pointer;
 }
 
@@ -270,14 +262,12 @@
 
 .storybook-icon-library-item:hover,
 .storybook-icon-library-item--hover {
-  background: var(--neutral_50);
+  @apply bg-neutral-50;
 }
 
 .storybook-icon-library-item--pressed {
   border: 1px solid var(--brand_100);
-  background: var(--brand_25);
-
-  color: var(--brand_400);
+  @apply bg-brand-25 text-brand-400;
 }
 
 .storybook-icon-library-item--sm.storybook-icon-library-item--pressed {
@@ -290,26 +280,23 @@
 }
 
 .storybook-icon-library-item--focused {
-  background: var(--neutral_00);
-  box-shadow: var(--shadow_focus-brand);
+  @apply bg-neutral-0 shadow-focus-brand;
 }
 
 .storybook-icon-library-item--focused.storybook-icon-library-item--pressed {
-  background: var(--brand_25);
+  @apply bg-brand-25;
 }
 
 .storybook-icon-library-item--disabled,
 .storybook-icon-library-item:disabled {
-  background: var(--neutral_50);
-  color: var(--neutral_300);
   cursor: not-allowed;
+  @apply bg-neutral-50 text-neutral-300;
 }
 
 .storybook-icon-library-item--disabled.storybook-icon-library-item--pressed,
 .storybook-icon-library-item:disabled.storybook-icon-library-item--pressed {
   border-color: var(--brand_100);
-  background: var(--brand_25);
-  color: var(--brand_100);
+  @apply bg-brand-25 text-brand-100;
 }
 
 .storybook-icon-library-item__icon {
@@ -322,12 +309,12 @@
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
-  gap: var(--spacing_2);
+  @apply gap-2;
 
-  padding: var(--spacing_3);
+  @apply p-3;
   border: 1px solid var(--neutral_200);
   border-radius: var(--spacing_2);
-  background: var(--neutral_00);
+  @apply bg-neutral-0;
 }
 
 .storybook-icon-library-grid__icons {
@@ -338,8 +325,7 @@
   flex-wrap: wrap;
   align-items: center;
   align-content: flex-start;
-  column-gap: var(--spacing_4);
-  row-gap: var(--spacing_3);
+  @apply gap-x-4 gap-y-3;
 }
 
 .storybook-icon-library-grid__scrollbar {
@@ -348,7 +334,7 @@
   flex-shrink: 0;
 
   border-radius: var(--spacing_2);
-  background: var(--neutral_100);
+  @apply bg-neutral-100;
 }
 
 .storybook-icon-library-story-stack,
@@ -360,7 +346,7 @@
 
 .storybook-icon-library-story-stack {
   flex-direction: column;
-  gap: var(--spacing_8);
+  @apply gap-8;
 }
 
 .storybook-icon-library-story-grid {
@@ -370,11 +356,11 @@
 }
 
 .storybook-icon-library-story-row {
-  gap: var(--spacing_4);
+  @apply gap-4;
   align-items: center;
 }
 
 .storybook-icon-library-story-matrix {
   flex-direction: column;
-  gap: var(--spacing_3);
+  @apply gap-3;
 }

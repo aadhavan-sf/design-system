@@ -2,17 +2,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing_1);
+  @apply gap-1;
 
-  padding: var(--spacing_1) var(--spacing_3);
+  @apply px-3 py-1;
 
   border: 0;
   border-radius: var(--spacing_2);
 
   background: transparent;
-  color: var(--neutral_900);
-
-  font-family: var(--font_family_base);
+  @apply font-sans text-neutral-900;
 
   cursor: pointer;
 
@@ -23,43 +21,40 @@
 }
 
 .storybook-tab-item--md {
-  padding-block: var(--spacing_1_5);
+  @apply py-1.5;
 }
 
 .storybook-tab-item--sm {
-  padding-block: var(--spacing_1);
+  @apply py-1;
 }
 
 .storybook-tab-item--hover,
 .storybook-tab-item:hover:not(:disabled):not(.storybook-tab-item--pressed) {
-  background: var(--neutral_50);
+  @apply bg-neutral-50;
 }
 
 .storybook-tab-item--focused,
 .storybook-tab-item:focus-visible {
   outline: none;
-  box-shadow: var(--shadow_focus-neutral);
+  @apply shadow-focus-neutral;
 }
 
 .storybook-tab-item--pressed {
-  background: var(--neutral_900);
-  color: var(--neutral_00);
+  @apply bg-neutral-900 text-neutral-0;
 }
 
 .storybook-tab-item--pressed.storybook-tab-item--hover,
 .storybook-tab-item--pressed:hover:not(:disabled) {
-  background: var(--neutral_900);
+  @apply bg-neutral-900;
 }
 
 .storybook-tab-item--disabled {
-  background: var(--neutral_100);
-  color: var(--neutral_200);
+  @apply bg-neutral-100 text-neutral-200;
   cursor: not-allowed;
 }
 
 .storybook-tab-item--disabled.storybook-tab-item--pressed {
-  background: var(--neutral_400);
-  color: var(--neutral_00);
+  @apply bg-neutral-400 text-neutral-0;
 }
 
 .storybook-tab-item__label {
@@ -78,22 +73,22 @@
 .storybook-tabs {
   display: inline-flex;
   align-items: flex-start;
-  gap: var(--spacing_2);
+  @apply gap-2;
 }
 
 .storybook-tabs--segments {
-  padding: var(--spacing_1);
+  @apply p-1;
 
   border: 1px solid var(--neutral_100);
   border-radius: var(--spacing_3);
 
-  background: var(--neutral_00);
+  @apply bg-neutral-0;
 }
 
 .tabs-story-stack,
 .tabs-story-grid {
   display: flex;
-  gap: var(--spacing_6);
+  @apply gap-6;
 }
 
 .tabs-story-stack {

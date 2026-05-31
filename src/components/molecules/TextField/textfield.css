@@ -3,7 +3,7 @@
 
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_1);
+  @apply gap-1;
 }
 
 .storybook-textfield--fluid {
@@ -13,17 +13,13 @@
 .storybook-textfield__header {
   display: flex;
   align-items: center;
-  gap: var(--spacing_1);
+  @apply gap-1;
 
   width: 100%;
 }
 
 .storybook-textfield__label {
-  font-size: var(--type-text-sm-size);
-  line-height: var(--type-text-sm-line);
-  font-weight: 500;
-
-  color: var(--neutral_600);
+  @apply text-ds-text-sm font-medium text-neutral-600;
 }
 
 .storybook-textfield__tooltip {
@@ -34,7 +30,7 @@
   width: 16px;
   height: 16px;
 
-  color: var(--neutral_600);
+  @apply text-neutral-600;
 }
 
 .storybook-textfield__required {
@@ -42,9 +38,7 @@
 
   font-size: var(--type-text-xs-size);
   line-height: var(--type-text-sm-line);
-  font-weight: 600;
-
-  color: var(--error_600);
+  @apply font-semibold text-error-600;
 }
 
 .storybook-textfield__field {
@@ -55,23 +49,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing_2);
+  @apply gap-2;
 
   padding: var(--spacing_3) 14px;
 
   border: 1px solid var(--neutral_200);
   border-radius: var(--spacing_2);
 
-  background: var(--neutral_00);
+  @apply bg-neutral-0;
 
   box-sizing: border-box;
 
   font: inherit;
-  font-size: var(--type-text-sm-size);
-  line-height: var(--type-text-sm-line);
-  font-weight: 400;
-
-  color: var(--neutral_700);
+  @apply text-ds-text-sm font-normal text-neutral-700;
 
   transition:
     border-color 160ms ease,
@@ -94,13 +84,9 @@ button.storybook-textfield__field {
 
 .storybook-textfield__field::placeholder,
 .storybook-textfield__search-input::placeholder {
-  font-family: var(--font_family_base);
-  font-size: var(--type-text-sm-size);
-  line-height: var(--type-text-sm-line);
-  font-weight: 400;
   letter-spacing: var(--type-text-sm-letter);
 
-  color: var(--neutral_300);
+  @apply font-sans text-ds-text-sm font-normal text-neutral-300;
 }
 
 .storybook-textfield__field:focus,
@@ -109,28 +95,25 @@ button.storybook-textfield__field {
 }
 
 .storybook-textfield__field:focus-visible {
-  border-color: var(--neutral_500);
+  @apply border-neutral-500;
 }
 
 .storybook-textfield__field--active {
-  border-color: var(--neutral_500);
+  @apply border-neutral-500;
 }
 
 .storybook-textfield__field--error {
-  border-color: var(--error_600);
-  color: var(--error_600);
+  @apply border-error-600 text-error-600;
 }
 
 .storybook-textfield__field--error::placeholder,
 .storybook-textfield__field--error .storybook-textfield__search-input::placeholder {
-  color: var(--error_600);
+  @apply text-error-600;
 }
 
 .storybook-textfield__field--disabled {
-  border-color: var(--neutral_200);
-  background: var(--neutral_25);
-  color: var(--neutral_300);
   cursor: not-allowed;
+  @apply border-neutral-200 bg-neutral-25 text-neutral-300;
 }
 
 .storybook-textfield__field:disabled {
@@ -140,7 +123,7 @@ button.storybook-textfield__field {
 .storybook-textfield__field-content {
   display: flex;
   align-items: center;
-  gap: var(--spacing_1);
+  @apply gap-1;
   flex: 1 0 0;
 
   min-width: 0;
@@ -149,73 +132,66 @@ button.storybook-textfield__field {
 .storybook-textfield__field-text {
   min-width: 0;
 
-  font-family: var(--font_family_base);
-  font-size: var(--type-text-sm-size);
-  line-height: var(--type-text-sm-line);
-  font-weight: 400;
   letter-spacing: var(--type-text-sm-letter);
 
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  color: var(--neutral_300);
+  @apply font-sans text-ds-text-sm font-normal text-neutral-300;
 }
 
 .storybook-textfield__field-text--filled {
-  color: var(--neutral_700);
+  @apply text-neutral-700;
 }
 
 .storybook-textfield__field-text--error {
-  color: var(--error_600);
+  @apply text-error-600;
 }
 
 .storybook-textfield__field-text--disabled {
-  color: var(--neutral_300);
+  @apply text-neutral-300;
 }
 
 .storybook-textfield__leading-icon,
 .storybook-textfield__trailing-icon {
   flex-shrink: 0;
 
-  color: var(--neutral_700);
+  @apply text-neutral-700;
 }
 
 .storybook-textfield__leading-icon {
-  color: var(--neutral_600);
+  @apply text-neutral-600;
 }
 
 .storybook-textfield__field--disabled .storybook-textfield__leading-icon,
 .storybook-textfield__field--disabled .storybook-textfield__trailing-icon {
-  color: var(--neutral_300);
+  @apply text-neutral-300;
 }
 
 .storybook-textfield__field--error .storybook-textfield__leading-icon,
 .storybook-textfield__field--error .storybook-textfield__trailing-icon {
-  color: var(--error_600);
+  @apply text-error-600;
 }
 
 .storybook-textfield__field--multiselect-one-line {
-  gap: var(--spacing_2);
-  padding: var(--spacing_3);
+  @apply gap-2 p-3;
 }
 
 .storybook-textfield__field--multiselect-one-line.storybook-textfield__field--disabled {
-  border-color: var(--neutral_200);
-  background: var(--neutral_25);
+  @apply border-neutral-200 bg-neutral-25;
 }
 
 .storybook-textfield__field--multiselect-two-line {
   height: 112px;
   align-items: flex-start;
-  gap: var(--spacing_2);
-  padding: var(--spacing_3);
+  @apply gap-2 p-3;
 
   overflow: hidden;
 }
 
 .storybook-textfield__field--multiselect-two-line .storybook-textfield__trailing-icon {
-  margin-top: var(--spacing_0_5);
+  @apply mt-0.5;
 }
 
 .storybook-textfield__field--multiselect-two-line .storybook-textfield__field-content {
@@ -229,7 +205,7 @@ button.storybook-textfield__field {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: var(--spacing_1);
+  @apply gap-1;
 }
 
 .storybook-textfield__field--multiselect-two-line .storybook-textfield__tag-list {
@@ -248,14 +224,13 @@ button.storybook-textfield__field {
   flex: 0 1 auto;
 
   justify-content: flex-start;
-  gap: var(--spacing_2);
+  @apply gap-2;
 
   padding: 7px var(--spacing_2);
   border: 0;
-  border-radius: var(--spacing_2);
-  background: var(--neutral_50);
+  @apply rounded-2 bg-neutral-50;
 
-  color: var(--neutral_600);
+  @apply text-neutral-600;
 }
 
 .storybook-textfield__selected-chip--first {
@@ -276,26 +251,22 @@ button.storybook-textfield__field {
 }
 
 .storybook-textfield__field--error .storybook-textfield__selected-chip {
-  color: var(--error_600);
+  @apply text-error-600;
 }
 
 .storybook-textfield__field--disabled .storybook-textfield__selected-chip {
-  background: var(--neutral_100);
-  color: var(--neutral_400);
+  @apply bg-neutral-100 text-neutral-400;
 }
 
 .storybook-textfield__field--multiselect-two-line.storybook-textfield__field--disabled {
-  border-color: var(--neutral_200);
-  background: var(--neutral_25);
+  @apply border-neutral-200 bg-neutral-25;
 }
 
 .storybook-textfield__field--multiselect-two-line.storybook-textfield__field--disabled .storybook-textfield__selected-chip {
   height: 28px;
-  padding: var(--spacing_1) var(--spacing_2);
-  border-radius: var(--spacing_1);
+  @apply rounded-1 px-2 py-1;
 
-  background: var(--neutral_100);
-  color: var(--neutral_600);
+  @apply bg-neutral-100 text-neutral-600;
 }
 
 .storybook-textfield__dropdown-wrapper,
@@ -322,23 +293,23 @@ button.storybook-textfield__field {
   border: 0;
   background: transparent;
 
-  color: var(--neutral_700);
+  @apply text-neutral-700;
 
   cursor: pointer;
 }
 
 .storybook-textfield__date-button--error {
-  color: var(--error_600);
+  @apply text-error-600;
 }
 
 .storybook-textfield__date-button:disabled {
-  color: var(--neutral_300);
   cursor: not-allowed;
+  @apply text-neutral-300;
 }
 
 .storybook-textfield__date-button:focus-visible {
   outline: none;
-  box-shadow: var(--shadow_focus-brand);
+  @apply shadow-focus-brand;
 }
 
 .storybook-textfield--date-picker .storybook-textfield__field {
@@ -365,10 +336,7 @@ button.storybook-textfield__field {
   background: transparent;
 
   font: inherit;
-  font-size: var(--type-text-sm-size);
-  line-height: var(--type-text-sm-line);
-
-  color: var(--neutral_700);
+  @apply text-ds-text-sm text-neutral-700;
 }
 
 .storybook-textfield__search-input::-webkit-search-cancel-button {
@@ -428,9 +396,9 @@ button.storybook-textfield__field {
 
   border: 0;
   background: transparent;
-  color: var(--neutral_400);
 
   cursor: ns-resize;
+  @apply text-neutral-400;
 }
 
 .storybook-textfield__resize-mark svg {
@@ -439,13 +407,13 @@ button.storybook-textfield__field {
 }
 
 .storybook-textfield__resize-mark:disabled {
-  color: var(--neutral_300);
   cursor: not-allowed;
+  @apply text-neutral-300;
 }
 
 .storybook-textfield__resize-mark:focus-visible {
   outline: none;
-  box-shadow: var(--shadow_focus-brand);
+  @apply shadow-focus-brand;
 }
 
 .storybook-textfield__mobile {
@@ -460,9 +428,9 @@ button.storybook-textfield__field {
   min-width: 70px;
 
   justify-content: center;
-  gap: var(--spacing_1);
+  @apply gap-1;
 
-  padding: var(--spacing_3) var(--spacing_2);
+  @apply px-2 py-3;
 
   border-radius: var(--spacing_2) 0 0 var(--spacing_2);
 }
@@ -487,8 +455,7 @@ button.storybook-textfield__field {
   border: 1px solid var(--neutral_100);
   border-radius: var(--spacing_2);
 
-  background: var(--neutral_00);
-  box-shadow: var(--shadow_sm);
+  @apply bg-neutral-0 shadow-sm;
 
   animation: storybook-textfield-popover-enter 150ms ease-out;
   transform-origin: top center;
@@ -521,15 +488,11 @@ button.storybook-textfield__field {
 .storybook-textfield__helper {
   width: 100%;
 
-  font-size: var(--type-text-xs-size);
-  line-height: var(--type-text-xs-line);
-  font-weight: 400;
-
-  color: var(--neutral_600);
+  @apply text-ds-text-xs font-normal text-neutral-600;
 }
 
 .storybook-textfield__helper--error {
-  color: var(--error_600);
+  @apply text-error-600;
 }
 
 .storybook-textfield__color-preview {
@@ -547,16 +510,14 @@ button.storybook-textfield__field {
 
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_3);
+  @apply gap-3;
 
-  margin-top: var(--spacing_3);
-  padding: var(--spacing_4);
+  @apply mt-3 p-4;
 
   border: 1px solid var(--neutral_100);
   border-radius: var(--spacing_2);
 
-  background: var(--neutral_00);
-  box-shadow: var(--shadow_lg);
+  @apply bg-neutral-0 shadow-lg;
 
   box-sizing: border-box;
 
@@ -575,22 +536,19 @@ button.storybook-textfield__field {
   border: 1px solid var(--neutral_200);
   border-radius: var(--spacing_2);
 
-  background: var(--neutral_00);
+  @apply bg-neutral-0;
   box-sizing: border-box;
 
-  font-size: var(--type-text-sm-size);
-  line-height: var(--type-text-sm-line);
-
-  color: var(--neutral_700);
+  @apply text-ds-text-sm text-neutral-700;
 }
 
 .storybook-textfield__colorpicker-input::placeholder {
-  color: var(--neutral_300);
+  @apply text-neutral-300;
 }
 
 .storybook-textfield__colorpicker-input:focus {
   outline: none;
-  border-color: var(--neutral_500);
+  @apply border-neutral-500;
 }
 
 .react-colorful {
@@ -631,7 +589,7 @@ button.storybook-textfield__field {
   border: 4px solid var(--neutral_00) !important;
   border-radius: 999px !important;
 
-  box-shadow: var(--shadow_md);
+  @apply shadow-md;
 
   box-sizing: border-box;
 }
@@ -689,8 +647,7 @@ button.storybook-textfield__field {
   border: 4px solid var(--neutral_00);
   border-radius: 999px;
 
-  background: var(--neutral_00);
-  box-shadow: var(--shadow_md);
+  @apply bg-neutral-0 shadow-md;
 }
 
 .storybook-textfield__opacity-slider::-moz-range-thumb {
@@ -700,8 +657,7 @@ button.storybook-textfield__field {
   border: 4px solid var(--neutral_00);
   border-radius: 999px;
 
-  background: var(--neutral_00);
-  box-shadow: var(--shadow_md);
+  @apply bg-neutral-0 shadow-md;
 }
 
 @keyframes storybook-textfield-popover-enter {
@@ -719,22 +675,18 @@ button.storybook-textfield__field {
 .textfield-story-grid {
   display: grid;
   grid-template-columns: repeat(3, 296px);
-  gap: var(--spacing_10);
+  @apply gap-10;
   align-items: start;
 }
 
 .textfield-story-item {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_3);
+  @apply gap-3;
 }
 
 .textfield-story-label {
   margin: 0;
 
-  font-size: var(--type-text-sm-size);
-  line-height: var(--type-text-sm-line);
-  font-weight: 600;
-
-  color: var(--neutral_900);
+  @apply text-ds-text-sm font-semibold text-neutral-900;
 }

@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
 
-  padding: var(--spacing_3) var(--spacing_6) var(--spacing_4);
+  @apply px-6 pb-4 pt-3;
 
   border-top: 1px solid var(--neutral_200);
 
@@ -49,7 +49,7 @@
 
   flex-shrink: 0;
 
-  background: var(--neutral_200);
+  @apply bg-neutral-200;
 }
 
 .storybook-pagination-button {
@@ -59,21 +59,19 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing_2);
+  @apply gap-2;
 
   padding: 10px var(--spacing_4);
 
   border: 1px solid var(--neutral_200);
   border-radius: 0;
 
-  background: var(--neutral_00);
-  color: var(--neutral_700);
+  @apply bg-neutral-0 text-neutral-700;
 
   box-sizing: border-box;
 
-  font-family: var(--font_family_base);
-
   cursor: pointer;
+  @apply font-sans;
 
   transition:
     background-color 160ms ease,
@@ -83,27 +81,22 @@
 
 .storybook-pagination-button:hover,
 .storybook-pagination-button--active {
-  background: var(--neutral_50);
-  color: var(--neutral_900);
+  @apply bg-neutral-50 text-neutral-900;
 }
 
 .storybook-pagination-button:disabled {
-  color: var(--neutral_300);
-  background: var(--neutral_00);
   cursor: not-allowed;
+  @apply bg-neutral-0 text-neutral-300;
 }
 
 .storybook-pagination-button:disabled:hover {
-  color: var(--neutral_300);
-  background: var(--neutral_00);
+  @apply bg-neutral-0 text-neutral-300;
 }
 
 .storybook-pagination-button:focus-visible,
 .storybook-pagination-button--focused {
   outline: none;
-  background: var(--neutral_50);
-  color: var(--neutral_900);
-  box-shadow: var(--shadow_focus-brand);
+  @apply bg-neutral-50 text-neutral-900 shadow-focus-brand;
   z-index: 1;
 }
 
@@ -142,7 +135,7 @@
 .pagination-story-stack,
 .pagination-story-buttons {
   display: flex;
-  gap: var(--spacing_4);
+  @apply gap-4;
 }
 
 .pagination-story-surface {
@@ -151,7 +144,7 @@
   align-items: stretch;
   flex-direction: column;
 
-  padding: var(--spacing_6);
+  @apply p-6;
 
   box-sizing: border-box;
 }

@@ -6,9 +6,7 @@
   align-items: stretch;
   overflow: hidden;
 
-  border-radius: var(--spacing_2);
-  background: var(--neutral_00);
-  box-shadow: var(--shadow_sm);
+  @apply rounded-2 bg-neutral-0 shadow-sm;
 
   animation: storybook-dropdown-list-enter 140ms ease-out;
   transform-origin: top center;
@@ -20,15 +18,15 @@
 
   display: flex;
   align-items: center;
-  gap: var(--spacing_2);
+  @apply gap-2;
 
-  padding: var(--spacing_3) var(--spacing_4);
+  @apply px-4 py-3;
 
   border: 0;
   background: transparent;
 
-  color: var(--neutral_600);
   cursor: pointer;
+  @apply text-neutral-600;
 
   transition:
     background-color 140ms ease,
@@ -36,21 +34,20 @@
 }
 
 .storybook-dropdown-list__item:hover {
-  background: var(--neutral_25);
+  @apply bg-neutral-25;
 }
 
 .storybook-dropdown-list__item--active {
-  background: var(--neutral_50);
-  color: var(--neutral_800);
+  @apply bg-neutral-50 text-neutral-800;
 }
 
 .storybook-dropdown-list__item--active .storybook-dropdown-list__icon {
-  color: var(--brand_400);
+  @apply text-brand-400;
 }
 
 .storybook-dropdown-list__item--disabled {
-  color: var(--neutral_300);
   cursor: not-allowed;
+  @apply text-neutral-300;
 }
 
 .storybook-dropdown-list__item--disabled:hover {
@@ -58,7 +55,7 @@
 }
 
 .storybook-dropdown-list__item--destructive {
-  color: var(--error_600);
+  @apply text-error-600;
 }
 
 .storybook-dropdown-list__label {
@@ -86,8 +83,7 @@
   align-items: center;
   justify-content: center;
 
-  font-size: var(--type-text-sm-size);
-  line-height: var(--type-text-sm-line);
+  @apply text-ds-text-sm;
 }
 
 .storybook-dropdown-list__checkbox {
@@ -98,27 +94,19 @@
   align-items: center;
   justify-content: center;
 
-  border: 1px solid var(--neutral_300);
-  border-radius: var(--spacing_1);
-  background: var(--neutral_00);
-
-  color: var(--neutral_00);
+  @apply rounded-1 border border-neutral-300 bg-neutral-0 text-neutral-0;
 }
 
 .storybook-dropdown-list__checkbox--checked {
-  border-color: var(--brand_400);
-  background: var(--brand_400);
+  @apply border-brand-400 bg-brand-400;
 }
 
 .storybook-dropdown-list__checkbox--disabled {
-  border-color: var(--neutral_200);
-  background: var(--neutral_25);
-  color: var(--neutral_00);
+  @apply border-neutral-200 bg-neutral-25 text-neutral-0;
 }
 
 .storybook-dropdown-list__checkbox--checked.storybook-dropdown-list__checkbox--disabled {
-  border-color: var(--brand_100);
-  background: var(--brand_100);
+  @apply border-brand-100 bg-brand-100;
 }
 
 .storybook-dropdown-list__radio {
@@ -131,12 +119,11 @@
 
   border: 1px solid var(--neutral_300);
   border-radius: 999px;
-  background: var(--neutral_00);
+  @apply border-neutral-300 bg-neutral-0;
 }
 
 .storybook-dropdown-list__radio--checked {
-  border-color: var(--brand_400);
-  background: var(--brand_50);
+  @apply border-brand-400 bg-brand-50;
 }
 
 .storybook-dropdown-list__radio-dot {
@@ -148,21 +135,19 @@
 }
 
 .storybook-dropdown-list__radio--checked .storybook-dropdown-list__radio-dot {
-  background: var(--brand_400);
+  @apply bg-brand-400;
 }
 
 .storybook-dropdown-list__radio--disabled {
-  border-color: var(--neutral_200);
-  background: var(--neutral_25);
+  @apply border-neutral-200 bg-neutral-25;
 }
 
 .storybook-dropdown-list__radio--checked.storybook-dropdown-list__radio--disabled {
-  border-color: var(--brand_100);
-  background: var(--brand_25);
+  @apply border-brand-100 bg-brand-25;
 }
 
 .storybook-dropdown-list__radio--disabled .storybook-dropdown-list__radio-dot {
-  background: var(--brand_100);
+  @apply bg-brand-100;
 }
 
 .storybook-dropdown-list__toggle {
@@ -172,24 +157,24 @@
   display: inline-flex;
   align-items: center;
 
-  padding: var(--spacing_0_5);
+  @apply p-0.5;
 
   border-radius: 999px;
-  background: var(--neutral_100);
+  @apply bg-neutral-100;
 }
 
 .storybook-dropdown-list__toggle--checked {
   justify-content: flex-end;
 
-  background: var(--brand_400);
+  @apply bg-brand-400;
 }
 
 .storybook-dropdown-list__toggle--disabled {
-  background: var(--neutral_50);
+  @apply bg-neutral-50;
 }
 
 .storybook-dropdown-list__toggle--checked.storybook-dropdown-list__toggle--disabled {
-  background: var(--brand_100);
+  @apply bg-brand-100;
 }
 
 .storybook-dropdown-list__toggle-thumb {
@@ -197,8 +182,7 @@
   height: 16px;
 
   border-radius: 999px;
-  background: var(--neutral_00);
-  box-shadow: var(--shadow_sm);
+  @apply bg-neutral-0 shadow-sm;
 
   transition: transform 160ms ease;
 }
@@ -218,6 +202,6 @@
 .storybook-dropdown-list-story-grid {
   display: grid;
   grid-template-columns: repeat(3, 240px);
-  gap: var(--spacing_24) var(--spacing_16);
+  @apply gap-x-16 gap-y-24;
   align-items: start;
 }

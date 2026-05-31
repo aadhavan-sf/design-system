@@ -8,9 +8,7 @@
   width: 16px;
   height: 16px;
 
-  color: var(--neutral_400);
-
-  font-family: var(--font_family_base);
+  @apply font-sans text-neutral-400;
 }
 
 .storybook-help-icon__trigger {
@@ -51,45 +49,40 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--spacing_1);
+  @apply gap-1;
 
   min-width: max-content;
   max-width: 320px;
-  padding: var(--spacing_2) var(--spacing_3);
+  @apply px-3 py-2;
 
   border-radius: var(--radius_8, 8px);
-  background: var(--neutral_900);
-  color: var(--neutral_00);
-  box-shadow: var(--shadow_md);
+  @apply bg-neutral-900 text-neutral-0 shadow-md;
 }
 
 .storybook-help-icon__popover--supporting .storybook-help-icon__content {
   width: 296px;
   min-width: 296px;
-  padding: var(--spacing_3);
+  @apply p-3;
 }
 
 .storybook-help-icon__title,
 .storybook-help-icon__description {
   display: block;
-  color: var(--neutral_00);
-
-  font-size: var(--type-text-xs-size);
-  line-height: var(--type-text-xs-line);
+  @apply text-ds-text-xs text-neutral-0;
 }
 
 .storybook-help-icon__title {
-  font-weight: 500;
   white-space: nowrap;
+  @apply font-medium;
 }
 
 .storybook-help-icon__popover--supporting .storybook-help-icon__title {
-  font-weight: 600;
   white-space: normal;
+  @apply font-semibold;
 }
 
 .storybook-help-icon__description {
-  font-weight: 400;
+  @apply font-normal;
 }
 
 .storybook-help-icon__popover--top-no-arrow,
@@ -166,11 +159,11 @@
 }
 
 .storybook-help-icon__popover--top-left::after {
-  margin-right: var(--spacing_6);
+  @apply mr-6;
 }
 
 .storybook-help-icon__popover--top-right::after {
-  margin-left: var(--spacing_6);
+  @apply ml-6;
 }
 
 .storybook-help-icon__popover--bottom::after {
@@ -200,19 +193,19 @@
 }
 
 .help-icon-story-grid {
-  gap: var(--spacing_4);
+  @apply gap-4;
 }
 
 .help-icon-story-stack {
   flex-direction: column;
-  gap: var(--spacing_16);
+  @apply gap-16;
 
   min-width: 320px;
-  padding: var(--spacing_16);
+  @apply p-16;
 }
 
 .help-icon-story-stack--wide {
-  gap: var(--spacing_24);
+  @apply gap-24;
   min-width: 460px;
 }
 

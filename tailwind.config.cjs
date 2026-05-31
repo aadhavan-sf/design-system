@@ -92,7 +92,10 @@ module.exports = {
       },
       borderRadius: {
         1: 'var(--spacing_1)',
+        1.5: 'var(--spacing_1_5)',
+        2: 'var(--spacing_2)',
         3: 'var(--spacing_3)',
+        6: 'var(--spacing_6)',
         ds: 'var(--radius_8)',
       },
       boxShadow: {

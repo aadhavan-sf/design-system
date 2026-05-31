@@ -9,11 +9,9 @@
   border: 1px solid transparent;
   border-radius: var(--radius_8, 8px);
 
-  font-family: var(--font_family_base);
-  font-weight: 600;
   text-decoration: none;
 
-  box-shadow: var(--shadow_xs);
+  @apply font-sans font-semibold shadow-xs;
 
   transition:
     background-color 160ms ease,
@@ -33,134 +31,105 @@
 }
 
 .storybook-button--primary {
-  background-color: var(--brand_400);
-  border-color: var(--brand_400);
-  color: var(--neutral_00);
+  @apply border-brand-400 bg-brand-400 text-neutral-0;
 }
 
 .storybook-button--primary:hover:not(:disabled) {
-  background-color: var(--brand_700);
-  border-color: var(--brand_700);
-
-  box-shadow: var(--shadow_sm);
+  @apply border-brand-700 bg-brand-700 shadow-sm;
 }
 
 .storybook-button--primary:focus-visible,
 .storybook-button--primary.storybook-button--focus {
-  background-color: var(--brand_400);
-  border-color: var(--brand_400);
-
-  box-shadow: var(--shadow_focus-brand);
+  @apply border-brand-400 bg-brand-400 shadow-focus-brand;
 }
 
 .storybook-button--primary:disabled {
-  background-color: var(--brand_200);
-  border-color: var(--brand_200);
-  color: var(--neutral_00);
+  @apply border-brand-200 bg-brand-200 text-neutral-0;
 }
 
 .storybook-button--secondary {
   background-color: transparent;
-  border-color: var(--neutral_300);
-  color: var(--neutral_700);
+  @apply border-neutral-300 text-neutral-700;
 }
 
 .storybook-button--secondary:hover:not(:disabled) {
-  background-color: var(--neutral_50);
-  border-color: var(--neutral_300);
-  color: var(--neutral_800);
-
-  box-shadow: var(--shadow_sm);
+  @apply border-neutral-300 bg-neutral-50 text-neutral-800 shadow-sm;
 }
 
 .storybook-button--secondary:focus-visible,
 .storybook-button--secondary.storybook-button--focus {
   background-color: transparent;
-  border-color: var(--neutral_300);
-  color: var(--neutral_700);
-
-  box-shadow: var(--shadow_focus-neutral);
+  @apply border-neutral-300 text-neutral-700 shadow-focus-neutral;
 }
 
 .storybook-button--secondary:disabled {
   background-color: transparent;
-  border-color: var(--neutral_200);
-  color: var(--neutral_300);
+  @apply border-neutral-200 text-neutral-300;
 }
 
 .storybook-button--link-grey {
   background-color: transparent;
   border-color: transparent;
-  color: var(--neutral_600);
-
   padding: 0;
 
   box-shadow: none;
+  @apply text-neutral-600;
 }
 
 .storybook-button--link-grey:hover:not(:disabled) {
-  color: var(--neutral_800);
+  @apply text-neutral-800;
 }
 
 .storybook-button--link-grey:focus-visible,
 .storybook-button--link-grey.storybook-button--focus {
-  color: var(--neutral_600);
   box-shadow: none;
+  @apply text-neutral-600;
 }
 
 .storybook-button--link-grey:disabled {
-  color: var(--neutral_300);
+  @apply text-neutral-300;
 }
 
 .storybook-button--link-color {
   background-color: transparent;
   border-color: transparent;
-  color: var(--brand_400);
-
   padding: 0;
 
   box-shadow: none;
+  @apply text-brand-400;
 }
 
 .storybook-button--link-color:hover:not(:disabled) {
-  color: var(--brand_700);
+  @apply text-brand-700;
 }
 
 .storybook-button--link-color:focus-visible,
 .storybook-button--link-color.storybook-button--focus {
-  color: var(--brand_400);
   box-shadow: none;
+  @apply text-brand-400;
 }
 
 .storybook-button--link-color:disabled {
-  color: var(--neutral_300);
+  @apply text-neutral-300;
 }
 
 /* Primary Destructive */
 
 .storybook-button--primary.storybook-button--destructive {
-  background-color: var(--error_600);
-  border-color: var(--error_600);
-  color: var(--neutral_00);
+  @apply border-error-600 bg-error-600 text-neutral-0;
 }
 
 .storybook-button--primary.storybook-button--destructive:hover:not(:disabled) {
-  background-color: var(--error_700);
-  border-color: var(--error_700);
+  @apply border-error-700 bg-error-700;
 }
 
 .storybook-button--primary.storybook-button--destructive:focus-visible,
 .storybook-button--primary.storybook-button--destructive.storybook-button--focus {
-  background-color: var(--error_600);
-  border-color: var(--error_600);
-
-  box-shadow: var(--shadow_focus-error);
+  @apply border-error-600 bg-error-600 shadow-focus-error;
 }
 
 .storybook-button--primary.storybook-button--destructive:disabled {
-  background-color: var(--error_300);
-  border-color: var(--error_300);
-  color: var(--neutral_00);
+  @apply border-error-300 bg-error-300 text-neutral-0;
 }
 
 /* Link Destructive */
@@ -168,45 +137,37 @@
 .storybook-button--link-color.storybook-button--destructive {
   background-color: transparent;
   border-color: transparent;
-  color: var(--error_600);
-
   box-shadow: none;
+  @apply text-error-600;
 }
 
 .storybook-button--link-color.storybook-button--destructive:hover:not(:disabled) {
-  color: var(--error_700);
+  @apply text-error-700;
 }
 
 .storybook-button--link-color.storybook-button--destructive:focus-visible,
 .storybook-button--link-color.storybook-button--destructive.storybook-button--focus {
-  color: var(--error_600);
-
   box-shadow: none;
+  @apply text-error-600;
 }
 
 .storybook-button--link-color.storybook-button--destructive:disabled {
-  color: var(--error_300);
+  @apply text-error-300;
 }
 
 .storybook-button--small {
   padding: var(--spacing_2) 14px;
-  font-size: var(--type-text-sm-size);
-  line-height: var(--type-text-sm-line);
+  @apply text-ds-text-sm;
 }
 .storybook-button--medium {
-  padding: var(--spacing_2_5) var(--spacing_4);
-  font-size: var(--type-text-sm-size);
-  line-height: var(--type-text-sm-line);
+  @apply px-4 py-2.5 text-ds-text-sm;
 }
 .storybook-button--large {
   padding: var(--spacing_2_5) 18px;
-  font-size: var(--type-text-md-size);
-  line-height: var(--type-text-md-line);
+  @apply text-ds-text-md;
 }
 .storybook-button--xlarge {
-  padding: var(--spacing_3) var(--spacing_5);
-  font-size: var(--type-text-md-size);
-  line-height: var(--type-text-md-line);
+  @apply px-5 py-3 text-ds-text-md;
 }
 
 .storybook-button__content {
@@ -214,7 +175,7 @@
   align-items: center;
   justify-content: center;
 
-  gap: var(--spacing_2);
+  @apply gap-2;
 }
 
 .storybook-button__icon--left,
@@ -243,15 +204,15 @@
 }
 
 .storybook-button--icon-only.storybook-button--small {
-  padding: var(--spacing_2);
+  @apply p-2;
 }
 
 .storybook-button--icon-only.storybook-button--medium {
-  padding: var(--spacing_2_5);
+  @apply p-2.5;
 }
 
 .storybook-button--icon-only.storybook-button--large {
-  padding: var(--spacing_3);
+  @apply p-3;
 }
 
 .storybook-button--icon-only.storybook-button--xlarge {
