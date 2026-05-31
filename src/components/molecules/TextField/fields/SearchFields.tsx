@@ -20,7 +20,10 @@ export function SearchFields({
   return (
     <div className={getFieldClassName({ state, hasValue })}>
       <MagnifyingGlass
-        className="storybook-textfield__leading-icon"
+        className={[
+          'shrink-0',
+          state === 'error' ? 'text-error-600' : state === 'disabled' ? 'text-neutral-300' : 'text-neutral-600',
+        ].join(' ')}
         size={20}
         weight="regular"
       />
@@ -30,14 +33,14 @@ export function SearchFields({
         disabled={disabled}
         placeholder={placeholder}
         onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
-        className="storybook-textfield__search-input"
+        className="min-w-0 flex-1 border-0 bg-transparent p-0 font-sans text-sm font-normal leading-normal text-neutral-700 placeholder:font-sans placeholder:text-sm placeholder:font-normal placeholder:leading-normal placeholder:tracking-normal placeholder:text-neutral-300 focus:outline-none [&::-webkit-search-cancel-button]:hidden"
       />
 
       {showClearButton && (
         <button
           type="button"
           aria-label="Clear search"
-          className="storybook-textfield__clear-button"
+          className="inline-flex h-5 w-5 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-neutral-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-400"
           onClick={() => onChange('')}
         >
           <X size={20} weight="regular" />

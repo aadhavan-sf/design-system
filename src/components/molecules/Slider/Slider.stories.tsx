@@ -2,6 +2,7 @@
 import { useArgs } from 'storybook/preview-api';
 
 import { Slider } from './Slider';
+import './slider.css';
 
 export default {
   title: 'Molecules/Slider',

@@ -87,7 +87,7 @@ export const Playground: Story = {
 
 export const Sizes: Story = {
   render: () => (
-    <div className="checkbox-story-row">
+    <div className="flex items-center gap-12">
       <CheckBox size="sm" />
       <CheckBox size="sm" defaultPressed />
       <CheckBox size="sm" defaultIndeterminate />
@@ -100,9 +100,9 @@ export const Sizes: Story = {
 
 export const States: Story = {
   render: () => (
-    <div className="checkbox-story-stack">
+    <div className="flex flex-col items-center gap-8">
       {states.map((state) => (
-        <div key={state} className="checkbox-story-row">
+        <div key={state} className="flex items-center gap-12">
           <CheckBox size="sm" state={state} />
           <CheckBox size="sm" state={state} defaultPressed />
           <CheckBox size="sm" state={state} defaultIndeterminate />

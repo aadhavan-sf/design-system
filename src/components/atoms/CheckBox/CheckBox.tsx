@@ -8,8 +8,6 @@ import {
   Minus,
 } from '@phosphor-icons/react';
 
-import './checkBox.css';
-
 export type CheckBoxSize = 'sm' | 'mid';
 export type CheckBoxState = 'default' | 'hover' | 'focus' | 'disabled';
 
@@ -23,6 +21,10 @@ export interface CheckBoxProps extends Omit<ButtonHTMLAttributes<HTMLButtonEleme
   onPressedChange?: (pressed: boolean) => void;
   onIndeterminateChange?: (indeterminate: boolean) => void;
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+}
+
+function buildClassName(parts: Array<string | false | null | undefined>) {
+  return parts.filter(Boolean).join(' ');
 }
 
 export function CheckBox({
@@ -86,26 +88,38 @@ export function CheckBox({
   const iconSize =
     size === 'mid' ? 14 : 12;
 
+  const buttonClassName = buildClassName([
+    'inline-flex cursor-pointer items-center justify-center border border-solid p-0 transition-[background-color,border-color,box-shadow] duration-[160ms] focus-visible:outline-none focus-visible:shadow-focus-brand disabled:cursor-not-allowed',
+    size === 'mid' ? 'h-5 w-5 rounded' : 'h-4 w-4 rounded',
+    isDisabled
+      ? isActive
+        ? 'border-primary-100 bg-primary-100'
+        : 'border-neutral-200 bg-neutral-50'
+      : isActive
+        ? 'border-primary-400 bg-primary-400'
+        : state === 'hover'
+          ? 'border-primary-400 bg-neutral-0'
+          : 'border-neutral-300 bg-neutral-0',
+    state === 'focus' && 'shadow-focus-brand',
+    className,
+  ]);
+
   return (
     <button
       type="button"
       role="checkbox"
       aria-checked={isIndeterminate ? 'mixed' : isPressed}
       disabled={isDisabled}
-      className={[
-        'storybook-checkbox',
-        `storybook-checkbox--${size}`,
-        `storybook-checkbox--${state}`,
-        isActive && 'storybook-checkbox--active',
-        isIndeterminate && 'storybook-checkbox--indeterminate',
-        className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
+      className={buttonClassName}
       {...props}
       onClick={handleClick}
     >
-      <span className="storybook-checkbox__icon">
+      <span
+        className={buildClassName([
+          'flex items-center justify-center text-neutral-0 opacity-0 transition-opacity duration-[160ms]',
+          isActive && 'opacity-100',
+        ])}
+      >
         {isIndeterminate ? (
           <Minus
             size={iconSize}

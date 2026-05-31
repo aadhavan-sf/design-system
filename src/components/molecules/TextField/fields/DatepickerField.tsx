@@ -91,7 +91,7 @@ export function DatepickerField({
   };
 
   return (
-    <div className="storybook-textfield__date-wrapper">
+    <div className="relative w-full">
       <input
         type="text"
         value={value}
@@ -100,14 +100,14 @@ export function DatepickerField({
         onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
         onClick={handleOpen}
         onFocus={handleOpen}
-        className={getFieldClassName({ state, hasValue })}
+        className={getFieldClassName({ state, hasValue, className: 'pr-[42px]' })}
       />
       <button
         type="button"
         disabled={disabled}
         className={buildClassName([
-          'storybook-textfield__date-button',
-          state === 'error' && 'storybook-textfield__date-button--error',
+          'absolute right-[14px] top-[13px] inline-flex h-5 w-5 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-neutral-700 focus-visible:outline-none focus-visible:shadow-focus-brand disabled:cursor-not-allowed disabled:text-neutral-300',
+          state === 'error' && 'text-error-600',
         ])}
         aria-label="Open date picker"
         onClick={handleOpen}
@@ -119,7 +119,7 @@ export function DatepickerField({
       </button>
 
       {isOpen && !disabled && (
-        <div className="storybook-textfield__datepicker-panel">
+        <div className="textfield-popover-enter absolute left-0 top-[calc(100%+8px)] z-[100] origin-top">
           <TextFieldDatePicker
             type={datePickerType}
             {...datePickerProps}

@@ -500,7 +500,7 @@ export function TextField({
         label={label}
         labelText={labelText}
         tooltip={tooltip}
-        className={fluid ? 'storybook-textfield--fluid' : undefined}
+        className={fluid ? 'w-full' : undefined}
         tooltipClassName={tooltipClassName}
         tooltipDescription={tooltipDescription}
         tooltipOpen={tooltipOpen}

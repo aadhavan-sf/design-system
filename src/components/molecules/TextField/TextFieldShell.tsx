@@ -46,19 +46,17 @@ export function TextFieldShell({
   return (
     <div
       className={buildClassName([
-        'storybook-textfield',
-        `storybook-textfield--${type}`,
+        'flex w-[296px] flex-col gap-1',
         className,
       ])}
     >
       {label && type !== 'search' && (
-        <div className="storybook-textfield__header">
+        <div className="flex w-full items-center gap-1">
           <Text
             as="label"
             variant="text-sm"
             weight="medium"
             color="var(--neutral_600)"
-            className="storybook-textfield__label"
           >
             {labelText}
           </Text>
@@ -66,7 +64,7 @@ export function TextFieldShell({
           {tooltip && (
             <HelpIcon
               className={buildClassName([
-                'storybook-textfield__tooltip',
+                'flex h-4 w-4 items-center justify-center text-neutral-600',
                 tooltipClassName,
               ])}
               open={tooltipOpen}
@@ -83,7 +81,7 @@ export function TextFieldShell({
               variant="text-xs"
               weight="semibold"
               color="var(--error_600)"
-              className="storybook-textfield__required"
+              className="w-[6px]"
             >
               *
             </Text>
@@ -99,10 +97,7 @@ export function TextFieldShell({
           variant="text-xs"
           weight="regular"
           color={isError ? 'var(--error_600)' : 'var(--neutral_600)'}
-          className={buildClassName([
-            'storybook-textfield__helper',
-            isError && 'storybook-textfield__helper--error',
-          ])}
+          className="w-full"
         >
           {isError ? errorText : helperText}
         </Text>

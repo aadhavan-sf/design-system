@@ -24,8 +24,6 @@ import { Button } from '../../molecules/Button';
 import { Pagination } from '../../molecules/Pagination';
 import { Text } from '../../foundations/Typography';
 
-import './table.css';
-
 const HEADER_ARROWS = ['none', 'down', 'up'];
 const TABLE_STATES = ['default', 'hover', 'disabled'];
 const CELL_TYPES = [
@@ -112,6 +110,11 @@ const DEFAULT_ROWS = [
   },
 ];
 
+const cloudIconBackground = {
+  background:
+    'radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.8) 0 32%, transparent 34%), linear-gradient(135deg, var(--neutral_100) 0%, var(--neutral_300) 100%)',
+};
+
 function buildClassName(parts) {
   return parts.filter(Boolean).join(' ');
 }
@@ -180,8 +183,8 @@ export function TableHeader({
   return (
     <span
       className={buildClassName([
-        'storybook-table-header-label',
-        `storybook-table-header-label--${resolvedState}`,
+        'inline-flex min-w-0 items-center gap-1 text-neutral-700',
+        resolvedState === 'disabled' && 'text-neutral-300',
         className,
       ])}
     >
@@ -196,7 +199,7 @@ export function TableHeader({
       {helpIcon && (
         <Question
           aria-hidden="true"
-          className="storybook-table-header-label__icon"
+          className="shrink-0"
           size={16}
           weight="regular"
         />
@@ -204,7 +207,7 @@ export function TableHeader({
       {resolvedArrow !== 'none' && (
         <ArrowIcon
           aria-hidden="true"
-          className="storybook-table-header-label__icon"
+          className="shrink-0"
           size={16}
           weight="regular"
         />
@@ -229,6 +232,7 @@ export function TableHeaderCell({
   helpIcon = false,
   text = true,
   state = 'default',
+  className,
 }) {
   const resolvedColor = normalizeValue(color, {
     White: 'white',
@@ -238,9 +242,10 @@ export function TableHeaderCell({
   return (
     <div
       className={buildClassName([
-        'storybook-table-header-cell',
-        `storybook-table-header-cell--${resolvedColor}`,
-        !text && 'storybook-table-header-cell--empty',
+        'box-border flex h-11 min-w-0 items-center gap-3 border-b border-solid border-neutral-200 bg-neutral-00 px-6 py-3',
+        resolvedColor === 'gray' && 'bg-neutral-25',
+        !text && 'justify-center',
+        className,
       ])}
       role="columnheader"
     >
@@ -265,12 +270,13 @@ TableHeaderCell.propTypes = {
   helpIcon: PropTypes.bool,
   text: PropTypes.bool,
   state: PropTypes.oneOf([...TABLE_STATES, 'Default', 'Hover', 'Disabled']),
+  className: PropTypes.string,
 };
 
 function StatusIcon({ icon }) {
   const iconProps = {
     'aria-hidden': true,
-    className: 'storybook-table-chip__icon',
+    className: 'shrink-0',
     size: 12,
     weight: 'regular',
   };
@@ -297,14 +303,22 @@ function TableChip({
   tone = 'success',
 }) {
   return (
-    <span className={buildClassName(['storybook-table-chip', `storybook-table-chip--${tone}`])}>
+    <span
+      className={buildClassName([
+        'inline-flex items-center justify-center gap-1 rounded-2 px-2 py-1',
+        tone === 'error' && 'bg-error-50 text-error-600',
+        tone === 'info' && 'bg-information-50 text-information-700',
+        tone === 'success' && 'bg-success-50 text-success-700',
+        tone === 'warning' && 'bg-warning-50 text-warning-700',
+      ])}
+    >
       {icon && <StatusIcon icon={icon} />}
       <Text
         as="span"
         variant="text-xs"
         weight="medium"
         color="currentColor"
-        className="storybook-table-chip__label"
+        className="shrink-0"
       >
         {label}
       </Text>
@@ -324,17 +338,17 @@ function DeliveryBar({ value = 72 }) {
   const error = 10;
 
   return (
-    <span className="storybook-table-delivery">
+    <span className="flex h-2 w-full overflow-hidden rounded-4">
       <span
-        className="storybook-table-delivery__segment storybook-table-delivery__segment--success"
+        className="bg-success-300"
         style={{ flexGrow: green }}
       />
       <span
-        className="storybook-table-delivery__segment storybook-table-delivery__segment--warning"
+        className="bg-warning-200"
         style={{ flexGrow: warning }}
       />
       <span
-        className="storybook-table-delivery__segment storybook-table-delivery__segment--error"
+        className="bg-error-500"
         style={{ flexGrow: error }}
       />
     </span>
@@ -351,15 +365,15 @@ function AvatarBlock({
   supportingValue = 'olivia@untitledui.com',
 }) {
   return (
-    <span className="storybook-table-avatar-cell">
-      <span className="storybook-table-avatar" aria-hidden="true" />
-      <span className="storybook-table-avatar-cell__copy">
+    <span className="inline-flex min-w-0 items-center gap-3">
+      <span className="h-10 w-10 shrink-0 rounded-full bg-[radial-gradient(circle_at_48%_35%,#2d1f18_0_16%,transparent_17%),radial-gradient(circle_at_50%_88%,#8b4f3a_0_34%,transparent_35%),linear-gradient(135deg,#f6d5bf_0%,#c88361_100%)]" aria-hidden="true" />
+      <span className="flex min-w-0 flex-col">
         <Text
           as="span"
           variant="text-sm"
           weight="medium"
           color="var(--neutral_800)"
-          className="storybook-table-cell__truncate"
+          className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
         >
           {value}
         </Text>
@@ -369,7 +383,7 @@ function AvatarBlock({
             variant="text-sm"
             weight="regular"
             color="var(--neutral_600)"
-            className="storybook-table-cell__truncate"
+            className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
           >
             {supportingValue}
           </Text>
@@ -389,11 +403,11 @@ function ActionButtons({ actionIcon = 'eye' }) {
   const FirstIcon = actionIcon === 'edit' ? PencilSimple : Eye;
 
   return (
-    <span className="storybook-table-actions">
-      <button type="button" className="storybook-table-action" aria-label={actionIcon === 'edit' ? 'Edit' : 'View'}>
+    <span className="inline-flex items-center gap-1">
+      <button type="button" className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-2 border-0 bg-transparent p-1 text-neutral-600 enabled:hover:bg-neutral-50 enabled:hover:text-neutral-800 focus-visible:outline-none focus-visible:shadow-focus-brand" aria-label={actionIcon === 'edit' ? 'Edit' : 'View'}>
         <FirstIcon size={20} weight="regular" />
       </button>
-      <button type="button" className="storybook-table-action" aria-label="More actions">
+      <button type="button" className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-2 border-0 bg-transparent p-1 text-neutral-600 enabled:hover:bg-neutral-50 enabled:hover:text-neutral-800 focus-visible:outline-none focus-visible:shadow-focus-brand" aria-label="More actions">
         <DotsThreeVertical size={20} weight="bold" />
       </button>
     </span>
@@ -414,6 +428,7 @@ export function TableCell({
   supportingValue,
   trend = '20%',
   value = 'Olivia Rhye',
+  className,
 }) {
   const resolvedState = getResolvedState(state);
   const resolvedStyle = normalizeValue(style, {
@@ -432,9 +447,12 @@ export function TableCell({
   return (
     <div
       className={buildClassName([
-        'storybook-table-cell',
-        `storybook-table-cell--${resolvedStyle}`,
-        `storybook-table-cell--${resolvedState}`,
+        'box-border flex h-[72px] min-w-0 items-center gap-3 border-b border-solid border-neutral-200 bg-neutral-00 p-6',
+        resolvedStyle === 'actions' && 'justify-center gap-2 px-4 py-5',
+        (resolvedStyle === 'badge' || resolvedStyle === 'badges') && 'justify-start',
+        resolvedState === 'hover' && 'bg-neutral-50',
+        resolvedState === 'disabled' && 'bg-neutral-25 text-neutral-300',
+        className,
       ])}
       role="cell"
     >
@@ -444,7 +462,7 @@ export function TableCell({
           variant="text-sm"
           weight="semibold"
           color="var(--neutral_800)"
-          className="storybook-table-cell__truncate"
+          className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
         >
           {value}
         </Text>
@@ -455,7 +473,7 @@ export function TableCell({
           variant="text-sm"
           weight="regular"
           color="var(--neutral_600)"
-          className="storybook-table-cell__truncate"
+          className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
         >
           {value}
         </Text>
@@ -468,7 +486,7 @@ export function TableCell({
             variant="text-sm"
             weight="semibold"
             color="var(--neutral_800)"
-            className="storybook-table-cell__truncate"
+            className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
           >
             {value}
           </Text>
@@ -489,7 +507,7 @@ export function TableCell({
         />
       )}
       {resolvedStyle === 'badges' && (
-        <span className="storybook-table-badges">
+        <span className="inline-flex min-w-0 items-center gap-1">
           {resolvedBadges.map((badge, index) => (
             <TableChip
               key={`${badge.label}-${index}`}
@@ -539,6 +557,7 @@ TableCell.propTypes = {
   supportingValue: PropTypes.string,
   trend: PropTypes.string,
   value: PropTypes.string,
+  className: PropTypes.string,
 };
 
 function FilterInput({
@@ -549,14 +568,17 @@ function FilterInput({
   const Icon = icon;
 
   return (
-    <span className={buildClassName(['storybook-table-filter-input', `storybook-table-filter-input--${type}`])}>
+    <span className={buildClassName([
+      'box-border inline-flex h-[42px] w-[min(200px,100%)] items-center gap-2 rounded-2 border border-solid border-neutral-200 bg-neutral-00 px-3 py-[10px] text-neutral-600 focus-within:outline-none focus-within:shadow-focus-brand',
+      type === 'search' && 'first:w-[min(240px,100%)]',
+    ])}>
       {Icon && <Icon size={20} weight="regular" />}
       <Text
         as="span"
         variant="text-sm"
         weight="regular"
         color="var(--neutral_300)"
-        className="storybook-table-filter-input__label"
+        className="min-w-0 flex-1 basis-0 overflow-hidden text-ellipsis whitespace-nowrap"
       >
         {label}
       </Text>
@@ -585,17 +607,17 @@ export function TableFilters({
   const showRefresh = resolvedStyle === 'advanced';
 
   return (
-    <div className="storybook-table-filters">
+    <div className="flex w-full max-w-[1257px] items-center justify-between gap-4 max-[900px]:flex-col max-[900px]:items-start">
       <Text
         as="h2"
         variant="display-xs"
         weight="semibold"
         color="var(--neutral_900)"
-        className="storybook-table-filters__title"
+        className="shrink-0"
       >
         {title}
       </Text>
-      <div className="storybook-table-filters__actions">
+      <div className="flex min-w-0 flex-wrap items-center justify-end gap-4 max-[900px]:w-full max-[900px]:justify-start">
         {showSearch && resolvedStyle !== 'button-only' && resolvedStyle !== 'advanced' && !showSelect && (
           <FilterInput
             icon={MagnifyingGlass}
@@ -621,7 +643,7 @@ export function TableFilters({
           />
         )}
         {showButton && showRefresh && (
-          <button type="button" className="storybook-table-icon-button" aria-label="Refresh filters">
+          <button type="button" className="inline-flex h-[42px] w-[42px] cursor-pointer items-center justify-center rounded-2 border border-solid border-neutral-200 bg-neutral-00 p-1 text-neutral-600 enabled:hover:bg-neutral-50 enabled:hover:text-neutral-800 focus-visible:outline-none focus-visible:shadow-focus-brand" aria-label="Refresh filters">
             <ArrowsClockwise size={20} weight="regular" />
           </button>
         )}
@@ -634,7 +656,7 @@ export function TableFilters({
           />
         )}
         {showButton && showRefresh && (
-          <button type="button" className="storybook-table-clear">
+          <button type="button" className="cursor-pointer rounded-2 border-0 bg-transparent p-0 font-sans text-sm font-semibold leading-normal text-primary-400 focus-visible:outline-none focus-visible:shadow-focus-brand">
             Clear Filters
           </button>
         )}
@@ -690,11 +712,19 @@ export function TableEmptyState({
   const Icon = config.icon;
 
   return (
-    <div className="storybook-table-empty">
-      <div className={buildClassName(['storybook-table-empty__icon', `storybook-table-empty__icon--${config.iconTone}`])}>
+    <div className="flex min-h-60 flex-col items-center justify-center gap-6 bg-neutral-00 px-8 pb-12 pt-10 text-center">
+      <div
+        className={buildClassName([
+          'inline-flex h-12 w-12 items-center justify-center rounded-[28px]',
+          config.iconTone === 'brand' && 'bg-primary-50 text-primary-400',
+          config.iconTone === 'cloud' && 'text-neutral-00 shadow-xl',
+          config.iconTone === 'warning' && 'bg-warning-50 text-warning-700',
+        ])}
+        style={config.iconTone === 'cloud' ? cloudIconBackground : undefined}
+      >
         <Icon size={24} weight="regular" />
       </div>
-      <div className="storybook-table-empty__copy">
+      <div className="flex w-[352px] flex-col gap-1 [&_p]:m-0">
         <Text
           as="h3"
           variant="text-md"
@@ -712,7 +742,7 @@ export function TableEmptyState({
           {config.description}
         </Text>
       </div>
-      <div className="storybook-table-empty__actions">
+      <div className="grid w-[352px] grid-cols-2 gap-3">
         <Button
           hierarchy="secondary"
           label={config.secondaryLabel}
@@ -786,15 +816,15 @@ export function Table({
   };
 
   return (
-    <section className={buildClassName(['storybook-table', `storybook-table--${resolvedType}`, `storybook-table--${resolvedView}`])}>
-      <div className="storybook-table__scroll">
+    <section className="box-border w-full min-w-0 max-w-full overflow-hidden rounded-2 border border-solid border-neutral-200 bg-neutral-00">
+      <div className="w-full overflow-x-auto">
         <div
-          className="storybook-table__grid"
+          className="grid w-full min-w-[720px] max-[900px]:min-w-[640px]"
           style={{ gridTemplateColumns }}
           role="table"
         >
-          <div className="storybook-table__header-row" role="row">
-            {columns.map((column) => (
+          <div className="contents" role="row">
+            {columns.map((column, columnIndex) => (
               <TableHeaderCell
                 key={column.key}
                 arrow={column.arrow}
@@ -802,19 +832,20 @@ export function Table({
                 color={resolvedView === 'row' ? 'gray' : 'white'}
                 helpIcon={column.helpIcon}
                 label={column.label}
+                className={buildClassName([
+                  resolvedType === 'with-border' && columnIndex < columns.length - 1 && 'border-r border-solid border-neutral-200',
+                  columnIndex === columns.length - 1 && 'justify-center px-4',
+                ])}
               />
             ))}
           </div>
           {rows.map((row) => (
             <div
               key={row.id}
-              className={buildClassName([
-                'storybook-table__row',
-                row.state === 'hover' && 'storybook-table__row--hover',
-              ])}
+              className="contents"
               role="row"
             >
-              {columns.map((column) => (
+              {columns.map((column, columnIndex) => (
                 <TableCell
                   key={`${row.id}-${column.key}`}
                   actionIcon={row.actionIcon}
@@ -823,6 +854,11 @@ export function Table({
                   state={row.state ?? 'default'}
                   style={column.type}
                   value={row[column.key] ?? row.name}
+                  className={buildClassName([
+                    row.state === 'hover' && 'bg-neutral-50',
+                    resolvedType === 'with-border' && columnIndex < columns.length - 1 && 'border-r border-solid border-neutral-200',
+                    row === rows[rows.length - 1] && 'border-b-0',
+                  ])}
                 />
               ))}
             </div>
@@ -834,7 +870,7 @@ export function Table({
           alignment={paginationAlignment}
           breakpoint={paginationBreakpoint}
           currentPage={activePage}
-          className="storybook-table__pagination"
+          className="max-w-full px-6 pb-4 pt-3 max-[900px]:justify-start max-[900px]:px-4"
           nextDisabled={Number.isFinite(activePageNumber) && activePageNumber >= lastPage}
           onNext={handleNext}
           onPageChange={updatePage}

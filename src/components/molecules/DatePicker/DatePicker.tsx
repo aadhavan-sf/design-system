@@ -5,8 +5,6 @@ import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 
 import { Text } from '../../foundations/Typography';
 
-import './datePicker.css';
-
 const DATE_PICKER_TYPES = [
   'single-date',
   'month',
@@ -219,10 +217,16 @@ export function DatePickerCalendarDay({
       type={isInteractive ? 'button' : undefined}
       disabled={isInteractive && isDisabled ? true : undefined}
       className={buildClassName([
-        'storybook-datepicker-day',
-        `storybook-datepicker-day--${size}`,
-        `storybook-datepicker-day--${normalizedState}`,
-        today && 'storybook-datepicker-day--today',
+        'relative box-border inline-flex h-10 w-10 cursor-pointer flex-col items-center justify-center rounded-1 border-0 bg-transparent px-3 py-[10px] enabled:hover:bg-neutral-50 focus-visible:outline-none focus-visible:shadow-focus-brand',
+        !isInteractive && 'cursor-default',
+        isDisabled && 'cursor-not-allowed',
+        normalizedState === 'hover' && 'bg-neutral-50',
+        normalizedState === 'focus' && 'bg-neutral-00 shadow-focus-brand',
+        normalizedState === 'selected' && 'bg-primary-400',
+        normalizedState === 'on-range' && 'rounded-none bg-primary-50',
+        today && 'gap-[10px]',
+        (size === 'month' || size === 'year') && 'h-10 w-[70px] px-1.5',
+        (size === 'month' || size === 'year') && normalizedState === 'selected' && 'px-2',
         className,
       ])}
       {...props}
@@ -232,12 +236,12 @@ export function DatePickerCalendarDay({
         variant="text-sm"
         weight={getDayWeight(normalizedState, today)}
         color={getDayColor(normalizedState, today)}
-        className="storybook-datepicker-day__label"
+        className="w-full whitespace-nowrap text-center"
       >
         {label}
       </Text>
       {today && normalizedState !== 'selected' && (
-        <span className="storybook-datepicker-day__today-dot" />
+        <span className="absolute left-1/2 top-[30px] h-1 w-1 -translate-x-1/2 rounded-pill bg-primary-400" />
       )}
     </Component>
   );
@@ -274,9 +278,9 @@ export function DatePickerListItem({
     <button
       type="button"
       className={buildClassName([
-        'storybook-datepicker-list-item',
-        selected && 'storybook-datepicker-list-item--selected',
-        normalizedState === 'hover' && 'storybook-datepicker-list-item--hover',
+        'box-border inline-flex w-32 cursor-pointer items-center rounded-2 border-0 bg-neutral-00 px-3 py-[10px] enabled:hover:bg-primary-50 focus-visible:outline-none focus-visible:shadow-focus-brand',
+        selected && 'bg-primary-400 enabled:hover:bg-primary-400',
+        normalizedState === 'hover' && !selected && 'bg-primary-50',
         className,
       ])}
       {...props}
@@ -309,12 +313,12 @@ function DatePickerHeader({
   onTitleClick,
 }) {
   return (
-    <div className="storybook-datepicker__header">
+    <div className="flex w-full items-center justify-between">
       <button
         type="button"
         className={buildClassName([
-          'storybook-datepicker__nav-button',
-          previousActive && 'storybook-datepicker__nav-button--active',
+          'inline-flex h-9 cursor-pointer items-center justify-center rounded-1 border-0 bg-transparent p-[10px] text-neutral-900 enabled:hover:bg-neutral-50 focus-visible:outline-none focus-visible:shadow-focus-brand',
+          previousActive && 'bg-neutral-50',
         ])}
         aria-label="Previous"
         onClick={onPrevious}
@@ -324,7 +328,7 @@ function DatePickerHeader({
 
       <button
         type="button"
-        className="storybook-datepicker__title-button"
+        className="inline-flex h-9 cursor-pointer items-center justify-center rounded-[6px] border-0 bg-transparent px-[14px] py-[10px] text-neutral-900 focus-visible:outline-none focus-visible:shadow-focus-brand"
         onClick={onTitleClick}
       >
         <Text
@@ -339,7 +343,7 @@ function DatePickerHeader({
 
       <button
         type="button"
-        className="storybook-datepicker__nav-button"
+        className="inline-flex h-9 cursor-pointer items-center justify-center rounded-1 border-0 bg-transparent p-[10px] text-neutral-900 enabled:hover:bg-neutral-50 focus-visible:outline-none focus-visible:shadow-focus-brand"
         aria-label="Next"
         onClick={onNext}
       >
@@ -376,7 +380,7 @@ function CalendarMonth({
   const rangeDaySet = new Set(rangeDays);
 
   return (
-    <div className="storybook-datepicker__calendar">
+    <div className="flex flex-col gap-1">
       <DatePickerHeader
         label={monthLabel ?? getMonthYearLabel(monthIndex, year)}
         previousActive={previousActive}
@@ -385,7 +389,7 @@ function CalendarMonth({
         onTitleClick={onTitleClick}
       />
 
-      <div className="storybook-datepicker__weekdays">
+      <div className="grid w-[280px] grid-cols-7">
         {weekDays.map((day, index) => (
           <DatePickerCalendarDay
             key={`${day}-${index}`}
@@ -395,7 +399,7 @@ function CalendarMonth({
         ))}
       </div>
 
-      <div className="storybook-datepicker__day-grid">
+      <div className="grid w-[280px] grid-cols-7 auto-rows-[40px]">
         {resolvedDays.map((day, index) => {
           const isSelected = selectedDaySet.has(day.label);
           const isOnRange = rangeDaySet.has(day.label);
@@ -450,7 +454,7 @@ function CalendarYearGrid({
   onSelect,
 }) {
   return (
-    <div className={`storybook-datepicker__${size}-grid`}>
+    <div className="grid w-[280px] flex-1 grid-cols-4 content-center justify-center">
       {items.map((item) => (
         <DatePickerCalendarDay
           key={item}
@@ -608,7 +612,7 @@ export function DatePicker({
   const goToPreviousYearRange = () => setYearRangeStart((currentYear) => currentYear - 12);
   const goToNextYearRange = () => setYearRangeStart((currentYear) => currentYear + 12);
   const renderMonthPanel = () => (
-    <div className="storybook-datepicker__panel storybook-datepicker__panel--fixed">
+    <div className="box-border flex h-[304px] w-[296px] flex-col items-start p-2">
       <DatePickerHeader
         label={String(visibleYear)}
         previousActive
@@ -631,7 +635,7 @@ export function DatePicker({
     );
 
     return (
-      <div className="storybook-datepicker__panel storybook-datepicker__panel--fixed">
+      <div className="box-border flex h-[304px] w-[296px] flex-col items-start p-2">
         <DatePickerHeader
           label={getVisibleYearRange(yearRangeStart)}
           onPrevious={goToPreviousYearRange}
@@ -659,7 +663,7 @@ export function DatePicker({
 
     if (normalizedType === 'date-range') {
       return (
-        <div className="storybook-datepicker__panel">
+        <div className="flex flex-col items-start p-2">
           <CalendarMonth
             monthIndex={visibleMonthIndex}
             year={visibleYear}
@@ -678,7 +682,7 @@ export function DatePicker({
     if (normalizedType === 'with-presets') {
       return (
         <>
-          <div className="storybook-datepicker__presets">
+          <div className="box-border flex w-[148px] flex-col gap-1 border-r border-solid border-neutral-200 px-2 py-4">
             {presetItems.map((item) => (
               <DatePickerListItem
                 key={item}
@@ -689,8 +693,8 @@ export function DatePicker({
               />
             ))}
           </div>
-          <div className="storybook-datepicker__wide-content">
-            <div className="storybook-datepicker__dual-calendars">
+          <div className="flex flex-col">
+            <div className="flex items-start [&>*]:p-2 [&>*+*]:border-l [&>*+*]:border-solid [&>*+*]:border-neutral-200">
               <CalendarMonth
                 monthIndex={visibleMonthIndex}
                 year={visibleYear}
@@ -715,10 +719,10 @@ export function DatePicker({
                 onDaySelect={handleRangeDaySelect}
               />
             </div>
-            <div className="storybook-datepicker__bottom-panel">
+            <div className="box-border flex w-[592px] items-start justify-end gap-3 rounded-br-2 border-t border-solid border-neutral-200 bg-neutral-00 p-3">
               <button
                 type="button"
-                className="storybook-datepicker__action storybook-datepicker__action--secondary"
+                className="inline-flex cursor-pointer items-center justify-center rounded-2 border border-solid border-neutral-300 bg-transparent px-[14px] py-2 font-sans text-neutral-700 transition-[background-color,border-color,box-shadow,color] duration-[160ms] enabled:hover:bg-neutral-50 enabled:hover:text-neutral-800 focus-visible:outline-none focus-visible:shadow-focus-brand"
                 onClick={onCancel}
               >
                 <Text
@@ -732,7 +736,7 @@ export function DatePicker({
               </button>
               <button
                 type="button"
-                className="storybook-datepicker__action storybook-datepicker__action--primary"
+                className="inline-flex cursor-pointer items-center justify-center rounded-2 border border-solid border-primary-400 bg-primary-400 px-[14px] py-2 font-sans text-neutral-00 shadow-xs transition-[background-color,border-color,box-shadow,color] duration-[160ms] enabled:hover:border-primary-700 enabled:hover:bg-primary-700 enabled:hover:shadow-sm focus-visible:outline-none focus-visible:shadow-focus-brand"
                 onClick={onApply}
               >
                 <Text
@@ -752,7 +756,7 @@ export function DatePicker({
 
     if (normalizedType === 'dual-dates') {
       return (
-        <div className="storybook-datepicker__dual-calendars">
+        <div className="flex items-start [&>*]:p-2 [&>*+*]:border-l [&>*+*]:border-solid [&>*+*]:border-neutral-200">
           <CalendarMonth
             monthIndex={visibleMonthIndex}
             year={visibleYear}
@@ -781,7 +785,7 @@ export function DatePicker({
     }
 
     return (
-      <div className="storybook-datepicker__panel">
+      <div className="flex flex-col items-start p-2">
         <CalendarMonth
           monthIndex={visibleMonthIndex}
           year={visibleYear}
@@ -799,9 +803,9 @@ export function DatePicker({
   return (
     <div
       className={buildClassName([
-        'storybook-datepicker',
-        isWide && 'storybook-datepicker--wide',
-        normalizedType === 'with-presets' && 'storybook-datepicker--with-presets',
+        'flex w-fit items-start overflow-hidden rounded-2 border border-solid border-neutral-200 bg-neutral-00 shadow-md',
+        isWide && 'min-w-[592px]',
+        normalizedType === 'with-presets' && 'min-w-[744px]',
         className,
       ])}
     >

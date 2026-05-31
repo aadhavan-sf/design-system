@@ -47,7 +47,7 @@ export function TextArea({
   };
 
   return (
-    <div className="storybook-textfield__textarea-wrap">
+    <div className="relative w-full">
       <textarea
         ref={textareaRef}
         value={value}
@@ -58,14 +58,14 @@ export function TextArea({
         className={getFieldClassName({
           state,
           hasValue,
-          className: 'storybook-textfield__field--paragraph',
+          className: 'h-28 items-start resize-none',
         })}
       />
       <button
         type="button"
         aria-label="Resize text area"
         disabled={disabled}
-        className="storybook-textfield__resize-mark"
+        className="absolute bottom-1 right-1 inline-flex h-[14px] w-[14px] cursor-ns-resize items-center justify-center border-0 bg-transparent p-0 text-neutral-400 focus-visible:outline-none focus-visible:shadow-focus-brand disabled:cursor-not-allowed disabled:text-neutral-300 [&_svg]:rotate-45"
         onPointerDown={handleResizeStart}
       >
         <svg

@@ -8,8 +8,6 @@ import {
 
 import { Text } from '../../foundations/Typography';
 
-import './settingsPanel.css';
-
 const PANEL_TYPES = ['app-settings', 'app-distribution'];
 const ITEM_STATES = ['default', 'hover', 'focused', 'disabled'];
 
@@ -83,9 +81,11 @@ export function SettingsPanelItem({
       type="button"
       disabled={isDisabled}
       className={buildClassName([
-        'storybook-settings-panel-item',
-        `storybook-settings-panel-item--${normalizedState}`,
-        pressed && 'storybook-settings-panel-item--pressed',
+        'box-border flex w-full cursor-pointer items-center gap-2 rounded-2 border border-solid border-neutral-100 bg-neutral-00 p-3 text-left font-sans text-neutral-600 transition-[background-color,border-color,color,box-shadow] duration-[160ms] enabled:hover:border-neutral-100 enabled:hover:bg-neutral-50 focus-visible:border-neutral-100 focus-visible:bg-neutral-00 focus-visible:outline-none focus-visible:shadow-focus-brand disabled:cursor-not-allowed disabled:border-neutral-100 disabled:bg-neutral-50 disabled:text-neutral-300',
+        normalizedState === 'hover' && 'border-neutral-100 bg-neutral-50',
+        normalizedState === 'focused' && 'border-neutral-100 bg-neutral-00 shadow-focus-brand',
+        pressed && 'border-primary-400 bg-primary-25 text-primary-400 enabled:hover:border-primary-400 enabled:hover:bg-primary-25',
+        pressed && isDisabled && 'border-primary-100 bg-primary-25 text-primary-100',
         className,
       ])}
       onClick={isDisabled ? undefined : onClick}
@@ -95,14 +95,14 @@ export function SettingsPanelItem({
         variant="text-md"
         weight={pressed ? 'semibold' : 'medium'}
         color="currentColor"
-        className="storybook-settings-panel-item__label"
+        className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap"
       >
         {label}
       </Text>
       {showIcon && (
         <Warning
           aria-hidden="true"
-          className="storybook-settings-panel-item__icon"
+          className="shrink-0 text-current"
           size={20}
           weight="regular"
         />
@@ -149,26 +149,25 @@ export function SettingsPanel({
     <aside
       aria-label={resolvedTitle}
       className={buildClassName([
-        'storybook-settings-panel',
-        `storybook-settings-panel--${resolvedType}`,
+        'box-border flex h-[846px] w-[284px] flex-col items-center overflow-hidden rounded-6 border border-solid border-neutral-50 bg-neutral-00 p-6',
         className,
       ])}
     >
-      <div className="storybook-settings-panel__inner">
-        <header className="storybook-settings-panel__header">
+      <div className="flex w-full flex-col gap-6">
+        <header className="flex w-full items-center gap-2">
           <Text
             as="h2"
             variant="text-md"
             weight="semibold"
             color="var(--neutral_900)"
-            className="storybook-settings-panel__title"
+            className="shrink-0 whitespace-nowrap"
           >
             {resolvedTitle}
           </Text>
           {showHelp && (
             <button
               type="button"
-              className="storybook-settings-panel__help"
+              className="inline-flex cursor-pointer items-center justify-center gap-1 rounded-2 border-0 bg-transparent p-0 text-primary-400 focus-visible:outline-none focus-visible:shadow-focus-brand"
               onClick={onHelpClick}
             >
               <Question aria-hidden="true" size={20} weight="regular" />
@@ -184,7 +183,7 @@ export function SettingsPanel({
           )}
         </header>
 
-        <nav className="storybook-settings-panel__nav">
+        <nav className="flex w-full flex-col gap-4">
           {resolvedItems.map((item, index) => {
             const itemLabel = typeof item === 'string' ? item : item.label;
             const disabled = typeof item === 'string' ? false : item.disabled;

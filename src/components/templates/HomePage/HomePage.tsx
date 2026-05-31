@@ -6,7 +6,12 @@ import {
   PencilSimple,
 } from '@phosphor-icons/react';
 import type { Icon } from '@phosphor-icons/react';
-import { useState, type ComponentType, type KeyboardEvent } from 'react';
+import {
+  useState,
+  type ComponentType,
+  type CSSProperties,
+  type KeyboardEvent,
+} from 'react';
 
 import { RadioButton } from '../../atoms/RadioButton';
 import { Button } from '../../molecules/Button';
@@ -17,8 +22,8 @@ import { Sidebar } from '../../organisms/Sidebar';
 import { TopNavigation } from '../../organisms/TopNavigation';
 
 import eyeConditionIcon from './assets/eye-condition.svg';
+import lineBackground from './assets/line-background.svg';
 import mobilePreviewImage from './assets/mobile-preview.png';
-import './homePage.css';
 
 type VisibilityId = 'visible' | 'hidden' | 'conditional';
 type VisibilityIcon = Icon | string;
@@ -107,7 +112,7 @@ function formatLastSavedAt(date = new Date()) {
 function PhonePreview() {
   return (
     <img
-      className="storybook-home-page-phone"
+      className="block h-auto max-h-[calc(100dvh-240px)] w-[322px] max-w-full object-contain min-[1537px]:w-[400px]"
       src={mobilePreviewImage}
       alt="Mobile storefront preview"
     />
@@ -132,7 +137,7 @@ function VisibilityOption({
 
   return (
     <div
-      className="storybook-home-page-visibility-option"
+      className="flex min-h-5 w-full cursor-pointer items-center gap-2 rounded-1 border-0 bg-transparent p-0 text-neutral-700 focus-visible:outline-none focus-visible:shadow-focus-brand"
       role="radio"
       aria-checked={checked}
       tabIndex={0}
@@ -143,7 +148,7 @@ function VisibilityOption({
         size="sm"
         pressed={checked}
         aria-label={label}
-        className="storybook-home-page-visibility-option__radio"
+        className="pointer-events-none shrink-0"
         tabIndex={-1}
       />
       <Text
@@ -157,14 +162,14 @@ function VisibilityOption({
       {isImageIcon ? (
         <img
           aria-hidden="true"
-          className="storybook-home-page-visibility-option__icon storybook-home-page-visibility-option__icon--image"
+          className="block h-4 w-4 shrink-0 text-neutral-600"
           src={icon}
           alt=""
         />
       ) : (
         <Icon
           aria-hidden="true"
-          className="storybook-home-page-visibility-option__icon"
+          className="h-4 w-4 shrink-0 text-neutral-600"
           size={16}
           weight="regular"
         />
@@ -177,24 +182,25 @@ function ConditionalFilterCard({
   isConditional,
 }: ConditionalFilterCardProps) {
   return (
-    <article className="storybook-home-page-filter-card">
+    <article className="grid grid-cols-[20px_1fr] gap-2 rounded-4 bg-neutral-25 p-4">
       <img
         aria-hidden="true"
-        className="storybook-home-page-filter-card__icon"
+        className="mt-px h-5 w-5"
         src={eyeConditionIcon}
         alt=""
       />
-      <div className="storybook-home-page-filter-card__content">
+      <div className="flex min-w-0 flex-col gap-1">
         <Text
           as="h3"
           variant="text-sm"
           weight="semibold"
           color="var(--neutral_900)"
+          className="m-0"
         >
           Conditional Filter
         </Text>
         {isConditional ? (
-          <ul className="storybook-home-page-filter-card__conditions">
+          <ul className="m-0 pl-[18px] text-neutral-600">
             <li>
               <Text as="span" variant="text-xs" weight="medium" color="var(--neutral_600)">
                 Customers (x3)
@@ -212,13 +218,14 @@ function ConditionalFilterCard({
             variant="text-xs"
             weight="medium"
             color="var(--neutral_600)"
+            className="m-0"
           >
             Set up logic to show each widget to the right users at the right time.
           </Text>
         )}
         <button
           type="button"
-          className="storybook-home-page-filter-card__setup"
+          className="mt-1 inline-flex w-max max-w-full cursor-pointer items-center justify-start gap-1 border-0 bg-transparent p-0 text-brand-400 focus-visible:outline-none focus-visible:shadow-focus-brand"
         >
           {isConditional && (
             <PencilSimple
@@ -265,28 +272,31 @@ function RightPanel({
   };
 
   return (
-    <aside className="storybook-home-page-right-panel" aria-label="Home page properties">
-      <div className="storybook-home-page-right-panel__top">
+    <aside
+      className="box-border flex h-full w-full flex-col gap-6 overflow-y-auto rounded-6 border border-solid border-neutral-100 bg-neutral-00 px-6 py-6 max-[1299px]:px-4"
+      aria-label="Home page properties"
+    >
+      <div className="flex flex-col gap-3">
         <Button
           label="Publish Theme"
           hierarchy="primary"
           size="medium"
-          className="storybook-home-page-right-panel__publish"
+          className="w-full min-w-0"
         />
-        <span className="storybook-home-page-right-panel__divider" />
+        <span className="block h-px w-full bg-neutral-100" />
       </div>
 
-      <section className="storybook-home-page-right-section">
+      <section className="flex flex-col gap-3">
         <Text as="h2" variant="text-md" weight="semibold" color="var(--neutral_900)">
           Properties
         </Text>
-        <div className="storybook-home-page-properties-copy">
-          <Text as="p" variant="text-xs" weight="regular" color="var(--neutral_600)">
+        <div className="flex flex-col gap-3">
+          <Text as="p" variant="text-xs" weight="regular" color="var(--neutral_600)" className="m-0">
             To customise custom blocks, go to the custom blocks settings under theme settings.
           </Text>
           <button
             type="button"
-            className="storybook-home-page-custom-blocks-link"
+            className="inline-flex w-max max-w-full cursor-pointer items-center justify-start gap-1 border-0 bg-transparent p-0 text-brand-400 focus-visible:outline-none focus-visible:shadow-focus-brand"
           >
             <Text as="span" variant="text-xs" weight="semibold" color="currentColor">
               Edit Custom Blocks
@@ -312,12 +322,12 @@ function RightPanel({
         astriks={false}
       />
 
-      <section className="storybook-home-page-right-section storybook-home-page-right-section--visibility">
+      <section className="flex flex-col gap-3">
         <Text as="h2" variant="text-md" weight="semibold" color="var(--neutral_900)">
           Visibility
         </Text>
         <div
-          className="storybook-home-page-visibility-controls"
+          className="flex flex-col gap-2"
           role="radiogroup"
           aria-label="Visibility"
         >
@@ -332,7 +342,7 @@ function RightPanel({
           ))}
         </div>
         {selectedVisibility?.helper && (
-          <Text as="p" variant="text-xs" weight="regular" color="var(--neutral_600)">
+          <Text as="p" variant="text-xs" weight="regular" color="var(--neutral_600)" className="m-0">
             {selectedVisibility.helper}
           </Text>
         )}
@@ -349,21 +359,29 @@ export function HomePage() {
   const [lastSavedAt, setLastSavedAt] = useState(() =>
     formatLastSavedAt()
   );
+  const shellStyle = {
+    backgroundImage: `url(${lineBackground})`,
+    backgroundPosition: 'center top',
+    backgroundSize: '1280px 1080px',
+  } satisfies CSSProperties;
 
   const handleDesignChange = () => {
     setLastSavedAt(formatLastSavedAt());
   };
 
   return (
-    <div className="storybook-home-page">
+    <div
+      className="grid h-dvh w-full min-w-[1280px] overflow-hidden bg-neutral-25 bg-repeat font-sans text-neutral-900 [grid-template-columns:216px_8px_248px_minmax(0,1fr)_8px_248px_8px] max-[1279px]:w-[1280px] min-[1537px]:[grid-template-columns:240px_16px_312px_minmax(0,1fr)_16px_312px_16px]"
+      style={shellStyle}
+    >
       <TemplateSidebar
         activeItemId="active-theme"
-        className="storybook-home-page__sidebar"
+        className="!h-dvh !w-[216px] min-[1537px]:!w-[240px]"
       />
 
-      <div className="storybook-home-page__left-panel">
+      <div className="col-start-3 h-dvh min-w-0 bg-transparent py-2 min-[1537px]:py-4">
         <TemplateLeftPanel
-          className="storybook-home-page__left-panel-surface"
+          className="!h-full !w-full max-[1299px]:!px-4 min-[1300px]:!px-6"
           type="fixed-blocks"
           title="Version 1"
           status="draft"
@@ -381,10 +399,10 @@ export function HomePage() {
         />
       </div>
 
-      <main className="storybook-home-page__canvas">
-        <TopNavigation />
-        <div className="storybook-home-page__preview-lane">
-          <div className="storybook-home-page__collection-select">
+      <main className="col-start-4 flex h-dvh min-w-0 flex-col items-center gap-8 overflow-y-auto overflow-x-visible bg-transparent px-4 py-2 min-[1537px]:py-4">
+        <TopNavigation className="max-w-full" />
+        <div className="grid w-max max-w-full flex-1 grid-rows-[auto_minmax(0,1fr)_auto] items-center justify-items-center gap-8">
+          <div className="mx-auto w-[216px] min-[1537px]:w-[280px]">
             <TextField
               type="dropdown"
               fluid
@@ -397,7 +415,7 @@ export function HomePage() {
               astriks={false}
             />
           </div>
-          <div className="storybook-home-page__preview-stack">
+          <div className="flex h-full w-max max-w-full flex-col items-center justify-center gap-4">
             <PhonePreview />
           </div>
           <Text
@@ -405,14 +423,13 @@ export function HomePage() {
             variant="text-xs"
             weight="regular"
             color="var(--neutral_600)"
-            className="storybook-home-page__last-saved"
           >
             Last saved: {lastSavedAt}
           </Text>
         </div>
       </main>
 
-      <div className="storybook-home-page__right-panel">
+      <div className="col-start-6 flex h-dvh min-w-0 bg-transparent py-2 min-[1537px]:py-4">
         <RightPanel onDesignChange={handleDesignChange} />
       </div>
     </div>

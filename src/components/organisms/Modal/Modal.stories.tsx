@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Modal } from './Modal';
+import './modal.css';
 
 const meta = {
   title: 'Organisms/Modal',

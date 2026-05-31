@@ -14,6 +14,7 @@ import {
 } from './IconLibrary';
 import { iconLibraryOptions } from './iconLibrary.constants';
 import { Text } from '../../foundations/Typography';
+import './iconLibrary.css';
 
 export default {
   title: 'Molecules/Icon Library',

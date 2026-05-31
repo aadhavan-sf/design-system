@@ -6,6 +6,7 @@ import {
   LeftPanelItem,
   ThemeStatus,
 } from './LeftPanel';
+import './leftPanel.css';
 
 export default {
   title: 'Organisms/Left Panel',

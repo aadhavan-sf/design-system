@@ -166,7 +166,7 @@ export const Playground: Story = {
 
 export const InputFieldStates: Story = {
   render: () => (
-    <div className="textfield-story-grid">
+    <div className="grid grid-cols-[repeat(3,296px)] items-start gap-10">
       {fieldStates.map((state) => (
         <TextField
           key={state}
@@ -181,7 +181,7 @@ export const InputFieldStates: Story = {
 
 export const DropdownFieldStates: Story = {
   render: () => (
-    <div className="textfield-story-grid">
+    <div className="grid grid-cols-[repeat(3,296px)] items-start gap-10">
       {fieldStates.map((state) => (
         <TextField
           key={state}
@@ -196,17 +196,18 @@ export const DropdownFieldStates: Story = {
 
 export const FieldTypes: Story = {
   render: () => (
-    <div className="textfield-story-grid">
+    <div className="grid grid-cols-[repeat(3,296px)] items-start gap-10">
       {fieldTypes.map((type) => (
         <div
           key={type}
-          className="textfield-story-item"
+          className="flex flex-col gap-3"
         >
           <Text
             as="p"
             variant="text-sm"
             weight="semibold"
-            className="textfield-story-label"
+            color="var(--neutral_900)"
+            className="m-0"
           >
             {fieldTypeLabels[type]}
           </Text>
@@ -227,7 +228,7 @@ export const FieldTypes: Story = {
 
 export const SearchStates: Story = {
   render: () => (
-    <div className="textfield-story-grid">
+    <div className="grid grid-cols-[repeat(3,296px)] items-start gap-10">
       {fieldStates.map((state) => (
         <TextField
           key={state}
@@ -242,7 +243,7 @@ export const SearchStates: Story = {
 
 export const ParagraphStates: Story = {
   render: () => (
-    <div className="textfield-story-grid">
+    <div className="grid grid-cols-[repeat(3,296px)] items-start gap-10">
       {fieldStates.map((state) => (
         <TextField
           key={state}

@@ -11,8 +11,6 @@ import type { IconWeight } from '@phosphor-icons/react';
 
 import { Text } from '../../foundations/Typography';
 
-import './topNavigation.css';
-
 export type TopNavigationItemState =
   | 'default'
   | 'hover'
@@ -72,7 +70,7 @@ function normalizeValue(
 function renderIcon(icon: TopNavigationIconName, weight: IconWeight = 'regular') {
   const iconProps = {
     'aria-hidden': true,
-    className: 'storybook-top-nav-item__icon',
+    className: 'shrink-0',
     size: 18,
     weight,
   };
@@ -115,9 +113,11 @@ export function TopNavigationItem({
       disabled={isDisabled}
       aria-current={pressed ? 'page' : undefined}
       className={buildClassName([
-        'storybook-top-nav-item',
-        `storybook-top-nav-item--${normalizedState}`,
-        pressed && 'storybook-top-nav-item--pressed',
+        'inline-flex cursor-pointer items-center justify-center gap-1 rounded-6 border-0 bg-neutral-00 px-2 py-1 font-sans text-neutral-700 transition-[background-color,color,box-shadow] duration-[160ms] enabled:hover:bg-neutral-50 focus-visible:outline-none focus-visible:shadow-focus-brand disabled:cursor-not-allowed disabled:bg-neutral-50 disabled:text-neutral-300',
+        normalizedState === 'hover' && 'bg-neutral-50',
+        normalizedState === 'focused' && 'bg-neutral-00 shadow-focus-brand',
+        pressed && 'bg-primary-400 text-neutral-00 enabled:hover:bg-primary-400 focus-visible:bg-primary-400',
+        pressed && isDisabled && 'bg-primary-100 text-neutral-00',
         className,
       ])}
       onClick={isDisabled ? undefined : onClick}
@@ -128,7 +128,7 @@ export function TopNavigationItem({
         variant="text-sm"
         weight={pressed ? 'semibold' : 'medium'}
         color="currentColor"
-        className="storybook-top-nav-item__label"
+        className="overflow-hidden text-center text-ellipsis whitespace-nowrap"
       >
         {label}
       </Text>
@@ -152,7 +152,10 @@ export function TopNavigation({
   return (
     <nav
       aria-label="Top navigation"
-      className={buildClassName(['storybook-top-nav', className])}
+      className={buildClassName([
+        'box-border inline-flex items-center gap-1 overflow-hidden rounded-6 border border-solid border-neutral-100 bg-neutral-00 px-2 py-3',
+        className,
+      ])}
     >
       {items.map((item, index) => {
         const normalizedItem: TopNavigationItemConfig = typeof item === 'string'
@@ -163,12 +166,12 @@ export function TopNavigation({
         return (
           <div
             key={`${normalizedItem.label}-${index}`}
-            className="storybook-top-nav__segment"
+            className="inline-flex shrink-0 items-center gap-1"
           >
             {index > 0 && (
               <CaretRight
                 aria-hidden="true"
-                className="storybook-top-nav__separator"
+                className="shrink-0 text-neutral-700"
                 size={20}
                 weight="regular"
               />

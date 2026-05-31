@@ -2,8 +2,6 @@ import { useMemo, useState, type ChangeEvent, type HTMLAttributes } from 'react'
 
 import { Text } from '../../foundations/Typography';
 
-import './slider.css';
-
 export type SliderStyle = 'classic' | 'dotted' | 'Classic' | 'Dotted';
 export type SliderMode = 'single' | 'range' | 'normal' | 'difference' | 'Normal' | 'Difference';
 export type SliderState = 'Normal' | 'Difference' | 'normal' | 'difference';
@@ -88,17 +86,31 @@ function SliderValueLabel({ value, position }: { value: number; position: Normal
 
   if (isFloating) {
     return (
-      <div className="storybook-slider__floating-label" aria-hidden="true">
+      <div
+        className={buildClassName([
+          'absolute left-1/2 inline-flex -translate-x-1/2 items-center drop-shadow-[0_4px_4px_rgba(0,0,0,0.1)]',
+          position === 'floating-top' && 'bottom-8 flex-col',
+          position === 'floating-bottom' && 'top-8 flex-col-reverse',
+        ])}
+        aria-hidden="true"
+      >
         <Text
           as="span"
           variant="text-sm"
           weight="medium"
           color="var(--neutral_800)"
-          className="storybook-slider__floating-label-text"
+          className="box-border inline-flex h-9 min-w-10 items-center justify-center whitespace-nowrap rounded-2 bg-neutral-00 px-3 py-2"
         >
           {value}
         </Text>
-        <span className="storybook-slider__floating-label-arrow" />
+        <span className="h-2 w-4 overflow-hidden text-neutral-00">
+          <span
+            className={buildClassName([
+              'mx-auto block h-3 w-3 rotate-45 bg-current',
+              position === 'floating-top' ? '-mt-[7px]' : 'mt-[3px]',
+            ])}
+          />
+        </span>
       </div>
     );
   }
@@ -109,7 +121,11 @@ function SliderValueLabel({ value, position }: { value: number; position: Normal
       variant="text-md"
       weight="medium"
       color="var(--neutral_800)"
-      className="storybook-slider__value-label"
+      className={buildClassName([
+        'absolute left-1/2 -translate-x-1/2 whitespace-nowrap',
+        position === 'top' && 'bottom-9',
+        position === 'bottom' && 'top-9',
+      ])}
       aria-hidden="true"
     >
       {value}
@@ -161,6 +177,7 @@ export function Slider({
     defaultStartValue,
     defaultEndValue,
   ]);
+  const [focusedThumb, setFocusedThumb] = useState<'single' | 'start' | 'end' | null>(null);
 
   const isRange = normalizedMode === 'range';
   const currentValue = clamp(value ?? internalValue, min, max);
@@ -207,28 +224,33 @@ export function Slider({
   return (
     <div
       className={buildClassName([
-        'storybook-slider',
-        `storybook-slider--${normalizedStyle}`,
-        `storybook-slider--${normalizedMode}`,
-        `storybook-slider--labels-${labelOffset}`,
-        disabled && 'storybook-slider--disabled',
+        'w-80 text-neutral-800',
+        (labelOffset === 'top' || labelOffset === 'bottom') && 'py-8',
+        labelOffset === 'top' && 'pt-10',
+        labelOffset === 'bottom' && 'pb-10',
+        disabled && 'opacity-55',
         className,
       ])}
       {...props}
     >
-      <div className="storybook-slider__control">
-        <div className="storybook-slider__rail" />
+      <div className="relative h-6 w-80 rounded-2">
+        <div
+          className={buildClassName([
+            'absolute inset-x-0 top-1 h-4 rounded-6 bg-neutral-100',
+            disabled && 'bg-neutral-50',
+          ])}
+        />
 
         {normalizedStyle === 'dotted' && (
-          <div className="storybook-slider__steps" aria-hidden="true">
+          <div className="pointer-events-none absolute inset-x-2 top-1/2 z-[1] h-[6px] -translate-y-1/2" aria-hidden="true">
             {steps.map((stepPosition) => (
               <span
                 key={stepPosition}
                 className={buildClassName([
-                  'storybook-slider__step',
+                  'absolute top-0 h-[6px] w-[6px] -translate-x-1/2 rounded-full bg-neutral-400',
                   stepPosition >= progressStart
                     && stepPosition <= progressEnd
-                    && 'storybook-slider__step--active',
+                    && 'bg-neutral-00',
                 ])}
                 style={{ left: `${stepPosition}%` }}
               />
@@ -237,7 +259,10 @@ export function Slider({
         )}
 
         <div
-          className="storybook-slider__progress"
+          className={buildClassName([
+            'absolute top-1 h-4 rounded-6 bg-primary-400',
+            disabled && 'bg-primary-100',
+          ])}
           style={{
             left: `${progressStart}%`,
             width: `${progressEnd - progressStart}%`,
@@ -247,20 +272,34 @@ export function Slider({
         {isRange ? (
           <>
             <div
-              className="storybook-slider__thumb storybook-slider__thumb--start"
+              className={buildClassName([
+                'pointer-events-none absolute top-1/2 z-[3] h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-solid border-primary-400 bg-neutral-00 shadow-md',
+                disabled && 'border-primary-100 shadow-xs',
+                focusedThumb === 'start' && 'shadow-slider-focus',
+              ])}
               style={{ left: `${progressStart}%` }}
             >
+              {normalizedStyle === 'dotted' && (
+                <span className={buildClassName(['absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-400', disabled && 'bg-primary-100'])} />
+              )}
               <SliderValueLabel value={currentRange[0]} position={normalizedLabelPosition} />
             </div>
             <div
-              className="storybook-slider__thumb storybook-slider__thumb--end"
+              className={buildClassName([
+                'pointer-events-none absolute top-1/2 z-[3] h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-solid border-primary-400 bg-neutral-00 shadow-md',
+                disabled && 'border-primary-100 shadow-xs',
+                focusedThumb === 'end' && 'shadow-slider-focus',
+              ])}
               style={{ left: `${progressEnd}%` }}
             >
+              {normalizedStyle === 'dotted' && (
+                <span className={buildClassName(['absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-400', disabled && 'bg-primary-100'])} />
+              )}
               <SliderValueLabel value={currentRange[1]} position={normalizedLabelPosition} />
             </div>
             <input
               aria-label="Minimum value"
-              className="storybook-slider__input storybook-slider__input--start"
+              className="absolute inset-0 z-[6] m-0 h-full w-full cursor-pointer opacity-0 disabled:cursor-not-allowed focus-visible:outline-none"
               disabled={disabled}
               max={max}
               min={min}
@@ -268,10 +307,12 @@ export function Slider({
               type="range"
               value={currentRange[0]}
               onChange={handleStartChange}
+              onBlur={() => setFocusedThumb(null)}
+              onFocus={() => setFocusedThumb('start')}
             />
             <input
               aria-label="Maximum value"
-              className="storybook-slider__input storybook-slider__input--end"
+              className="absolute inset-0 z-[7] m-0 h-full w-full cursor-pointer opacity-0 disabled:cursor-not-allowed focus-visible:outline-none"
               disabled={disabled}
               max={max}
               min={min}
@@ -279,19 +320,28 @@ export function Slider({
               type="range"
               value={currentRange[1]}
               onChange={handleEndChange}
+              onBlur={() => setFocusedThumb(null)}
+              onFocus={() => setFocusedThumb('end')}
             />
           </>
         ) : (
           <>
             <div
-              className="storybook-slider__thumb"
+              className={buildClassName([
+                'pointer-events-none absolute top-1/2 z-[3] h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-solid border-primary-400 bg-neutral-00 shadow-md',
+                disabled && 'border-primary-100 shadow-xs',
+                focusedThumb === 'single' && 'shadow-slider-focus',
+              ])}
               style={{ left: `${progressEnd}%` }}
             >
+              {normalizedStyle === 'dotted' && (
+                <span className={buildClassName(['absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-400', disabled && 'bg-primary-100'])} />
+              )}
               <SliderValueLabel value={currentValue} position={normalizedLabelPosition} />
             </div>
             <input
               aria-label="Slider value"
-              className="storybook-slider__input"
+              className="absolute inset-0 z-[5] m-0 h-full w-full cursor-pointer opacity-0 disabled:cursor-not-allowed focus-visible:outline-none"
               disabled={disabled}
               max={max}
               min={min}
@@ -299,6 +349,8 @@ export function Slider({
               type="range"
               value={currentValue}
               onChange={handleSingleChange}
+              onBlur={() => setFocusedThumb(null)}
+              onFocus={() => setFocusedThumb('single')}
             />
           </>
         )}

@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { Chip } from './Chip';
+import './chip.css';
 
 export default {
   title: 'Molecules/Chip',

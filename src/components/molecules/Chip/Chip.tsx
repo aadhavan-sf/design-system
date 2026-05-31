@@ -6,8 +6,6 @@ import {
 
 import { Text } from '../../foundations/Typography';
 
-import './chip.css';
-
 export type ChipType = string;
 export type ChipSize = string;
 export type ChipShape = string;
@@ -72,6 +70,38 @@ function getIconSize(size: ChipSize) {
   return 14;
 }
 
+function getSizeClassName(size: ChipSize) {
+  if (size === 'lg') {
+    return 'min-h-7 px-3 py-0.5';
+  }
+
+  if (size === 'md') {
+    return 'min-h-6 px-2.5 py-0.5';
+  }
+
+  return 'min-h-5 px-2 py-0.5';
+}
+
+function getIconOnlySizeClassName(size: ChipSize) {
+  if (size === 'lg') {
+    return 'p-2';
+  }
+
+  return 'p-2';
+}
+
+function getAvatarSizeClassName(size: ChipSize) {
+  if (size === 'lg') {
+    return 'h-[18px] w-[18px]';
+  }
+
+  if (size === 'md') {
+    return 'h-4 w-4';
+  }
+
+  return 'h-3.5 w-3.5';
+}
+
 function ChipIcon({ name, size }: { name: InnerChipIconName; size: ChipSize }) {
   const iconSize = getIconSize(size);
 
@@ -79,8 +109,8 @@ function ChipIcon({ name, size }: { name: InnerChipIconName; size: ChipSize }) {
     return (
       <span
         className={buildClassName([
-          'storybook-chip__avatar',
-          `storybook-chip__avatar--${size}`,
+          'inline-flex shrink-0 rounded-full bg-[radial-gradient(circle_at_50%_36%,#2f251f_0_18%,transparent_19%),radial-gradient(circle_at_50%_88%,#5f3a29_0_34%,transparent_35%),linear-gradient(135deg,#f6c7a8_0%,#b86f4a_100%)]',
+          getAvatarSizeClassName(size),
         ])}
         aria-hidden="true"
       />
@@ -91,7 +121,7 @@ function ChipIcon({ name, size }: { name: InnerChipIconName; size: ChipSize }) {
     return (
       <ArrowUp
         aria-hidden="true"
-        className="storybook-chip__icon"
+        className="shrink-0"
         size={iconSize}
         weight="regular"
       />
@@ -101,7 +131,7 @@ function ChipIcon({ name, size }: { name: InnerChipIconName; size: ChipSize }) {
   return (
     <X
       aria-hidden="true"
-      className="storybook-chip__icon"
+      className="shrink-0"
       size={iconSize}
       weight="regular"
     />
@@ -169,15 +199,17 @@ export function Chip({
       aria-disabled={!isButton && isDisabled ? true : undefined}
       aria-pressed={isButton ? isActive : undefined}
       className={buildClassName([
-        'storybook-chip',
-        `storybook-chip--${normalizedType}`,
-        `storybook-chip--${size}`,
-        `storybook-chip--${normalizedShape}`,
-        `storybook-chip--state-${normalizedState}`,
-        border && normalizedType === 'chip' && 'storybook-chip--bordered',
-        isActive && 'storybook-chip--active',
-        isDisabled && 'storybook-chip--disabled',
-        normalizedIcon === 'icon-only' && 'storybook-chip--icon-only',
+        'inline-flex max-w-full items-center justify-center gap-1 border border-solid border-transparent box-border font-sans text-neutral-600 transition-[background-color,border-color,color,box-shadow] duration-[160ms]',
+        normalizedIcon === 'icon-only' ? getIconOnlySizeClassName(size) : getSizeClassName(size),
+        normalizedShape === 'pill' ? 'rounded-6' : 'rounded-2',
+        normalizedType === 'chip' && 'bg-neutral-50',
+        normalizedType === 'button' && 'cursor-pointer border-neutral-400 bg-neutral-0 text-neutral-700 hover:border-neutral-800 focus-visible:outline-none focus-visible:shadow-focus-neutral',
+        border && normalizedType === 'chip' && 'border-neutral-200',
+        isActive && normalizedType === 'button' && 'border-transparent bg-neutral-800 text-neutral-0 hover:border-transparent',
+        normalizedState === 'hover' && normalizedType === 'button' && !isActive && 'border-neutral-800',
+        normalizedState === 'focused' && normalizedType === 'button' && 'shadow-focus-neutral',
+        isDisabled && 'cursor-not-allowed border-neutral-200 bg-neutral-100 text-neutral-200',
+        isDisabled && isActive && normalizedType === 'button' && 'border-transparent bg-neutral-100 text-neutral-200',
         className,
       ])}
       onClick={isDisabled ? undefined : (event) => {
@@ -203,7 +235,7 @@ export function Chip({
           variant={getTextVariant(size)}
           weight={isButton && isActive ? 'semibold' : 'medium'}
           color="currentColor"
-          className="storybook-chip__label"
+          className="min-w-0 overflow-hidden text-center text-ellipsis whitespace-nowrap"
         >
           {label}
         </Text>

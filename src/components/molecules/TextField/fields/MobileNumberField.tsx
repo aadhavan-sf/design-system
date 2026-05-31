@@ -95,15 +95,15 @@ export function MobileNumberField({
   };
 
   return (
-    <div className="storybook-textfield__mobile">
-      <div className="storybook-textfield__country-wrapper">
+    <div className="flex h-11 w-full">
+      <div className="relative shrink-0">
         <button
           type="button"
           disabled={disabled}
           className={getFieldClassName({
             state,
             hasValue: true,
-            className: 'storybook-textfield__country-code',
+            className: 'w-auto min-w-[70px] justify-center gap-1 rounded-r-none px-2 py-3',
           })}
           onClick={() => onCountryOpenChange(!isCountryOpen)}
           aria-label={`Selected country code ${selectedCountry.code}`}
@@ -115,8 +115,9 @@ export function MobileNumberField({
         </button>
 
         {isCountryOpen && !disabled && (
-          <div className="storybook-textfield__country-menu">
+          <div className="textfield-popover-enter absolute left-0 top-[calc(100%+8px)] z-[100] max-h-[280px] w-60 origin-top overflow-y-auto rounded-2 border border-solid border-neutral-100 bg-neutral-00 shadow-sm">
             <DropdownList
+              className="w-full shadow-none"
               items={countryDropdownItems}
               selectedValues={[selectedCountry.code]}
               variant="text"
@@ -140,7 +141,7 @@ export function MobileNumberField({
         className={getFieldClassName({
           state,
           hasValue,
-          className: 'storybook-textfield__mobile-input',
+          className: 'flex-1 rounded-l-none border-l-0',
         })}
       />
     </div>

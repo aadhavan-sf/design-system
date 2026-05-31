@@ -3,8 +3,6 @@ import { House } from '@phosphor-icons/react';
 
 import { Text } from '../../foundations/Typography';
 
-import './tabs.css';
-
 export type TabSize = 'sm' | 'md';
 export type TabState = 'default' | 'hover' | 'focused' | 'disabled' | 'Default' | 'Hover' | 'Focused' | 'Disabled';
 export type TabIconPosition = 'left' | 'right' | 'Left' | 'Right';
@@ -88,7 +86,7 @@ export function TabItem({
 
   const icon = showIcons ? (
     <House
-      className="storybook-tab-item__icon"
+      className="shrink-0"
       size={16}
       weight="regular"
     />
@@ -99,10 +97,13 @@ export function TabItem({
       type="button"
       disabled={isDisabled}
       className={buildClassName([
-        'storybook-tab-item',
-        `storybook-tab-item--${size}`,
-        `storybook-tab-item--${normalizedState}`,
-        pressed && 'storybook-tab-item--pressed',
+        'inline-flex cursor-pointer items-center justify-center gap-1 rounded-2 border-0 bg-transparent px-3 font-sans text-neutral-900 transition-[background-color,box-shadow,color] duration-[160ms] hover:not-disabled:not-[.is-pressed]:bg-neutral-50 focus-visible:outline-none focus-visible:shadow-focus-neutral disabled:cursor-not-allowed',
+        size === 'md' ? 'py-1.5' : 'py-1',
+        normalizedState === 'hover' && !pressed && 'bg-neutral-50',
+        normalizedState === 'focused' && 'shadow-focus-neutral',
+        pressed && 'is-pressed bg-neutral-900 text-neutral-0 hover:not-disabled:bg-neutral-900',
+        isDisabled && 'bg-neutral-100 text-neutral-200',
+        isDisabled && pressed && 'bg-neutral-400 text-neutral-0',
         className,
       ])}
       {...props}
@@ -113,7 +114,7 @@ export function TabItem({
         variant={getTextVariant(size)}
         weight={getTextWeight({ pressed, size })}
         color="currentColor"
-        className="storybook-tab-item__label"
+        className="max-w-40 overflow-hidden text-center text-ellipsis whitespace-nowrap"
       >
         {label}
       </Text>
@@ -145,8 +146,8 @@ export function Tabs({
   return (
     <div
       className={buildClassName([
-        'storybook-tabs',
-        `storybook-tabs--${normalizedType}`,
+        'inline-flex items-start gap-2',
+        normalizedType === 'segments' && 'rounded-3 border border-solid border-neutral-100 bg-neutral-0 p-1',
         className,
       ])}
       role="tablist"

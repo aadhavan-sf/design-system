@@ -77,7 +77,7 @@ export const Playground: Story = {
 
 export const Sizes: Story = {
   render: () => (
-    <div className="toggle-story-row">
+    <div className="flex items-center gap-12">
       <Toggle size="sm" />
       <Toggle size="sm" defaultPressed />
       <Toggle size="mid" />
@@ -88,9 +88,9 @@ export const Sizes: Story = {
 
 export const States: Story = {
   render: () => (
-    <div className="toggle-story-stack">
+    <div className="flex flex-col items-center gap-8">
       {states.map((state) => (
-        <div key={state} className="toggle-story-row">
+        <div key={state} className="flex items-center gap-12">
           <Toggle size="sm" state={state} />
           <Toggle size="sm" state={state} defaultPressed />
           <Toggle size="mid" state={state} />
