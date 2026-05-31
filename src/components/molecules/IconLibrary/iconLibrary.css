@@ -249,15 +249,15 @@
 .storybook-icon-library-item--sm {
   width: 24px;
   height: 24px;
-  padding: 4.5px;
-  border-radius: 3.692px;
+  padding: var(--spacing_1);
+  border-radius: var(--spacing_1);
 }
 
 .storybook-icon-library-item--md {
   width: 32px;
   height: 32px;
-  padding: 6px;
-  border-radius: 4.923px;
+  padding: var(--spacing_1_5);
+  border-radius: var(--spacing_1);
 }
 
 .storybook-icon-library-item:hover,
@@ -271,8 +271,7 @@
 }
 
 .storybook-icon-library-item--sm.storybook-icon-library-item--pressed {
-  border-width: 0.75px;
-  border-radius: 3px;
+  border-radius: var(--spacing_1);
 }
 
 .storybook-icon-library-item--md.storybook-icon-library-item--pressed {

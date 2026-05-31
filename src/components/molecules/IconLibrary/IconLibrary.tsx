@@ -54,7 +54,7 @@ function getMergedOptions(...optionGroups) {
 }
 
 function getIconItemSize(size) {
-  return size === 'md' ? 20 : 15;
+  return size === 'md' ? 20 : 16;
 }
 
 function IconGlyph({
