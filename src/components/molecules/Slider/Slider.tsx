@@ -93,7 +93,7 @@ function SliderValueLabel({ value, position }: { value: number; position: Normal
           as="span"
           variant="text-sm"
           weight="medium"
-          color="var(--neutral_800)"
+          color="currentColor"
           className="storybook-slider__floating-label-text"
         >
           {value}
@@ -108,7 +108,7 @@ function SliderValueLabel({ value, position }: { value: number; position: Normal
       as="span"
       variant="text-md"
       weight="medium"
-      color="var(--neutral_800)"
+      color="currentColor"
       className="storybook-slider__value-label"
       aria-hidden="true"
     >

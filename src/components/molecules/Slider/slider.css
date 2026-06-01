@@ -28,7 +28,7 @@
   width: var(--slider-width);
   height: var(--slider-thumb-size);
 
-  border-radius: var(--spacing_2);
+  @apply rounded-2;
 }
 
 .storybook-slider__rail,
@@ -38,7 +38,7 @@
 
   height: var(--slider-track-height);
 
-  border-radius: var(--spacing_6);
+  @apply rounded-6;
 }
 
 .storybook-slider__rail {
@@ -55,11 +55,10 @@
 .storybook-slider__steps {
   position: absolute;
   top: 50%;
-  right: 8px;
-  left: 8px;
+  @apply left-2 right-2;
   z-index: 1;
 
-  height: 6px;
+  @apply h-1.5;
 
   transform: translateY(-50%);
   pointer-events: none;
@@ -69,10 +68,7 @@
   position: absolute;
   top: 0;
 
-  width: 6px;
-  height: 6px;
-
-  border-radius: 50%;
+  @apply size-1.5 rounded-full;
 
   @apply bg-neutral-400;
 
@@ -91,10 +87,7 @@
   width: var(--slider-thumb-size);
   height: var(--slider-thumb-size);
 
-  border: 2px solid var(--brand_400);
-  border-radius: 50%;
-
-  @apply bg-neutral-0 shadow-md;
+  @apply rounded-full border-2 border-solid border-brand-400 bg-neutral-0 shadow-md;
 
   transform: translate(-50%, -50%);
   pointer-events: none;
@@ -105,10 +98,7 @@
   top: 50%;
   left: 50%;
 
-  width: 12px;
-  height: 12px;
-
-  border-radius: 50%;
+  @apply size-3 rounded-full;
 
   @apply bg-brand-400;
 
@@ -166,7 +156,6 @@
 }
 
 .storybook-slider--disabled .storybook-slider__thumb {
-  border-color: var(--brand_100);
   @apply border-brand-100 shadow-xs;
 }
 
@@ -224,17 +213,13 @@
   height: 36px;
   @apply px-3 py-2;
 
-  border-radius: var(--spacing_2);
+  @apply box-border rounded-2 bg-neutral-0 text-neutral-800;
 
-  @apply bg-neutral-0;
-
-  box-sizing: border-box;
   white-space: nowrap;
 }
 
 .storybook-slider__floating-label-arrow {
-  width: 16px;
-  height: 8px;
+  @apply h-2 w-4;
 
   overflow: hidden;
 
@@ -248,7 +233,7 @@
   height: 12px;
   margin: -7px auto 0;
 
-  background: currentColor;
+  @apply bg-current;
 
   transform: rotate(45deg);
 
