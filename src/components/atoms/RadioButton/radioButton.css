@@ -1,4 +1,5 @@
 .storybook-radio {
+  appearance: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
