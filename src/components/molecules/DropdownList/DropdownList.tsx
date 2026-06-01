@@ -126,7 +126,8 @@ function IconPickerUpload({
           as="span"
           variant="text-sm"
           weight="medium"
-          color="var(--neutral_900)"
+          color="currentColor"
+          className="storybook-dropdown-list__icon-picker-upload-title"
         >
           Upload Your Icon
         </Text>
@@ -134,7 +135,8 @@ function IconPickerUpload({
           as="span"
           variant="text-xs"
           weight="regular"
-          color="var(--neutral_600)"
+          color="currentColor"
+          className="storybook-dropdown-list__icon-picker-upload-size"
         >
           24x24 SVG or PNG
         </Text>
@@ -170,7 +172,7 @@ function IconPickerDropdown({
         as="p"
         variant="text-xs"
         weight="medium"
-        color="var(--neutral_600)"
+        color="currentColor"
         className="storybook-dropdown-list__icon-picker-title"
       >
         Choose Icon
@@ -194,7 +196,7 @@ function IconPickerDropdown({
           as="span"
           variant="text-xs"
           weight="medium"
-          color="var(--neutral_200)"
+          color="currentColor"
           className="storybook-dropdown-list__icon-picker-separator-label"
         >
           OR

@@ -26,6 +26,7 @@
 
 .storybook-dropdown-list__icon-picker-title {
   margin: 0;
+  @apply text-neutral-600;
 }
 
 .storybook-dropdown-list__icon-picker-choices {
@@ -82,9 +83,7 @@
   right: 0;
   top: 50%;
 
-  height: 1px;
-
-  @apply bg-neutral-200;
+  @apply h-px bg-neutral-200;
 }
 
 .storybook-dropdown-list__icon-picker-separator-label {
@@ -93,7 +92,7 @@
 
   letter-spacing: 0.2em;
 
-  @apply bg-neutral-0 px-1;
+  @apply bg-neutral-0 px-1 text-neutral-200;
 }
 
 .storybook-dropdown-list__icon-picker-upload {
@@ -135,11 +134,18 @@
   text-align: left;
 }
 
+.storybook-dropdown-list__icon-picker-upload-title {
+  @apply text-neutral-900;
+}
+
+.storybook-dropdown-list__icon-picker-upload-size {
+  @apply text-neutral-600;
+}
+
 .storybook-dropdown-list__icon-picker-upload-input {
   position: absolute;
 
-  width: 1px;
-  height: 1px;
+  @apply size-px;
 
   overflow: hidden;
 
@@ -200,8 +206,7 @@
 
   @apply px-4 py-3;
 
-  border: 0;
-  background: transparent;
+  @apply border-0 bg-transparent;
 
   cursor: pointer;
   @apply text-neutral-600;
@@ -229,7 +234,7 @@
 }
 
 .storybook-dropdown-list__item--disabled:hover {
-  background: transparent;
+  @apply bg-transparent;
 }
 
 .storybook-dropdown-list__item--destructive {
@@ -295,9 +300,7 @@
   align-items: center;
   justify-content: center;
 
-  border: 1px solid var(--neutral_300);
-  border-radius: 999px;
-  @apply border-neutral-300 bg-neutral-0;
+  @apply rounded-full border border-solid border-neutral-300 bg-neutral-0;
 }
 
 .storybook-dropdown-list__radio--checked {
@@ -308,8 +311,7 @@
   width: 6px;
   height: 6px;
 
-  border-radius: 999px;
-  background: transparent;
+  @apply rounded-full bg-transparent;
 }
 
 .storybook-dropdown-list__radio--checked .storybook-dropdown-list__radio-dot {
@@ -337,8 +339,7 @@
 
   @apply p-0.5;
 
-  border-radius: 999px;
-  @apply bg-neutral-100;
+  @apply rounded-full bg-neutral-100;
 }
 
 .storybook-dropdown-list__toggle--checked {
@@ -359,8 +360,7 @@
   width: 16px;
   height: 16px;
 
-  border-radius: 999px;
-  @apply bg-neutral-0 shadow-sm;
+  @apply rounded-full bg-neutral-0 shadow-sm;
 
   transition: transform 160ms ease;
 }
