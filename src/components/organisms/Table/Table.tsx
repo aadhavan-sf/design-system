@@ -79,7 +79,6 @@ const DEFAULT_ROWS = [
     delivery: 54,
     status: [{ label: 'Review', tone: 'warning', icon: 'list' }],
     updated: 'Jan 8, 2025',
-    state: 'hover',
   },
   {
     id: 'row-4',

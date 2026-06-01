@@ -3,7 +3,7 @@
   max-width: 100%;
   min-width: 0;
 
-  @apply rounded-2 border border-solid border-neutral-200;
+  @apply rounded-2 border border-solid border-neutral-100;
 
   @apply bg-neutral-0;
 
@@ -18,7 +18,7 @@
 
 .storybook-table--with-border .storybook-table-cell,
 .storybook-table--with-border .storybook-table-header-cell {
-  @apply border-r border-solid border-neutral-200;
+  @apply border-r border-solid border-neutral-100;
 }
 
 .storybook-table--with-border .storybook-table-cell:last-child,
@@ -54,7 +54,7 @@
 
   @apply px-6 py-3;
 
-  @apply border-b border-solid border-neutral-200;
+  @apply border-b border-solid border-neutral-100;
 
   @apply bg-neutral-0;
 
@@ -97,7 +97,7 @@
 
   @apply p-6;
 
-  @apply border-b border-solid border-neutral-200;
+  @apply border-b border-solid border-neutral-100;
 
   @apply bg-neutral-0;
 
@@ -378,7 +378,7 @@
   padding-bottom: 10px;
   @apply px-3;
 
-  @apply rounded-2 border border-solid border-neutral-200;
+  @apply rounded-2 border border-solid border-neutral-100;
 
   @apply bg-neutral-0 text-neutral-600;
 
@@ -405,7 +405,7 @@
   width: 42px;
   height: 42px;
 
-  @apply border border-solid border-neutral-200;
+  @apply border border-solid border-neutral-100;
 
   @apply bg-neutral-0;
 }

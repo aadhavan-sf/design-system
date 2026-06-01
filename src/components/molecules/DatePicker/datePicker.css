@@ -133,6 +133,10 @@ div.storybook-datepicker-day {
   @apply bg-brand-400 text-neutral-0;
 }
 
+.storybook-datepicker-day--selected.storybook-datepicker-day--today {
+  @apply text-neutral-0;
+}
+
 .storybook-datepicker-day--on-range {
   @apply rounded-none bg-brand-50 text-neutral-900;
 }

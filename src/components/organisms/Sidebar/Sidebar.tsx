@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   CaretUpDown,
+  Check,
   CopySimple,
   CurrencyCircleDollar,
   DeviceMobileCamera,
@@ -313,6 +314,7 @@ export function Sidebar({
   const isCollapsed = normalizedType === 'collapsed';
   const [selectedItemId, setSelectedItemId] = useState(activeItemId);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isPreviewLinkCopied, setIsPreviewLinkCopied] = useState(false);
   const [isStoreDropdownOpen, setIsStoreDropdownOpen] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState(() => storeOptions[0]?.id);
   const storeButtonRef = useRef(null);
@@ -343,6 +345,28 @@ export function Sidebar({
     setIsPreviewOpen((currentValue) => !currentValue);
     onPreview?.();
   };
+
+  const handlePreviewCopy = async () => {
+    try {
+      await navigator.clipboard?.writeText(window.location.href);
+    } catch {
+      // The visual confirmation should still work when clipboard access is unavailable.
+    }
+
+    setIsPreviewLinkCopied(true);
+  };
+
+  useEffect(() => {
+    if (!isPreviewLinkCopied) {
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setIsPreviewLinkCopied(false);
+    }, 1800);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [isPreviewLinkCopied]);
 
   useEffect(() => {
     if (!isPreviewOpen) {
@@ -602,21 +626,34 @@ export function Sidebar({
           </div>
           <button
             type="button"
-            className="storybook-sidebar-preview-popover__copy"
+            className={buildClassName([
+              'storybook-sidebar-preview-popover__copy',
+              isPreviewLinkCopied && 'storybook-sidebar-preview-popover__copy--copied',
+            ])}
+            onClick={handlePreviewCopy}
           >
-            <CopySimple
-              aria-hidden="true"
-              className="storybook-sidebar-preview-popover__copy-icon"
-              size={18}
-              weight="regular"
-            />
+            {isPreviewLinkCopied ? (
+              <Check
+                aria-hidden="true"
+                className="storybook-sidebar-preview-popover__copy-icon storybook-sidebar-preview-popover__copy-icon--check"
+                size={18}
+                weight="bold"
+              />
+            ) : (
+              <CopySimple
+                aria-hidden="true"
+                className="storybook-sidebar-preview-popover__copy-icon"
+                size={18}
+                weight="regular"
+              />
+            )}
             <Text
               as="span"
               variant="text-xs"
               weight="semibold"
               color="currentColor"
             >
-              Copy link
+              {isPreviewLinkCopied ? 'Copied' : 'Copy link'}
             </Text>
           </button>
         </div>

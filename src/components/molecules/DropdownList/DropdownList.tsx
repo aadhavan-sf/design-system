@@ -369,7 +369,7 @@ export function DropdownList({
         const isSelected = resolvedSelectedValues.includes(value);
         const isActive =
           itemState === 'active' ||
-          (typeof item !== 'string' && item.active) ||
+          (typeof item !== 'string' && item.active && isSelected) ||
           isSelected;
 
         return (

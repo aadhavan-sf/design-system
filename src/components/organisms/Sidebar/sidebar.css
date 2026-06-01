@@ -534,9 +534,36 @@
   @apply bg-neutral-25;
 }
 
+.storybook-sidebar-preview-popover__copy--copied,
+.storybook-sidebar-preview-popover__copy--copied:hover {
+  @apply border-success-200 bg-success-50 text-success-600;
+}
+
+.storybook-sidebar-preview-popover__copy-icon--check {
+  animation: storybook-sidebar-copy-check 260ms ease-out;
+  transform-origin: center;
+}
+
 .storybook-sidebar-preview-popover__copy:focus-visible {
   outline: none;
   @apply shadow-focus-brand;
+}
+
+@keyframes storybook-sidebar-copy-check {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) rotate(-12deg);
+  }
+
+  70% {
+    opacity: 1;
+    transform: scale(1.08) rotate(0deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
 }
 
 .storybook-sidebar-story-surface {
