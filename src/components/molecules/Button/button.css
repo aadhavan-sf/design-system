@@ -12,7 +12,7 @@
 
   text-decoration: none;
 
-  @apply rounded-ds border border-transparent font-sans font-semibold shadow-xs;
+  @apply rounded-ds border border-solid border-transparent font-sans font-semibold shadow-xs;
 
   transition:
     background-color 160ms ease,
@@ -53,7 +53,7 @@
 }
 
 .storybook-button--secondary:hover:not(:disabled) {
-  @apply border-neutral-300 bg-neutral-50 text-neutral-800 shadow-sm;
+  @apply border-neutral-300 bg-neutral-50 text-neutral-800 shadow-none;
 }
 
 .storybook-button--secondary:focus-visible,
