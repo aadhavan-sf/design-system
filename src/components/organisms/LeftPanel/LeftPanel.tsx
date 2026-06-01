@@ -343,7 +343,7 @@ function PanelHeader({
           as="h2"
           variant="text-md"
           weight="semibold"
-          color="var(--neutral_900)"
+          color="currentColor"
           className="storybook-left-panel__title"
         >
           {title}
@@ -448,7 +448,7 @@ function BlockSection({
         as="h3"
         variant="text-xs"
         weight="regular"
-        color="var(--neutral_700)"
+        color="currentColor"
         className="storybook-left-panel-section__title"
       >
         {title}
@@ -549,7 +549,7 @@ function ThemeSettingsContent({
             as="h3"
             variant="text-xs"
             weight="regular"
-            color="var(--neutral_700)"
+            color="currentColor"
             className="storybook-left-panel-section__title"
           >
             {section.title}
@@ -890,7 +890,7 @@ export function LeftPanel({
               as="h2"
               variant="text-md"
               weight="semibold"
-              color="var(--neutral_900)"
+              color="currentColor"
               className="storybook-left-panel__page-title"
             >
               {resolvedPageTitle}
