@@ -79,10 +79,6 @@ function getDisplayLabel({ hierarchy, icon, label }: { hierarchy: NormalizedHier
   return '1';
 }
 
-function PaginationDivider() {
-  return <span className="storybook-pagination__divider" aria-hidden="true" />;
-}
-
 export function PaginationButton({
   hierarchy = 'middle',
   icon = 'false',
@@ -258,7 +254,6 @@ export function Pagination({
             key={`${page}-${index}`}
             className="storybook-pagination__item"
           >
-            <PaginationDivider />
             <PaginationButton
               hierarchy="middle"
               label={String(page)}

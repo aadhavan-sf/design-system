@@ -41,12 +41,8 @@
 .storybook-pagination__item {
   display: inline-flex;
   align-items: stretch;
-}
 
-.storybook-pagination__divider {
-  flex-shrink: 0;
-
-  @apply h-10 w-px bg-neutral-200;
+  margin-left: -1px;
 }
 
 .storybook-pagination-button {
@@ -104,10 +100,12 @@
 
   flex-direction: column;
 
-  @apply border-x-0 px-4 py-2.5;
+  @apply px-4 py-2.5;
 }
 
 .storybook-pagination-button--trailing {
+  margin-left: -1px;
+
   @apply rounded-r-2;
 }
 
