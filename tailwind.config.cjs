@@ -90,6 +90,24 @@ const successScale = {
   DEFAULT: 'var(--success_500)',
 };
 
+const informationScale = {
+  25: 'var(--information_25)',
+  50: 'var(--information_50)',
+  100: 'var(--information_100)',
+  200: 'var(--information_200)',
+  300: 'var(--information_300)',
+  400: 'var(--information_400)',
+  500: 'var(--information_500)',
+  600: 'var(--information_600)',
+  700: 'var(--information_700)',
+  800: 'var(--information_800)',
+  900: 'var(--information_900)',
+  light: 'var(--information_400)',
+  main: 'var(--information_500)',
+  dark: 'var(--information_600)',
+  DEFAULT: 'var(--information_500)',
+};
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -169,22 +187,8 @@ module.exports = {
         success: successScale,
         warning: warningScale,
         error: errorScale,
-        info: {
-          50: '#E3F3FF',
-          100: '#BBDFFF',
-          200: '#8CCCFF',
-          300: '#56B7FF',
-          400: '#23A6FF',
-          500: '#0096FF',
-          600: '#0D87FF',
-          700: '#2173FF',
-          800: '#2960EC',
-          900: '#313CCC',
-          light: '#23A6FF',
-          main: '#0096FF',
-          dark: '#0D87FF',
-          DEFAULT: '#0096FF',
-        },
+        info: informationScale,
+        information: informationScale,
         neutral: neutralScale,
         special: {
           'off-white': 'var(--off-white)',

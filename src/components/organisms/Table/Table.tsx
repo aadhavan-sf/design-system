@@ -358,7 +358,7 @@ function AvatarBlock({
           as="span"
           variant="text-sm"
           weight="medium"
-          color="var(--neutral_800)"
+          color="currentColor"
           className="storybook-table-cell__truncate"
         >
           {value}
@@ -368,7 +368,7 @@ function AvatarBlock({
             as="span"
             variant="text-sm"
             weight="regular"
-            color="var(--neutral_600)"
+            color="currentColor"
             className="storybook-table-cell__truncate"
           >
             {supportingValue}
@@ -443,7 +443,7 @@ export function TableCell({
           as="span"
           variant="text-sm"
           weight="semibold"
-          color="var(--neutral_800)"
+          color="currentColor"
           className="storybook-table-cell__truncate"
         >
           {value}
@@ -454,7 +454,7 @@ export function TableCell({
           as="span"
           variant="text-sm"
           weight="regular"
-          color="var(--neutral_600)"
+          color="currentColor"
           className="storybook-table-cell__truncate"
         >
           {value}
@@ -467,7 +467,7 @@ export function TableCell({
             as="span"
             variant="text-sm"
             weight="semibold"
-            color="var(--neutral_800)"
+            color="currentColor"
             className="storybook-table-cell__truncate"
           >
             {value}
@@ -507,7 +507,7 @@ export function TableCell({
               as="span"
               variant="text-sm"
               weight="regular"
-              color="var(--neutral_600)"
+              color="currentColor"
             >
               {value}
             </Text>
@@ -555,7 +555,7 @@ function FilterInput({
         as="span"
         variant="text-sm"
         weight="regular"
-        color="var(--neutral_300)"
+        color="currentColor"
         className="storybook-table-filter-input__label"
       >
         {label}
@@ -590,7 +590,7 @@ export function TableFilters({
         as="h2"
         variant="display-xs"
         weight="semibold"
-        color="var(--neutral_900)"
+        color="currentColor"
         className="storybook-table-filters__title"
       >
         {title}
@@ -699,7 +699,7 @@ export function TableEmptyState({
           as="h3"
           variant="text-md"
           weight="semibold"
-          color="var(--neutral_900)"
+          color="currentColor"
         >
           {config.title}
         </Text>
@@ -707,7 +707,7 @@ export function TableEmptyState({
           as="p"
           variant="text-sm"
           weight="regular"
-          color="var(--neutral_600)"
+          color="currentColor"
         >
           {config.description}
         </Text>
