@@ -10,6 +10,7 @@
 
 .storybook-icon-library__label {
   display: block;
+  @apply text-neutral-600;
 }
 
 .storybook-icon-library__field-row {
@@ -25,19 +26,14 @@
   display: inline-flex;
   align-items: center;
 
-  box-sizing: border-box;
-  border: 1px solid var(--neutral_200);
-  border-radius: var(--spacing_2);
-  @apply bg-neutral-0;
+  @apply box-border rounded-2 border border-solid border-neutral-200 bg-neutral-0;
 }
 
 .storybook-icon-library__icon-preview {
   width: 44px;
   flex-shrink: 0;
   justify-content: center;
-  padding: 0;
-
-  @apply text-neutral-700;
+  @apply p-0 text-neutral-700;
   cursor: pointer;
 }
 
@@ -60,7 +56,8 @@
   justify-content: space-between;
   @apply gap-2;
 
-  padding: var(--spacing_3) 14px;
+  padding-inline: 14px;
+  @apply py-3;
 
   cursor: pointer;
   @apply text-neutral-700;
@@ -122,23 +119,20 @@
   align-items: center;
   justify-content: center;
 
-  border: 0;
-  @apply bg-neutral-0 text-neutral-600;
+  @apply border-0 bg-neutral-0 text-neutral-600;
   cursor: pointer;
 }
 
 .storybook-icon-library-item--sm {
   width: 24px;
   height: 24px;
-  padding: var(--spacing_1);
-  border-radius: var(--spacing_1);
+  @apply rounded-1 p-1;
 }
 
 .storybook-icon-library-item--md {
   width: 32px;
   height: 32px;
-  padding: var(--spacing_1_5);
-  border-radius: var(--spacing_1);
+  @apply rounded-1 p-1.5;
 }
 
 .storybook-icon-library-item:hover,
@@ -147,16 +141,15 @@
 }
 
 .storybook-icon-library-item--pressed {
-  border: 1px solid var(--brand_100);
-  @apply bg-brand-25 text-brand-400;
+  @apply border border-solid border-brand-100 bg-brand-25 text-brand-400;
 }
 
 .storybook-icon-library-item--sm.storybook-icon-library-item--pressed {
-  border-radius: var(--spacing_1);
+  @apply rounded-1;
 }
 
 .storybook-icon-library-item--md.storybook-icon-library-item--pressed {
-  border-radius: var(--spacing_1);
+  @apply rounded-1;
 }
 
 .storybook-icon-library-item--focused {
@@ -175,8 +168,7 @@
 
 .storybook-icon-library-item--disabled.storybook-icon-library-item--pressed,
 .storybook-icon-library-item:disabled.storybook-icon-library-item--pressed {
-  border-color: var(--brand_100);
-  @apply bg-brand-25 text-brand-100;
+  @apply border-brand-100 bg-brand-25 text-brand-100;
 }
 
 .storybook-icon-library-item__icon {
@@ -191,10 +183,7 @@
   justify-content: flex-end;
   @apply gap-2;
 
-  @apply p-3;
-  border: 1px solid var(--neutral_200);
-  border-radius: var(--spacing_2);
-  @apply bg-neutral-0;
+  @apply rounded-2 border border-solid border-neutral-200 bg-neutral-0 p-3;
 }
 
 .storybook-icon-library-grid__icons {
@@ -209,12 +198,11 @@
 }
 
 .storybook-icon-library-grid__scrollbar {
-  width: var(--spacing_2);
+  @apply w-2;
   height: 60px;
   flex-shrink: 0;
 
-  border-radius: var(--spacing_2);
-  @apply bg-neutral-100;
+  @apply rounded-2 bg-neutral-100;
 }
 
 .storybook-icon-library-story-stack,

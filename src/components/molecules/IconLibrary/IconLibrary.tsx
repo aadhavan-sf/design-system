@@ -289,7 +289,7 @@ export function IconLibrary({
         as="label"
         variant="text-sm"
         weight="medium"
-        color="var(--neutral_600)"
+        color="currentColor"
         className="storybook-icon-library__label"
       >
         {label}
@@ -319,7 +319,7 @@ export function IconLibrary({
             as="span"
             variant="text-sm"
             weight="medium"
-            color="var(--neutral_700)"
+            color="currentColor"
             className="storybook-icon-library__select-label"
           >
             {displayLabel}
