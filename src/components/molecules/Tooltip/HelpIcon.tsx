@@ -81,7 +81,7 @@ export function HelpIcon({
               as="span"
               variant="text-xs"
               weight={supportingText ? 'semibold' : 'medium'}
-              color="var(--neutral_00)"
+              color="currentColor"
               className="storybook-help-icon__title"
             >
               {title}
@@ -92,7 +92,7 @@ export function HelpIcon({
                 as="span"
                 variant="text-xs"
                 weight="regular"
-                color="var(--neutral_00)"
+                color="currentColor"
                 className="storybook-help-icon__description"
               >
                 {description}

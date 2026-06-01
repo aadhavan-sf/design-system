@@ -5,10 +5,7 @@
   align-items: center;
   justify-content: center;
 
-  width: 16px;
-  height: 16px;
-
-  @apply font-sans text-neutral-400;
+  @apply size-4 font-sans text-neutral-400;
 }
 
 .storybook-help-icon__trigger {
@@ -16,19 +13,11 @@
   align-items: center;
   justify-content: center;
 
-  width: 16px;
-  height: 16px;
-  padding: 0;
-
-  border: 0;
-  background: transparent;
-  color: inherit;
+  @apply size-4 border-0 bg-transparent p-0 text-current;
 }
 
 .storybook-help-icon__trigger:focus-visible {
-  outline: 2px solid var(--brand_300);
-  outline-offset: 2px;
-  border-radius: 999px;
+  @apply rounded-full outline-2 outline-offset-2 outline-brand-300;
 }
 
 .storybook-help-icon__trigger svg {
@@ -55,8 +44,7 @@
   max-width: 320px;
   @apply px-3 py-2;
 
-  border-radius: var(--radius_8, 8px);
-  @apply bg-neutral-900 text-neutral-0 shadow-md;
+  @apply rounded-ds bg-neutral-900 text-neutral-0 shadow-md;
 }
 
 .storybook-help-icon__popover--supporting .storybook-help-icon__content {
@@ -149,13 +137,15 @@
 
 .storybook-help-icon__popover--top-arrow::after {
   border-width: 6px 8px 0;
-  border-color: var(--neutral_900) transparent transparent;
+  border-color: transparent;
+  @apply border-t-neutral-900;
 }
 
 .storybook-help-icon__popover--top-left::after,
 .storybook-help-icon__popover--top-right::after {
   border-width: 6px 8px 0;
-  border-color: var(--neutral_900) transparent transparent;
+  border-color: transparent;
+  @apply border-t-neutral-900;
 }
 
 .storybook-help-icon__popover--top-left::after {
@@ -170,19 +160,22 @@
   order: -1;
 
   border-width: 0 8px 6px;
-  border-color: transparent transparent var(--neutral_900);
+  border-color: transparent;
+  @apply border-b-neutral-900;
 }
 
 .storybook-help-icon__popover--left::after {
   border-width: 8px 0 8px 6px;
-  border-color: transparent transparent transparent var(--neutral_900);
+  border-color: transparent;
+  @apply border-l-neutral-900;
 }
 
 .storybook-help-icon__popover--right::after {
   order: -1;
 
   border-width: 8px 6px 8px 0;
-  border-color: transparent var(--neutral_900) transparent transparent;
+  border-color: transparent;
+  @apply border-r-neutral-900;
 }
 
 .help-icon-story-grid,
