@@ -89,19 +89,6 @@
   @apply text-neutral-700;
 }
 
-.storybook-icon-library-popover {
-  width: 216px;
-
-  display: flex;
-  flex-direction: column;
-  @apply gap-4;
-
-  @apply rounded-2 bg-neutral-0 p-4 shadow-md;
-
-  animation: storybook-icon-library-popover-enter 150ms ease-out;
-  transform-origin: top center;
-}
-
 .storybook-icon-library__dropdown-menu {
   position: absolute;
   z-index: 20;
@@ -126,112 +113,6 @@
 
 .storybook-icon-library__dropdown-menu .storybook-dropdown-list {
   width: 164px;
-}
-
-.storybook-icon-library-popover__title {
-  margin: 0;
-}
-
-.storybook-icon-library-popover__choices {
-  display: flex;
-  align-items: center;
-  @apply gap-2;
-}
-
-.storybook-icon-library-separator {
-  width: 100%;
-  height: 16px;
-
-  position: relative;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.storybook-icon-library-separator__line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-
-  height: 1px;
-
-  background: var(--neutral_200);
-}
-
-.storybook-icon-library-separator__label {
-  position: relative;
-  z-index: 1;
-
-  @apply bg-neutral-0 px-1;
-
-  letter-spacing: 0.2em;
-}
-
-.storybook-icon-library-upload {
-  width: 100%;
-
-  display: flex;
-  align-items: flex-start;
-  @apply gap-2;
-
-  @apply p-3;
-  border: 1px dashed var(--neutral_200);
-  border-radius: var(--spacing_2);
-  @apply bg-neutral-0 text-neutral-900;
-  cursor: pointer;
-}
-
-.storybook-icon-library-upload:hover {
-  @apply bg-neutral-25;
-}
-
-.storybook-icon-library-upload:focus-visible {
-  outline: none;
-  @apply shadow-focus-brand;
-}
-
-.storybook-icon-library-upload__icon {
-  flex-shrink: 0;
-
-  @apply text-brand-400;
-}
-
-.storybook-icon-library-upload__copy {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  @apply gap-1;
-
-  text-align: left;
-}
-
-.storybook-icon-library-upload__input {
-  position: absolute;
-
-  width: 1px;
-  height: 1px;
-
-  overflow: hidden;
-
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-.storybook-icon-library-uploaded {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  @apply gap-2;
-}
-
-.storybook-icon-library-uploaded__actions {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing_2);
 }
 
 .storybook-icon-library-item {

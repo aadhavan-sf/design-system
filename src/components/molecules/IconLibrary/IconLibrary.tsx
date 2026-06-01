@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { createElement, useMemo, useRef, useState } from 'react';
+import { createElement, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Bell,
@@ -7,10 +7,8 @@ import {
   BellSimple,
   CaretUpDown,
   HouseSimple,
-  MonitorArrowUp,
 } from '@phosphor-icons/react';
 
-import { IconHoverEffect } from '../../atoms/IconHoverEffect';
 import { DropdownList } from '../DropdownList';
 import { Text } from '../../foundations/Typography';
 import {
@@ -196,154 +194,6 @@ IconLibraryGrid.propTypes = {
   state: PropTypes.oneOf([...GRID_STATES, 'Default', 'Icon not selected']),
 };
 
-function IconUploadDropzone({
-  onUpload,
-}) {
-  const inputRef = useRef(null);
-
-  return (
-    <button
-      type="button"
-      className="storybook-icon-library-upload"
-      onClick={() => inputRef.current?.click()}
-    >
-      <MonitorArrowUp
-        aria-hidden="true"
-        className="storybook-icon-library-upload__icon"
-        size={24}
-        weight="regular"
-      />
-      <span className="storybook-icon-library-upload__copy">
-        <Text
-          as="span"
-          variant="text-sm"
-          weight="medium"
-          color="var(--neutral_900)"
-        >
-          Upload Your Icon
-        </Text>
-        <Text
-          as="span"
-          variant="text-xs"
-          weight="regular"
-          color="var(--neutral_600)"
-        >
-          24x24 SVG or PNG
-        </Text>
-      </span>
-      <input
-        ref={inputRef}
-        type="file"
-        accept=".svg,.png,image/svg+xml,image/png"
-        className="storybook-icon-library-upload__input"
-        onChange={(event) => onUpload?.(event.target.files?.[0] ?? null)}
-      />
-    </button>
-  );
-}
-
-IconUploadDropzone.propTypes = {
-  onUpload: PropTypes.func,
-};
-
-function IconPickerPopover({
-  onIconSelect,
-  onRemoveUploadedIcon,
-  onRepeatUploadedIcon,
-  onUpload,
-  selectedValue,
-  state,
-  uploadedIcon = BellRinging,
-}) {
-  const normalizedState = normalizeValue(state, {
-    Default: 'default',
-    'Dropdown + Upload Icon': 'dropdown-upload-icon',
-    'Uploaded Icon': 'uploaded-icon',
-  });
-  const isUploadedState = normalizedState === 'uploaded-icon';
-
-  return (
-    <div className="storybook-icon-library-popover">
-      <Text
-        as="p"
-        variant="text-xs"
-        weight="medium"
-        color="var(--neutral_600)"
-        className="storybook-icon-library-popover__title"
-      >
-        Choose Icon
-      </Text>
-
-      <div className="storybook-icon-library-popover__choices">
-        {(isUploadedState ? [
-          { value: 'bell', label: 'Notifications', icon: Bell },
-          { value: 'bell-ringing', label: 'Notifications ringing', icon: BellRinging },
-          { value: 'bell-simple', label: 'Simple notifications', icon: BellSimple },
-        ] : smallPickerOptions).map((option) => (
-          <IconLibraryItem
-            key={option.value}
-            ariaLabel={option.label}
-            icon={option.icon}
-            pressed={option.value === selectedValue}
-            size="md"
-            onClick={() => onIconSelect?.(option)}
-          />
-        ))}
-      </div>
-
-      <div className="storybook-icon-library-separator">
-        <span className="storybook-icon-library-separator__line" />
-        <Text
-          as="span"
-          variant="text-xs"
-          weight="medium"
-          color="var(--neutral_200)"
-          className="storybook-icon-library-separator__label"
-        >
-          OR
-        </Text>
-      </div>
-
-      {isUploadedState ? (
-        <div className="storybook-icon-library-uploaded">
-          <IconLibraryItem
-            ariaLabel="Uploaded icon"
-            icon={uploadedIcon}
-            pressed
-            size="md"
-          />
-          <span className="storybook-icon-library-uploaded__actions">
-            <IconHoverEffect
-              ariaLabel="Replace uploaded icon"
-              icon="repeat"
-              size="sm"
-              onClick={onRepeatUploadedIcon}
-            />
-            <IconHoverEffect
-              ariaLabel="Delete uploaded icon"
-              type="destructive"
-              size="sm"
-              onClick={onRemoveUploadedIcon}
-            />
-          </span>
-        </div>
-      ) : (
-        <IconUploadDropzone onUpload={onUpload} />
-      )}
-    </div>
-  );
-}
-
-IconPickerPopover.propTypes = {
-  onIconSelect: PropTypes.func,
-  onRemoveUploadedIcon: PropTypes.func,
-  onRepeatUploadedIcon: PropTypes.func,
-  onUpload: PropTypes.func,
-  selectedValue: PropTypes.string,
-  state: PropTypes.oneOf([...LIBRARY_STATES, 'Default', 'Dropdown + Upload Icon', 'Uploaded Icon']),
-  uploadedIcon: PropTypes.elementType,
-};
-
 export function IconLibrary({
   categoryValue,
   className,
@@ -387,6 +237,13 @@ export function IconLibrary({
   );
   const SelectedIcon = selectedOption?.icon ?? BellRinging;
   const displayLabel = selectedLabel ?? getCategoryLabel(resolvedCategoryValue);
+  const pickerOptions = normalizedState === 'uploaded-icon'
+    ? [
+      { value: 'bell', label: 'Notifications', icon: Bell },
+      { value: 'bell-ringing', label: 'Notifications ringing', icon: BellRinging },
+      { value: 'bell-simple', label: 'Simple notifications', icon: BellSimple },
+    ]
+    : smallPickerOptions;
 
   const togglePanel = (panel) => {
     const nextPanel = activePanel === panel ? null : panel;
@@ -477,10 +334,11 @@ export function IconLibrary({
       </div>
 
       {isPickerOpen && (
-        <IconPickerPopover
+        <DropdownList
+          variant="icon-picker"
+          iconOptions={pickerOptions}
           selectedValue={resolvedSelectedValue}
-          state={normalizedState}
-          uploadedIcon={uploadedIcon}
+          uploadedIcon={normalizedState === 'uploaded-icon' ? uploadedIcon ?? BellRinging : undefined}
           onIconSelect={handleIconSelect}
           onRemoveUploadedIcon={onRemoveUploadedIcon}
           onRepeatUploadedIcon={onRepeatUploadedIcon}

@@ -1,7 +1,10 @@
-import { useState, type ReactNode } from 'react';
+import { createElement, useRef, useState, type ElementType, type ReactNode } from 'react';
 import {
   Check,
+  MonitorArrowUp,
   Plug,
+  Repeat,
+  Trash,
 } from '@phosphor-icons/react';
 
 import { Text } from '../../foundations/Typography';
@@ -40,6 +43,183 @@ function getDefaultSelectedValues(items: DropdownListItem[]) {
   return items
     .filter((item) => typeof item !== 'string' && item.selected)
     .map(getItemValue);
+}
+
+function IconPickerGlyph({
+  className,
+  icon,
+  size,
+}: {
+  className?: string;
+  icon: ElementType;
+  size: number;
+}) {
+  return createElement(icon, {
+    'aria-hidden': true,
+    className,
+    size,
+    weight: 'regular',
+  });
+}
+
+function IconPickerItem({
+  icon,
+  label,
+  onClick,
+  pressed,
+}: {
+  icon: ElementType;
+  label: string;
+  onClick?: () => void;
+  pressed?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      aria-pressed={pressed}
+      className={buildClassName([
+        'storybook-dropdown-list__icon-picker-item',
+        pressed && 'storybook-dropdown-list__icon-picker-item--pressed',
+      ])}
+      onClick={onClick}
+    >
+      <IconPickerGlyph
+        className="storybook-dropdown-list__icon-picker-icon"
+        icon={icon}
+        size={20}
+      />
+    </button>
+  );
+}
+
+function IconPickerUpload({
+  onUpload,
+}: {
+  onUpload?: (file: File | null) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  return (
+    <button
+      type="button"
+      className="storybook-dropdown-list__icon-picker-upload"
+      onClick={() => inputRef.current?.click()}
+    >
+      <MonitorArrowUp
+        aria-hidden="true"
+        className="storybook-dropdown-list__icon-picker-upload-icon"
+        size={24}
+        weight="regular"
+      />
+      <span className="storybook-dropdown-list__icon-picker-upload-copy">
+        <Text
+          as="span"
+          variant="text-sm"
+          weight="medium"
+          color="var(--neutral_900)"
+        >
+          Upload Your Icon
+        </Text>
+        <Text
+          as="span"
+          variant="text-xs"
+          weight="regular"
+          color="var(--neutral_600)"
+        >
+          24x24 SVG or PNG
+        </Text>
+      </span>
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".svg,.png,image/svg+xml,image/png"
+        className="storybook-dropdown-list__icon-picker-upload-input"
+        onChange={(event) => onUpload?.(event.target.files?.[0] ?? null)}
+      />
+    </button>
+  );
+}
+
+function IconPickerDropdown({
+  iconOptions = [],
+  onIconSelect,
+  onRemoveUploadedIcon,
+  onRepeatUploadedIcon,
+  onUpload,
+  selectedValue,
+  uploadedIcon,
+}: Pick<DropdownListProps, 'iconOptions' | 'onIconSelect' | 'onRemoveUploadedIcon' | 'onRepeatUploadedIcon' | 'onUpload' | 'selectedValue' | 'uploadedIcon'>) {
+  const isUploadedState = Boolean(uploadedIcon);
+
+  return (
+    <div className="storybook-dropdown-list__icon-picker">
+      <Text
+        as="p"
+        variant="text-xs"
+        weight="medium"
+        color="var(--neutral_600)"
+        className="storybook-dropdown-list__icon-picker-title"
+      >
+        Choose Icon
+      </Text>
+
+      <div className="storybook-dropdown-list__icon-picker-choices">
+        {iconOptions.map((option) => (
+          <IconPickerItem
+            key={option.value}
+            icon={option.icon}
+            label={option.label}
+            pressed={option.value === selectedValue}
+            onClick={() => onIconSelect?.(option)}
+          />
+        ))}
+      </div>
+
+      <div className="storybook-dropdown-list__icon-picker-separator">
+        <span className="storybook-dropdown-list__icon-picker-separator-line" />
+        <Text
+          as="span"
+          variant="text-xs"
+          weight="medium"
+          color="var(--neutral_200)"
+          className="storybook-dropdown-list__icon-picker-separator-label"
+        >
+          OR
+        </Text>
+      </div>
+
+      {isUploadedState && uploadedIcon ? (
+        <div className="storybook-dropdown-list__icon-picker-uploaded">
+          <IconPickerItem
+            icon={uploadedIcon}
+            label="Uploaded icon"
+            pressed
+          />
+          <span className="storybook-dropdown-list__icon-picker-uploaded-actions">
+            <button
+              type="button"
+              aria-label="Replace uploaded icon"
+              className="storybook-dropdown-list__icon-picker-action"
+              onClick={onRepeatUploadedIcon}
+            >
+              <Repeat size={16} weight="regular" />
+            </button>
+            <button
+              type="button"
+              aria-label="Delete uploaded icon"
+              className="storybook-dropdown-list__icon-picker-action storybook-dropdown-list__icon-picker-action--destructive"
+              onClick={onRemoveUploadedIcon}
+            >
+              <Trash size={16} weight="regular" />
+            </button>
+          </span>
+        </div>
+      ) : (
+        <IconPickerUpload onUpload={onUpload} />
+      )}
+    </div>
+  );
 }
 
 function Control({ disabled, selected, variant }: { disabled: boolean; selected: boolean; variant: 'checkbox-left' | 'radio-left' | 'toggle-right' }) {
@@ -92,8 +272,15 @@ function Control({ disabled, selected, variant }: { disabled: boolean; selected:
 }
 
 export function DropdownList({
+  iconOptions,
   items = DEFAULT_ITEMS,
+  onIconSelect,
+  onRemoveUploadedIcon,
+  onRepeatUploadedIcon,
+  onUpload,
+  selectedValue,
   selectedValues,
+  uploadedIcon,
   variant = 'icon-left',
   onItemSelect,
   onSelectedValuesChange,
@@ -101,6 +288,23 @@ export function DropdownList({
   const [internalSelectedValues, setInternalSelectedValues] = useState(() =>
     getDefaultSelectedValues(items)
   );
+
+  if (variant === 'icon-picker') {
+    return (
+      <div className="storybook-dropdown-list storybook-dropdown-list--icon-picker">
+        <IconPickerDropdown
+          iconOptions={iconOptions}
+          selectedValue={selectedValue}
+          uploadedIcon={uploadedIcon}
+          onIconSelect={onIconSelect}
+          onRemoveUploadedIcon={onRemoveUploadedIcon}
+          onRepeatUploadedIcon={onRepeatUploadedIcon}
+          onUpload={onUpload}
+        />
+      </div>
+    );
+  }
+
   const resolvedSelectedValues = selectedValues ?? internalSelectedValues;
 
   const updateSelectedValues = (nextValues: string[]) => {
@@ -233,6 +437,11 @@ export function DropdownList({
 }
 export type DropdownListVariant = string;
 export type DropdownListItemState = string;
+export type DropdownListIconOption = {
+  icon: ElementType;
+  label: string;
+  value: string;
+};
 
 export type DropdownListItem =
   | string
@@ -248,9 +457,16 @@ export type DropdownListItem =
     };
 
 export interface DropdownListProps {
+  iconOptions?: DropdownListIconOption[];
   items?: DropdownListItem[];
+  onIconSelect?: (item: DropdownListIconOption) => void;
   selectedValues?: string[];
+  selectedValue?: string;
   variant?: DropdownListVariant;
   onItemSelect?: (item: DropdownListItem, index: number) => void;
+  onRemoveUploadedIcon?: () => void;
+  onRepeatUploadedIcon?: () => void;
   onSelectedValuesChange?: (values: string[]) => void;
+  onUpload?: (file: File | null) => void;
+  uploadedIcon?: ElementType;
 }
