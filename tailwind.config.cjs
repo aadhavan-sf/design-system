@@ -219,7 +219,9 @@ module.exports = {
         1.5: 'var(--spacing_1_5)',
         2: 'var(--spacing_2)',
         3: 'var(--spacing_3)',
+        4: 'var(--spacing_4)',
         6: 'var(--spacing_6)',
+        10: 'var(--spacing_10)',
         ds: 'var(--radius_8)',
       },
       boxShadow: {

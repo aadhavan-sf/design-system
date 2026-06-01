@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
 
-  padding: var(--spacing_10);
+  @apply p-10;
 
   background: color-mix(in srgb, var(--neutral_100) 70%, transparent);
 }
@@ -16,22 +16,21 @@
 
   display: flex;
   align-items: flex-start;
-  gap: var(--spacing_4);
+  @apply gap-4;
   overflow: hidden;
 
-  padding: var(--spacing_6);
+  @apply p-6;
 
-  border-radius: var(--spacing_4);
-  background: var(--neutral_00);
+  @apply rounded-4 bg-neutral-0;
 }
 
 .storybook-modal--demo {
   width: 480px;
 
   flex-direction: column;
-  gap: var(--spacing_6);
+  @apply gap-6;
 
-  border-radius: var(--spacing_4);
+  @apply rounded-4;
 }
 
 .storybook-modal__demo-header {
@@ -40,11 +39,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing_4);
+  @apply gap-4;
 }
 
 .storybook-modal__demo-title {
   min-width: 0;
+  @apply text-neutral-900;
 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -60,12 +60,7 @@
   justify-content: center;
   flex-shrink: 0;
 
-  padding: 0;
-
-  color: var(--neutral_600);
-  background: transparent;
-  border: 0;
-  border-radius: var(--radius_4, 4px);
+  @apply rounded-1 border-0 bg-transparent p-0 text-neutral-600;
   cursor: pointer;
 
   transition:
@@ -75,13 +70,12 @@
 }
 
 .storybook-modal__close-button:hover {
-  color: var(--neutral_800);
-  background: var(--neutral_25);
+  @apply bg-neutral-25 text-neutral-800;
 }
 
 .storybook-modal__close-button:focus-visible {
   outline: none;
-  box-shadow: var(--shadow_focus-neutral);
+  @apply shadow-focus-neutral;
 }
 
 .storybook-modal__icon {
@@ -93,25 +87,21 @@
   justify-content: center;
   flex-shrink: 0;
 
-  padding: var(--spacing_2);
+  @apply p-2;
 
-  border-radius: var(--spacing_10);
-  box-sizing: border-box;
+  @apply box-border rounded-10;
 }
 
 .storybook-modal__icon--error {
-  background: var(--error_50);
-  color: var(--error_600);
+  @apply bg-error-50 text-error-600;
 }
 
 .storybook-modal__icon--warning {
-  background: var(--warning_50);
-  color: var(--warning_600);
+  @apply bg-warning-50 text-warning-600;
 }
 
 .storybook-modal__icon--success {
-  background: var(--success_50);
-  color: var(--success_600);
+  @apply bg-success-50 text-success-600;
 }
 
 .storybook-modal__content {
@@ -120,17 +110,18 @@
 
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_8);
+  @apply gap-8;
 }
 
 .storybook-modal__copy {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_2);
+  @apply gap-2;
 }
 
 .storybook-modal__title {
   width: 100%;
+  @apply text-neutral-900;
 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -139,13 +130,14 @@
 
 .storybook-modal__description {
   width: 100%;
+  @apply text-neutral-600;
 }
 
 .storybook-modal__actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--spacing_4);
+  @apply gap-4;
 }
 
 .storybook-modal__actions--demo {
@@ -155,11 +147,11 @@
 .storybook-modal-story-grid {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_6);
+  @apply gap-6;
   align-items: stretch;
 }
 
 .storybook-modal-story-grid .storybook-modal__backdrop {
   min-height: 180px;
-  padding: var(--spacing_6);
+  @apply p-6;
 }

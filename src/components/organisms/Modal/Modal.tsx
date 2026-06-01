@@ -173,7 +173,7 @@ export function Modal({
               id="storybook-modal-title"
               variant="text-lg"
               weight="semibold"
-              color="var(--neutral_900)"
+              color="currentColor"
               className="storybook-modal__demo-title"
             >
               {title ?? 'Add menu Item'}
@@ -241,7 +241,7 @@ export function Modal({
               id="storybook-modal-title"
               variant="text-lg"
               weight="semibold"
-              color="var(--neutral_900)"
+              color="currentColor"
               className="storybook-modal__title"
             >
               {resolvedTitle}
@@ -252,7 +252,7 @@ export function Modal({
               id="storybook-modal-description"
               variant="text-sm"
               weight="regular"
-              color="var(--neutral_600)"
+              color="currentColor"
               className="storybook-modal__description"
             >
               {resolvedDescription}
