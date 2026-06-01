@@ -511,7 +511,7 @@
 
   @apply p-6;
 
-  @apply bg-neutral-100;
+  @apply bg-neutral-50;
 }
 
 @media (max-width: 900px) {
