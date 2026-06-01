@@ -249,7 +249,7 @@ function SidebarSection({
           as="h3"
           variant="text-xs"
           weight="medium"
-          color="var(--neutral_600)"
+          color="currentColor"
           className="storybook-sidebar-section__title"
         >
           {title}
@@ -431,8 +431,11 @@ export function Sidebar({
                 as="span"
                 variant="text-sm"
                 weight="regular"
-                color={selectedStore ? 'var(--neutral_700)' : 'var(--neutral_300)'}
-                className="storybook-sidebar-store__label"
+                color="currentColor"
+                className={buildClassName([
+                  'storybook-sidebar-store__label',
+                  !selectedStore && 'storybook-sidebar-store__label--placeholder',
+                ])}
               >
                 {selectedStore?.name ?? storePlaceholder}
               </Text>
@@ -502,7 +505,8 @@ export function Sidebar({
                 as="span"
                 variant="text-sm"
                 weight="bold"
-                color="var(--neutral_900)"
+                color="currentColor"
+                className="storybook-sidebar-account__name"
               >
                 {selectedStore?.name ?? avatarLabel}
               </Text>
@@ -510,7 +514,7 @@ export function Sidebar({
                 as="span"
                 variant="text-xs"
                 weight="regular"
-                color="var(--neutral_600)"
+                color="currentColor"
                 className="storybook-sidebar-account__meta"
               >
                 {selectedStore?.code ?? avatarMeta}
@@ -590,7 +594,7 @@ export function Sidebar({
               as="span"
               variant="text-xs"
               weight="medium"
-              color="var(--neutral_600)"
+              color="currentColor"
               className="storybook-sidebar-preview-popover__hint-text"
             >
               Scan QR to download the app to preview on mobile
