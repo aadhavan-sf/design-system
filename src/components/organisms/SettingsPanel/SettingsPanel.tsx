@@ -26,6 +26,7 @@ const PANEL_CONTENT = {
       'Global CSS',
       'Metafields',
       'Product Badges',
+      'Other Options',
     ],
     warningLabels: [],
   },
