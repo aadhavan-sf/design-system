@@ -425,7 +425,7 @@ export function UploadFileItem({
             as="span"
             variant="text-sm"
             weight="medium"
-            color="var(--neutral_900)"
+            color="currentColor"
             className="storybook-upload-item__name"
           >
             {displayedFile.name}
@@ -434,7 +434,8 @@ export function UploadFileItem({
             as="span"
             variant="text-xs"
             weight="regular"
-            color="var(--neutral_600)"
+            color="currentColor"
+            className="storybook-upload-item__size"
           >
             {displayedFile.size}
           </Text>

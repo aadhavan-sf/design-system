@@ -9,8 +9,7 @@
 .storybook-upload-file__input {
   position: absolute;
 
-  width: 1px;
-  height: 1px;
+  @apply size-px;
 
   overflow: hidden;
 
@@ -24,12 +23,11 @@
 
   display: flex;
 
-  border: 1px dashed var(--neutral_200);
-  border-radius: var(--spacing_2);
+  @apply rounded-2 border border-dashed border-neutral-200;
 
   @apply bg-neutral-0 text-neutral-900;
 
-  box-sizing: border-box;
+  @apply box-border;
 
   text-align: left;
   @apply font-sans;
@@ -122,10 +120,9 @@
 .storybook-upload-item {
   width: 500px;
 
-  border: 1px solid var(--neutral_200);
-  border-radius: var(--spacing_2);
+  @apply rounded-2 border border-solid border-neutral-200;
 
-  box-sizing: border-box;
+  @apply box-border;
 }
 
 .storybook-upload-item--single {
@@ -157,8 +154,7 @@
 
   flex-shrink: 0;
 
-  border: 1px solid var(--neutral_200);
-  border-radius: var(--spacing_2);
+  @apply rounded-2 border border-solid border-neutral-200;
 
   overflow: hidden;
 
@@ -199,6 +195,12 @@
 
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  @apply text-neutral-900;
+}
+
+.storybook-upload-item__size {
+  @apply text-neutral-600;
 }
 
 .storybook-upload-item__actions {
@@ -214,13 +216,7 @@
   justify-content: center;
   @apply gap-2;
 
-  padding: 0;
-
-  border: 0;
-  border-radius: var(--spacing_2);
-
-  background: transparent;
-  @apply text-neutral-700;
+  @apply rounded-2 border-0 bg-transparent p-0 text-neutral-700;
 
   cursor: pointer;
 
@@ -232,7 +228,7 @@
 
 .storybook-upload-action:first-child {
   padding: var(--spacing_2) 14px;
-  border: 1px solid var(--neutral_300);
+  @apply border border-solid border-neutral-300;
 }
 
 .storybook-upload-action--hover:first-child,
@@ -293,12 +289,11 @@
 
   flex-shrink: 0;
 
-  border: 1px solid var(--neutral_200);
-  border-radius: var(--spacing_1);
+  @apply rounded-1 border border-solid border-neutral-200;
 
   overflow: hidden;
 
-  box-sizing: border-box;
+  @apply box-border;
 }
 
 .storybook-upload-tile--square {
@@ -326,8 +321,7 @@
   align-items: center;
   justify-content: center;
 
-  border-style: dashed;
-  border-radius: var(--spacing_2);
+  @apply rounded-2 border-dashed;
 
   @apply bg-neutral-0 text-brand-400;
 }
