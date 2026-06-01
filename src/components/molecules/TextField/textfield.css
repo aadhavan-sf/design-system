@@ -36,9 +36,7 @@
 .storybook-textfield__required {
   width: 6px;
 
-  font-size: var(--type-text-xs-size);
-  line-height: var(--type-text-sm-line);
-  @apply font-semibold text-error-600;
+  @apply text-ds-text-xs font-semibold text-error-600;
 }
 
 .storybook-textfield__field {
@@ -53,10 +51,7 @@
 
   padding: var(--spacing_3) 14px;
 
-  border: 1px solid var(--neutral_200);
-  border-radius: var(--spacing_2);
-
-  @apply bg-neutral-0;
+  @apply rounded-2 border border-solid border-neutral-200 bg-neutral-0;
 
   box-sizing: border-box;
 
@@ -71,6 +66,10 @@
 }
 
 button.storybook-textfield__field {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
   cursor: pointer;
 }
 
@@ -227,8 +226,7 @@ button.storybook-textfield__field {
   @apply gap-2;
 
   padding: 7px var(--spacing_2);
-  border: 0;
-  @apply rounded-2 bg-neutral-50;
+  @apply rounded-2 border-0 bg-neutral-50;
 
   @apply text-neutral-600;
 }
@@ -277,6 +275,10 @@ button.storybook-textfield__field {
 }
 
 .storybook-textfield__date-button {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
   position: absolute;
   top: 13px;
   right: 14px;
@@ -288,12 +290,7 @@ button.storybook-textfield__field {
   align-items: center;
   justify-content: center;
 
-  padding: 0;
-
-  border: 0;
-  background: transparent;
-
-  @apply text-neutral-700;
+  @apply border-0 bg-transparent p-0 text-neutral-700;
 
   cursor: pointer;
 }
@@ -330,10 +327,7 @@ button.storybook-textfield__field {
   flex: 1;
 
   min-width: 0;
-  padding: 0;
-
-  border: 0;
-  background: transparent;
+  @apply border-0 bg-transparent p-0;
 
   font: inherit;
   @apply text-ds-text-sm text-neutral-700;
@@ -344,6 +338,10 @@ button.storybook-textfield__field {
 }
 
 .storybook-textfield__clear-button {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
   width: 20px;
   height: 20px;
 
@@ -351,12 +349,7 @@ button.storybook-textfield__field {
   align-items: center;
   justify-content: center;
 
-  padding: 0;
-
-  border: 0;
-  background: transparent;
-
-  color: var(--neutral_600);
+  @apply border-0 bg-transparent p-0 text-neutral-600;
 
   cursor: pointer;
 }
@@ -381,6 +374,10 @@ button.storybook-textfield__field {
 }
 
 .storybook-textfield__resize-mark {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
   position: absolute;
   right: 4px;
   bottom: 4px;
@@ -392,10 +389,7 @@ button.storybook-textfield__field {
   align-items: center;
   justify-content: center;
 
-  padding: 0;
-
-  border: 0;
-  background: transparent;
+  @apply border-0 bg-transparent p-0;
 
   cursor: ns-resize;
   @apply text-neutral-400;
@@ -432,7 +426,7 @@ button.storybook-textfield__field {
 
   @apply px-2 py-3;
 
-  border-radius: var(--spacing_2) 0 0 var(--spacing_2);
+  @apply rounded-l-2;
 }
 
 .storybook-textfield__country-wrapper {
@@ -452,10 +446,7 @@ button.storybook-textfield__field {
 
   overflow-y: auto;
 
-  border: 1px solid var(--neutral_100);
-  border-radius: var(--spacing_2);
-
-  @apply bg-neutral-0 shadow-sm;
+  @apply rounded-2 border border-solid border-neutral-100 bg-neutral-0 shadow-sm;
 
   animation: storybook-textfield-popover-enter 150ms ease-out;
   transform-origin: top center;
@@ -463,14 +454,14 @@ button.storybook-textfield__field {
 
 .storybook-textfield__country-menu .storybook-dropdown-list {
   width: 100%;
-  box-shadow: none;
+  @apply shadow-none;
 }
 
 .storybook-textfield__mobile-input {
   flex: 1;
 
   border-left: 0;
-  border-radius: 0 var(--spacing_2) var(--spacing_2) 0;
+  @apply rounded-l-none rounded-r-2;
 }
 
 .storybook-textfield__dropdown-wrapper > .storybook-dropdown-list {
@@ -501,7 +492,7 @@ button.storybook-textfield__field {
 
   flex-shrink: 0;
 
-  border-radius: var(--spacing_1_5);
+  @apply rounded-1.5;
   box-shadow: inset 0 0 0 1px var(--neutral_100);
 }
 
@@ -514,10 +505,7 @@ button.storybook-textfield__field {
 
   @apply mt-3 p-4;
 
-  border: 1px solid var(--neutral_100);
-  border-radius: var(--spacing_2);
-
-  @apply bg-neutral-0 shadow-lg;
+  @apply rounded-2 border border-solid border-neutral-100 bg-neutral-0 shadow-lg;
 
   box-sizing: border-box;
 
@@ -533,10 +521,7 @@ button.storybook-textfield__field {
 
   padding: var(--spacing_3) 14px;
 
-  border: 1px solid var(--neutral_200);
-  border-radius: var(--spacing_2);
-
-  @apply bg-neutral-0;
+  @apply rounded-2 border border-solid border-neutral-200 bg-neutral-0;
   box-sizing: border-box;
 
   @apply text-ds-text-sm text-neutral-700;
@@ -586,10 +571,7 @@ button.storybook-textfield__field {
   width: 20px !important;
   height: 20px !important;
 
-  border: 4px solid var(--neutral_00) !important;
-  border-radius: 999px !important;
-
-  @apply shadow-md;
+  @apply !rounded-full !border-4 !border-solid !border-neutral-0 shadow-md;
 
   box-sizing: border-box;
 }
@@ -604,7 +586,7 @@ button.storybook-textfield__field {
 
   overflow: hidden;
 
-  border-radius: 999px;
+  @apply rounded-full;
 }
 
 .storybook-textfield__opacity-grid {
@@ -644,20 +626,14 @@ button.storybook-textfield__field {
 
   appearance: none;
 
-  border: 4px solid var(--neutral_00);
-  border-radius: 999px;
-
-  @apply bg-neutral-0 shadow-md;
+  @apply rounded-full border-4 border-solid border-neutral-0 bg-neutral-0 shadow-md;
 }
 
 .storybook-textfield__opacity-slider::-moz-range-thumb {
   width: 20px;
   height: 20px;
 
-  border: 4px solid var(--neutral_00);
-  border-radius: 999px;
-
-  @apply bg-neutral-0 shadow-md;
+  @apply rounded-full border-4 border-solid border-neutral-0 bg-neutral-0 shadow-md;
 }
 
 @keyframes storybook-textfield-popover-enter {
