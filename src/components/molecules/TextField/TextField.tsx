@@ -78,7 +78,11 @@ function getFilledValue(type: NormalizedTextFieldType) {
 }
 
 function getInitialTextValue(type: NormalizedTextFieldType, state: NormalizedTextFieldState) {
-  return state === 'filled'
+  const shouldUseFilledValue =
+    state === 'filled' ||
+    (state === 'error' && type === 'mobile-number');
+
+  return shouldUseFilledValue
     ? getFilledValue(type)
     : '';
 }
