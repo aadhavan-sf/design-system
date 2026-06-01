@@ -4,7 +4,6 @@ import {
   Eye,
   EyeSlash,
   PencilSimple,
-  Plus,
 } from '@phosphor-icons/react';
 import type { Icon } from '@phosphor-icons/react';
 import { useState, type ComponentType, type KeyboardEvent } from 'react';
@@ -378,8 +377,6 @@ export function HomePage() {
             { id: 'content-block-2', label: 'Content Block' },
           ]}
           selectedItemId="custom-blocks-1"
-          footerIcon={Plus}
-          footerLabel="Add Pages"
         />
       </div>
 

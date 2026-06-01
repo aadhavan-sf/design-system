@@ -11,7 +11,6 @@ import {
   Eye,
   EyeSlash,
   LockSimple,
-  PencilSimple,
   Plus,
   Trash,
 } from '@phosphor-icons/react';
@@ -598,8 +597,8 @@ export function LeftPanel({
   fixedItems = DEFAULT_FIXED_ITEMS,
   scrollItems = DEFAULT_BLOCK_ITEMS,
   themeSections = DEFAULT_THEME_SECTIONS,
-  footerIcon = PencilSimple,
-  footerLabel = 'Edit Search Page',
+  footerIcon = Plus,
+  footerLabel = 'Add Pages',
   className,
   onAddBlock,
   onBack,
