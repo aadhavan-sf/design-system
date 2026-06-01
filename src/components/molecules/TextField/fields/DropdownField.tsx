@@ -89,7 +89,7 @@ export function DropdownField({
     };
   });
   const visibleSelectedItems =
-    multiselectLayout === 'two-line' ? selectedItems : selectedItems.slice(0, 2);
+    multiselectLayout === 'two-line' ? selectedItems.slice(0, 4) : selectedItems.slice(0, 2);
   const fieldClassName = getFieldClassName({
     state,
     hasValue,

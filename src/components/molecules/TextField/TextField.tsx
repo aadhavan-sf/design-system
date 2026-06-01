@@ -104,11 +104,11 @@ function getInitialSelections(
   }
 
   if (type === 'multiselect-2-line') {
-    return options.slice(0, 2);
+    return options.slice(0, 4);
   }
 
   if (type === 'multiselect') {
-    return options.length > 0 ? [options[0]] : [];
+    return options.slice(0, 2);
   }
 
   if (type === 'dropdown') {
