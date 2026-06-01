@@ -160,7 +160,7 @@ export function SettingsPanel({
             as="h2"
             variant="text-md"
             weight="semibold"
-            color="var(--neutral_900)"
+            color="currentColor"
             className="storybook-settings-panel__title"
           >
             {resolvedTitle}

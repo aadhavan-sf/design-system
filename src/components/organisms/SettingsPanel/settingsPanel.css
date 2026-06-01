@@ -6,14 +6,13 @@
   flex-direction: column;
   align-items: center;
 
-  padding: var(--spacing_6);
+  @apply p-6;
 
-  border: 1px solid var(--neutral_50);
-  border-radius: var(--spacing_6);
+  @apply rounded-6 border border-solid border-neutral-50;
 
-  background: var(--neutral_00);
+  @apply bg-neutral-0;
 
-  box-sizing: border-box;
+  @apply box-border;
   overflow: hidden;
 }
 
@@ -22,7 +21,7 @@
 
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_6);
+  @apply gap-6;
 }
 
 .storybook-settings-panel__header {
@@ -30,11 +29,12 @@
 
   display: flex;
   align-items: center;
-  gap: var(--spacing_2);
+  @apply gap-2;
 }
 
 .storybook-settings-panel__title {
   flex-shrink: 0;
+  @apply text-neutral-900;
 
   white-space: nowrap;
 }
@@ -43,22 +43,20 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing_1);
+  @apply gap-1;
 
-  padding: 0;
+  @apply p-0;
 
-  border: 0;
-  border-radius: var(--spacing_2);
+  @apply rounded-2 border-0;
 
-  background: transparent;
-  color: var(--brand_400);
+  @apply bg-transparent text-brand-400;
 
   cursor: pointer;
 }
 
 .storybook-settings-panel__help:focus-visible {
   outline: none;
-  box-shadow: var(--shadow_focus-brand);
+  @apply shadow-focus-brand;
 }
 
 .storybook-settings-panel__nav {
@@ -66,7 +64,7 @@
 
   display: flex;
   flex-direction: column;
-  gap: var(--spacing_4);
+  @apply gap-4;
 }
 
 .storybook-settings-panel-item {
@@ -74,19 +72,17 @@
 
   display: flex;
   align-items: center;
-  gap: var(--spacing_2);
+  @apply gap-2;
 
-  padding: var(--spacing_3);
+  @apply p-3;
 
-  border: 1px solid var(--neutral_100);
-  border-radius: var(--spacing_2);
+  @apply rounded-2 border border-solid border-neutral-100;
 
-  background: var(--neutral_00);
-  color: var(--neutral_600);
+  @apply bg-neutral-0 text-neutral-600;
 
-  box-sizing: border-box;
+  @apply box-border;
 
-  font-family: var(--font_family_base);
+  @apply font-sans;
   text-align: left;
 
   cursor: pointer;
@@ -100,46 +96,35 @@
 
 .storybook-settings-panel-item:hover,
 .storybook-settings-panel-item--hover {
-  border-color: var(--neutral_100);
-  background: var(--neutral_50);
+  @apply border-neutral-100 bg-neutral-50;
 }
 
 .storybook-settings-panel-item:focus-visible,
 .storybook-settings-panel-item--focused {
   outline: none;
-  border-color: var(--neutral_100);
-  background: var(--neutral_00);
-  box-shadow: var(--shadow_focus-brand);
+  @apply border-neutral-100 bg-neutral-0 shadow-focus-brand;
 }
 
 .storybook-settings-panel-item--pressed {
-  border-color: var(--brand_400);
-  background: var(--brand_25);
-  color: var(--brand_400);
+  @apply border-brand-400 bg-brand-25 text-brand-400;
 }
 
 .storybook-settings-panel-item--pressed:hover,
 .storybook-settings-panel-item--pressed.storybook-settings-panel-item--hover,
 .storybook-settings-panel-item--pressed.storybook-settings-panel-item--focused,
 .storybook-settings-panel-item--pressed:focus-visible {
-  border-color: var(--brand_400);
-  background: var(--brand_25);
-  color: var(--brand_400);
+  @apply border-brand-400 bg-brand-25 text-brand-400;
 }
 
 .storybook-settings-panel-item:disabled,
 .storybook-settings-panel-item--disabled {
-  border-color: var(--neutral_100);
-  background: var(--neutral_50);
-  color: var(--neutral_300);
+  @apply border-neutral-100 bg-neutral-50 text-neutral-300;
   cursor: not-allowed;
 }
 
 .storybook-settings-panel-item--pressed.storybook-settings-panel-item--disabled,
 .storybook-settings-panel-item--pressed:disabled {
-  border-color: var(--brand_100);
-  background: var(--brand_25);
-  color: var(--brand_100);
+  @apply border-brand-100 bg-brand-25 text-brand-100;
 }
 
 .storybook-settings-panel-item__label {
@@ -165,11 +150,11 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  gap: var(--spacing_8);
+  @apply gap-8;
 
-  padding: var(--spacing_6);
+  @apply p-6;
 
-  background: var(--neutral_100);
+  @apply bg-neutral-100;
 }
 
 .settings-panel-item-story-grid {
@@ -177,5 +162,5 @@
   grid-template-columns: repeat(2, 285px);
   gap: 68px 86px;
 
-  padding: var(--spacing_5);
+  @apply p-5;
 }
