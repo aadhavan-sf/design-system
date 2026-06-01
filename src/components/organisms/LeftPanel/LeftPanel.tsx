@@ -390,7 +390,7 @@ AddBlockButton.propTypes = {
   onClick: PropTypes.func,
 };
 
-function FooterAction({ label, onClick }) {
+function FooterAction({ icon: Icon, label, onClick }) {
   return (
     <footer className="storybook-left-panel-footer">
       <span className="storybook-left-panel-footer__divider" />
@@ -399,7 +399,7 @@ function FooterAction({ label, onClick }) {
         className="storybook-left-panel-footer__button"
         onClick={onClick}
       >
-        <PencilSimple
+        <Icon
           aria-hidden="true"
           size={20}
           weight="regular"
@@ -418,6 +418,7 @@ function FooterAction({ label, onClick }) {
 }
 
 FooterAction.propTypes = {
+  icon: PropTypes.elementType.isRequired,
   label: PropTypes.string.isRequired,
   onClick: PropTypes.func,
 };
@@ -597,6 +598,7 @@ export function LeftPanel({
   fixedItems = DEFAULT_FIXED_ITEMS,
   scrollItems = DEFAULT_BLOCK_ITEMS,
   themeSections = DEFAULT_THEME_SECTIONS,
+  footerIcon = PencilSimple,
   footerLabel = 'Edit Search Page',
   className,
   onAddBlock,
@@ -953,6 +955,7 @@ export function LeftPanel({
 
       {!isThemeSettings && (
         <FooterAction
+          icon={footerIcon}
           label={footerLabel}
           onClick={onFooterClick}
         />
@@ -989,6 +992,7 @@ LeftPanel.propTypes = {
     title: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(blockItemShape).isRequired,
   })),
+  footerIcon: PropTypes.elementType,
   footerLabel: PropTypes.string,
   className: PropTypes.string,
   onAddBlock: PropTypes.func,
