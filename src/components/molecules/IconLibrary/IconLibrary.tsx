@@ -243,7 +243,7 @@ export function IconLibrary({
       { value: 'bell-ringing', label: 'Notifications ringing', icon: BellRinging },
       { value: 'bell-simple', label: 'Simple notifications', icon: BellSimple },
     ]
-    : smallPickerOptions;
+    : iconOptions;
 
   const togglePanel = (panel) => {
     const nextPanel = activePanel === panel ? null : panel;

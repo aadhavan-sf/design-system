@@ -1,5 +1,8 @@
 import { createElement, useRef, useState, type ElementType, type ReactNode } from 'react';
 import {
+  Bell,
+  BellSimple,
+  BellSlash,
   Check,
   MonitorArrowUp,
   Plug,
@@ -15,6 +18,12 @@ const DEFAULT_ITEMS = [
   { label: 'Head Content Editor' },
   { label: 'Head Content Editor', active: true, selected: true },
   { label: 'Head Content Editor', selected: true },
+];
+
+const DEFAULT_ICON_PICKER_ITEMS = [
+  { value: 'bell', label: 'Notifications', icon: Bell },
+  { value: 'bell-slash', label: 'Notifications off', icon: BellSlash },
+  { value: 'bell-simple', label: 'Simple notifications', icon: BellSimple },
 ];
 
 function buildClassName(parts: Array<string | false | null | undefined>) {
@@ -151,6 +160,9 @@ function IconPickerDropdown({
   uploadedIcon,
 }: Pick<DropdownListProps, 'iconOptions' | 'onIconSelect' | 'onRemoveUploadedIcon' | 'onRepeatUploadedIcon' | 'onUpload' | 'selectedValue' | 'uploadedIcon'>) {
   const isUploadedState = Boolean(uploadedIcon);
+  const resolvedIconOptions = iconOptions?.length
+    ? iconOptions
+    : DEFAULT_ICON_PICKER_ITEMS;
 
   return (
     <div className="storybook-dropdown-list__icon-picker">
@@ -165,7 +177,7 @@ function IconPickerDropdown({
       </Text>
 
       <div className="storybook-dropdown-list__icon-picker-choices">
-        {iconOptions.map((option) => (
+        {resolvedIconOptions.map((option) => (
           <IconPickerItem
             key={option.value}
             icon={option.icon}
