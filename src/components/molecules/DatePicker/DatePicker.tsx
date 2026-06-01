@@ -97,26 +97,6 @@ function getDayWeight(state, today) {
   return state === 'selected' || today ? 'semibold' : 'regular';
 }
 
-function getDayColor(state, today) {
-  if (state === 'selected') {
-    return 'var(--neutral_00)';
-  }
-
-  if (state === 'disabled') {
-    return 'var(--neutral_300)';
-  }
-
-  if (state === 'on-range') {
-    return 'var(--neutral_900)';
-  }
-
-  if (today) {
-    return 'var(--neutral_900)';
-  }
-
-  return 'var(--neutral_800)';
-}
-
 function buildClassName(parts) {
   return parts.filter(Boolean).join(' ');
 }
@@ -231,7 +211,7 @@ export function DatePickerCalendarDay({
         as="span"
         variant="text-sm"
         weight={getDayWeight(normalizedState, today)}
-        color={getDayColor(normalizedState, today)}
+        color="currentColor"
         className="storybook-datepicker-day__label"
       >
         {label}
@@ -285,7 +265,7 @@ export function DatePickerListItem({
         as="span"
         variant="text-sm"
         weight={selected ? 'semibold' : 'medium'}
-        color={selected ? 'var(--neutral_00)' : 'var(--neutral_800)'}
+        color="currentColor"
       >
         {label}
       </Text>
@@ -331,7 +311,7 @@ function DatePickerHeader({
           as="span"
           variant="text-sm"
           weight="semibold"
-          color="var(--neutral_900)"
+          color="currentColor"
         >
           {label}
         </Text>

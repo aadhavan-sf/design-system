@@ -6,10 +6,7 @@
 
   overflow: hidden;
 
-  border: 1px solid var(--neutral_200);
-  border-radius: var(--spacing_2);
-
-  @apply bg-neutral-0 shadow-md;
+  @apply rounded-2 border border-solid border-neutral-200 bg-neutral-0 shadow-md;
 
   animation: storybook-datepicker-enter 150ms ease-out;
   transform-origin: top center;
@@ -35,7 +32,7 @@
   width: 296px;
   height: 304px;
 
-  box-sizing: border-box;
+  @apply box-border;
 }
 
 .storybook-datepicker__calendar {
@@ -60,13 +57,7 @@
   align-items: center;
   justify-content: center;
 
-  padding: 10px;
-
-  border: 0;
-  border-radius: var(--spacing_1);
-
-  background: transparent;
-  @apply text-neutral-900;
+  @apply rounded-1 border-0 bg-transparent p-2.5 text-neutral-900;
 
   cursor: pointer;
 }
@@ -86,7 +77,7 @@
 
 .storybook-datepicker__title-button {
   padding-inline: 14px;
-  border-radius: var(--spacing_1_5);
+  @apply rounded-1.5;
 }
 
 .storybook-datepicker__weekdays,
@@ -112,14 +103,9 @@
   align-items: center;
   justify-content: center;
 
-  padding: 10px var(--spacing_3);
+  @apply rounded-1 border-0 bg-transparent px-3 py-2.5 text-neutral-800;
 
-  border: 0;
-  border-radius: var(--spacing_1);
-
-  background: transparent;
-
-  box-sizing: border-box;
+  @apply box-border;
 
   cursor: pointer;
 }
@@ -131,6 +117,7 @@ div.storybook-datepicker-day {
 .storybook-datepicker-day:disabled,
 .storybook-datepicker-day--disabled {
   cursor: not-allowed;
+  @apply text-neutral-300;
 }
 
 .storybook-datepicker-day:hover:not(:disabled),
@@ -143,16 +130,16 @@ div.storybook-datepicker-day {
 }
 
 .storybook-datepicker-day--selected {
-  @apply bg-brand-400;
+  @apply bg-brand-400 text-neutral-0;
 }
 
 .storybook-datepicker-day--on-range {
-  border-radius: 0;
-  @apply bg-brand-50;
+  @apply rounded-none bg-brand-50 text-neutral-900;
 }
 
 .storybook-datepicker-day--today {
   gap: 10px;
+  @apply text-neutral-900;
 }
 
 .storybook-datepicker-day__label {
@@ -167,11 +154,7 @@ div.storybook-datepicker-day {
   left: 50%;
   top: 30px;
 
-  width: var(--spacing_1);
-  height: var(--spacing_1);
-
-  border-radius: 999px;
-  @apply bg-brand-400;
+  @apply size-1 rounded-full bg-brand-400;
 
   transform: translateX(-50%);
 }
@@ -209,8 +192,7 @@ div.storybook-datepicker-day {
 
   @apply px-2;
 
-  border-right: 1px solid var(--neutral_200);
-  box-sizing: border-box;
+  @apply box-border border-r border-solid border-neutral-200;
 }
 
 .storybook-datepicker-list-item {
@@ -221,12 +203,7 @@ div.storybook-datepicker-day {
 
   @apply px-3;
 
-  border: 0;
-  border-radius: var(--spacing_2);
-
-  @apply bg-neutral-0;
-
-  box-sizing: border-box;
+  @apply box-border rounded-2 border-0 bg-neutral-0 text-neutral-800;
 
   cursor: pointer;
 }
@@ -238,7 +215,7 @@ div.storybook-datepicker-day {
 
 .storybook-datepicker-list-item--selected,
 .storybook-datepicker-list-item--selected:hover {
-  @apply bg-brand-400;
+  @apply bg-brand-400 text-neutral-0;
 }
 
 @keyframes storybook-datepicker-enter {
@@ -268,7 +245,7 @@ div.storybook-datepicker-day {
 }
 
 .storybook-datepicker__dual-calendars .storybook-datepicker__calendar + .storybook-datepicker__calendar {
-  border-left: 1px solid var(--neutral_200);
+  @apply border-l border-solid border-neutral-200;
 }
 
 .storybook-datepicker__bottom-panel {
@@ -281,11 +258,7 @@ div.storybook-datepicker-day {
 
   @apply p-3;
 
-  border-top: 1px solid var(--neutral_200);
-  border-bottom-right-radius: var(--spacing_2);
-
-  @apply bg-neutral-0;
-  box-sizing: border-box;
+  @apply box-border rounded-br-2 border-t border-solid border-neutral-200 bg-neutral-0;
 }
 
 .storybook-datepicker__action {
@@ -295,8 +268,7 @@ div.storybook-datepicker-day {
 
   padding: var(--spacing_2) 14px;
 
-  border: 1px solid transparent;
-  border-radius: var(--spacing_2);
+  @apply rounded-2 border border-solid border-transparent;
 
   cursor: pointer;
   @apply font-sans;
@@ -309,8 +281,7 @@ div.storybook-datepicker-day {
 }
 
 .storybook-datepicker__action--secondary {
-  border-color: var(--neutral_300);
-  @apply text-neutral-700;
+  @apply border-neutral-300 text-neutral-700;
 }
 
 .storybook-datepicker__action--secondary:hover {
