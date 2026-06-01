@@ -150,7 +150,7 @@ function VisibilityOption({
         as="span"
         variant="text-sm"
         weight="medium"
-        color="var(--neutral_700)"
+        color="currentColor"
       >
         {label}
       </Text>
@@ -189,19 +189,19 @@ function ConditionalFilterCard({
           as="h3"
           variant="text-sm"
           weight="semibold"
-          color="var(--neutral_900)"
+          color="currentColor"
         >
           Conditional Filter
         </Text>
         {isConditional ? (
           <ul className="storybook-home-page-filter-card__conditions">
             <li>
-              <Text as="span" variant="text-xs" weight="medium" color="var(--neutral_600)">
+              <Text as="span" variant="text-xs" weight="medium" color="currentColor">
                 Customers (x3)
               </Text>
             </li>
             <li>
-              <Text as="span" variant="text-xs" weight="medium" color="var(--neutral_600)">
+              <Text as="span" variant="text-xs" weight="medium" color="currentColor">
                 Time (x1)
               </Text>
             </li>
@@ -211,7 +211,7 @@ function ConditionalFilterCard({
             as="p"
             variant="text-xs"
             weight="medium"
-            color="var(--neutral_600)"
+            color="currentColor"
           >
             Set up logic to show each widget to the right users at the right time.
           </Text>
@@ -277,11 +277,11 @@ function RightPanel({
       </div>
 
       <section className="storybook-home-page-right-section">
-        <Text as="h2" variant="text-md" weight="semibold" color="var(--neutral_900)">
+        <Text as="h2" variant="text-md" weight="semibold" color="currentColor">
           Properties
         </Text>
         <div className="storybook-home-page-properties-copy">
-          <Text as="p" variant="text-xs" weight="regular" color="var(--neutral_600)">
+          <Text as="p" variant="text-xs" weight="regular" color="currentColor">
             To customise custom blocks, go to the custom blocks settings under theme settings.
           </Text>
           <button
@@ -313,7 +313,7 @@ function RightPanel({
       />
 
       <section className="storybook-home-page-right-section storybook-home-page-right-section--visibility">
-        <Text as="h2" variant="text-md" weight="semibold" color="var(--neutral_900)">
+        <Text as="h2" variant="text-md" weight="semibold" color="currentColor">
           Visibility
         </Text>
         <div
@@ -332,7 +332,7 @@ function RightPanel({
           ))}
         </div>
         {selectedVisibility?.helper && (
-          <Text as="p" variant="text-xs" weight="regular" color="var(--neutral_600)">
+          <Text as="p" variant="text-xs" weight="regular" color="currentColor">
             {selectedVisibility.helper}
           </Text>
         )}
@@ -403,7 +403,7 @@ export function HomePage() {
             as="span"
             variant="text-xs"
             weight="regular"
-            color="var(--neutral_600)"
+            color="currentColor"
             className="storybook-home-page__last-saved"
           >
             Last saved: {lastSavedAt}
