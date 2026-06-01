@@ -6,11 +6,7 @@
 
   @apply px-3 py-1;
 
-  border: 0;
-  border-radius: var(--spacing_2);
-
-  background: transparent;
-  @apply font-sans text-neutral-900;
+  @apply rounded-2 border-0 bg-transparent font-sans text-neutral-900;
 
   cursor: pointer;
 
@@ -79,10 +75,7 @@
 .storybook-tabs--segments {
   @apply p-1;
 
-  border: 1px solid var(--neutral_100);
-  border-radius: var(--spacing_3);
-
-  @apply bg-neutral-0;
+  @apply rounded-3 border border-solid border-neutral-100 bg-neutral-0;
 }
 
 .tabs-story-stack,
