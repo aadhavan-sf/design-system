@@ -190,7 +190,7 @@ button.storybook-textfield__field {
 }
 
 .storybook-textfield__field--multiselect-two-line .storybook-textfield__trailing-icon {
-  @apply mt-0.5;
+  @apply mt-1;
 }
 
 .storybook-textfield__field--multiselect-two-line .storybook-textfield__field-content {
@@ -355,7 +355,7 @@ button.storybook-textfield__field {
 
 .storybook-textfield__clear-button:focus-visible {
   outline: 2px solid var(--brand_400);
-  outline-offset: var(--spacing_0_5);
+  outline-offset: calc(var(--spacing_1) / 2);
 }
 
 .storybook-textfield__textarea-wrap {
@@ -429,7 +429,7 @@ button.storybook-textfield__field {
   justify-content: center;
   @apply gap-2;
 
-  @apply px-2 py-2.5;
+  @apply px-2 py-3;
 
   border-right-width: 0;
   @apply rounded-l-2 rounded-r-none shadow-none;
@@ -475,7 +475,7 @@ button.storybook-textfield__field {
   flex: 1;
   height: 44px;
 
-  @apply rounded-l-none rounded-r-2 px-[14px] py-2.5;
+  @apply rounded-l-none rounded-r-2 px-[14px] py-3;
 }
 
 .storybook-textfield__mobile-input:focus {
@@ -514,7 +514,7 @@ button.storybook-textfield__field {
 
   flex-shrink: 0;
 
-  @apply rounded-1.5;
+  @apply rounded-2;
   box-shadow: inset 0 0 0 1px var(--neutral_100);
 }
 

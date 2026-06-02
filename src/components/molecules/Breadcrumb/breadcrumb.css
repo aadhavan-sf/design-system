@@ -5,7 +5,7 @@
 }
 
 .storybook-breadcrumb--small {
-  @apply gap-0.5;
+  @apply gap-1;
 }
 
 .storybook-breadcrumb-item {

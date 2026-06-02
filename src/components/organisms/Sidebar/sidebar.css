@@ -90,7 +90,7 @@
   justify-content: space-between;
   @apply gap-2;
 
-  padding: var(--spacing_2_5) 14px;
+  padding: var(--spacing_3) 14px;
 
   @apply rounded-2 border border-solid border-neutral-200;
 
@@ -431,15 +431,15 @@
   }
 
   25% {
-    transform: translateX(calc(var(--spacing_0_5) * -1));
+    transform: translateX(calc(var(--spacing_1) / -2));
   }
 
   50% {
-    transform: translateX(var(--spacing_0_5));
+    transform: translateX(calc(var(--spacing_1) / 2));
   }
 
   75% {
-    transform: translateX(calc(var(--spacing_0_5) * -1));
+    transform: translateX(calc(var(--spacing_1) / -2));
   }
 }
 
@@ -450,11 +450,11 @@
   }
 
   35% {
-    transform: translateY(calc(var(--spacing_0_5) * -1));
+    transform: translateY(calc(var(--spacing_1) / -2));
   }
 
   70% {
-    transform: translateY(var(--spacing_0_5));
+    transform: translateY(calc(var(--spacing_1) / 2));
   }
 }
 

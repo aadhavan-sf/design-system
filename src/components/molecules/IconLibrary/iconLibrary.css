@@ -132,7 +132,7 @@
 .storybook-icon-library-item--md {
   width: 32px;
   height: 32px;
-  @apply rounded-1 p-1.5;
+  @apply rounded-1 p-2;
 }
 
 .storybook-icon-library-item:hover,

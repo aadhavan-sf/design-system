@@ -593,11 +593,11 @@
   }
 
   35% {
-    transform: translateY(calc(var(--spacing_0_5) * -1));
+    transform: translateY(calc(var(--spacing_1) / -2));
   }
 
   70% {
-    transform: translateY(var(--spacing_0_5));
+    transform: translateY(calc(var(--spacing_1) / 2));
   }
 }
 
@@ -608,7 +608,7 @@
   }
 
   50% {
-    transform: translateY(calc(var(--spacing_0_5) * -1)) scale(1.08);
+    transform: translateY(calc(var(--spacing_1) / -2)) scale(1.08);
   }
 }
 

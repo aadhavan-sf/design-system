@@ -48,7 +48,7 @@
   justify-content: center;
   flex-shrink: 0;
 
-  @apply rounded-1 border border-solid border-transparent bg-neutral-0 p-1.5 text-neutral-600 shadow-none;
+  @apply rounded-1 border border-solid border-transparent bg-neutral-0 p-2 text-neutral-600 shadow-none;
 
   cursor: pointer;
 }
@@ -337,7 +337,7 @@
   display: inline-flex;
   align-items: center;
 
-  @apply p-0.5;
+  @apply p-1;
 
   @apply rounded-full bg-neutral-100;
 }

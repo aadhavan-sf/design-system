@@ -1,10 +1,7 @@
 export const spacing = {
   0: 'var(--spacing_0)',
-  0.5: 'var(--spacing_0_5)',
   1: 'var(--spacing_1)',
-  1.5: 'var(--spacing_1_5)',
   2: 'var(--spacing_2)',
-  2.5: 'var(--spacing_2_5)',
   3: 'var(--spacing_3)',
   4: 'var(--spacing_4)',
   5: 'var(--spacing_5)',
@@ -21,11 +18,8 @@ export const spacing = {
 
 export const spacingPx = {
   0: '0px',
-  0.5: '2px',
   1: '4px',
-  1.5: '6px',
   2: '8px',
-  2.5: '10px',
   3: '12px',
   4: '16px',
   5: '20px',

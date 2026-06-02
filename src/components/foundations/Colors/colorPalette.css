@@ -34,7 +34,7 @@
 .ds-swatch__meta {
   display: flex;
   flex-direction: column;
-  @apply gap-0.5 px-3 pb-3;
+  @apply gap-1 px-3 pb-3;
 }
 
 .ds-swatch__name {

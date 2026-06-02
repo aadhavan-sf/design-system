@@ -32,7 +32,7 @@
 }
 
 .storybook-chip--md {
-  @apply min-h-6 px-2.5 py-0.5;
+  @apply min-h-6 px-3 py-1;
 }
 
 .storybook-chip--lg {

@@ -57,7 +57,7 @@
   align-items: center;
   justify-content: center;
 
-  @apply rounded-1 border-0 bg-transparent p-2.5 text-neutral-900;
+  @apply rounded-1 border-0 bg-transparent p-3 text-neutral-900;
 
   cursor: pointer;
 }
@@ -77,7 +77,7 @@
 
 .storybook-datepicker__title-button {
   padding-inline: 14px;
-  @apply rounded-1.5;
+  @apply rounded-2;
 }
 
 .storybook-datepicker__weekdays,
@@ -103,7 +103,7 @@
   align-items: center;
   justify-content: center;
 
-  @apply rounded-1 border-0 bg-transparent px-3 py-2.5 text-neutral-800;
+  @apply rounded-1 border-0 bg-transparent px-3 py-3 text-neutral-800;
 
   @apply box-border;
 
@@ -179,7 +179,7 @@ div.storybook-datepicker-day {
   width: 70px;
   height: 40px;
 
-  @apply px-1.5;
+  @apply px-2;
 }
 
 .storybook-datepicker-day--month.storybook-datepicker-day--selected,

@@ -17,7 +17,7 @@
 }
 
 .storybook-tab-item--md {
-  @apply py-1.5;
+  @apply py-2;
 }
 
 .storybook-tab-item--sm {
