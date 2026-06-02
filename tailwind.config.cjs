@@ -108,6 +108,10 @@ const informationScale = {
   DEFAULT: 'var(--information_500)',
 };
 
+const customPixelScale = Object.fromEntries(
+  Array.from({ length: 257 }, (_, value) => [`custom-${value}`, `${value}px`]),
+);
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -197,6 +201,7 @@ module.exports = {
         },
       },
       spacing: {
+        ...customPixelScale,
         0: 'var(--spacing_0)',
         'custom-2': 'var(--spacing_custom_2)',
         1: 'var(--spacing_1)',
@@ -222,6 +227,7 @@ module.exports = {
         sans: ['var(--font_family_base)'],
       },
       borderRadius: {
+        ...customPixelScale,
         0: 'var(--spacing_0)',
         'custom-2': 'var(--spacing_custom_2)',
         1: 'var(--spacing_1)',

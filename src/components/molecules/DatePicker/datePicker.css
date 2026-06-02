@@ -76,8 +76,7 @@
 }
 
 .storybook-datepicker__title-button {
-  padding-inline: 14px;
-  @apply rounded-2;
+  @apply rounded-2 px-custom-14;
 }
 
 .storybook-datepicker__weekdays,
@@ -270,9 +269,7 @@ div.storybook-datepicker-day {
   align-items: center;
   justify-content: center;
 
-  padding: var(--spacing_2) 14px;
-
-  @apply rounded-2 border border-solid border-transparent;
+  @apply rounded-2 border border-solid border-transparent px-custom-14 py-2;
 
   cursor: pointer;
   @apply font-sans;

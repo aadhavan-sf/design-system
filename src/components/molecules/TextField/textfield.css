@@ -49,9 +49,7 @@
   justify-content: space-between;
   @apply gap-2;
 
-  padding: var(--spacing_3) 14px;
-
-  @apply rounded-2 border border-solid border-neutral-200 bg-neutral-0;
+  @apply rounded-2 border border-solid border-neutral-200 bg-neutral-0 px-custom-14 py-3;
 
   box-sizing: border-box;
 
@@ -309,7 +307,7 @@ button.storybook-textfield__field {
 }
 
 .storybook-textfield--date-picker .storybook-textfield__field {
-  padding-right: 42px;
+  @apply pr-custom-42;
 }
 
 .storybook-textfield__datepicker-panel {
@@ -475,7 +473,7 @@ button.storybook-textfield__field {
   flex: 1;
   height: 44px;
 
-  @apply rounded-l-none rounded-r-2 px-[14px] py-3;
+  @apply rounded-l-none rounded-r-2 px-custom-14 py-3;
 }
 
 .storybook-textfield__mobile-input:focus {
@@ -541,9 +539,7 @@ button.storybook-textfield__field {
   width: 100%;
   height: 44px;
 
-  padding: var(--spacing_3) 14px;
-
-  @apply rounded-2 border border-solid border-neutral-200 bg-neutral-0;
+  @apply rounded-2 border border-solid border-neutral-200 bg-neutral-0 px-custom-14 py-3;
   box-sizing: border-box;
 
   @apply text-ds-text-sm text-neutral-700;
@@ -573,7 +569,7 @@ button.storybook-textfield__field {
 
   margin: 0 !important;
 
-  border-radius: var(--spacing_2) !important;
+  @apply !rounded-2;
   box-sizing: border-box !important;
 }
 
@@ -584,7 +580,7 @@ button.storybook-textfield__field {
 
   margin: 0 !important;
 
-  border-radius: 999px !important;
+  @apply !rounded-full;
 }
 
 .react-colorful__pointer,

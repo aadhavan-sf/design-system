@@ -303,9 +303,8 @@
 
 .storybook-home-page-filter-card__conditions {
   margin: 0;
-  padding-left: 18px;
 
-  @apply text-neutral-600;
+  @apply pl-custom-18 text-neutral-600;
 }
 
 .storybook-home-page-filter-card__conditions li {

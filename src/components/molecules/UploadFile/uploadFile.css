@@ -227,8 +227,7 @@
 }
 
 .storybook-upload-action:first-child {
-  padding: var(--spacing_2) 14px;
-  @apply border border-solid border-neutral-300;
+  @apply border border-solid border-neutral-300 px-custom-14 py-2;
 }
 
 .storybook-upload-action--hover:first-child,

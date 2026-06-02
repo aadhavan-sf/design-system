@@ -138,15 +138,13 @@
 }
 
 .storybook-button--small {
-  padding: var(--spacing_2) 14px;
-  @apply text-ds-text-sm;
+  @apply px-custom-14 py-2 text-ds-text-sm;
 }
 .storybook-button--medium {
   @apply px-4 py-3 text-ds-text-sm;
 }
 .storybook-button--large {
-  padding: var(--spacing_3) 18px;
-  @apply text-ds-text-md;
+  @apply px-custom-18 py-3 text-ds-text-md;
 }
 .storybook-button--xlarge {
   @apply px-5 py-3 text-ds-text-md;
@@ -198,5 +196,5 @@
 }
 
 .storybook-button--icon-only.storybook-button--xlarge {
-  padding: 14px;
+  @apply p-custom-14;
 }

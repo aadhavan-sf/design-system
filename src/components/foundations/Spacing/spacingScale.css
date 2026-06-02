@@ -72,8 +72,7 @@
 .ds-spacing-row__bar {
   min-width: 1px;
   height: 16px;
-  border-radius: 999px;
-  @apply bg-brand-500;
+  @apply rounded-full bg-brand-500;
 }
 
 .ds-spacing-row__value {

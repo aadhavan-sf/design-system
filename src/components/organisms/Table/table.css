@@ -225,7 +225,7 @@
 
   flex-shrink: 0;
 
-  border-radius: 50%;
+  @apply rounded-full;
 
   background:
     radial-gradient(circle at 48% 35%, #2d1f18 0 16%, transparent 17%),
@@ -363,9 +363,7 @@
   align-items: center;
   @apply gap-2;
 
-  padding-top: 10px;
-  padding-bottom: 10px;
-  @apply px-3;
+  @apply px-3 py-custom-10;
 
   @apply rounded-2 border border-solid border-neutral-100;
 
@@ -436,7 +434,7 @@
   align-items: center;
   justify-content: center;
 
-  border-radius: 28px;
+  @apply rounded-custom-28;
 }
 
 .storybook-table-empty__icon--brand {
