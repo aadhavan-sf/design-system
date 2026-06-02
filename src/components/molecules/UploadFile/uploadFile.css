@@ -54,7 +54,7 @@
   @apply gap-4;
 
   min-height: 128px;
-  padding: var(--spacing_6) 54px;
+  @apply px-custom-54 py-6;
 
   text-align: center;
 }
