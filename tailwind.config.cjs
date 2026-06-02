@@ -198,8 +198,11 @@ module.exports = {
       },
       spacing: {
         0: 'var(--spacing_0)',
+        'custom-2': 'var(--spacing_custom_2)',
         1: 'var(--spacing_1)',
+        'custom-6': 'var(--spacing_custom_6)',
         2: 'var(--spacing_2)',
+        'custom-10': 'var(--spacing_custom_10)',
         3: 'var(--spacing_3)',
         4: 'var(--spacing_4)',
         5: 'var(--spacing_5)',
@@ -218,8 +221,11 @@ module.exports = {
       },
       borderRadius: {
         0: 'var(--spacing_0)',
+        'custom-2': 'var(--spacing_custom_2)',
         1: 'var(--spacing_1)',
+        'custom-6': 'var(--spacing_custom_6)',
         2: 'var(--spacing_2)',
+        'custom-10': 'var(--spacing_custom_10)',
         3: 'var(--spacing_3)',
         4: 'var(--spacing_4)',
         5: 'var(--spacing_5)',
