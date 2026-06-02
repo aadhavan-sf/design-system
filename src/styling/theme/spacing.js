@@ -16,6 +16,7 @@ export const spacing = {
   20: 'var(--spacing_20)',
   24: 'var(--spacing_24)',
   32: 'var(--spacing_32)',
+  64: 'var(--spacing_64)',
 };
 
 export const spacingPx = {
@@ -36,4 +37,5 @@ export const spacingPx = {
   20: '80px',
   24: '96px',
   32: '128px',
+  64: '256px',
 };
