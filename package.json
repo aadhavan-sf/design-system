@@ -8,7 +8,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build && touch storybook-static/.nojekyll",
     "predeploy": "npm run build-storybook",
-    "deploy": "gh-pages -d storybook-static --dotfiles",
+    "deploy": "gh-pages -d storybook-static --dotfiles --add",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
