@@ -4,7 +4,7 @@
   display: inline-flex;
   align-items: center;
 
-  @apply rounded-full bg-neutral-100 p-1;
+  @apply rounded-full bg-neutral-100 p-custom-2;
 
   border: 0;
 
