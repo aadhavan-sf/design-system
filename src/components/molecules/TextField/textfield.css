@@ -225,8 +225,7 @@ button.storybook-textfield__field {
   justify-content: flex-start;
   @apply gap-2;
 
-  padding: 7px var(--spacing_2);
-  @apply rounded-2 border-0 bg-neutral-50;
+  @apply rounded-2 border-0 bg-neutral-50 px-2 py-2;
 
   @apply text-neutral-600;
 }
@@ -574,7 +573,7 @@ button.storybook-textfield__field {
 
   margin: 0 !important;
 
-  border-radius: 8px !important;
+  border-radius: var(--spacing_2) !important;
   box-sizing: border-box !important;
 }
 

@@ -219,7 +219,7 @@
 
 .storybook-icon-library-story-grid {
   flex-wrap: wrap;
-  gap: 40px;
+  @apply gap-10;
   align-items: flex-start;
 }
 
