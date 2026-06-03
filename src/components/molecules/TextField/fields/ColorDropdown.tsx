@@ -67,7 +67,7 @@ export function ColorDropdown({
             value={displayValue}
             onChange={(event: ChangeEvent<HTMLInputElement>) => onColorChange(event.target.value)}
             placeholder="HEX Code"
-            className="storybook-textfield__colorpicker-input rounded-2 border border-solid border-neutral-200 bg-neutral-0 px-custom-14 py-custom-10 text-ds-text-sm text-neutral-700 placeholder:text-neutral-300 focus:border-neutral-500"
+            className="storybook-textfield__colorpicker-input rounded-2 border border-solid border-neutral-200 bg-neutral-0 px-custom-14 py-3 text-ds-text-sm text-neutral-700 placeholder:text-neutral-300 focus:border-neutral-500"
           />
 
           <div className="storybook-textfield__opacity-wrapper rounded-full">
