@@ -7,9 +7,6 @@
   align-items: center;
   justify-content: center;
 
-  @apply rounded-full border border-neutral-300 bg-neutral-0 p-0;
-
-  border-style: solid;
   line-height: 0;
   vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
@@ -28,8 +25,6 @@
 }
 
 .storybook-radio:focus-visible {
-  @apply shadow-focus-brand;
-
   outline: none;
 }
 
@@ -50,10 +45,6 @@
 .storybook-radio__dot {
   display: block;
 
-  @apply rounded-full bg-brand-400;
-
-  opacity: 0;
-
   transition: opacity 160ms ease;
 }
 
@@ -65,38 +56,6 @@
 .storybook-radio--mid .storybook-radio__dot {
   width: 8px;
   height: 8px;
-}
-
-.storybook-radio--pressed {
-  @apply border-brand-400 bg-brand-50;
-}
-
-.storybook-radio--pressed .storybook-radio__dot {
-  opacity: 1;
-}
-
-.storybook-radio--hover {
-  @apply border-brand-400;
-}
-
-.storybook-radio--hover.storybook-radio--pressed {
-  @apply border-brand-400 bg-brand-50;
-}
-
-.storybook-radio--focus {
-  @apply shadow-focus-brand;
-}
-
-.storybook-radio--disabled {
-  @apply border-neutral-200 bg-neutral-50;
-}
-
-.storybook-radio--disabled.storybook-radio--pressed {
-  @apply border-brand-100 bg-brand-25;
-}
-
-.storybook-radio--disabled .storybook-radio__dot {
-  @apply bg-brand-100;
 }
 
 .radio-story-row,

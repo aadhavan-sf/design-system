@@ -40,6 +40,16 @@ export function RadioButton({
 
   const isDisabled = state === 'disabled';
 
+  const stateClasses = isDisabled
+    ? isPressed
+      ? 'border-brand-100 bg-brand-25'
+      : 'border-neutral-200 bg-neutral-50'
+    : isPressed
+      ? 'border-brand-400 bg-brand-50'
+      : state === 'hover'
+        ? 'border-brand-400 bg-neutral-0'
+        : 'border-neutral-300 bg-neutral-0';
+
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     if (isDisabled) {
       return;
@@ -63,9 +73,14 @@ export function RadioButton({
       disabled={isDisabled}
       className={[
         'storybook-radio',
+        'rounded-full',
+        'border',
+        'border-solid',
+        'p-0',
+        'focus-visible:shadow-focus-brand',
+        stateClasses,
         `storybook-radio--${size}`,
-        `storybook-radio--${state}`,
-        isPressed && 'storybook-radio--pressed',
+        state === 'focus' && 'shadow-focus-brand',
         className,
       ]
         .filter(Boolean)
@@ -73,7 +88,16 @@ export function RadioButton({
       {...props}
       onClick={handleClick}
     >
-      <span className="storybook-radio__dot" />
+      <span
+        className={[
+          'storybook-radio__dot',
+          'rounded-full',
+          isPressed ? 'opacity-100' : 'opacity-0',
+          isDisabled ? 'bg-brand-100' : 'bg-brand-400',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+      />
     </button>
   );
 }

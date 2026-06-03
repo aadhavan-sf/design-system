@@ -60,6 +60,16 @@ export function CheckBox({
 
   const isDisabled = state === 'disabled';
 
+  const stateClasses = isDisabled
+    ? isActive
+      ? 'border-brand-100 bg-brand-100'
+      : 'border-neutral-200 bg-neutral-50'
+    : isActive
+      ? 'border-brand-400 bg-brand-400'
+      : state === 'hover'
+        ? 'border-brand-400 bg-neutral-0'
+        : 'border-neutral-300 bg-neutral-0';
+
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     if (isDisabled) {
       return;
@@ -94,9 +104,14 @@ export function CheckBox({
       disabled={isDisabled}
       className={[
         'storybook-checkbox',
+        'rounded-1',
+        'border',
+        'border-solid',
+        'p-0',
+        'focus-visible:shadow-focus-brand',
+        stateClasses,
         `storybook-checkbox--${size}`,
-        `storybook-checkbox--${state}`,
-        isActive && 'storybook-checkbox--active',
+        state === 'focus' && 'shadow-focus-brand',
         isIndeterminate && 'storybook-checkbox--indeterminate',
         className,
       ]
@@ -105,7 +120,15 @@ export function CheckBox({
       {...props}
       onClick={handleClick}
     >
-      <span className="storybook-checkbox__icon">
+      <span
+        className={[
+          'storybook-checkbox__icon',
+          'text-neutral-0',
+          isActive ? 'opacity-100' : 'opacity-0',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+      >
         {isIndeterminate ? (
           <Minus
             size={iconSize}
