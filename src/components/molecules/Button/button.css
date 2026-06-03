@@ -12,8 +12,6 @@
 
   text-decoration: none;
 
-  @apply rounded-ds border border-solid border-transparent font-sans font-semibold shadow-xs;
-
   transition:
     background-color 160ms ease,
     border-color 160ms ease,
@@ -28,134 +26,12 @@
 
 .storybook-button:disabled {
   cursor: not-allowed;
-  @apply shadow-none;
-}
-
-.storybook-button--primary {
-  @apply border-brand-400 bg-brand-400 text-neutral-0;
-}
-
-.storybook-button--primary:hover:not(:disabled) {
-  @apply border-brand-700 bg-brand-700 shadow-sm;
-}
-
-.storybook-button--primary:focus-visible,
-.storybook-button--primary.storybook-button--focus {
-  @apply border-brand-400 bg-brand-400 shadow-focus-brand;
-}
-
-.storybook-button--primary:disabled {
-  @apply border-brand-200 bg-brand-200 text-neutral-0;
-}
-
-.storybook-button--secondary {
-  @apply border-neutral-300 bg-transparent text-neutral-700 shadow-none;
-}
-
-.storybook-button--secondary:hover:not(:disabled) {
-  @apply border-neutral-300 bg-neutral-50 text-neutral-800 shadow-none;
-}
-
-.storybook-button--secondary:focus-visible,
-.storybook-button--secondary.storybook-button--focus {
-  @apply border-neutral-300 bg-transparent text-neutral-700 shadow-focus-neutral;
-}
-
-.storybook-button--secondary:disabled {
-  @apply border-neutral-200 bg-transparent text-neutral-300;
-}
-
-.storybook-button--link-grey {
-  @apply border-transparent bg-transparent p-0 text-neutral-600 shadow-none;
-}
-
-.storybook-button--link-grey:hover:not(:disabled) {
-  @apply text-neutral-800;
-}
-
-.storybook-button--link-grey:focus-visible,
-.storybook-button--link-grey.storybook-button--focus {
-  @apply text-neutral-600 shadow-none;
-}
-
-.storybook-button--link-grey:disabled {
-  @apply text-neutral-300;
-}
-
-.storybook-button--link-color {
-  @apply border-transparent bg-transparent p-0 text-brand-400 shadow-none;
-}
-
-.storybook-button--link-color:hover:not(:disabled) {
-  @apply text-brand-700;
-}
-
-.storybook-button--link-color:focus-visible,
-.storybook-button--link-color.storybook-button--focus {
-  @apply text-brand-400 shadow-none;
-}
-
-.storybook-button--link-color:disabled {
-  @apply text-neutral-300;
-}
-
-/* Primary Destructive */
-
-.storybook-button--primary.storybook-button--destructive {
-  @apply border-error-600 bg-error-600 text-neutral-0;
-}
-
-.storybook-button--primary.storybook-button--destructive:hover:not(:disabled) {
-  @apply border-error-700 bg-error-700;
-}
-
-.storybook-button--primary.storybook-button--destructive:focus-visible,
-.storybook-button--primary.storybook-button--destructive.storybook-button--focus {
-  @apply border-error-600 bg-error-600 shadow-focus-error;
-}
-
-.storybook-button--primary.storybook-button--destructive:disabled {
-  @apply border-error-300 bg-error-300 text-neutral-0;
-}
-
-/* Link Destructive */
-
-.storybook-button--link-color.storybook-button--destructive {
-  @apply border-transparent bg-transparent text-error-600 shadow-none;
-}
-
-.storybook-button--link-color.storybook-button--destructive:hover:not(:disabled) {
-  @apply text-error-700;
-}
-
-.storybook-button--link-color.storybook-button--destructive:focus-visible,
-.storybook-button--link-color.storybook-button--destructive.storybook-button--focus {
-  @apply text-error-600 shadow-none;
-}
-
-.storybook-button--link-color.storybook-button--destructive:disabled {
-  @apply text-error-300;
-}
-
-.storybook-button--small {
-  @apply px-custom-14 py-2 text-ds-text-sm;
-}
-.storybook-button--medium {
-  @apply px-4 py-custom-10 text-ds-text-sm;
-}
-.storybook-button--large {
-  @apply px-custom-18 py-custom-10 text-ds-text-md;
-}
-.storybook-button--xlarge {
-  @apply px-5 py-3 text-ds-text-md;
 }
 
 .storybook-button__content {
   display: flex;
   align-items: center;
   justify-content: center;
-
-  @apply gap-2;
 }
 
 .storybook-button__icon--left,
@@ -181,20 +57,4 @@
 .storybook-button__label {
   display: flex;
   align-items: center;
-}
-
-.storybook-button--icon-only.storybook-button--small {
-  @apply p-2;
-}
-
-.storybook-button--icon-only.storybook-button--medium {
-  @apply p-3;
-}
-
-.storybook-button--icon-only.storybook-button--large {
-  @apply p-3;
-}
-
-.storybook-button--icon-only.storybook-button--xlarge {
-  @apply p-custom-14;
 }
