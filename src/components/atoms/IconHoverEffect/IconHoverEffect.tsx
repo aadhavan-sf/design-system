@@ -67,7 +67,7 @@ function renderIcon({
 }) {
   const iconProps: IconProps = {
     'aria-hidden': true,
-    className: 'storybook-icon-hover-effect__icon',
+    className: 'storybook-icon-hover-effect__icon shrink-0',
     size: getIconSize(size),
     weight: 'regular',
   };
@@ -127,6 +127,14 @@ export function IconHoverEffect({
     Pencil: 'pencil',
     Repeat: 'repeat',
   }) as NormalizedIcon;
+  const stateClasses =
+    normalizedType === 'destructive'
+      ? normalizedState === 'hover'
+        ? 'bg-error-50 text-error-600 hover:bg-error-50 focus-visible:shadow-focus-error'
+        : 'bg-transparent text-error-600 hover:bg-error-50 focus-visible:shadow-focus-error'
+      : normalizedState === 'hover'
+        ? 'bg-neutral-50 text-neutral-600 hover:bg-neutral-50 focus-visible:shadow-focus-neutral'
+        : 'bg-transparent text-neutral-600 hover:bg-neutral-50 focus-visible:shadow-focus-neutral';
   const resolvedAriaLabel =
     ariaLabel ?? (normalizedType === 'destructive' ? 'Delete' : 'Icon action');
 
@@ -136,9 +144,12 @@ export function IconHoverEffect({
       aria-label={resolvedAriaLabel}
       className={buildClassName([
         'storybook-icon-hover-effect',
+        'rounded-1',
+        'border-0',
+        'p-1',
+        stateClasses,
         `storybook-icon-hover-effect--${normalizedType}`,
         `storybook-icon-hover-effect--${normalizedSize}`,
-        `storybook-icon-hover-effect--${normalizedState}`,
         normalizedType === 'destructive' && 'storybook-icon-hover-effect--trash-motion',
         normalizedType !== 'destructive' && `storybook-icon-hover-effect--icon-${normalizedIcon}`,
         className,

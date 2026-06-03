@@ -40,6 +40,16 @@ export function Toggle({
 
   const isDisabled = state === 'disabled';
 
+  const backgroundClass = isDisabled
+    ? isPressed
+      ? 'bg-brand-100'
+      : 'bg-neutral-50'
+    : isPressed
+      ? 'bg-brand-400'
+      : state === 'hover'
+        ? 'bg-neutral-200'
+        : 'bg-neutral-100';
+
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     if (isDisabled) {
       return;
@@ -63,8 +73,13 @@ export function Toggle({
       disabled={isDisabled}
       className={[
         'storybook-toggle',
+        'rounded-full',
+        'border-0',
+        'p-custom-2',
+        'focus-visible:shadow-focus-brand',
+        backgroundClass,
         `storybook-toggle--${size}`,
-        `storybook-toggle--${state}`,
+        state === 'focus' && 'shadow-focus-brand',
         isPressed && 'storybook-toggle--pressed',
         className,
       ]
@@ -73,7 +88,16 @@ export function Toggle({
       {...props}
       onClick={handleClick}
     >
-      <span className="storybook-toggle__thumb" />
+      <span
+        className={[
+          'storybook-toggle__thumb',
+          'rounded-full',
+          'bg-neutral-0',
+          isDisabled ? 'shadow-xs' : 'shadow-sm',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+      />
     </button>
   );
 }
