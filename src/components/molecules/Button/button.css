@@ -141,10 +141,10 @@
   @apply px-custom-14 py-2 text-ds-text-sm;
 }
 .storybook-button--medium {
-  @apply px-4 py-3 text-ds-text-sm;
+  @apply px-4 py-custom-10 text-ds-text-sm;
 }
 .storybook-button--large {
-  @apply px-custom-18 py-3 text-ds-text-md;
+  @apply px-custom-18 py-custom-10 text-ds-text-md;
 }
 .storybook-button--xlarge {
   @apply px-5 py-3 text-ds-text-md;
