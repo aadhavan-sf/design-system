@@ -3,7 +3,6 @@
 
   display: flex;
   flex-direction: column;
-  @apply gap-1;
 }
 
 .storybook-textfield--fluid {
@@ -13,13 +12,8 @@
 .storybook-textfield__header {
   display: flex;
   align-items: center;
-  @apply gap-1;
 
   width: 100%;
-}
-
-.storybook-textfield__label {
-  @apply text-ds-text-sm font-medium text-neutral-600;
 }
 
 .storybook-textfield__tooltip {
@@ -29,14 +23,10 @@
 
   width: 16px;
   height: 16px;
-
-  @apply text-neutral-600;
 }
 
 .storybook-textfield__required {
   width: 6px;
-
-  @apply text-ds-text-xs font-semibold text-error-600;
 }
 
 .storybook-textfield__field {
@@ -47,14 +37,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  @apply gap-2;
-
-  @apply rounded-2 border border-solid border-neutral-200 bg-neutral-0 px-custom-14 py-3;
 
   box-sizing: border-box;
 
   font: inherit;
-  @apply text-ds-text-sm font-normal text-neutral-700;
 
   transition:
     border-color 160ms ease,
@@ -82,8 +68,6 @@ button.storybook-textfield__field {
 .storybook-textfield__field::placeholder,
 .storybook-textfield__search-input::placeholder {
   letter-spacing: var(--type-text-sm-letter);
-
-  @apply font-sans text-ds-text-sm font-normal text-neutral-300;
 }
 
 .storybook-textfield__field:focus,
@@ -91,26 +75,8 @@ button.storybook-textfield__field {
   outline: none;
 }
 
-.storybook-textfield__field:focus-visible {
-  @apply border-neutral-500;
-}
-
-.storybook-textfield__field--active {
-  @apply border-neutral-500;
-}
-
-.storybook-textfield__field--error {
-  @apply border-error-600 text-error-600;
-}
-
-.storybook-textfield__field--error::placeholder,
-.storybook-textfield__field--error .storybook-textfield__search-input::placeholder {
-  @apply text-error-600;
-}
-
 .storybook-textfield__field--disabled {
   cursor: not-allowed;
-  @apply border-neutral-200 bg-neutral-25 text-neutral-300;
 }
 
 .storybook-textfield__field:disabled {
@@ -120,7 +86,6 @@ button.storybook-textfield__field {
 .storybook-textfield__field-content {
   display: flex;
   align-items: center;
-  @apply gap-1;
   flex: 1 0 0;
 
   min-width: 0;
@@ -135,60 +100,18 @@ button.storybook-textfield__field {
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  @apply font-sans text-ds-text-sm font-normal text-neutral-300;
-}
-
-.storybook-textfield__field-text--filled {
-  @apply text-neutral-700;
-}
-
-.storybook-textfield__field-text--error {
-  @apply text-error-600;
-}
-
-.storybook-textfield__field-text--disabled {
-  @apply text-neutral-300;
 }
 
 .storybook-textfield__leading-icon,
 .storybook-textfield__trailing-icon {
   flex-shrink: 0;
-
-  @apply text-neutral-700;
-}
-
-.storybook-textfield__leading-icon {
-  @apply text-neutral-600;
-}
-
-.storybook-textfield__field--disabled .storybook-textfield__leading-icon,
-.storybook-textfield__field--disabled .storybook-textfield__trailing-icon {
-  @apply text-neutral-300;
-}
-
-.storybook-textfield__field--error .storybook-textfield__leading-icon,
-.storybook-textfield__field--error .storybook-textfield__trailing-icon {
-  @apply text-error-600;
-}
-
-.storybook-textfield__field--multiselect-one-line {
-  @apply gap-2 p-3;
-}
-
-.storybook-textfield__field--multiselect-one-line.storybook-textfield__field--disabled {
-  @apply border-neutral-200 bg-neutral-25;
 }
 
 .storybook-textfield__field--multiselect-two-line {
   height: 112px;
   align-items: flex-start;
-  @apply gap-2 p-3;
 
   overflow: hidden;
-}
-
-.storybook-textfield__field--multiselect-two-line .storybook-textfield__trailing-icon {
-  @apply mt-1;
 }
 
 .storybook-textfield__field--multiselect-two-line .storybook-textfield__field-content {
@@ -202,7 +125,6 @@ button.storybook-textfield__field {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  @apply gap-1;
 }
 
 .storybook-textfield__field--multiselect-two-line .storybook-textfield__tag-list {
@@ -221,11 +143,6 @@ button.storybook-textfield__field {
   flex: 0 1 auto;
 
   justify-content: flex-start;
-  @apply gap-2;
-
-  @apply rounded-2 border-0 bg-neutral-50 px-2 py-2;
-
-  @apply text-neutral-600;
 }
 
 .storybook-textfield__selected-chip--first {
@@ -245,23 +162,8 @@ button.storybook-textfield__field {
   text-align: left;
 }
 
-.storybook-textfield__field--error .storybook-textfield__selected-chip {
-  @apply text-error-600;
-}
-
-.storybook-textfield__field--disabled .storybook-textfield__selected-chip {
-  @apply bg-neutral-100 text-neutral-400;
-}
-
-.storybook-textfield__field--multiselect-two-line.storybook-textfield__field--disabled {
-  @apply border-neutral-200 bg-neutral-25;
-}
-
 .storybook-textfield__field--multiselect-two-line.storybook-textfield__field--disabled .storybook-textfield__selected-chip {
   height: 28px;
-  @apply rounded-1 px-2 py-1;
-
-  @apply bg-neutral-100 text-neutral-600;
 }
 
 .storybook-textfield__dropdown-wrapper,
@@ -287,27 +189,15 @@ button.storybook-textfield__field {
   align-items: center;
   justify-content: center;
 
-  @apply border-0 bg-transparent p-0 text-neutral-700;
-
   cursor: pointer;
-}
-
-.storybook-textfield__date-button--error {
-  @apply text-error-600;
 }
 
 .storybook-textfield__date-button:disabled {
   cursor: not-allowed;
-  @apply text-neutral-300;
 }
 
 .storybook-textfield__date-button:focus-visible {
   outline: none;
-  @apply shadow-focus-brand;
-}
-
-.storybook-textfield--date-picker .storybook-textfield__field {
-  @apply pr-custom-42;
 }
 
 .storybook-textfield__datepicker-panel {
@@ -324,10 +214,8 @@ button.storybook-textfield__field {
   flex: 1;
 
   min-width: 0;
-  @apply border-0 bg-transparent p-0;
 
   font: inherit;
-  @apply text-ds-text-sm text-neutral-700;
 }
 
 .storybook-textfield__search-input::-webkit-search-cancel-button {
@@ -345,8 +233,6 @@ button.storybook-textfield__field {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
-  @apply border-0 bg-transparent p-0 text-neutral-600;
 
   cursor: pointer;
 }
@@ -386,10 +272,7 @@ button.storybook-textfield__field {
   align-items: center;
   justify-content: center;
 
-  @apply border-0 bg-transparent p-0;
-
   cursor: ns-resize;
-  @apply text-neutral-400;
 }
 
 .storybook-textfield__resize-mark svg {
@@ -399,12 +282,10 @@ button.storybook-textfield__field {
 
 .storybook-textfield__resize-mark:disabled {
   cursor: not-allowed;
-  @apply text-neutral-300;
 }
 
 .storybook-textfield__resize-mark:focus-visible {
   outline: none;
-  @apply shadow-focus-brand;
 }
 
 .storybook-textfield__mobile {
@@ -425,16 +306,8 @@ button.storybook-textfield__field {
   height: 44px;
 
   justify-content: center;
-  @apply gap-2;
-
-  @apply px-2 py-3;
 
   border-right-width: 0;
-  @apply rounded-l-2 rounded-r-none shadow-none;
-}
-
-.storybook-textfield__country-code:hover:not(:disabled) {
-  @apply bg-neutral-0;
 }
 
 .storybook-textfield__country-code .storybook-textfield__field-text {
@@ -458,8 +331,6 @@ button.storybook-textfield__field {
 
   overflow-y: auto;
 
-  @apply rounded-2 border border-solid border-neutral-100 bg-neutral-0 shadow-sm;
-
   animation: storybook-textfield-popover-enter 150ms ease-out;
   transform-origin: top center;
 }
@@ -472,16 +343,10 @@ button.storybook-textfield__field {
 .storybook-textfield__mobile-input {
   flex: 1;
   height: 44px;
-
-  @apply rounded-l-none rounded-r-2 px-custom-14 py-3;
 }
 
 .storybook-textfield__mobile-input:focus {
   outline: none;
-}
-
-.storybook-textfield__mobile-input::placeholder {
-  @apply text-neutral-300;
 }
 
 .storybook-textfield__dropdown-wrapper > .storybook-dropdown-list {
@@ -498,12 +363,6 @@ button.storybook-textfield__field {
 
 .storybook-textfield__helper {
   width: 100%;
-
-  @apply text-ds-text-xs font-normal text-neutral-600;
-}
-
-.storybook-textfield__helper--error {
-  @apply text-error-600;
 }
 
 .storybook-textfield__color-preview {
@@ -512,7 +371,6 @@ button.storybook-textfield__field {
 
   flex-shrink: 0;
 
-  @apply rounded-2;
   box-shadow: inset 0 0 0 1px var(--neutral_100);
 }
 
@@ -521,11 +379,6 @@ button.storybook-textfield__field {
 
   display: flex;
   flex-direction: column;
-  @apply gap-3;
-
-  @apply mt-3 p-4;
-
-  @apply rounded-2 border border-solid border-neutral-100 bg-neutral-0 shadow-lg;
 
   box-sizing: border-box;
 
@@ -539,19 +392,11 @@ button.storybook-textfield__field {
   width: 100%;
   height: 44px;
 
-  @apply rounded-2 border border-solid border-neutral-200 bg-neutral-0 px-custom-14 py-3;
   box-sizing: border-box;
-
-  @apply text-ds-text-sm text-neutral-700;
-}
-
-.storybook-textfield__colorpicker-input::placeholder {
-  @apply text-neutral-300;
 }
 
 .storybook-textfield__colorpicker-input:focus {
   outline: none;
-  @apply border-neutral-500;
 }
 
 .react-colorful {
@@ -603,8 +448,6 @@ button.storybook-textfield__field {
   height: 20px;
 
   overflow: hidden;
-
-  @apply rounded-full;
 }
 
 .storybook-textfield__opacity-grid {

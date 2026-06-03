@@ -146,13 +146,26 @@ export function DatepickerField({
         onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
         onClick={handleOpen}
         onFocus={handleOpen}
-        className={getFieldClassName({ state, hasValue })}
+        className={getFieldClassName({
+          state,
+          hasValue,
+          className: 'pr-custom-42',
+        })}
       />
       <button
         type="button"
         disabled={disabled}
         className={buildClassName([
           'storybook-textfield__date-button',
+          'border-0',
+          'bg-transparent',
+          'p-0',
+          'focus-visible:shadow-focus-brand',
+          disabled
+            ? 'text-neutral-300'
+            : state === 'error'
+              ? 'text-error-600'
+              : 'text-neutral-700',
           state === 'error' && 'storybook-textfield__date-button--error',
         ])}
         aria-label="Open date picker"

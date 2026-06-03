@@ -47,18 +47,19 @@ export function TextFieldShell({
     <div
       className={buildClassName([
         'storybook-textfield',
+        'gap-1',
         `storybook-textfield--${type}`,
         className,
       ])}
     >
       {label && type !== 'search' && (
-        <div className="storybook-textfield__header">
+        <div className="storybook-textfield__header gap-1">
           <Text
             as="label"
             variant="text-sm"
             weight="medium"
-            color="var(--neutral_600)"
-            className="storybook-textfield__label"
+            color="currentColor"
+            className="storybook-textfield__label text-ds-text-sm font-medium text-neutral-600"
           >
             {labelText}
           </Text>
@@ -67,6 +68,7 @@ export function TextFieldShell({
             <HelpIcon
               className={buildClassName([
                 'storybook-textfield__tooltip',
+                'text-neutral-600',
                 tooltipClassName,
               ])}
               open={tooltipOpen}
@@ -82,8 +84,8 @@ export function TextFieldShell({
               as="span"
               variant="text-xs"
               weight="semibold"
-              color="var(--error_600)"
-              className="storybook-textfield__required"
+              color="currentColor"
+              className="storybook-textfield__required text-ds-text-xs font-semibold text-error-600"
             >
               *
             </Text>
@@ -98,9 +100,12 @@ export function TextFieldShell({
           as="span"
           variant="text-xs"
           weight="regular"
-          color={isError ? 'var(--error_600)' : 'var(--neutral_600)'}
+          color="currentColor"
           className={buildClassName([
             'storybook-textfield__helper',
+            'text-ds-text-xs',
+            'font-normal',
+            isError ? 'text-error-600' : 'text-neutral-600',
             isError && 'storybook-textfield__helper--error',
           ])}
         >

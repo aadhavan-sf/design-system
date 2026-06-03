@@ -45,10 +45,10 @@ export function ColorDropdown({
         className={getFieldClassName({ state, hasValue })}
         onClick={() => onOpenChange(!isOpen)}
       >
-        <span className="storybook-textfield__field-content">
+        <span className="storybook-textfield__field-content gap-1">
           {hasValue && (
             <span
-              className="storybook-textfield__color-preview"
+              className="storybook-textfield__color-preview rounded-2"
               style={{ background: color }}
             />
           )}
@@ -59,7 +59,7 @@ export function ColorDropdown({
       </button>
 
       {isOpen && !disabled && (
-        <div className="storybook-textfield__colorpicker-panel">
+        <div className="storybook-textfield__colorpicker-panel mt-3 gap-3 rounded-2 border border-solid border-neutral-100 bg-neutral-0 p-4 shadow-lg">
           <HexColorPicker color={color} onChange={onColorChange} />
 
           <input
@@ -67,10 +67,10 @@ export function ColorDropdown({
             value={displayValue}
             onChange={(event: ChangeEvent<HTMLInputElement>) => onColorChange(event.target.value)}
             placeholder="HEX Code"
-            className="storybook-textfield__colorpicker-input"
+            className="storybook-textfield__colorpicker-input rounded-2 border border-solid border-neutral-200 bg-neutral-0 px-custom-14 py-3 text-ds-text-sm text-neutral-700 placeholder:text-neutral-300 focus:border-neutral-500"
           />
 
-          <div className="storybook-textfield__opacity-wrapper">
+          <div className="storybook-textfield__opacity-wrapper rounded-full">
             <div className="storybook-textfield__opacity-grid" />
             <input
               type="range"

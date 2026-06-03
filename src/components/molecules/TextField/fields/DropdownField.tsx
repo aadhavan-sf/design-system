@@ -8,6 +8,7 @@ import { DropdownList } from '../../DropdownList';
 import { Text } from '../../../foundations/Typography';
 import {
   getFieldClassName,
+  getFieldIconClassName,
   getFieldTextClassName,
 } from '../textFieldState';
 import type { DropdownListItem, DropdownListVariant } from '../../DropdownList/DropdownList';
@@ -29,18 +30,6 @@ export interface DropdownFieldProps {
   selectedOptions: string[];
   state: string;
   withIcon: boolean;
-}
-
-function getDropdownTextColor({ hasValue, state }: { hasValue: boolean; state: string }) {
-  if (state === 'error') {
-    return 'var(--error_600)';
-  }
-
-  if (state === 'disabled' || !hasValue) {
-    return 'var(--neutral_300)';
-  }
-
-  return 'var(--neutral_700)';
 }
 
 export function DropdownField({
@@ -93,7 +82,11 @@ export function DropdownField({
   const fieldClassName = getFieldClassName({
     state,
     hasValue,
-    className: multiple && `storybook-textfield__field--multiselect-${multiselectLayout}`,
+    className: multiple && [
+      `storybook-textfield__field--multiselect-${multiselectLayout}`,
+      'gap-2',
+      'p-3',
+    ].join(' '),
   });
   const handleToggle = () => {
     if (!disabled) {
@@ -108,9 +101,9 @@ export function DropdownField({
   };
   const renderFieldContent = () => (
     <>
-      <span className="storybook-textfield__field-content">
+      <span className="storybook-textfield__field-content gap-1">
         {multiple && hasValue ? (
-          <span className="storybook-textfield__tag-list">
+          <span className="storybook-textfield__tag-list gap-1">
             {visibleSelectedItems.map((item, index) => (
               <Chip
                 key={item.value}
@@ -123,6 +116,13 @@ export function DropdownField({
                 disabled={disabled}
                 className={[
                   'storybook-textfield__selected-chip',
+                  'gap-2',
+                  'border-0',
+                  state === 'disabled' && multiselectLayout === 'two-line'
+                    ? 'rounded-1 bg-neutral-100 px-2 py-1 text-neutral-600'
+                    : 'rounded-2 bg-neutral-50 px-2 py-2 text-neutral-600',
+                  state === 'error' && 'text-error-600',
+                  state === 'disabled' && multiselectLayout !== 'two-line' && 'bg-neutral-100 text-neutral-400',
                   index === 0 && 'storybook-textfield__selected-chip--first',
                 ].filter(Boolean).join(' ')}
                 onClick={(event) => {
@@ -137,7 +137,7 @@ export function DropdownField({
             as="span"
             variant="text-sm"
             weight="regular"
-            color={getDropdownTextColor({ hasValue, state })}
+            color="currentColor"
             className={getFieldTextClassName({ state, hasValue })}
           >
             {displayValue}
@@ -146,7 +146,11 @@ export function DropdownField({
       </span>
 
       <CaretUpDown
-        className="storybook-textfield__trailing-icon"
+        className={[
+          'storybook-textfield__trailing-icon',
+          getFieldIconClassName({ state }),
+          multiselectLayout === 'two-line' && 'mt-1',
+        ].filter(Boolean).join(' ')}
         size={20}
         weight="regular"
       />

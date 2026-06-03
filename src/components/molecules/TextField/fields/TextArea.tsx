@@ -65,7 +65,16 @@ export function TextArea({
         type="button"
         aria-label="Resize text area"
         disabled={disabled}
-        className="storybook-textfield__resize-mark"
+        className={[
+          'storybook-textfield__resize-mark',
+          'border-0',
+          'bg-transparent',
+          'p-0',
+          'focus-visible:shadow-focus-brand',
+          disabled ? 'text-neutral-300' : 'text-neutral-400',
+        ]
+          .filter(Boolean)
+          .join(' ')}
         onPointerDown={handleResizeStart}
       >
         <svg
