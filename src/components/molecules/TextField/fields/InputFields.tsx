@@ -24,7 +24,7 @@ export function InputFields({
       type="text"
       value={value}
       disabled={disabled}
-      placeholder={placeholder}
+      placeholder={state === 'active' ? '' : placeholder}
       onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
       className={getFieldClassName({ state, hasValue })}
     />

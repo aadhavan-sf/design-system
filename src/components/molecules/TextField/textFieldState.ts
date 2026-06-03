@@ -26,7 +26,7 @@ export function getFieldClassName({
     'border-solid',
     'bg-neutral-0',
     'px-custom-14',
-    'py-3',
+    'py-custom-10',
     'font-sans',
     'text-ds-text-sm',
     'font-normal',
