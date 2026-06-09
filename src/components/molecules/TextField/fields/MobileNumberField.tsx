@@ -103,7 +103,7 @@ export function MobileNumberField({
           className={getFieldClassName({
             state,
             hasValue: true,
-            className: 'storybook-textfield__country-code gap-2 rounded-l-2 rounded-r-none px-2 py-3 shadow-none hover:bg-neutral-0',
+            className: 'storybook-textfield__country-code gap-2 rounded-l-2 rounded-r-none px-2 py-custom-10 shadow-none hover:bg-neutral-0',
           })}
           onClick={() => onCountryOpenChange(!isCountryOpen)}
           aria-label={`Selected country code ${selectedCountry.code}`}
@@ -140,7 +140,7 @@ export function MobileNumberField({
         className={getFieldClassName({
           state,
           hasValue,
-          className: 'storybook-textfield__mobile-input rounded-l-none rounded-r-2 px-custom-14 py-3 placeholder:text-neutral-300',
+          className: 'storybook-textfield__mobile-input rounded-l-none rounded-r-2 px-custom-14 py-custom-10 placeholder:text-neutral-300',
         })}
       />
     </div>
