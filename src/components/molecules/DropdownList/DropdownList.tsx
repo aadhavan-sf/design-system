@@ -1,4 +1,12 @@
-import { createElement, useRef, useState, type ElementType, type ReactNode } from 'react';
+import {
+  createElement,
+  useRef,
+  useState,
+  type ElementType,
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactNode,
+} from 'react';
 import {
   Bell,
   BellSimple,
@@ -10,24 +18,29 @@ import {
   Trash,
 } from '@phosphor-icons/react';
 
+import { CheckBox } from '../../atoms/CheckBox';
+import { RadioButton } from '../../atoms/RadioButton';
+import { Toggle } from '../../atoms/Toggle';
 import { Text } from '../../foundations/Typography';
 
 import './dropdownList.css';
 
 const DEFAULT_ITEMS = [
   { label: 'Head Content Editor' },
-  { label: 'Head Content Editor', active: true, selected: true },
+  { label: 'Head Content Editor', selected: true },
   { label: 'Head Content Editor', selected: true },
 ];
 
-const DEFAULT_ICON_PICKER_ITEMS = [
+const DEFAULT_ICON_PICKER_ITEMS: DropdownListIconOption[] = [
   { value: 'bell', label: 'Notifications', icon: Bell },
   { value: 'bell-slash', label: 'Notifications off', icon: BellSlash },
   { value: 'bell-simple', label: 'Simple notifications', icon: BellSimple },
 ];
 
+type ControlVariant = 'checkbox-left' | 'radio-left' | 'toggle-right';
+
 function buildClassName(parts: Array<string | false | null | undefined>) {
-  return parts.filter(Boolean).join(' ');
+  return parts.flat().filter(Boolean).join(' ');
 }
 
 function getItemValue(item: DropdownListItem) {
@@ -52,6 +65,89 @@ function getDefaultSelectedValues(items: DropdownListItem[]) {
   return items
     .filter((item) => typeof item !== 'string' && item.selected)
     .map(getItemValue);
+}
+
+function usesControlVariant(variant: string): variant is ControlVariant {
+  return variant === 'checkbox-left'
+    || variant === 'radio-left'
+    || variant === 'toggle-right';
+}
+
+function getDropdownListItemClasses({
+  isActive,
+  isDisabled,
+  isDestructive,
+}: {
+  isActive: boolean;
+  isDisabled: boolean;
+  isDestructive: boolean;
+}) {
+  if (isDisabled) {
+    return 'cursor-not-allowed bg-neutral-0 text-neutral-300';
+  }
+
+  if (isDestructive) {
+    return 'bg-neutral-0 text-error-600 hover:bg-neutral-25';
+  }
+
+  if (isActive) {
+    return 'bg-neutral-25 text-neutral-800 hover:bg-neutral-25';
+  }
+
+  return 'bg-neutral-0 text-neutral-600 hover:bg-neutral-25';
+}
+
+function getControlState(isDisabled: boolean, isHovered: boolean) {
+  if (isDisabled) {
+    return 'disabled' as const;
+  }
+
+  if (isHovered) {
+    return 'hover' as const;
+  }
+
+  return 'default' as const;
+}
+
+function getItemRole(variant: string) {
+  if (variant === 'checkbox-left') {
+    return 'menuitemcheckbox';
+  }
+
+  if (variant === 'radio-left') {
+    return 'menuitemradio';
+  }
+
+  return 'menuitem';
+}
+
+function getDropdownListItemSizeClasses(size: DropdownListSize) {
+  return size === 'sm' ? 'h-9 px-3' : 'h-11 px-4';
+}
+
+function getDropdownListTextVariant(size: DropdownListSize) {
+  return size === 'sm' ? 'text-xs' : 'text-sm';
+}
+
+function getIconPickerItemClassName(pressed?: boolean) {
+  return buildClassName([
+    'storybook-dropdown-list__icon-picker-item',
+    'inline-flex size-8 shrink-0 cursor-pointer items-center justify-center',
+    'rounded-1 border border-solid border-transparent bg-neutral-0 p-1.5 text-neutral-600 shadow-none',
+    'hover:bg-neutral-50 focus-visible:outline-none focus-visible:shadow-focus-brand',
+    pressed && 'border-brand-100 bg-brand-25 text-brand-400',
+  ]);
+}
+
+function getIconPickerActionClassName(destructive?: boolean) {
+  return buildClassName([
+    'storybook-dropdown-list__icon-picker-action',
+    'inline-flex size-6 cursor-pointer items-center justify-center rounded-1 border-0 bg-transparent p-1',
+    'focus-visible:outline-none focus-visible:shadow-focus-brand',
+    destructive
+      ? 'text-error-600 hover:bg-error-50'
+      : 'text-neutral-600 hover:bg-neutral-50',
+  ]);
 }
 
 function IconPickerGlyph({
@@ -87,14 +183,11 @@ function IconPickerItem({
       type="button"
       aria-label={label}
       aria-pressed={pressed}
-      className={buildClassName([
-        'storybook-dropdown-list__icon-picker-item',
-        pressed && 'storybook-dropdown-list__icon-picker-item--pressed',
-      ])}
+      className={getIconPickerItemClassName(pressed)}
       onClick={onClick}
     >
       <IconPickerGlyph
-        className="storybook-dropdown-list__icon-picker-icon"
+        className="shrink-0"
         icon={icon}
         size={20}
       />
@@ -112,22 +205,26 @@ function IconPickerUpload({
   return (
     <button
       type="button"
-      className="storybook-dropdown-list__icon-picker-upload"
+      className={buildClassName([
+        'storybook-dropdown-list__icon-picker-upload',
+        'relative flex w-full cursor-pointer items-start gap-2 rounded-2 border border-dashed',
+        'border-neutral-200 bg-neutral-0 p-3 text-neutral-900 shadow-none',
+        'hover:bg-neutral-25 focus-visible:outline-none focus-visible:shadow-focus-brand',
+      ])}
       onClick={() => inputRef.current?.click()}
     >
       <MonitorArrowUp
         aria-hidden="true"
-        className="storybook-dropdown-list__icon-picker-upload-icon"
+        className="shrink-0 text-brand-400"
         size={24}
         weight="regular"
       />
-      <span className="storybook-dropdown-list__icon-picker-upload-copy">
+      <span className="flex min-w-0 flex-col gap-1 text-left">
         <Text
           as="span"
           variant="text-sm"
           weight="medium"
-          color="currentColor"
-          className="storybook-dropdown-list__icon-picker-upload-title"
+          className="text-neutral-900"
         >
           Upload Your Icon
         </Text>
@@ -135,8 +232,7 @@ function IconPickerUpload({
           as="span"
           variant="text-xs"
           weight="regular"
-          color="currentColor"
-          className="storybook-dropdown-list__icon-picker-upload-size"
+          className="text-neutral-600"
         >
           24x24 SVG or PNG
         </Text>
@@ -160,25 +256,33 @@ function IconPickerDropdown({
   onUpload,
   selectedValue,
   uploadedIcon,
-}: Pick<DropdownListProps, 'iconOptions' | 'onIconSelect' | 'onRemoveUploadedIcon' | 'onRepeatUploadedIcon' | 'onUpload' | 'selectedValue' | 'uploadedIcon'>) {
+}: Pick<
+  DropdownListProps,
+  | 'iconOptions'
+  | 'onIconSelect'
+  | 'onRemoveUploadedIcon'
+  | 'onRepeatUploadedIcon'
+  | 'onUpload'
+  | 'selectedValue'
+  | 'uploadedIcon'
+>) {
   const isUploadedState = Boolean(uploadedIcon);
   const resolvedIconOptions = iconOptions?.length
     ? iconOptions
     : DEFAULT_ICON_PICKER_ITEMS;
 
   return (
-    <div className="storybook-dropdown-list__icon-picker">
+    <div className="flex flex-col gap-4 p-4">
       <Text
         as="p"
         variant="text-xs"
         weight="medium"
-        color="currentColor"
-        className="storybook-dropdown-list__icon-picker-title"
+        className="m-0 text-neutral-600"
       >
         Choose Icon
       </Text>
 
-      <div className="storybook-dropdown-list__icon-picker-choices">
+      <div className="flex items-center gap-2">
         {resolvedIconOptions.map((option) => (
           <IconPickerItem
             key={option.value}
@@ -190,31 +294,33 @@ function IconPickerDropdown({
         ))}
       </div>
 
-      <div className="storybook-dropdown-list__icon-picker-separator">
-        <span className="storybook-dropdown-list__icon-picker-separator-line" />
+      <div className="relative flex h-4 w-full items-center justify-center">
+        <span
+          aria-hidden="true"
+          className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-neutral-200"
+        />
         <Text
           as="span"
           variant="text-xs"
           weight="medium"
-          color="currentColor"
-          className="storybook-dropdown-list__icon-picker-separator-label"
+          className="relative z-[1] bg-neutral-0 px-1 tracking-[0.2em] text-neutral-200"
         >
           OR
         </Text>
       </div>
 
       {isUploadedState && uploadedIcon ? (
-        <div className="storybook-dropdown-list__icon-picker-uploaded">
+        <div className="flex items-center justify-between gap-2">
           <IconPickerItem
             icon={uploadedIcon}
             label="Uploaded icon"
             pressed
           />
-          <span className="storybook-dropdown-list__icon-picker-uploaded-actions">
+          <span className="inline-flex items-center gap-2">
             <button
               type="button"
               aria-label="Replace uploaded icon"
-              className="storybook-dropdown-list__icon-picker-action"
+              className={getIconPickerActionClassName()}
               onClick={onRepeatUploadedIcon}
             >
               <Repeat size={16} weight="regular" />
@@ -222,7 +328,7 @@ function IconPickerDropdown({
             <button
               type="button"
               aria-label="Delete uploaded icon"
-              className="storybook-dropdown-list__icon-picker-action storybook-dropdown-list__icon-picker-action--destructive"
+              className={getIconPickerActionClassName(true)}
               onClick={onRemoveUploadedIcon}
             >
               <Trash size={16} weight="regular" />
@@ -236,53 +342,172 @@ function IconPickerDropdown({
   );
 }
 
-function Control({ disabled, selected, variant }: { disabled: boolean; selected: boolean; variant: 'checkbox-left' | 'radio-left' | 'toggle-right' }) {
-  if (variant === 'checkbox-left') {
-    return (
-      <span
-        className={buildClassName([
-          'storybook-dropdown-list__checkbox',
-          selected && 'storybook-dropdown-list__checkbox--checked',
-          disabled && 'storybook-dropdown-list__checkbox--disabled',
-        ])}
-        aria-hidden="true"
+function DropdownListItem({
+  index,
+  isSelected,
+  item,
+  label,
+  prefix,
+  size,
+  variant,
+  isDisabled,
+  isDestructive,
+  onSelect,
+}: {
+  index: number;
+  isSelected: boolean;
+  item: DropdownListItem;
+  label: string;
+  prefix: ReactNode;
+  size: DropdownListSize;
+  variant: string;
+  isDisabled: boolean;
+  isDestructive: boolean;
+  onSelect: (item: DropdownListItem, index: number) => void;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const controlState = getControlState(isDisabled, isHovered);
+  const hasControlVariant = usesControlVariant(variant);
+
+  const itemClasses = buildClassName([
+    'storybook-dropdown-list__item',
+    'box-border flex w-full shrink-0 cursor-pointer items-center gap-2 border-0',
+    getDropdownListItemSizeClasses(size),
+    getDropdownListItemClasses({ isActive: isSelected, isDisabled, isDestructive }),
+    isDisabled && 'cursor-not-allowed',
+  ]);
+
+  const handleSelect = () => {
+    onSelect(item, index);
+  };
+
+  const handleControlClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    handleSelect();
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (isDisabled) {
+      return;
+    }
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleSelect();
+    }
+  };
+
+  const content = (
+    <>
+      {variant === 'icon-left' && (
+        <Plug
+          className="shrink-0 text-current"
+          size={16}
+          weight="regular"
+        />
+      )}
+
+      {variant === 'checkbox-left' && (
+        <CheckBox
+          size="sm"
+          pressed={isSelected}
+          state={controlState}
+          aria-label={label}
+          tabIndex={-1}
+          className="shrink-0"
+          onClick={handleControlClick}
+        />
+      )}
+
+      {variant === 'radio-left' && (
+        <RadioButton
+          size="sm"
+          pressed={isSelected}
+          state={controlState}
+          aria-label={label}
+          tabIndex={-1}
+          className="shrink-0"
+          onClick={handleControlClick}
+        />
+      )}
+
+      {prefix && (
+        <span
+          className="storybook-dropdown-list__prefix inline-flex w-5 shrink-0 items-center justify-center text-ds-text-sm"
+          aria-hidden="true"
+        >
+          {prefix}
+        </span>
+      )}
+
+      <Text
+        as="span"
+        variant={getDropdownListTextVariant(size)}
+        weight="regular"
+        color="currentColor"
+        className="storybook-dropdown-list__label min-w-px flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-left"
       >
-        {selected && <Check size={12} weight="regular" />}
-      </span>
+        {label}
+      </Text>
+
+      {variant === 'toggle-right' && (
+        <Toggle
+          size="sm"
+          pressed={isSelected}
+          state={controlState}
+          aria-label={label}
+          tabIndex={-1}
+          className="ml-auto shrink-0"
+          onClick={handleControlClick}
+        />
+      )}
+
+      {variant === 'icon-right' && (
+        <Plug
+          className="shrink-0 text-current"
+          size={16}
+          weight="regular"
+        />
+      )}
+
+      {variant === 'check-right' && isSelected && (
+        <Check
+          className="shrink-0 text-brand-400"
+          size={16}
+          weight="bold"
+        />
+      )}
+    </>
+  );
+
+  if (hasControlVariant) {
+    return (
+      <div
+        role={getItemRole(variant)}
+        aria-checked={isSelected}
+        aria-disabled={isDisabled || undefined}
+        tabIndex={isDisabled ? -1 : 0}
+        className={itemClasses}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={handleSelect}
+        onKeyDown={handleKeyDown}
+      >
+        {content}
+      </div>
     );
   }
 
-  if (variant === 'radio-left') {
-    return (
-      <span
-        className={buildClassName([
-          'storybook-dropdown-list__radio',
-          selected && 'storybook-dropdown-list__radio--checked',
-          disabled && 'storybook-dropdown-list__radio--disabled',
-        ])}
-        aria-hidden="true"
-      >
-        <span className="storybook-dropdown-list__radio-dot" />
-      </span>
-    );
-  }
-
-  if (variant === 'toggle-right') {
-    return (
-      <span
-        className={buildClassName([
-          'storybook-dropdown-list__toggle',
-          selected && 'storybook-dropdown-list__toggle--checked',
-          disabled && 'storybook-dropdown-list__toggle--disabled',
-        ])}
-        aria-hidden="true"
-      >
-        <span className="storybook-dropdown-list__toggle-thumb" />
-      </span>
-    );
-  }
-
-  return null;
+  return (
+    <button
+      type="button"
+      disabled={isDisabled}
+      className={itemClasses}
+      onClick={handleSelect}
+    >
+      {content}
+    </button>
+  );
 }
 
 export function DropdownList({
@@ -296,6 +521,9 @@ export function DropdownList({
   selectedValues,
   uploadedIcon,
   variant = 'icon-left',
+  size = 'md',
+  fullWidth = false,
+  className,
   onItemSelect,
   onSelectedValuesChange,
 }: DropdownListProps) {
@@ -305,7 +533,12 @@ export function DropdownList({
 
   if (variant === 'icon-picker') {
     return (
-      <div className="storybook-dropdown-list storybook-dropdown-list--icon-picker">
+      <div
+        className={buildClassName([
+          'storybook-dropdown-list',
+          'flex w-[216px] flex-col items-stretch overflow-hidden shadow-md',
+        ])}
+      >
         <IconPickerDropdown
           iconOptions={iconOptions}
           selectedValue={selectedValue}
@@ -329,11 +562,13 @@ export function DropdownList({
     onSelectedValuesChange?.(nextValues);
   };
 
-  const handleItemClick = (item: DropdownListItem, index: number) => {
+  const handleItemSelect = (item: DropdownListItem, index: number) => {
     const value = getItemValue(item);
     const disabled = typeof item !== 'string' && item.disabled;
+    const itemState = typeof item === 'string' ? 'default' : item.state ?? 'default';
+    const isDisabled = itemState === 'disabled' || Boolean(disabled);
 
-    if (disabled) {
+    if (isDisabled) {
       return;
     }
 
@@ -356,8 +591,12 @@ export function DropdownList({
     <div
       className={buildClassName([
         'storybook-dropdown-list',
-        `storybook-dropdown-list--${variant}`,
+        'flex flex-col items-stretch overflow-hidden',
+        fullWidth ? 'w-full' : 'w-[240px]',
+        'rounded-2 bg-neutral-0 shadow-sm',
+        className,
       ])}
+      role="menu"
     >
       {items.map((item, index) => {
         const label = getItemLabel(item);
@@ -367,89 +606,29 @@ export function DropdownList({
         const isDisabled = itemState === 'disabled' || (typeof item !== 'string' && item.disabled);
         const isDestructive = itemState === 'destructive';
         const isSelected = resolvedSelectedValues.includes(value);
-        const isActive =
-          itemState === 'active' ||
-          (typeof item !== 'string' && item.active && isSelected) ||
-          isSelected;
 
         return (
-          <button
+          <DropdownListItem
             key={`${value}-${index}`}
-            type="button"
-            disabled={Boolean(isDisabled)}
-            className={buildClassName([
-              'storybook-dropdown-list__item',
-              isActive && 'storybook-dropdown-list__item--active',
-              isDisabled && 'storybook-dropdown-list__item--disabled',
-              isDestructive && 'storybook-dropdown-list__item--destructive',
-            ])}
-            onClick={() => handleItemClick(item, index)}
-          >
-            {variant === 'icon-left' && (
-              <Plug
-                className="storybook-dropdown-list__icon"
-                size={16}
-                weight="regular"
-              />
-            )}
-
-            {(variant === 'checkbox-left' || variant === 'radio-left') && (
-              <Control
-                disabled={Boolean(isDisabled)}
-                selected={isSelected}
-                variant={variant}
-              />
-            )}
-
-            {prefix && (
-              <span
-                className="storybook-dropdown-list__prefix"
-                aria-hidden="true"
-              >
-                {prefix}
-              </span>
-            )}
-
-            <Text
-              as="span"
-              variant="text-sm"
-              weight="regular"
-              color="currentColor"
-              className="storybook-dropdown-list__label"
-            >
-              {label}
-            </Text>
-
-            {variant === 'toggle-right' && (
-              <Control
-                disabled={Boolean(isDisabled)}
-                selected={isSelected}
-                variant={variant}
-              />
-            )}
-
-            {variant === 'icon-right' && (
-              <Plug
-                className="storybook-dropdown-list__icon"
-                size={16}
-                weight="regular"
-              />
-            )}
-
-            {variant === 'check-right' && isSelected && (
-              <Check
-                className="storybook-dropdown-list__icon"
-                size={16}
-                weight="regular"
-              />
-            )}
-          </button>
+            index={index}
+            isDestructive={isDestructive}
+            isDisabled={Boolean(isDisabled)}
+            isSelected={isSelected}
+            item={item}
+            label={label}
+            prefix={prefix}
+            size={size}
+            variant={variant}
+            onSelect={handleItemSelect}
+          />
         );
       })}
     </div>
   );
 }
+
 export type DropdownListVariant = string;
+export type DropdownListSize = 'sm' | 'md';
 export type DropdownListItemState = string;
 export type DropdownListIconOption = {
   icon: ElementType;
@@ -477,6 +656,9 @@ export interface DropdownListProps {
   selectedValues?: string[];
   selectedValue?: string;
   variant?: DropdownListVariant;
+  size?: DropdownListSize;
+  fullWidth?: boolean;
+  className?: string;
   onItemSelect?: (item: DropdownListItem, index: number) => void;
   onRemoveUploadedIcon?: () => void;
   onRepeatUploadedIcon?: () => void;

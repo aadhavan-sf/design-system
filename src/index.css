@@ -97,13 +97,6 @@ body {
   color-scheme: light;
 }
 
-.sbdocs .ds-text,
-.sbdocs-wrapper .ds-text,
-.sbdocs-content .ds-text,
-.docs-story .ds-text {
-  color: var(--neutral_900);
-}
-
 #root {
   width: 1126px;
   max-width: 100%;

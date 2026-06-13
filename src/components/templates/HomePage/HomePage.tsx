@@ -76,6 +76,10 @@ const visibilityOptions = [
   },
 ];
 
+function buildClassName(parts: Array<string | false | null | undefined>) {
+  return parts.flat().filter(Boolean).join(' ');
+}
+
 function formatLastSavedAt(date = new Date()) {
   const parts = new Intl.DateTimeFormat('en-IN', {
     timeZone: 'Asia/Kolkata',
@@ -107,7 +111,7 @@ function formatLastSavedAt(date = new Date()) {
 function PhonePreview() {
   return (
     <img
-      className="storybook-home-page-phone"
+      className="storybook-home-page-phone block h-auto object-contain drop-shadow-[0_32px_52px_rgba(10,13,18,0.14)]"
       src={mobilePreviewImage}
       alt="Mobile storefront preview"
     />
@@ -121,7 +125,7 @@ function VisibilityOption({
   onSelect,
 }: VisibilityOptionProps) {
   const isImageIcon = typeof icon === 'string';
-  const Icon = icon;
+  const IconComponent = icon;
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -132,7 +136,11 @@ function VisibilityOption({
 
   return (
     <div
-      className="storybook-home-page-visibility-option"
+      className={buildClassName([
+        'storybook-home-page-visibility-option',
+        'flex min-h-5 w-full cursor-pointer items-center gap-2 rounded-1 border-0 bg-transparent p-0 text-neutral-700',
+        'focus-visible:outline-none focus-visible:shadow-focus-brand',
+      ])}
       role="radio"
       aria-checked={checked}
       tabIndex={0}
@@ -143,28 +151,28 @@ function VisibilityOption({
         size="sm"
         pressed={checked}
         aria-label={label}
-        className="storybook-home-page-visibility-option__radio"
+        className="pointer-events-none shrink-0"
         tabIndex={-1}
       />
       <Text
         as="span"
         variant="text-sm"
         weight="medium"
-        color="currentColor"
+        className="text-neutral-700"
       >
         {label}
       </Text>
       {isImageIcon ? (
         <img
           aria-hidden="true"
-          className="storybook-home-page-visibility-option__icon storybook-home-page-visibility-option__icon--image"
+          className="storybook-home-page-visibility-option__icon storybook-home-page-visibility-option__icon--image block size-4 shrink-0"
           src={icon}
           alt=""
         />
       ) : (
-        <Icon
+        <IconComponent
           aria-hidden="true"
-          className="storybook-home-page-visibility-option__icon"
+          className="size-4 shrink-0 text-neutral-600"
           size={16}
           weight="regular"
         />
@@ -177,53 +185,72 @@ function ConditionalFilterCard({
   isConditional,
 }: ConditionalFilterCardProps) {
   return (
-    <article className="storybook-home-page-filter-card">
+    <article
+      className={buildClassName([
+        'storybook-home-page-filter-card',
+        'grid gap-2 rounded-16 bg-neutral-25 p-4',
+      ])}
+    >
       <img
         aria-hidden="true"
-        className="storybook-home-page-filter-card__icon"
+        className="storybook-home-page-filter-card__icon size-5"
         src={eyeConditionIcon}
         alt=""
       />
-      <div className="storybook-home-page-filter-card__content">
-        <Text
-          as="h3"
-          variant="text-sm"
-          weight="semibold"
-          color="currentColor"
-        >
-          Conditional Filter
-        </Text>
-        {isConditional ? (
-          <ul className="storybook-home-page-filter-card__conditions">
-            <li>
-              <Text as="span" variant="text-xs" weight="medium" color="currentColor">
-                Customers (x3)
-              </Text>
-            </li>
-            <li>
-              <Text as="span" variant="text-xs" weight="medium" color="currentColor">
-                Time (x1)
-              </Text>
-            </li>
-          </ul>
-        ) : (
+      <div className="flex min-w-0 flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <Text
-            as="p"
-            variant="text-xs"
-            weight="medium"
-            color="currentColor"
+            as="h3"
+            variant="text-sm"
+            weight="semibold"
+            className="text-neutral-900"
           >
-            Set up logic to show each widget to the right users at the right time.
+            Conditional Filter
           </Text>
-        )}
+          {isConditional ? (
+            <ul className="storybook-home-page-filter-card__conditions m-0 list-none p-0">
+              <li className="storybook-home-page-filter-card__condition">
+                <span
+                  aria-hidden="true"
+                  className="storybook-home-page-filter-card__condition-marker"
+                />
+                <Text as="span" variant="text-xs" weight="medium" className="text-neutral-600">
+                  Customers (x3)
+                </Text>
+              </li>
+              <li className="storybook-home-page-filter-card__condition">
+                <span
+                  aria-hidden="true"
+                  className="storybook-home-page-filter-card__condition-marker"
+                />
+                <Text as="span" variant="text-xs" weight="medium" className="text-neutral-600">
+                  Time (x1)
+                </Text>
+              </li>
+            </ul>
+          ) : (
+            <Text
+              as="p"
+              variant="text-xs"
+              weight="medium"
+              className="text-neutral-600"
+            >
+              Set up logic to show each widget to the right users at the right time.
+            </Text>
+          )}
+        </div>
         <button
           type="button"
-          className="storybook-home-page-filter-card__setup"
+          className={buildClassName([
+            'storybook-home-page-filter-card__setup',
+            'inline-flex w-max max-w-full cursor-pointer items-center justify-start gap-2 border-0 bg-transparent p-0 text-brand-400',
+            'focus-visible:outline-none focus-visible:shadow-focus-brand',
+          ])}
         >
           {isConditional && (
             <PencilSimple
               aria-hidden="true"
-              size={16}
+              size={18}
               weight="regular"
             />
           )}
@@ -238,7 +265,7 @@ function ConditionalFilterCard({
           {!isConditional && (
             <CaretRight
               aria-hidden="true"
-              size={16}
+              size={18}
               weight="bold"
             />
           )}
@@ -251,6 +278,8 @@ function ConditionalFilterCard({
 function RightPanel({
   onDesignChange = () => {},
 }: RightPanelProps) {
+  // Demo default for Storybook only. In production, initialize from saved block settings
+  // (e.g. API response) so visibility survives refresh.
   const [visibility, setVisibility] = useState<VisibilityId>('visible');
   const selectedVisibility = visibilityOptions.find((option) => option.id === visibility);
   const isConditional = visibility === 'conditional';
@@ -265,28 +294,38 @@ function RightPanel({
   };
 
   return (
-    <aside className="storybook-home-page-right-panel" aria-label="Home page properties">
-      <div className="storybook-home-page-right-panel__top">
+    <aside
+      className={buildClassName([
+        'storybook-home-page-right-panel',
+        'box-border flex h-full w-full flex-col gap-6 overflow-y-auto rounded-6 border border-solid border-neutral-100 bg-neutral-0 py-6 text-neutral-900',
+      ])}
+      aria-label="Home page properties"
+    >
+      <div className="flex flex-col gap-3">
         <Button
           label="Publish Theme"
           hierarchy="primary"
           size="medium"
-          className="storybook-home-page-right-panel__publish"
+          className="w-full min-w-0"
         />
-        <span className="storybook-home-page-right-panel__divider" />
+        <span className="block h-px w-full bg-neutral-100" />
       </div>
 
-      <section className="storybook-home-page-right-section">
-        <Text as="h2" variant="text-md" weight="semibold" color="currentColor">
+      <section className="flex flex-col gap-3">
+        <Text as="h2" variant="text-md" weight="semibold" className="text-neutral-900">
           Properties
         </Text>
-        <div className="storybook-home-page-properties-copy">
-          <Text as="p" variant="text-xs" weight="regular" color="currentColor">
+        <div className="flex flex-col gap-3 text-neutral-600">
+          <Text as="p" variant="text-xs" weight="regular" className="text-neutral-600">
             To customise custom blocks, go to the custom blocks settings under theme settings.
           </Text>
           <button
             type="button"
-            className="storybook-home-page-custom-blocks-link"
+            className={buildClassName([
+              'storybook-home-page-custom-blocks-link',
+              'inline-flex w-max max-w-full cursor-pointer items-center justify-start gap-1 border-0 bg-transparent p-0 text-brand-400',
+              'focus-visible:outline-none focus-visible:shadow-focus-brand',
+            ])}
           >
             <Text as="span" variant="text-xs" weight="semibold" color="currentColor">
               Edit Custom Blocks
@@ -312,12 +351,12 @@ function RightPanel({
         astriks={false}
       />
 
-      <section className="storybook-home-page-right-section storybook-home-page-right-section--visibility">
-        <Text as="h2" variant="text-md" weight="semibold" color="currentColor">
+      <section className="flex flex-col gap-3">
+        <Text as="h2" variant="text-md" weight="semibold" className="text-neutral-900">
           Visibility
         </Text>
         <div
-          className="storybook-home-page-visibility-controls"
+          className="flex flex-col gap-2"
           role="radiogroup"
           aria-label="Visibility"
         >
@@ -332,7 +371,7 @@ function RightPanel({
           ))}
         </div>
         {selectedVisibility?.helper && (
-          <Text as="p" variant="text-xs" weight="regular" color="currentColor">
+          <Text as="p" variant="text-xs" weight="regular" className="text-neutral-600">
             {selectedVisibility.helper}
           </Text>
         )}
@@ -355,15 +394,15 @@ export function HomePage() {
   };
 
   return (
-    <div className="storybook-home-page">
+    <div className="storybook-home-page box-border bg-neutral-25 font-sans text-neutral-900">
       <TemplateSidebar
         activeItemId="active-theme"
         className="storybook-home-page__sidebar"
       />
 
-      <div className="storybook-home-page__left-panel">
+      <div className="storybook-home-page__left-panel box-border bg-transparent">
         <TemplateLeftPanel
-          className="storybook-home-page__left-panel-surface"
+          className="storybook-home-page__left-panel-surface rounded-6"
           type="fixed-blocks"
           title="Version 1"
           status="draft"
@@ -380,9 +419,9 @@ export function HomePage() {
         />
       </div>
 
-      <main className="storybook-home-page__canvas">
+      <main className="storybook-home-page__canvas box-border flex flex-col items-center gap-8 bg-transparent px-4">
         <TopNavigation />
-        <div className="storybook-home-page__preview-lane">
+        <div className="storybook-home-page__preview-lane grid gap-8">
           <div className="storybook-home-page__collection-select">
             <TextField
               type="dropdown"
@@ -396,22 +435,21 @@ export function HomePage() {
               astriks={false}
             />
           </div>
-          <div className="storybook-home-page__preview-stack">
+          <div className="storybook-home-page__preview-stack flex flex-col items-center justify-center gap-4">
             <PhonePreview />
           </div>
           <Text
             as="span"
             variant="text-xs"
             weight="regular"
-            color="currentColor"
-            className="storybook-home-page__last-saved"
+            className="storybook-home-page__last-saved text-neutral-600"
           >
             Last saved: {lastSavedAt}
           </Text>
         </div>
       </main>
 
-      <div className="storybook-home-page__right-panel">
+      <div className="storybook-home-page__right-panel flex bg-transparent">
         <RightPanel onDesignChange={handleDesignChange} />
       </div>
     </div>

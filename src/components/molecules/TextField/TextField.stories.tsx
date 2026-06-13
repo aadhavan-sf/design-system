@@ -166,7 +166,7 @@ export const Playground: Story = {
 
 export const InputFieldStates: Story = {
   render: () => (
-    <div className="textfield-story-grid">
+    <div className="grid grid-cols-[repeat(3,296px)] items-start gap-10">
       {fieldStates.map((state) => (
         <TextField
           key={state}
@@ -181,14 +181,37 @@ export const InputFieldStates: Story = {
 
 export const DropdownFieldStates: Story = {
   render: () => (
-    <div className="textfield-story-grid">
+    <div className="grid grid-cols-[repeat(3,296px)] items-start gap-10">
       {fieldStates.map((state) => (
-        <TextField
+        <div
           key={state}
-          type="dropdown-field"
-          state={state}
-          {...commonProps}
-        />
+          className={state === 'active' ? 'min-h-[360px]' : undefined}
+        >
+          <TextField
+            type="dropdown-field"
+            state={state}
+            {...commonProps}
+          />
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+export const MultiselectOneLineFieldStates: Story = {
+  render: () => (
+    <div className="grid grid-cols-[repeat(3,296px)] items-start gap-10">
+      {fieldStates.map((state) => (
+        <div
+          key={state}
+          className={state === 'active' ? 'min-h-[360px]' : undefined}
+        >
+          <TextField
+            type="multiselect-field-one-line"
+            state={state}
+            {...commonProps}
+          />
+        </div>
       ))}
     </div>
   ),
@@ -196,17 +219,17 @@ export const DropdownFieldStates: Story = {
 
 export const FieldTypes: Story = {
   render: () => (
-    <div className="textfield-story-grid">
+    <div className="grid grid-cols-[repeat(3,296px)] items-start gap-10">
       {fieldTypes.map((type) => (
         <div
           key={type}
-          className="textfield-story-item"
+          className="flex flex-col gap-3"
         >
           <Text
             as="p"
             variant="text-sm"
             weight="semibold"
-            className="textfield-story-label"
+            className="m-0 text-ds-text-sm font-semibold text-neutral-900"
           >
             {fieldTypeLabels[type]}
           </Text>
@@ -227,7 +250,7 @@ export const FieldTypes: Story = {
 
 export const SearchStates: Story = {
   render: () => (
-    <div className="textfield-story-grid">
+    <div className="grid grid-cols-[repeat(3,296px)] items-start gap-10">
       {fieldStates.map((state) => (
         <TextField
           key={state}
@@ -242,7 +265,7 @@ export const SearchStates: Story = {
 
 export const ParagraphStates: Story = {
   render: () => (
-    <div className="textfield-story-grid">
+    <div className="grid grid-cols-[repeat(3,296px)] items-start gap-10">
       {fieldStates.map((state) => (
         <TextField
           key={state}
@@ -271,10 +294,12 @@ export const ColorPicker: Story = {
 
 export const DropdownWithIcons: Story = {
   render: (args) => (
-    <TextField
-      key={`${args.type}-${args.state}`}
-      {...args}
-    />
+    <div className={args.state === 'active' ? 'min-h-[360px]' : undefined}>
+      <TextField
+        key={`${args.type}-${args.state}`}
+        {...args}
+      />
+    </div>
   ),
   args: {
     type: 'dropdown-field',
@@ -286,10 +311,12 @@ export const DropdownWithIcons: Story = {
 
 export const DropdownListCustomization: Story = {
   render: (args) => (
-    <TextField
-      key={`${args.dropdownListVariant}-${args.state}`}
-      {...args}
-    />
+    <div className={args.state === 'active' ? 'min-h-[360px]' : undefined}>
+      <TextField
+        key={`${args.dropdownListVariant}-${args.state}`}
+        {...args}
+      />
+    </div>
   ),
   args: {
     type: 'dropdown-field',

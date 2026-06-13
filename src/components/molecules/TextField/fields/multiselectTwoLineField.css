@@ -1,0 +1,8 @@
+.storybook-multiselect-two-line-field__selected-chip {
+  flex: 0 1 calc((100% - var(--spacing_1)) / 2);
+  max-width: calc((100% - var(--spacing_1)) / 2);
+}
+
+.storybook-multiselect-two-line-field__selected-chip .storybook-chip__label {
+  text-align: left;
+}

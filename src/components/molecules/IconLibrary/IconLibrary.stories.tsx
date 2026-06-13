@@ -87,7 +87,7 @@ export const Playground = {
 
 export const SmallStates = {
   render: () => (
-    <div className="storybook-icon-library-story-grid">
+    <div className="flex flex-wrap items-start gap-10">
       <IconLibrary state="default" />
       <IconLibrary state="dropdown-upload-icon" />
       <IconLibrary state="uploaded-icon" />
@@ -101,7 +101,7 @@ export const LargePicker = {
     const [emptySelectedValue, setEmptySelectedValue] = useState('empty');
 
     return (
-      <div className="storybook-icon-library-story-grid">
+      <div className="flex flex-wrap items-start gap-10">
         <IconLibraryGrid
           selectedValue={selectedValue}
           state="default"
@@ -119,11 +119,11 @@ export const LargePicker = {
 
 export const IconItemStates = {
   render: () => (
-    <div className="storybook-icon-library-story-matrix">
+    <div className="flex flex-col gap-3">
       {['default', 'hover', 'focused', 'disabled'].map((state) => (
         <div
           key={state}
-          className="storybook-icon-library-story-row"
+          className="flex items-center gap-4"
         >
           <Text
             as="span"

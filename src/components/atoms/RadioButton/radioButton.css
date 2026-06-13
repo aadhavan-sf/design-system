@@ -6,9 +6,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
-  line-height: 0;
-  vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
 
   cursor: pointer;
@@ -32,43 +29,8 @@
   cursor: not-allowed;
 }
 
-.storybook-radio--sm {
-  width: 16px;
-  height: 16px;
-}
-
-.storybook-radio--mid {
-  width: 20px;
-  height: 20px;
-}
-
 .storybook-radio__dot {
   display: block;
 
   transition: opacity 160ms ease;
-}
-
-.storybook-radio--sm .storybook-radio__dot {
-  width: 6px;
-  height: 6px;
-}
-
-.storybook-radio--mid .storybook-radio__dot {
-  width: 8px;
-  height: 8px;
-}
-
-.radio-story-row,
-.radio-story-stack {
-  display: flex;
-  align-items: center;
-}
-
-.radio-story-row {
-  @apply gap-12;
-}
-
-.radio-story-stack {
-  flex-direction: column;
-  @apply gap-8;
 }

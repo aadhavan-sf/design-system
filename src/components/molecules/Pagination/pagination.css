@@ -1,68 +1,5 @@
-.storybook-pagination {
-  width: 100%;
-  max-width: 1216px;
-  min-width: 0;
-
-  display: flex;
-  align-items: center;
-
-  @apply px-6 pb-4 pt-3;
-
-  @apply border-0 border-t border-solid border-neutral-200;
-
-  @apply box-border;
-  overflow-x: auto;
-  overflow-y: visible;
-}
-
-.storybook-pagination--mobile {
-  max-width: 375px;
-}
-
-.storybook-pagination--left {
-  justify-content: flex-start;
-}
-
-.storybook-pagination--center {
-  justify-content: center;
-}
-
-.storybook-pagination--right {
-  justify-content: flex-end;
-}
-
-.storybook-pagination__group {
-  flex: 0 0 auto;
-
-  display: inline-flex;
-  align-items: stretch;
-}
-
-.storybook-pagination__item {
-  display: inline-flex;
-  align-items: stretch;
-
-  margin-left: -1px;
-}
-
 .storybook-pagination-button {
-  @apply h-10 min-w-10;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  @apply gap-2;
-
-  @apply px-4 py-3;
-
-  @apply rounded-none border border-solid border-neutral-200;
-
-  @apply bg-neutral-0 text-neutral-700;
-
-  @apply box-border;
-
   cursor: pointer;
-  @apply font-sans;
 
   transition:
     background-color 160ms ease,
@@ -70,80 +7,10 @@
     box-shadow 160ms ease;
 }
 
-.storybook-pagination-button:hover,
-.storybook-pagination-button--active {
-  @apply bg-neutral-50 text-neutral-900;
+.storybook-pagination-button:focus-visible {
+  outline: none;
 }
 
 .storybook-pagination-button:disabled {
   cursor: not-allowed;
-  @apply bg-neutral-0 text-neutral-300;
-}
-
-.storybook-pagination-button:disabled:hover {
-  @apply bg-neutral-0 text-neutral-300;
-}
-
-.storybook-pagination-button:focus-visible,
-.storybook-pagination-button--focused {
-  outline: none;
-  @apply bg-neutral-50 text-neutral-900 shadow-focus-brand;
-  z-index: 1;
-}
-
-.storybook-pagination-button--leading {
-  @apply rounded-l-2;
-}
-
-.storybook-pagination-button--middle {
-  @apply w-10;
-
-  flex-direction: column;
-
-  @apply px-4 py-3;
-}
-
-.storybook-pagination-button--trailing {
-  margin-left: -1px;
-
-  @apply rounded-r-2;
-}
-
-.storybook-pagination-button--icon-only {
-  @apply w-10 p-3;
-}
-
-.storybook-pagination-button__icon {
-  flex-shrink: 0;
-}
-
-.storybook-pagination-button__label {
-  white-space: nowrap;
-}
-
-.pagination-story-surface,
-.pagination-story-stack,
-.pagination-story-buttons {
-  display: flex;
-  @apply gap-4;
-}
-
-.pagination-story-surface {
-  width: 100%;
-
-  align-items: stretch;
-  flex-direction: column;
-
-  @apply p-6;
-
-  @apply box-border;
-}
-
-.pagination-story-stack {
-  flex-direction: column;
-  align-items: stretch;
-}
-
-.pagination-story-buttons {
-  flex-wrap: wrap;
 }

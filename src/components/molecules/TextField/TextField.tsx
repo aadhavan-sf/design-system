@@ -30,8 +30,6 @@ import type { DatepickerFieldProps } from './fields/DatepickerField';
 import type { DropdownListVariant } from '../DropdownList/DropdownList';
 import type { TextFieldDropdownItem } from './fields/DropdownField';
 
-import './textfield.css';
-
 const EMPTY_OPTIONS: string[] = [];
 
 export interface TextFieldProps {
@@ -78,11 +76,7 @@ function getFilledValue(type: NormalizedTextFieldType) {
 }
 
 function getInitialTextValue(type: NormalizedTextFieldType, state: NormalizedTextFieldState) {
-  const shouldUseFilledValue =
-    state === 'filled' ||
-    (state === 'error' && type === 'mobile-number');
-
-  return shouldUseFilledValue
+  return state === 'filled'
     ? getFilledValue(type)
     : '';
 }
@@ -104,7 +98,7 @@ function getInitialSelections(
   }
 
   if (type === 'multiselect-2-line') {
-    return options.slice(0, 4);
+    return options.slice(0, 2);
   }
 
   if (type === 'multiselect') {
@@ -158,15 +152,23 @@ function formatColorWithOpacity(color: string, opacity: number) {
     : `${color.toUpperCase()}${alphaHex}`;
 }
 
-function formatColorDisplayValue(colorValue: string) {
-  const normalizedColor = colorValue.toUpperCase();
-  const colorNames: Record<string, string> = {
-    '#131313': 'Black',
-  };
+const FIELD_TYPES_OPEN_ON_ACTIVE: NormalizedTextFieldType[] = [
+  'color-picker',
+  'date-picker',
+  'dropdown',
+  'multiselect',
+  'multiselect-2-line',
+];
 
-  return colorNames[normalizedColor]
-    ? `${colorNames[normalizedColor]} (${normalizedColor})`
-    : normalizedColor;
+function getOpenMenuForActiveState(
+  type: NormalizedTextFieldType,
+  state: NormalizedTextFieldState
+) {
+  if (state === 'active' && FIELD_TYPES_OPEN_ON_ACTIVE.includes(type)) {
+    return type;
+  }
+
+  return '';
 }
 
 export function TextField({
@@ -219,10 +221,8 @@ export function TextField({
     ? controlledSelectedOptions
     : internalSelectedOptions;
   const [countryCode, setCountryCode] = useState('+91');
-  const [openMenu, setOpenMenu] = useState(
-    normalizedState === 'active' && normalizedType === 'color-picker'
-      ? normalizedType
-      : ''
+  const [openMenu, setOpenMenu] = useState(() =>
+    getOpenMenuForActiveState(normalizedType, normalizedState)
   );
   const [color, setColor] = useState('#131313');
   const [opacity, setOpacity] = useState(100);
@@ -249,8 +249,16 @@ export function TextField({
     };
   }, []);
 
+  useEffect(() => {
+    if (isDisabled) {
+      setOpenMenu('');
+      return;
+    }
+
+    setOpenMenu(getOpenMenuForActiveState(normalizedType, normalizedState));
+  }, [normalizedType, normalizedState, isDisabled]);
+
   const colorValue = formatColorWithOpacity(color, opacity);
-  const colorDisplayValue = formatColorDisplayValue(colorValue);
   const hasInputValue = inputValue.length > 0;
   const hasSelectedOptions = selectedOptions.length > 0;
   const hasColorValue =
@@ -373,7 +381,6 @@ export function TextField({
           dropdownListVariant={dropdownListVariant}
           selectedOptions={selectedOptions}
           state={visualState}
-          withIcon={withIcon}
         />
       );
     }
@@ -392,7 +399,6 @@ export function TextField({
           dropdownListVariant={dropdownListVariant}
           selectedOptions={selectedOptions}
           state={visualState}
-          withIcon={withIcon}
         />
       );
     }
@@ -403,7 +409,6 @@ export function TextField({
           color={color}
           disabled={isDisabled}
           displayValue={colorValue}
-          fieldDisplayValue={colorDisplayValue}
           hasValue={hasValue}
           isOpen={openMenu === 'color-picker'}
           onColorChange={handleColorChange}
@@ -504,7 +509,7 @@ export function TextField({
         label={label}
         labelText={labelText}
         tooltip={tooltip}
-        className={fluid ? 'storybook-textfield--fluid' : undefined}
+        fluid={fluid}
         tooltipClassName={tooltipClassName}
         tooltipDescription={tooltipDescription}
         tooltipOpen={tooltipOpen}

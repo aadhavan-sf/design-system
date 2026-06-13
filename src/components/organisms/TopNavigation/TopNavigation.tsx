@@ -49,6 +49,7 @@ export type TopNavigationProps = {
 };
 
 type ClassNamePart = string | false | null | undefined;
+type NormalizedTopNavigationItemState = 'default' | 'hover' | 'focused' | 'disabled';
 
 const DEFAULT_ITEMS: TopNavigationItemConfig[] = [
   { label: 'Theme Settings', icon: 'gear' },
@@ -59,7 +60,7 @@ const DEFAULT_ITEMS: TopNavigationItemConfig[] = [
 ];
 
 function buildClassName(parts: ClassNamePart[]) {
-  return parts.filter(Boolean).join(' ');
+  return parts.flat().filter(Boolean).join(' ');
 }
 
 function normalizeValue(
@@ -69,10 +70,35 @@ function normalizeValue(
   return aliases[value] ?? value;
 }
 
+function getTopNavItemClassName({
+  state,
+  pressed,
+  className,
+}: {
+  state: NormalizedTopNavigationItemState;
+  pressed: boolean;
+  className?: string;
+}) {
+  const isDisabled = state === 'disabled';
+
+  return buildClassName([
+    'storybook-top-nav-item inline-flex items-center justify-center gap-1 rounded-6 border-0 px-2 py-1 font-sans',
+    'cursor-pointer transition-[background-color,color,box-shadow] duration-[160ms] ease-out focus-visible:outline-none',
+    pressed && !isDisabled && 'text-neutral-0 hover:bg-brand-700 hover:text-neutral-0 focus-visible:bg-brand-400 focus-visible:text-neutral-0 focus-visible:shadow-none',
+    pressed && !isDisabled && (state === 'hover' ? 'bg-brand-700' : 'bg-brand-400'),
+    pressed && isDisabled && 'bg-brand-100 text-neutral-0',
+    !pressed && !isDisabled && 'bg-neutral-0 text-neutral-700 hover:bg-neutral-50 focus-visible:bg-neutral-0 focus-visible:shadow-focus-brand',
+    !pressed && isDisabled && 'cursor-not-allowed bg-neutral-50 text-neutral-300',
+    !pressed && state === 'hover' && 'bg-neutral-50',
+    !pressed && state === 'focused' && 'bg-neutral-0 shadow-focus-brand',
+    className,
+  ]);
+}
+
 function renderIcon(icon: TopNavigationIconName, weight: IconWeight = 'regular') {
   const iconProps = {
     'aria-hidden': true,
-    className: 'storybook-top-nav-item__icon',
+    className: 'shrink-0',
     size: 18,
     weight,
   };
@@ -106,7 +132,7 @@ export function TopNavigationItem({
     Hover: 'hover',
     Focused: 'focused',
     Disabled: 'disabled',
-  });
+  }) as NormalizedTopNavigationItemState;
   const isDisabled = normalizedState === 'disabled';
 
   return (
@@ -114,12 +140,11 @@ export function TopNavigationItem({
       type="button"
       disabled={isDisabled}
       aria-current={pressed ? 'page' : undefined}
-      className={buildClassName([
-        'storybook-top-nav-item',
-        `storybook-top-nav-item--${normalizedState}`,
-        pressed && 'storybook-top-nav-item--pressed',
+      className={getTopNavItemClassName({
+        state: normalizedState,
+        pressed,
         className,
-      ])}
+      })}
       onClick={isDisabled ? undefined : onClick}
     >
       {renderIcon(icon, pressed ? 'fill' : 'regular')}
@@ -128,7 +153,7 @@ export function TopNavigationItem({
         variant="text-sm"
         weight={pressed ? 'semibold' : 'medium'}
         color="currentColor"
-        className="storybook-top-nav-item__label"
+        className="overflow-hidden text-center text-ellipsis whitespace-nowrap"
       >
         {label}
       </Text>
@@ -152,7 +177,10 @@ export function TopNavigation({
   return (
     <nav
       aria-label="Top navigation"
-      className={buildClassName(['storybook-top-nav', className])}
+      className={buildClassName([
+        'storybook-top-nav box-border inline-flex items-center gap-1 overflow-hidden rounded-6 border border-solid border-neutral-100 bg-neutral-0 px-2 py-3',
+        className,
+      ])}
     >
       {items.map((item, index) => {
         const normalizedItem: TopNavigationItemConfig = typeof item === 'string'
@@ -163,12 +191,12 @@ export function TopNavigation({
         return (
           <div
             key={`${normalizedItem.label}-${index}`}
-            className="storybook-top-nav__segment"
+            className="inline-flex shrink-0 items-center gap-1"
           >
             {index > 0 && (
               <CaretRight
                 aria-hidden="true"
-                className="storybook-top-nav__separator"
+                className="shrink-0 text-neutral-700"
                 size={20}
                 weight="regular"
               />

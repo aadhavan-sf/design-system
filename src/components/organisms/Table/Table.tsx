@@ -43,7 +43,7 @@ const EMPTY_TYPES = ['search', 'upload', 'error'];
 const FILTER_STYLES = ['button-only', 'search-button', 'dropdown-search-button', 'advanced'];
 const TABLE_TYPES = ['with-border', 'without-border'];
 const TABLE_VIEWS = ['column', 'row'];
-const DEFAULT_PAGINATION_PAGES = ['1', '2', '3', '...', '8', '9', '10'];
+const DEFAULT_PAGINATION_TOTAL_PAGES = 10;
 
 const DEFAULT_COLUMNS = [
   { key: 'name', label: 'Name', type: 'lead', width: 'minmax(180px, 2fr)' },
@@ -741,7 +741,8 @@ export function Table({
   onPrevious,
   paginationAlignment = 'right',
   paginationBreakpoint = 'desktop',
-  paginationPages = DEFAULT_PAGINATION_PAGES,
+  paginationTotalPages = DEFAULT_PAGINATION_TOTAL_PAGES,
+  paginationPages,
   rows = DEFAULT_ROWS,
   showPagination = true,
   type = 'without-border',
@@ -752,11 +753,8 @@ export function Table({
   const [internalCurrentPage, setInternalCurrentPage] = useState(defaultCurrentPage);
   const activePage = currentPage ?? internalCurrentPage;
   const gridTemplateColumns = columns.map((column) => column.width ?? 'minmax(140px, 1fr)').join(' ');
-  const selectablePages = paginationPages
-    .map((page) => Number(page))
-    .filter((page) => Number.isFinite(page));
-  const firstPage = selectablePages[0] ?? 1;
-  const lastPage = selectablePages[selectablePages.length - 1] ?? firstPage;
+  const firstPage = 1;
+  const lastPage = paginationTotalPages;
   const activePageNumber = Number(activePage);
   const updatePage = (nextPage) => {
     const normalizedPage = Number(nextPage);
@@ -838,7 +836,8 @@ export function Table({
           onNext={handleNext}
           onPageChange={updatePage}
           onPrevious={handlePrevious}
-          pages={paginationPages}
+          totalPages={paginationTotalPages}
+          {...(paginationPages ? { pages: paginationPages } : {})}
           previousDisabled={Number.isFinite(activePageNumber) && activePageNumber <= firstPage}
         />
       )}
@@ -869,6 +868,7 @@ Table.propTypes = {
     PropTypes.string,
     PropTypes.number,
   ])),
+  paginationTotalPages: PropTypes.number,
   rows: PropTypes.arrayOf(PropTypes.object),
   showPagination: PropTypes.bool,
   type: PropTypes.oneOf([...TABLE_TYPES, 'With Border', 'Without Border', 'withBorder', 'withoutBorder']),

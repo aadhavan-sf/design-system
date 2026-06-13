@@ -25,6 +25,7 @@ const PANEL_CONTENT = {
       'Policies',
       'Global CSS',
       'Metafields',
+      'Other Options',
       'Product Badges',
       'Other Options',
     ],
@@ -45,7 +46,7 @@ const PANEL_CONTENT = {
 };
 
 function buildClassName(parts) {
-  return parts.filter(Boolean).join(' ');
+  return parts.flat().filter(Boolean).join(' ');
 }
 
 function normalizeValue(value, aliases = {}) {
@@ -61,6 +62,42 @@ function getResolvedType(type) {
   });
 }
 
+function getResolvedState(state) {
+  return normalizeValue(state, {
+    Default: 'default',
+    Hover: 'hover',
+    Focused: 'focused',
+    Disabled: 'disabled',
+  });
+}
+
+function getSettingsPanelItemClassName({
+  state,
+  pressed,
+  className,
+}) {
+  const isDisabled = state === 'disabled';
+  const isHover = state === 'hover';
+  const isFocused = state === 'focused';
+
+  return buildClassName([
+    'storybook-settings-panel-item box-border flex h-12 w-full cursor-pointer items-center gap-2 rounded-2 border border-solid p-3 text-left font-sans transition-[background-color,border-color,color,box-shadow] duration-[160ms] ease-out focus-visible:outline-none focus-visible:shadow-focus-brand',
+    pressed && !isDisabled && 'border-brand-400 bg-brand-25 text-brand-400',
+    pressed && !isDisabled && isHover && 'bg-brand-25',
+    pressed && !isDisabled && isFocused && 'border-brand-400 bg-brand-25 shadow-focus-brand',
+    !pressed && !isDisabled && 'border-neutral-100 bg-neutral-0 text-neutral-600 enabled:hover:border-neutral-100 enabled:hover:bg-neutral-50',
+    !pressed && !isDisabled && isHover && 'border-neutral-100 bg-neutral-50',
+    !pressed && !isDisabled && isFocused && 'border-neutral-100 bg-neutral-0 shadow-focus-brand',
+    isDisabled && !pressed && 'cursor-not-allowed border-neutral-100 bg-neutral-50 text-neutral-300',
+    pressed && isDisabled && 'cursor-not-allowed border-brand-100 bg-brand-25 text-brand-100',
+    isHover && 'storybook-settings-panel-item--hover',
+    isFocused && 'storybook-settings-panel-item--focused',
+    pressed && 'storybook-settings-panel-item--pressed',
+    isDisabled && 'storybook-settings-panel-item--disabled',
+    className,
+  ]);
+}
+
 export function SettingsPanelItem({
   label = 'Label',
   pressed = false,
@@ -69,39 +106,33 @@ export function SettingsPanelItem({
   className,
   onClick,
 }) {
-  const normalizedState = normalizeValue(state, {
-    Default: 'default',
-    Hover: 'hover',
-    Focused: 'focused',
-    Disabled: 'disabled',
-  });
-  const isDisabled = normalizedState === 'disabled';
+  const resolvedState = getResolvedState(state);
+  const isDisabled = resolvedState === 'disabled';
 
   return (
     <button
       type="button"
       disabled={isDisabled}
-      className={buildClassName([
-        'storybook-settings-panel-item',
-        `storybook-settings-panel-item--${normalizedState}`,
-        pressed && 'storybook-settings-panel-item--pressed',
+      className={getSettingsPanelItemClassName({
+        state: resolvedState,
+        pressed,
         className,
-      ])}
+      })}
       onClick={isDisabled ? undefined : onClick}
     >
       <Text
         as="span"
         variant="text-md"
-        weight={pressed ? 'semibold' : 'medium'}
+        weight={pressed && !isDisabled ? 'semibold' : 'medium'}
         color="currentColor"
-        className="storybook-settings-panel-item__label"
+        className="min-w-0 flex-[1_1_0] overflow-hidden text-ellipsis whitespace-nowrap"
       >
         {label}
       </Text>
       {showIcon && (
         <Warning
           aria-hidden="true"
-          className="storybook-settings-panel-item__icon"
+          className="size-5 shrink-0"
           size={20}
           weight="regular"
         />
@@ -148,29 +179,27 @@ export function SettingsPanel({
     <aside
       aria-label={resolvedTitle}
       className={buildClassName([
-        'storybook-settings-panel',
-        `storybook-settings-panel--${resolvedType}`,
+        'storybook-settings-panel box-border flex h-full min-h-0 w-full flex-col items-center overflow-hidden rounded-6 border border-solid border-neutral-50 bg-neutral-0 p-6 font-sans',
         className,
       ])}
     >
-      <div className="storybook-settings-panel__inner">
-        <header className="storybook-settings-panel__header">
+      <div className="flex w-full flex-col gap-6">
+        <header className="flex w-full items-center gap-2">
           <Text
             as="h2"
             variant="text-md"
             weight="semibold"
-            color="currentColor"
-            className="storybook-settings-panel__title"
+            className="shrink-0 whitespace-nowrap text-neutral-900"
           >
             {resolvedTitle}
           </Text>
           {showHelp && (
             <button
               type="button"
-              className="storybook-settings-panel__help"
+              className="storybook-settings-panel__help inline-flex cursor-pointer items-center justify-center gap-1 rounded-2 border-0 bg-transparent p-0 text-brand-400 focus-visible:outline-none focus-visible:shadow-focus-brand"
               onClick={onHelpClick}
             >
-              <Question aria-hidden="true" size={20} weight="regular" />
+              <Question aria-hidden="true" className="size-5 shrink-0" size={20} weight="regular" />
               <Text
                 as="span"
                 variant="text-sm"
@@ -183,7 +212,7 @@ export function SettingsPanel({
           )}
         </header>
 
-        <nav className="storybook-settings-panel__nav">
+        <nav className="flex w-full flex-col gap-4">
           {resolvedItems.map((item, index) => {
             const itemLabel = typeof item === 'string' ? item : item.label;
             const disabled = typeof item === 'string' ? false : item.disabled;

@@ -46,7 +46,7 @@ export default {
 
 export const Playground = {
   render: (args) => (
-    <div className="storybook-table-story-surface">
+    <div className="flex min-h-screen flex-col items-stretch gap-8 bg-neutral-50 p-6 max-[640px]:p-4">
       <Table {...args} />
     </div>
   ),
@@ -61,7 +61,7 @@ export const Playground = {
 
 export const TableVariants = {
   render: () => (
-    <div className="storybook-table-story-surface">
+    <div className="flex min-h-screen flex-col items-stretch gap-8 bg-neutral-50 p-6 max-[640px]:p-4">
       <Table type="without-border" view="column" />
       <Table type="with-border" view="column" />
       <Table type="without-border" view="row" />
@@ -72,7 +72,7 @@ export const TableVariants = {
 
 export const FilterStyles = {
   render: () => (
-    <div className="storybook-table-story-stack">
+    <div className="flex w-full flex-col gap-8">
       <TableFilters filterStyle="search-button" />
       <TableFilters filterStyle="dropdown-search-button" />
       <TableFilters filterStyle="advanced" />
@@ -86,8 +86,8 @@ export const FilterStyles = {
 
 export const HeaderStates = {
   render: () => (
-    <div className="storybook-table-story-stack">
-      <div className="storybook-table-story-grid">
+    <div className="flex w-full flex-col gap-8">
+      <div className="grid grid-cols-2 gap-8 [grid-template-columns:repeat(2,max-content)]">
         {['default', 'hover', 'disabled'].map((state) => (
           <TableHeader
             key={`plain-${state}`}
@@ -138,7 +138,7 @@ export const HeaderStates = {
           />
         ))}
       </div>
-      <div className="storybook-table-story-grid">
+      <div className="grid grid-cols-2 gap-8 [grid-template-columns:repeat(2,max-content)]">
         <TableHeaderCell checkbox label="Company" arrow="down" />
         <TableHeaderCell checkbox color="gray" label="Company" arrow="down" />
         <TableHeaderCell checkbox text={false} />
@@ -155,7 +155,7 @@ export const HeaderStates = {
 
 export const CellStates = {
   render: () => (
-    <div className="storybook-table-story-grid">
+    <div className="grid grid-cols-2 gap-8 [grid-template-columns:repeat(2,max-content)]">
       {['default', 'hover', 'disabled'].map((state) => (
         <TableCell
           key={`lead-${state}`}
@@ -241,7 +241,7 @@ export const CellStates = {
 
 export const EmptyStates = {
   render: () => (
-    <div className="storybook-table-story-stack">
+    <div className="flex w-full flex-col gap-8">
       <TableEmptyState type="search" />
       <TableEmptyState type="upload" />
       <TableEmptyState type="error" />

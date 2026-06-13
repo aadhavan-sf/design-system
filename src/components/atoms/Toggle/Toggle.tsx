@@ -18,6 +18,86 @@ export interface ToggleProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
+function buildClassName(parts: Array<string | false | null | undefined>) {
+  return parts.flat().filter(Boolean).join(' ');
+}
+
+function getToggleTrackSizeClasses(size: ToggleSize) {
+  return size === 'sm' ? 'h-5 w-9' : 'h-6 w-11';
+}
+
+function getToggleThumbSizeClasses(size: ToggleSize) {
+  return size === 'sm' ? 'h-4 w-4' : 'h-5 w-5';
+}
+
+function getToggleStateClasses({
+  isPressed,
+  state,
+}: {
+  isPressed: boolean;
+  state: ToggleState;
+}) {
+  const stateClasses: Record<ToggleState, string> = {
+    default: isPressed
+      ? 'bg-brand-400'
+      : 'bg-neutral-100',
+    hover: isPressed
+      ? 'bg-brand-400'
+      : 'bg-neutral-200',
+    focus: isPressed
+      ? 'bg-brand-400 shadow-focus-brand'
+      : 'bg-neutral-100 shadow-focus-brand',
+    disabled: isPressed
+      ? 'bg-brand-100'
+      : 'bg-neutral-50',
+  };
+
+  return stateClasses[state];
+}
+
+function getToggleHoverClasses(isPressed: boolean) {
+  return isPressed
+    ? 'enabled:hover:bg-brand-400'
+    : 'enabled:hover:bg-neutral-200';
+}
+
+function getToggleClassName({
+  className,
+  isPressed,
+  size,
+  state,
+}: {
+  className?: string;
+  isPressed: boolean;
+  size: ToggleSize;
+  state: ToggleState;
+}) {
+  return buildClassName([
+    'storybook-toggle relative rounded-full border-0 p-0.5',
+    getToggleTrackSizeClasses(size),
+    `storybook-toggle--${size}`,
+    isPressed && 'storybook-toggle--pressed',
+    'focus-visible:shadow-focus-brand',
+    getToggleStateClasses({ isPressed, state }),
+    getToggleHoverClasses(isPressed),
+    className,
+  ]);
+}
+
+function getToggleThumbClassName({
+  isDisabled,
+  size,
+}: {
+  isDisabled: boolean;
+  size: ToggleSize;
+}) {
+  return buildClassName([
+    'storybook-toggle__thumb rounded-full bg-neutral-0',
+    getToggleThumbSizeClasses(size),
+    isDisabled ? 'shadow-xs' : 'shadow-sm',
+  ]);
+}
+
 export function Toggle({
   size = 'sm',
   state = 'default',
@@ -40,16 +120,6 @@ export function Toggle({
 
   const isDisabled = state === 'disabled';
 
-  const backgroundClass = isDisabled
-    ? isPressed
-      ? 'bg-brand-100'
-      : 'bg-neutral-50'
-    : isPressed
-      ? 'bg-brand-400'
-      : state === 'hover'
-        ? 'bg-neutral-200'
-        : 'bg-neutral-100';
-
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     if (isDisabled) {
       return;
@@ -69,34 +139,22 @@ export function Toggle({
     <button
       type="button"
       role="switch"
+      {...props}
       aria-checked={isPressed}
       disabled={isDisabled}
-      className={[
-        'storybook-toggle',
-        'rounded-full',
-        'border-0',
-        'p-custom-2',
-        'focus-visible:shadow-focus-brand',
-        backgroundClass,
-        `storybook-toggle--${size}`,
-        state === 'focus' && 'shadow-focus-brand',
-        isPressed && 'storybook-toggle--pressed',
+      className={getToggleClassName({
         className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
-      {...props}
+        isPressed,
+        size,
+        state,
+      })}
       onClick={handleClick}
     >
       <span
-        className={[
-          'storybook-toggle__thumb',
-          'rounded-full',
-          'bg-neutral-0',
-          isDisabled ? 'shadow-xs' : 'shadow-sm',
-        ]
-          .filter(Boolean)
-          .join(' ')}
+        className={getToggleThumbClassName({
+          isDisabled,
+          size,
+        })}
       />
     </button>
   );

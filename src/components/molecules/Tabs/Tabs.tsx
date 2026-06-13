@@ -64,6 +64,59 @@ function getTextWeight({ pressed, size }: { pressed: boolean; size: TabSize }) {
   return pressed && size === 'sm' ? 'semibold' : 'medium';
 }
 
+function getTabItemVariantClasses({
+  pressed,
+  state,
+}: {
+  pressed: boolean;
+  state: NormalizedTabState;
+}) {
+  const isDisabled = state === 'disabled';
+  const isFocused = state === 'focused';
+  const isHover = state === 'hover';
+
+  if (isDisabled) {
+    if (pressed) {
+      return 'bg-neutral-400 text-neutral-0 shadow-none';
+    }
+
+    return 'bg-neutral-100 text-neutral-200 shadow-none';
+  }
+
+  if (pressed) {
+    return [
+      'bg-neutral-900 text-neutral-0',
+      isFocused && 'shadow-focus-neutral',
+      'enabled:hover:bg-neutral-900',
+      'focus-visible:shadow-focus-neutral',
+    ]
+      .filter(Boolean)
+      .join(' ');
+  }
+
+  if (isHover) {
+    return 'bg-neutral-50 text-neutral-900 shadow-none';
+  }
+
+  if (isFocused) {
+    return 'bg-transparent text-neutral-900 shadow-focus-neutral';
+  }
+
+  return [
+    'bg-transparent text-neutral-900 shadow-none',
+    'enabled:hover:bg-neutral-50',
+    'focus-visible:shadow-focus-neutral',
+  ].join(' ');
+}
+
+function getTabsTypeClasses(type: NormalizedTabsType) {
+  if (type === 'segments') {
+    return 'gap-2 rounded-3 border border-solid border-neutral-100 bg-neutral-0 p-1';
+  }
+
+  return 'gap-2';
+}
+
 export function TabItem({
   label = 'Dynamic',
   iconPosition = 'right',
@@ -85,12 +138,16 @@ export function TabItem({
     Disabled: 'disabled',
   }) as NormalizedTabState;
   const isDisabled = normalizedState === 'disabled';
+  const variantClasses = getTabItemVariantClasses({
+    pressed,
+    state: normalizedState,
+  });
 
   const icon = showIcons ? (
     <House
       className="storybook-tab-item__icon"
       size={16}
-      weight="regular"
+      weight={pressed ? 'fill' : 'regular'}
     />
   ) : null;
 
@@ -100,6 +157,8 @@ export function TabItem({
       disabled={isDisabled}
       className={buildClassName([
         'storybook-tab-item',
+        'gap-1 rounded-2 border-0 px-3 py-1.5 font-sans',
+        variantClasses,
         `storybook-tab-item--${size}`,
         `storybook-tab-item--${normalizedState}`,
         pressed && 'storybook-tab-item--pressed',
@@ -127,7 +186,7 @@ export function Tabs({
   activeIndex,
   defaultActiveIndex = 0,
   type = 'no-segment',
-  size = 'md',
+  size = 'sm',
   iconPosition = 'left',
   showIcons = false,
   className,
@@ -141,11 +200,14 @@ export function Tabs({
     Segemnts: 'segments',
     Segments: 'segments',
   }) as NormalizedTabsType;
+  const typeClasses = getTabsTypeClasses(normalizedType);
 
   return (
     <div
       className={buildClassName([
         'storybook-tabs',
+        'inline-flex items-start',
+        typeClasses,
         `storybook-tabs--${normalizedType}`,
         className,
       ])}

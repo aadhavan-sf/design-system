@@ -3,14 +3,14 @@ import {
   CaretUpDown,
 } from '@phosphor-icons/react';
 
-import { Chip } from '../../Chip';
 import { DropdownList } from '../../DropdownList';
 import { Text } from '../../../foundations/Typography';
 import {
-  getFieldClassName,
-  getFieldIconClassName,
-  getFieldTextClassName,
-} from '../textFieldState';
+  buildClassName,
+  textFieldDropdownMenuClassName,
+  textFieldTrackingClass,
+  type NormalizedTextFieldState,
+} from '../textField.constants';
 import type { DropdownListItem, DropdownListVariant } from '../../DropdownList/DropdownList';
 
 export type TextFieldDropdownItem = DropdownListItem;
@@ -28,8 +28,80 @@ export interface DropdownFieldProps {
   onSelect: (value: string) => void;
   options: string[];
   selectedOptions: string[];
-  state: string;
+  state: NormalizedTextFieldState | string;
   withIcon: boolean;
+}
+
+function getDropdownFieldClassName(state: NormalizedTextFieldState | string) {
+  const baseClasses = [
+    'storybook-dropdown-field',
+    'box-border flex h-11 w-full min-w-0 items-center justify-between gap-2',
+    'rounded-8 border border-solid bg-neutral-0 px-[14px] py-3',
+    'font-sans text-ds-text-sm font-normal text-neutral-700',
+    'transition-[border-color,background-color,color,box-shadow] duration-150 ease-out',
+    'focus:outline-none focus-visible:border-neutral-500',
+    'm-0 cursor-pointer appearance-none text-left font-[inherit]',
+  ];
+
+  if (state === 'disabled') {
+    return buildClassName([
+      ...baseClasses,
+      'storybook-dropdown-field--disabled cursor-not-allowed border-neutral-200 bg-neutral-25 text-neutral-300',
+    ]);
+  }
+
+  if (state === 'error') {
+    return buildClassName([
+      ...baseClasses,
+      'border-error-600 text-error-600',
+    ]);
+  }
+
+  if (state === 'active') {
+    return buildClassName([
+      ...baseClasses,
+      'border-neutral-500',
+    ]);
+  }
+
+  return buildClassName([
+    ...baseClasses,
+    'border-neutral-200',
+  ]);
+}
+
+function getDropdownDisplayTextClassName({
+  hasValue,
+  state,
+}: {
+  hasValue: boolean;
+  state: NormalizedTextFieldState | string;
+}) {
+  if (!hasValue) {
+    return state === 'error' ? 'text-error-600' : 'text-neutral-300';
+  }
+
+  if (state === 'error') {
+    return 'text-error-600';
+  }
+
+  if (state === 'disabled') {
+    return 'text-neutral-300';
+  }
+
+  return 'text-neutral-700';
+}
+
+function getTrailingIconClassName(state: NormalizedTextFieldState | string) {
+  if (state === 'error') {
+    return 'shrink-0 text-error-600';
+  }
+
+  if (state === 'disabled') {
+    return 'shrink-0 text-neutral-300';
+  }
+
+  return 'shrink-0 text-neutral-600';
 }
 
 export function DropdownField({
@@ -39,15 +111,13 @@ export function DropdownField({
   dropdownListVariant,
   hasValue,
   isOpen,
-  multiple,
-  multiselectLayout = 'one-line',
   onOpenChange,
   onSelect,
   options,
   selectedOptions,
   state,
   withIcon,
-}: DropdownFieldProps) {
+}: Omit<DropdownFieldProps, 'multiple' | 'multiselectLayout'>) {
   const resolvedDropdownItems = dropdownListItems ?? options;
   const dropdownItems = resolvedDropdownItems.map((item) => {
     if (typeof item === 'string') {
@@ -67,125 +137,58 @@ export function DropdownField({
     };
   });
   const resolvedDropdownListVariant =
-    dropdownListVariant ??
-    (multiple ? 'checkbox-left' : withIcon ? 'icon-left' : 'check-right');
-  const selectedItems = selectedOptions.map((selectedValue) => {
-    const matchingItem = dropdownItems.find((item) => item.value === selectedValue);
+    dropdownListVariant ?? (withIcon ? 'icon-left' : 'check-right');
+  const fieldClassName = getDropdownFieldClassName(state);
 
-    return {
-      label: matchingItem?.label ?? selectedValue,
-      value: selectedValue,
-    };
-  });
-  const visibleSelectedItems =
-    multiselectLayout === 'two-line' ? selectedItems.slice(0, 4) : selectedItems.slice(0, 2);
-  const fieldClassName = getFieldClassName({
-    state,
-    hasValue,
-    className: multiple && [
-      `storybook-textfield__field--multiselect-${multiselectLayout}`,
-      'gap-2',
-      'p-3',
-    ].join(' '),
-  });
   const handleToggle = () => {
     if (!disabled) {
       onOpenChange(!isOpen);
     }
   };
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      handleToggle();
-    }
-  };
-  const renderFieldContent = () => (
-    <>
-      <span className="storybook-textfield__field-content gap-1">
-        {multiple && hasValue ? (
-          <span className="storybook-textfield__tag-list gap-1">
-            {visibleSelectedItems.map((item, index) => (
-              <Chip
-                key={item.value}
-                type="button"
-                label={item.label}
-                size="md"
-                shape="rounded"
-                icon="right"
-                state={disabled ? 'disabled' : 'default'}
-                disabled={disabled}
-                className={[
-                  'storybook-textfield__selected-chip',
-                  'gap-2',
-                  'border-0',
-                  state === 'disabled' && multiselectLayout === 'two-line'
-                    ? 'rounded-1 bg-neutral-100 px-2 py-1 text-neutral-600'
-                    : 'rounded-2 bg-neutral-50 px-2 py-2 text-neutral-600',
-                  state === 'error' && 'text-error-600',
-                  state === 'disabled' && multiselectLayout !== 'two-line' && 'bg-neutral-100 text-neutral-400',
-                  index === 0 && 'storybook-textfield__selected-chip--first',
-                ].filter(Boolean).join(' ')}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onSelect(item.value);
-                }}
-              />
-            ))}
-          </span>
-        ) : (
+
+  return (
+    <div className="relative w-full">
+      <button
+        type="button"
+        disabled={disabled}
+        className={fieldClassName}
+        onClick={handleToggle}
+        onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            handleToggle();
+          }
+        }}
+      >
+        <span className="flex min-w-0 flex-[1_0_0] items-center gap-1">
           <Text
             as="span"
             variant="text-sm"
             weight="regular"
-            color="currentColor"
-            className={getFieldTextClassName({ state, hasValue })}
+            className={buildClassName([
+              'min-w-0 overflow-hidden text-ellipsis whitespace-nowrap font-sans text-ds-text-sm font-normal',
+              textFieldTrackingClass,
+              getDropdownDisplayTextClassName({ hasValue, state }),
+            ])}
           >
             {displayValue}
           </Text>
-        )}
-      </span>
+        </span>
 
-      <CaretUpDown
-        className={[
-          'storybook-textfield__trailing-icon',
-          getFieldIconClassName({ state }),
-          multiselectLayout === 'two-line' && 'mt-1',
-        ].filter(Boolean).join(' ')}
-        size={20}
-        weight="regular"
-      />
-    </>
-  );
-
-  return (
-    <div className="storybook-textfield__dropdown-wrapper">
-      {multiple ? (
-        <div
-          role="button"
-          tabIndex={disabled ? -1 : 0}
-          aria-disabled={disabled}
-          className={fieldClassName}
-          onClick={handleToggle}
-          onKeyDown={handleKeyDown}
-        >
-          {renderFieldContent()}
-        </div>
-      ) : (
-        <button
-          type="button"
-          disabled={disabled}
-          className={fieldClassName}
-          onClick={handleToggle}
-        >
-          {renderFieldContent()}
-        </button>
-      )}
+        <CaretUpDown
+          className={getTrailingIconClassName(state)}
+          size={20}
+          weight="regular"
+        />
+      </button>
 
       {isOpen && !disabled && dropdownItems.length > 0 && (
         <DropdownList
           items={dropdownItems}
           selectedValues={selectedOptions}
           variant={resolvedDropdownListVariant}
+          fullWidth
+          className={textFieldDropdownMenuClassName}
           onItemSelect={(item) => {
             const value = typeof item === 'string' ? item : item.value ?? item.label;
             onSelect(value);

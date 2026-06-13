@@ -2,7 +2,15 @@ import type { ChangeEvent, ComponentType } from 'react';
 import { CalendarBlank } from '@phosphor-icons/react';
 
 import { DatePicker } from '../../DatePicker';
-import { getFieldClassName } from '../textFieldState';
+import {
+  buildClassName,
+  textFieldFocusVisibleClassName,
+  textFieldPlaceholderTrackingClass,
+  textFieldPopoverPanelClassName,
+  type NormalizedTextFieldState,
+} from '../textField.constants';
+
+import './datepickerField.css';
 
 const TextFieldDatePicker = DatePicker as unknown as ComponentType<Record<string, unknown>>;
 
@@ -45,7 +53,7 @@ export interface DatepickerFieldProps {
   onChange: (value: string) => void;
   onOpenChange: (open: boolean) => void;
   placeholder: string;
-  state: string;
+  state: NormalizedTextFieldState | string;
   value: string;
 }
 
@@ -96,15 +104,90 @@ function getDatePickerSelectionFromValue(value: string) {
   };
 }
 
-function buildClassName(parts: Array<string | false | null | undefined>) {
-  return parts.filter(Boolean).join(' ');
+function getDatepickerShellClassName({
+  isOpen,
+  state,
+}: {
+  isOpen: boolean;
+  state: NormalizedTextFieldState | string;
+}) {
+  const isActive = state === 'active' || isOpen;
+
+  const baseClasses = [
+    'storybook-datepicker-field',
+    'box-border flex h-11 w-full min-w-0 items-center px-[14px] py-3',
+    'rounded-8 border border-solid bg-neutral-0',
+    'transition-[border-color,background-color,color,box-shadow] duration-150 ease-out',
+    'focus-within:outline-none',
+  ];
+
+  if (state === 'disabled') {
+    return buildClassName([
+      ...baseClasses,
+      'cursor-not-allowed border-neutral-200 bg-neutral-25',
+    ]);
+  }
+
+  if (state === 'error') {
+    return buildClassName([
+      ...baseClasses,
+      'border-error-600',
+    ]);
+  }
+
+  if (isActive) {
+    return buildClassName([
+      ...baseClasses,
+      'border-neutral-500',
+    ]);
+  }
+
+  return buildClassName([
+    ...baseClasses,
+    'border-neutral-200 focus-within:border-neutral-500',
+  ]);
+}
+
+function getDatepickerInputClassName(state: NormalizedTextFieldState | string) {
+  const placeholderClasses =
+    state === 'error'
+      ? 'placeholder:text-error-600'
+      : 'placeholder:text-neutral-300';
+
+  return buildClassName([
+    'min-w-0 flex-1 border-0 bg-transparent py-0 pl-0 pr-0',
+    'font-sans text-ds-text-sm font-normal text-neutral-700',
+    'placeholder:font-sans placeholder:text-ds-text-sm placeholder:font-normal',
+    textFieldPlaceholderTrackingClass,
+    placeholderClasses,
+    'focus:outline-none',
+    state === 'disabled' && 'cursor-not-allowed text-neutral-300 disabled:cursor-not-allowed',
+    state === 'error' && 'text-error-600',
+  ]);
+}
+
+function getCalendarButtonClassName(state: NormalizedTextFieldState | string) {
+  const baseClasses = [
+    'inline-flex shrink-0 items-center justify-center',
+    'border-0 bg-transparent p-0',
+    textFieldFocusVisibleClassName,
+  ];
+
+  if (state === 'error') {
+    return buildClassName([...baseClasses, 'cursor-pointer text-error-600']);
+  }
+
+  if (state === 'disabled') {
+    return buildClassName([...baseClasses, 'cursor-not-allowed text-neutral-300']);
+  }
+
+  return buildClassName([...baseClasses, 'cursor-pointer text-neutral-600']);
 }
 
 export function DatepickerField({
   datePickerProps,
   datePickerType,
   disabled,
-  hasValue,
   isOpen,
   onChange,
   onOpenChange,
@@ -137,48 +220,37 @@ export function DatepickerField({
   };
 
   return (
-    <div className="storybook-textfield__date-wrapper">
-      <input
-        type="text"
-        value={value}
-        disabled={disabled}
-        placeholder={placeholder}
-        onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
-        onClick={handleOpen}
-        onFocus={handleOpen}
-        className={getFieldClassName({
-          state,
-          hasValue,
-          className: 'pr-custom-42',
-        })}
-      />
-      <button
-        type="button"
-        disabled={disabled}
-        className={buildClassName([
-          'storybook-textfield__date-button',
-          'border-0',
-          'bg-transparent',
-          'p-0',
-          'focus-visible:shadow-focus-brand',
-          disabled
-            ? 'text-neutral-300'
-            : state === 'error'
-              ? 'text-error-600'
-              : 'text-neutral-700',
-          state === 'error' && 'storybook-textfield__date-button--error',
-        ])}
-        aria-label="Open date picker"
-        onClick={handleOpen}
-      >
-        <CalendarBlank
-          size={20}
-          weight="regular"
+    <div className="relative w-full">
+      <div className={getDatepickerShellClassName({ isOpen, state })}>
+        <input
+          type="text"
+          value={value}
+          disabled={disabled}
+          placeholder={placeholder}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
+          onClick={handleOpen}
+          onFocus={handleOpen}
+          className={getDatepickerInputClassName(state)}
         />
-      </button>
+        <button
+          type="button"
+          disabled={disabled}
+          className={getCalendarButtonClassName(state)}
+          aria-label="Open date picker"
+          onClick={handleOpen}
+        >
+          <CalendarBlank
+            size={20}
+            weight="regular"
+          />
+        </button>
+      </div>
 
       {isOpen && !disabled && (
-        <div className="storybook-textfield__datepicker-panel">
+        <div className={buildClassName([
+          'storybook-datepicker-field__panel',
+          textFieldPopoverPanelClassName,
+        ])}>
           <TextFieldDatePicker
             type={datePickerType}
             {...datePickerProps}

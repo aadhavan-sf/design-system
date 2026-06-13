@@ -19,22 +19,35 @@ export default {
   },
   tags: ['autodocs'],
   argTypes: {
-    open: { control: 'boolean' },
-    supportingText: { control: 'boolean' },
     tooltip: {
       control: 'select',
       options: placements,
+      table: { order: 1 },
     },
-    title: { control: 'text' },
-    description: { control: 'text' },
+    open: {
+      control: 'boolean',
+      table: { order: 2 },
+    },
+    supportingText: {
+      control: 'boolean',
+      table: { order: 3 },
+    },
+    title: {
+      control: 'text',
+      table: { order: 4 },
+    },
+    description: {
+      control: 'text',
+      table: { order: 5 },
+    },
   },
 };
 
 export const Playground = {
   args: {
+    tooltip: 'Top no arrow',
     open: false,
     supportingText: false,
-    tooltip: 'Top no arrow',
     title: 'This is a tooltip',
   },
   render: (args) => (
@@ -46,7 +59,7 @@ export const Playground = {
 
 export const Closed = {
   render: () => (
-    <div className="help-icon-story-grid">
+    <div className="flex items-center justify-center gap-4">
       {placements.map((placement) => (
         <HelpIcon key={placement} tooltip={placement} />
       ))}
@@ -68,9 +81,9 @@ export const HoverInteraction = {
 
 export const OpenWithoutSupportingText = {
   render: () => (
-    <div className="help-icon-story-stack">
+    <div className="flex min-w-[320px] flex-col items-center justify-center gap-16 p-16">
       {placements.map((placement) => (
-        <div key={placement} className="help-icon-story-row">
+        <div key={placement} className="flex min-h-[72px] min-w-[360px] items-center justify-center">
           <HelpIcon open tooltip={placement} />
         </div>
       ))}
@@ -80,9 +93,9 @@ export const OpenWithoutSupportingText = {
 
 export const OpenWithSupportingText = {
   render: () => (
-    <div className="help-icon-story-stack help-icon-story-stack--wide">
+    <div className="flex min-w-[460px] flex-col items-center justify-center gap-24 p-16">
       {placements.map((placement) => (
-        <div key={placement} className="help-icon-story-row">
+        <div key={placement} className="flex min-h-[72px] min-w-[360px] items-center justify-center">
           <HelpIcon open supportingText tooltip={placement} />
         </div>
       ))}

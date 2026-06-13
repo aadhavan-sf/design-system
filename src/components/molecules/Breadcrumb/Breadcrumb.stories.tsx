@@ -33,7 +33,7 @@ export default {
     },
     size: {
       control: 'select',
-      options: ['base', 'small'],
+      options: ['sm', 'md'],
     },
     homeIcon: {
       control: 'boolean',
@@ -47,7 +47,7 @@ export default {
 export const Playground = {
   args: {
     divider: 'arrow',
-    size: 'base',
+    size: 'sm',
     homeIcon: true,
     items: fullItems,
   },
@@ -55,37 +55,37 @@ export const Playground = {
 
 export const DividerVariants = {
   render: () => (
-    <div className="breadcrumb-story-row">
-      <BreadcrumbDivider type="arrow" size="base" />
-      <BreadcrumbDivider type="arrow" size="small" />
-      <BreadcrumbDivider type="slash" size="base" />
-      <BreadcrumbDivider type="slash" size="small" />
+    <div className="flex items-center gap-5">
+      <BreadcrumbDivider type="arrow" size="md" />
+      <BreadcrumbDivider type="arrow" size="sm" />
+      <BreadcrumbDivider type="slash" size="md" />
+      <BreadcrumbDivider type="slash" size="sm" />
     </div>
   ),
 };
 
 export const ItemStates = {
   render: () => (
-    <div className="breadcrumb-story-grid">
-      <BreadcrumbItem state="enabled" />
-      <BreadcrumbItem state="enabled" size="small" />
-      <BreadcrumbItem state="hover" />
-      <BreadcrumbItem state="hover" size="small" />
-      <BreadcrumbItem state="focus" />
-      <BreadcrumbItem state="focus" size="small" />
-      <BreadcrumbItem state="current" />
-      <BreadcrumbItem state="current" size="small" />
+    <div className="grid grid-cols-2 items-start gap-5">
+      <BreadcrumbItem state="enabled" size="md" />
+      <BreadcrumbItem state="enabled" size="sm" />
+      <BreadcrumbItem state="hover" size="md" />
+      <BreadcrumbItem state="hover" size="sm" />
+      <BreadcrumbItem state="focus" size="md" />
+      <BreadcrumbItem state="focus" size="sm" />
+      <BreadcrumbItem state="current" size="md" />
+      <BreadcrumbItem state="current" size="sm" />
     </div>
   ),
 };
 
 export const BreadcrumbVariants = {
   render: () => (
-    <div className="breadcrumb-story-stack">
-      <Breadcrumb divider="arrow" size="base" items={fullItems} />
-      <Breadcrumb divider="arrow" size="small" items={fullItems} />
-      <Breadcrumb divider="slash" size="base" items={fullItems} />
-      <Breadcrumb divider="slash" size="small" items={fullItems} />
+    <div className="flex flex-col items-start gap-5">
+      <Breadcrumb divider="arrow" size="md" items={fullItems} />
+      <Breadcrumb divider="arrow" size="sm" items={fullItems} />
+      <Breadcrumb divider="slash" size="md" items={fullItems} />
+      <Breadcrumb divider="slash" size="sm" items={fullItems} />
     </div>
   ),
 };

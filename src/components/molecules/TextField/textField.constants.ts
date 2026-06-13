@@ -96,7 +96,7 @@ export const filledValueByType: Record<NormalizedTextFieldType, string> = {
   search: 'Search query',
   paragraph: 'This is the first line of text.\nThis is the second line of text.',
   'mobile-number': '98765 43210',
-  multiselect: 'Phoenix Baker',
+  multiselect: 'Phoenix Baker, Olivia Rhye',
   'multiselect-2-line': 'Phoenix Baker, Olivia Rhye',
 };
 
@@ -149,5 +149,20 @@ export function normalizeState(state: TextFieldState | string): NormalizedTextFi
 }
 
 export function buildClassName(parts: Array<string | false | null | undefined>) {
-  return parts.filter(Boolean).join(' ');
+  return parts.flat().filter(Boolean).join(' ');
 }
+
+export const textFieldPlaceholderTrackingClass =
+  'placeholder:[letter-spacing:var(--type-text-sm-letter)]';
+
+export const textFieldTrackingClass =
+  '[letter-spacing:var(--type-text-sm-letter)]';
+
+export const textFieldDropdownMenuClassName =
+  'absolute left-0 top-full z-[100] mt-2 box-border max-h-80 w-full overflow-y-auto';
+
+export const textFieldFocusVisibleClassName =
+  'focus-visible:outline-none focus-visible:shadow-focus-brand';
+
+export const textFieldPopoverPanelClassName =
+  'absolute left-0 top-full z-[100] mt-2';

@@ -4,8 +4,11 @@ import { fn } from 'storybook/test';
 import {
   LeftPanel,
   LeftPanelItem,
+  LeftPanelMenuItem,
   ThemeStatus,
 } from './LeftPanel';
+
+const panelFrameClassName = 'h-[846px] w-[284px] shrink-0';
 
 export default {
   title: 'Organisms/Left Panel',
@@ -44,10 +47,12 @@ export default {
 
 export const Playground = {
   render: (args) => (
-    <div className="storybook-left-panel-story-surface">
-      <div className="storybook-left-panel-story-demo">
-        <LeftPanel {...args} />
-        <p className="storybook-left-panel-story-note">
+    <div className="flex min-h-screen items-start justify-center bg-neutral-100 p-8">
+      <div className="flex flex-col items-center gap-4">
+        <div className={panelFrameClassName}>
+          <LeftPanel {...args} />
+        </div>
+        <p className="max-w-[284px] text-center text-sm text-neutral-600">
           Preview note: hide toggles the hidden state. Delete removes the item for this session only; refresh restores the demo list.
         </p>
       </div>
@@ -61,17 +66,23 @@ export const Playground = {
 
 export const Variants = {
   render: () => (
-    <div className="storybook-left-panel-story-surface">
-      <LeftPanel type="blocks" />
-      <LeftPanel type="fixed-blocks" />
-      <LeftPanel type="theme-settings" />
+    <div className="flex min-h-screen flex-wrap items-start justify-center gap-10 bg-neutral-100 p-8">
+      <div className={panelFrameClassName}>
+        <LeftPanel type="blocks" />
+      </div>
+      <div className={panelFrameClassName}>
+        <LeftPanel type="fixed-blocks" />
+      </div>
+      <div className={panelFrameClassName}>
+        <LeftPanel type="theme-settings" />
+      </div>
     </div>
   ),
 };
 
 export const ItemStates = {
   render: () => (
-    <div className="storybook-left-panel-item-story-grid">
+    <div className="storybook-left-panel-item-story-grid grid grid-cols-[236px_236px] gap-x-24 gap-y-16 p-5">
       {['default', 'hover', 'focused', 'disabled'].map((state) => (
         <LeftPanelItem
           key={`default-${state}`}
@@ -94,9 +105,34 @@ export const ItemStates = {
   },
 };
 
+export const MenuItemStates = {
+  render: () => (
+    <div className="grid grid-cols-[236px_236px] gap-x-16 gap-y-5 p-5">
+      {['default', 'hover', 'focused', 'disabled'].map((state) => (
+        <LeftPanelMenuItem
+          key={`menu-default-${state}`}
+          label="App Styling"
+          state={state}
+        />
+      ))}
+      {['default', 'hover', 'focused', 'disabled'].map((state) => (
+        <LeftPanelMenuItem
+          key={`menu-pressed-${state}`}
+          label="App Styling"
+          pressed
+          state={state}
+        />
+      ))}
+    </div>
+  ),
+  parameters: {
+    layout: 'centered',
+  },
+};
+
 export const Status = {
   render: () => (
-    <div className="storybook-left-panel-status-story-row">
+    <div className="flex items-center gap-4 p-5">
       <ThemeStatus status="draft" />
       <ThemeStatus status="active" />
     </div>

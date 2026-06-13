@@ -86,16 +86,60 @@ const DEFAULT_SECTIONS = [
 ];
 
 function buildClassName(parts) {
-  return parts.filter(Boolean).join(' ');
+  return parts.flat().filter(Boolean).join(' ');
 }
 
 function normalizeValue(value, aliases = {}) {
   return aliases[value] ?? value;
 }
 
+function getSidebarItemClassName({
+  state,
+  pressed,
+  collapsed,
+  className,
+}) {
+  const isDisabled = state === 'disabled';
+
+  return buildClassName([
+    'storybook-sidebar-item inline-flex cursor-pointer border-0 font-sans text-left transition-[background-color,color,box-shadow] duration-[160ms] ease-out focus-visible:outline-none focus-visible:shadow-focus-brand',
+    collapsed
+      ? 'size-9 shrink-0 items-center justify-center gap-0 rounded-2'
+      : 'w-full items-center gap-2 rounded-2 p-2',
+    pressed && !isDisabled && 'text-neutral-0 hover:bg-brand-700 hover:text-neutral-0 focus-visible:bg-brand-400 focus-visible:text-neutral-0 focus-visible:shadow-none',
+    pressed && !isDisabled && (state === 'hover' ? 'bg-brand-700' : 'bg-brand-400'),
+    pressed && isDisabled && 'cursor-not-allowed bg-brand-100 text-neutral-0',
+    !pressed && !isDisabled && 'bg-transparent text-neutral-700 hover:bg-neutral-50 focus-visible:bg-neutral-0 focus-visible:shadow-focus-brand',
+    !pressed && isDisabled && 'cursor-not-allowed bg-neutral-50 text-neutral-300',
+    !pressed && state === 'hover' && 'bg-neutral-50',
+    !pressed && state === 'focused' && 'bg-neutral-0 shadow-focus-brand',
+    className,
+  ]);
+}
+
+function getSidebarActionClassName(destructive = false) {
+  return buildClassName([
+    'storybook-sidebar-action inline-flex cursor-pointer items-center justify-center gap-1 rounded-2 border border-solid border-neutral-100 bg-neutral-0 px-2.5 py-2 text-neutral-600',
+    'transition-[background-color,border-color,color] duration-[160ms] ease-out focus-visible:outline-none focus-visible:shadow-focus-brand',
+    destructive
+      ? 'storybook-sidebar-action--destructive hover:border-error-600 hover:bg-error-25 hover:text-error-600'
+      : 'hover:border-neutral-100 hover:bg-neutral-25 hover:text-neutral-600',
+  ]);
+}
+
+function getPreviewCopyClassName(isCopied) {
+  return buildClassName([
+    'storybook-sidebar-preview-popover__copy inline-flex w-full cursor-pointer items-center justify-center gap-1 rounded-2 border border-solid p-2 font-sans',
+    'transition-[background-color,border-color,box-shadow] duration-[160ms] ease-out focus-visible:outline-none focus-visible:shadow-focus-brand',
+    isCopied
+      ? 'border-success-200 bg-success-50 text-success-600 hover:border-success-200 hover:bg-success-50 hover:text-success-600'
+      : 'border-neutral-100 bg-neutral-0 text-neutral-600 hover:bg-neutral-25',
+  ]);
+}
+
 function renderSidebarIcon(
   icon,
-  className = 'storybook-sidebar-item__icon',
+  className = 'storybook-sidebar-item__icon size-5 shrink-0',
   weight = 'regular'
 ) {
   const iconProps = {
@@ -141,7 +185,7 @@ function renderSidebarIcon(
 
 function SuperfansBrand({
   alt = '',
-  compact = false,
+  sidebarCollapsed = false,
   variant = 'mark',
 }) {
   const imageSrc = variant === 'logo'
@@ -152,9 +196,11 @@ function SuperfansBrand({
     <img
       alt={alt}
       className={buildClassName([
-        'storybook-sidebar-brand-image',
-        `storybook-sidebar-brand-image--${variant}`,
-        compact && 'storybook-sidebar-logo-mark--compact',
+        'storybook-sidebar-brand-image block shrink-0 object-contain',
+        variant === 'logo' && 'h-6 w-[151px]',
+        variant === 'mark' && 'h-6 w-[26px]',
+        variant === 'avatar' && 'rounded-2',
+        variant === 'avatar' && (sidebarCollapsed ? 'size-9' : 'size-[38px]'),
       ])}
       src={imageSrc}
     />
@@ -163,7 +209,7 @@ function SuperfansBrand({
 
 SuperfansBrand.propTypes = {
   alt: PropTypes.string,
-  compact: PropTypes.bool,
+  sidebarCollapsed: PropTypes.bool,
   variant: PropTypes.oneOf(['avatar', 'logo', 'mark']),
 };
 
@@ -195,17 +241,16 @@ export function SidebarItem({
       aria-current={pressed ? 'page' : undefined}
       aria-label={isCollapsed ? label : undefined}
       disabled={isDisabled}
-      className={buildClassName([
-        'storybook-sidebar-item',
-        `storybook-sidebar-item--${normalizedType}`,
-        `storybook-sidebar-item--${normalizedState}`,
-        pressed && 'storybook-sidebar-item--pressed',
+      className={getSidebarItemClassName({
+        state: normalizedState,
+        pressed,
+        collapsed: isCollapsed,
         className,
-      ])}
+      })}
       onClick={isDisabled ? undefined : onClick}
     >
       {renderSidebarIcon(icon, buildClassName([
-        'storybook-sidebar-item__icon',
+        'storybook-sidebar-item__icon size-5 shrink-0',
         icon === 'drag' && 'storybook-sidebar-item__icon--drag',
       ]), pressed ? 'fill' : 'regular')}
       {!isCollapsed && (
@@ -214,7 +259,7 @@ export function SidebarItem({
           variant="text-sm"
           weight={pressed ? 'semibold' : 'medium'}
           color="currentColor"
-          className="storybook-sidebar-item__label"
+          className="min-w-0 flex-[1_1_auto] overflow-hidden text-ellipsis whitespace-nowrap"
         >
           {label}
         </Text>
@@ -243,20 +288,22 @@ function SidebarSection({
   return (
     <section
       aria-label={title}
-      className="storybook-sidebar-section"
+      className="flex w-full flex-col gap-2"
     >
       {!collapsed && (
         <Text
           as="h3"
           variant="text-xs"
           weight="medium"
-          color="currentColor"
-          className="storybook-sidebar-section__title"
+          className="storybook-sidebar-section__title w-full uppercase text-neutral-600"
         >
           {title}
         </Text>
       )}
-      <div className="storybook-sidebar-section__items">
+      <div className={buildClassName([
+        'flex w-full flex-col',
+        collapsed && 'items-center',
+      ])}>
         {items.map((item) => {
           const itemId = item.id ?? item.label;
           const isActive = itemId === activeItemId;
@@ -350,23 +397,21 @@ export function Sidebar({
     try {
       await navigator.clipboard?.writeText(window.location.href);
     } catch {
-      // The visual confirmation should still work when clipboard access is unavailable.
+      // Visual confirmation should still work when clipboard access is unavailable.
     }
 
     setIsPreviewLinkCopied(true);
   };
 
   useEffect(() => {
-    if (!isPreviewLinkCopied) {
-      return undefined;
-    }
+    setSelectedItemId(activeItemId);
+  }, [activeItemId]);
 
-    const timeoutId = window.setTimeout(() => {
+  useEffect(() => {
+    if (!isPreviewOpen) {
       setIsPreviewLinkCopied(false);
-    }, 1800);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [isPreviewLinkCopied]);
+    }
+  }, [isPreviewOpen]);
 
   useEffect(() => {
     if (!isPreviewOpen) {
@@ -425,47 +470,48 @@ export function Sidebar({
   return (
     <aside
       className={buildClassName([
-        'storybook-sidebar',
-        `storybook-sidebar--${normalizedType}`,
+        'storybook-sidebar relative box-border flex h-[952px] flex-col justify-between border-r border-solid border-neutral-100 bg-neutral-0 font-sans',
+        isCollapsed ? 'storybook-sidebar--collapsed w-[60px]' : 'w-[216px]',
         className,
       ])}
     >
-      <div className="storybook-sidebar__main">
-        <header className="storybook-sidebar__header">
-          <div className="storybook-sidebar-logo">
+      <div className="flex flex-col gap-6 pt-6">
+        <header className={buildClassName([
+          'flex items-center',
+          isCollapsed ? 'justify-center p-0' : 'pl-3 pr-5',
+        ])}>
+          <div className="inline-flex items-center px-1 py-3">
             <SuperfansBrand
               alt={isCollapsed ? brandLabel : `${brandLabel} logo`}
-              compact={isCollapsed}
               variant={isCollapsed ? 'mark' : 'logo'}
             />
           </div>
         </header>
 
         {!isCollapsed ? (
-          <div className="storybook-sidebar-store-control">
+          <div className="relative mx-4">
             <button
               ref={storeButtonRef}
               type="button"
               aria-expanded={isStoreDropdownOpen}
               aria-controls="storybook-sidebar-store-dropdown"
-              className="storybook-sidebar-store"
+              className="storybook-sidebar-store box-border flex h-11 w-full cursor-pointer items-center justify-between gap-2 rounded-2 border border-solid border-neutral-200 bg-neutral-0 px-[14px] py-2.5 focus-visible:outline-none focus-visible:shadow-focus-brand"
               onClick={() => setIsStoreDropdownOpen((currentValue) => !currentValue)}
             >
               <Text
                 as="span"
                 variant="text-sm"
                 weight="regular"
-                color="currentColor"
                 className={buildClassName([
-                  'storybook-sidebar-store__label',
-                  !selectedStore && 'storybook-sidebar-store__label--placeholder',
+                  'min-w-0 overflow-hidden text-ellipsis whitespace-nowrap',
+                  selectedStore ? 'text-neutral-700' : 'text-neutral-300',
                 ])}
               >
                 {selectedStore?.name ?? storePlaceholder}
               </Text>
               <CaretUpDown
                 aria-hidden="true"
-                className="storybook-sidebar-store__icon"
+                className="size-5 shrink-0 text-neutral-600"
                 size={20}
                 weight="regular"
               />
@@ -475,7 +521,7 @@ export function Sidebar({
               <div
                 ref={storeDropdownRef}
                 id="storybook-sidebar-store-dropdown"
-                className="storybook-sidebar-store-dropdown"
+                className="storybook-sidebar-store-dropdown absolute left-0 z-20 w-full"
               >
                 <DropdownList
                   items={storeOptions.map((store) => ({
@@ -484,6 +530,7 @@ export function Sidebar({
                   }))}
                   selectedValues={selectedStore ? [selectedStore.id] : []}
                   variant="check-right"
+                  className="w-full"
                   onItemSelect={handleStoreSelect}
                 />
               </div>
@@ -493,15 +540,18 @@ export function Sidebar({
           <button
             type="button"
             aria-label="Switch store"
-            className="storybook-sidebar-icon-button storybook-sidebar-icon-button--header"
+            className="storybook-sidebar-icon-button inline-flex cursor-pointer items-center justify-center self-center rounded-2 border border-solid border-neutral-100 bg-neutral-0 p-2 text-neutral-600 focus-visible:outline-none focus-visible:shadow-focus-brand"
           >
-            {renderSidebarIcon('repeat', 'storybook-sidebar-icon-button__icon')}
+            {renderSidebarIcon('repeat', 'storybook-sidebar-icon-button__icon size-[18px] shrink-0')}
           </button>
         )}
 
         <nav
           aria-label="Sidebar navigation"
-          className="storybook-sidebar__nav"
+          className={buildClassName([
+            'flex flex-col gap-6',
+            isCollapsed ? 'items-center px-3' : 'px-4',
+          ])}
         >
           {sections.map((section) => (
             <SidebarSection
@@ -516,21 +566,23 @@ export function Sidebar({
         </nav>
       </div>
 
-      <footer className="storybook-sidebar__footer">
-        <div className="storybook-sidebar-account">
+      <footer className={buildClassName([
+        'flex flex-col gap-4',
+        isCollapsed ? 'items-center justify-center px-3 pb-6' : 'px-4 pb-6',
+      ])}>
+        <div className="flex items-center gap-3">
           <SuperfansBrand
             alt=""
-            compact
+            sidebarCollapsed={isCollapsed}
             variant="avatar"
           />
           {!isCollapsed && (
-            <div className="storybook-sidebar-account__copy">
+            <div className="flex flex-col">
               <Text
                 as="span"
                 variant="text-sm"
                 weight="bold"
-                color="currentColor"
-                className="storybook-sidebar-account__name"
+                className="text-neutral-900"
               >
                 {selectedStore?.name ?? avatarLabel}
               </Text>
@@ -538,8 +590,7 @@ export function Sidebar({
                 as="span"
                 variant="text-xs"
                 weight="regular"
-                color="currentColor"
-                className="storybook-sidebar-account__meta"
+                className="storybook-sidebar-account__meta text-neutral-600"
               >
                 {selectedStore?.code ?? avatarMeta}
               </Text>
@@ -547,19 +598,22 @@ export function Sidebar({
           )}
         </div>
 
-        <span className="storybook-sidebar__divider" />
+        <span className="h-px w-full bg-neutral-100" />
 
-        <div className="storybook-sidebar-actions">
+        <div className={buildClassName([
+          'flex items-center gap-3',
+          isCollapsed ? 'justify-center' : 'justify-between',
+        ])}>
           <button
             ref={previewButtonRef}
             type="button"
             aria-label={isCollapsed ? 'Preview' : undefined}
             aria-expanded={isPreviewOpen}
             aria-controls="storybook-sidebar-preview-popover"
-            className="storybook-sidebar-action"
+            className={getSidebarActionClassName()}
             onClick={handlePreviewClick}
           >
-            {renderSidebarIcon('camera', 'storybook-sidebar-action__icon')}
+            {renderSidebarIcon('camera', 'storybook-sidebar-action__icon size-[18px] shrink-0')}
             {!isCollapsed && (
               <Text
                 as="span"
@@ -575,10 +629,10 @@ export function Sidebar({
           {!isCollapsed && (
             <button
               type="button"
-              className="storybook-sidebar-action storybook-sidebar-action--destructive"
+              className={getSidebarActionClassName(true)}
               onClick={onLogout}
             >
-              {renderSidebarIcon('sign-out', 'storybook-sidebar-action__icon')}
+              {renderSidebarIcon('sign-out', 'storybook-sidebar-action__icon size-[18px] shrink-0')}
               <Text
                 as="span"
                 variant="text-xs"
@@ -596,21 +650,21 @@ export function Sidebar({
         <div
           ref={previewPopoverRef}
           id="storybook-sidebar-preview-popover"
-          className="storybook-sidebar-preview-popover"
+          className="storybook-sidebar-preview-popover absolute bottom-[72px] left-4 z-10 box-border flex w-[189px] flex-col items-center justify-center gap-2 rounded-16 border border-solid border-neutral-100 bg-neutral-0 p-3 shadow-lg"
           role="dialog"
           aria-label="App preview QR code"
         >
-          <div className="storybook-sidebar-preview-popover__qr-frame">
+          <div className="flex w-full items-center justify-center overflow-hidden rounded-2">
             <img
               alt="QR code for app preview"
-              className="storybook-sidebar-preview-popover__qr"
+              className="block size-[165px] object-cover opacity-70"
               src={sidebarPreviewQr}
             />
           </div>
-          <div className="storybook-sidebar-preview-popover__hint">
+          <div className="flex w-full items-center gap-1 text-neutral-600">
             <Scan
               aria-hidden="true"
-              className="storybook-sidebar-preview-popover__hint-icon"
+              className="size-5 shrink-0"
               size={20}
               weight="regular"
             />
@@ -618,31 +672,27 @@ export function Sidebar({
               as="span"
               variant="text-xs"
               weight="medium"
-              color="currentColor"
-              className="storybook-sidebar-preview-popover__hint-text"
+              className="min-w-0 flex-[1_1_auto] text-neutral-600"
             >
               Scan QR to download the app to preview on mobile
             </Text>
           </div>
           <button
             type="button"
-            className={buildClassName([
-              'storybook-sidebar-preview-popover__copy',
-              isPreviewLinkCopied && 'storybook-sidebar-preview-popover__copy--copied',
-            ])}
+            className={getPreviewCopyClassName(isPreviewLinkCopied)}
             onClick={handlePreviewCopy}
           >
             {isPreviewLinkCopied ? (
               <Check
                 aria-hidden="true"
-                className="storybook-sidebar-preview-popover__copy-icon storybook-sidebar-preview-popover__copy-icon--check"
+                className="storybook-sidebar-preview-popover__copy-icon--check size-[18px] shrink-0"
                 size={18}
                 weight="bold"
               />
             ) : (
               <CopySimple
                 aria-hidden="true"
-                className="storybook-sidebar-preview-popover__copy-icon"
+                className="size-[18px] shrink-0"
                 size={18}
                 weight="regular"
               />

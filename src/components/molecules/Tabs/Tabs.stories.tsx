@@ -45,7 +45,7 @@ export default {
 export const Playground = {
   args: {
     type: 'no-segment',
-    size: 'md',
+    size: 'sm',
     showIcons: false,
     iconPosition: 'left',
     defaultActiveIndex: 0,

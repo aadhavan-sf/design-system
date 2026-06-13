@@ -8,6 +8,7 @@ export interface TextFieldShellProps {
   children: ReactNode;
   className?: string;
   errorText: string;
+  fluid?: boolean;
   helperText: string;
   isError: boolean;
   isInfo: boolean;
@@ -24,10 +25,35 @@ export interface TextFieldShellProps {
   type: string;
 }
 
+function getTextFieldShellClassName({
+  fluid,
+  type,
+  className,
+}: {
+  fluid?: boolean;
+  type: string;
+  className?: string;
+}) {
+  return buildClassName([
+    'storybook-textfield flex flex-col gap-1',
+    fluid ? 'w-full' : 'w-[296px]',
+    type && `storybook-textfield--${type}`,
+    className,
+  ]);
+}
+
+function getTextFieldHelperClassName(isError: boolean) {
+  return buildClassName([
+    'w-full font-normal text-ds-text-xs',
+    isError ? 'text-error-600' : 'text-neutral-600',
+  ]);
+}
+
 export function TextFieldShell({
   children,
   className,
   errorText,
+  fluid = false,
   helperText,
   isError,
   isInfo,
@@ -45,21 +71,15 @@ export function TextFieldShell({
 }: TextFieldShellProps) {
   return (
     <div
-      className={buildClassName([
-        'storybook-textfield',
-        'gap-1',
-        `storybook-textfield--${type}`,
-        className,
-      ])}
+      className={getTextFieldShellClassName({ fluid, type, className })}
     >
       {label && type !== 'search' && (
-        <div className="storybook-textfield__header gap-1">
+        <div className="flex w-full items-center gap-1">
           <Text
             as="label"
             variant="text-sm"
             weight="medium"
-            color="currentColor"
-            className="storybook-textfield__label text-ds-text-sm font-medium text-neutral-600"
+            className="leading-none text-neutral-600"
           >
             {labelText}
           </Text>
@@ -67,8 +87,7 @@ export function TextFieldShell({
           {tooltip && (
             <HelpIcon
               className={buildClassName([
-                'storybook-textfield__tooltip',
-                'text-neutral-600',
+                'inline-flex size-4 shrink-0 items-center justify-center text-neutral-600',
                 tooltipClassName,
               ])}
               open={tooltipOpen}
@@ -84,8 +103,7 @@ export function TextFieldShell({
               as="span"
               variant="text-xs"
               weight="semibold"
-              color="currentColor"
-              className="storybook-textfield__required text-ds-text-xs font-semibold text-error-600"
+              className="inline-flex shrink-0 items-center leading-none text-error-600"
             >
               *
             </Text>
@@ -100,14 +118,7 @@ export function TextFieldShell({
           as="span"
           variant="text-xs"
           weight="regular"
-          color="currentColor"
-          className={buildClassName([
-            'storybook-textfield__helper',
-            'text-ds-text-xs',
-            'font-normal',
-            isError ? 'text-error-600' : 'text-neutral-600',
-            isError && 'storybook-textfield__helper--error',
-          ])}
+          className={getTextFieldHelperClassName(isError)}
         >
           {isError ? errorText : helperText}
         </Text>

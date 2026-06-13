@@ -1,10 +1,5 @@
 // @ts-nocheck
 import { DropdownList } from './DropdownList';
-import {
-  Bell,
-  BellSimple,
-  BellSlash,
-} from '@phosphor-icons/react';
 
 const variants = [
   'icon-left',
@@ -14,20 +9,13 @@ const variants = [
   'icon-right',
   'check-right',
   'text',
-  'icon-picker',
 ];
 
 const sampleItems = [
   { label: 'Head Content Editor', value: 'editor' },
-  { label: 'Head Content Editor', value: 'editor-active', active: true, selected: true },
+  { label: 'Head Content Editor', value: 'editor-active', selected: true },
   { label: 'Head Content Editor', value: 'editor-disabled', state: 'disabled' },
   { label: 'Remove language', value: 'remove-language', state: 'destructive' },
-];
-
-const sampleIconItems = [
-  { value: 'bell', label: 'Notifications', icon: Bell },
-  { value: 'bell-slash', label: 'Notifications off', icon: BellSlash },
-  { value: 'bell-simple', label: 'Simple notifications', icon: BellSimple },
 ];
 
 export default {
@@ -60,26 +48,14 @@ export const Playground = {
 
 export const Variants = {
   render: () => (
-    <div className="storybook-dropdown-list-story-grid">
+    <div className="storybook-dropdown-list-story-grid gap-x-16 gap-y-24">
       {variants.map((variant) => (
         <DropdownList
           key={variant}
-          iconOptions={variant === 'icon-picker' ? sampleIconItems : undefined}
           items={sampleItems}
-          selectedValue={variant === 'icon-picker' ? 'bell' : undefined}
           variant={variant}
         />
       ))}
     </div>
-  ),
-};
-
-export const IconPicker = {
-  render: () => (
-    <DropdownList
-      variant="icon-picker"
-      selectedValue="bell"
-      iconOptions={sampleIconItems}
-    />
   ),
 };

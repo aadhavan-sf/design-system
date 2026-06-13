@@ -12,7 +12,7 @@ import {
 } from './IconHoverEffect';
 
 const states: IconHoverEffectState[] = ['default', 'hover'];
-const sizes: IconHoverEffectSize[] = ['sm', 'md', 'lg'];
+const sizes: IconHoverEffectSize[] = ['sm', 'md', 'lg', 'xl'];
 const icons: IconHoverEffectIcon[] = ['repeat', 'copy', 'download', 'eye', 'pencil'];
 
 const meta = {
@@ -23,7 +23,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Icon action atom for compact edit, view, duplicate, download, refresh, and delete controls. Destructive mode always renders the trash icon.',
+          'Compact icon action for hover and focus treatments only (neutral and destructive). No click animations — use for background/color hover states on edit, view, duplicate, download, refresh, and delete controls.',
       },
     },
   },
@@ -66,7 +66,7 @@ export const Playground: Story = {
 
 export const Sizes: Story = {
   render: () => (
-    <div className="icon-hover-effect-story-row">
+    <div className="flex items-center gap-6">
       {sizes.map((size) => (
         <IconHoverEffect
           key={`regular-${size}`}
@@ -86,9 +86,9 @@ export const Sizes: Story = {
 
 export const States: Story = {
   render: () => (
-    <div className="icon-hover-effect-story-stack">
+    <div className="flex flex-col gap-6">
       {sizes.map((size) => (
-        <div key={size} className="icon-hover-effect-story-row">
+        <div key={size} className="flex items-center gap-6">
           {states.map((state) => (
             <IconHoverEffect
               key={`regular-${size}-${state}`}
@@ -112,7 +112,7 @@ export const States: Story = {
 
 export const Icons: Story = {
   render: () => (
-    <div className="icon-hover-effect-story-row">
+    <div className="flex items-center gap-6">
       {icons.map((icon) => (
         <IconHoverEffect
           key={icon}

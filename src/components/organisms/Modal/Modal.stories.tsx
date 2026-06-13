@@ -137,7 +137,7 @@ export const DemoModal: Story = {
 
 export const States: Story = {
   render: () => (
-    <div className="storybook-modal-story-grid">
+    <div className="flex flex-col items-stretch gap-6 [&_.storybook-modal__backdrop]:min-h-[180px] [&_.storybook-modal__backdrop]:p-6">
       <Modal state="error" actionCount={2} closeOnAction={false} />
       <Modal state="warning" actionCount={1} closeOnAction={false} />
       <Modal state="success" actionCount={1} closeOnAction={false} />

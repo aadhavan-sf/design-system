@@ -1,0 +1,99 @@
+.storybook-color-field__preview {
+  box-shadow: inset 0 0 0 1px var(--neutral_100);
+}
+
+.storybook-color-field__panel {
+  animation: storybook-color-field-panel-enter 150ms ease-out;
+  transform-origin: top center;
+}
+
+.storybook-color-field__panel .react-colorful {
+  width: 100% !important;
+  display: contents !important;
+}
+
+.storybook-color-field__panel .react-colorful__saturation {
+  order: 1;
+  width: 100% !important;
+  height: 262px !important;
+  padding-bottom: 0 !important;
+  margin: 0 !important;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
+}
+
+.storybook-color-field__panel .react-colorful__hue {
+  order: 3;
+  height: 20px !important;
+  margin: 0 !important;
+  border-radius: 999px !important;
+}
+
+.storybook-color-field__panel .react-colorful__pointer,
+.storybook-color-field__panel .react-colorful__hue-pointer,
+.storybook-color-field__panel .react-colorful__saturation-pointer {
+  width: 20px !important;
+  height: 20px !important;
+  border: 4px solid var(--neutral_00) !important;
+  border-radius: 999px !important;
+  box-shadow: var(--shadow_md);
+  box-sizing: border-box;
+}
+
+.storybook-color-field__opacity-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(45deg, var(--neutral_100) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--neutral_100) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--neutral_100) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--neutral_100) 75%);
+  background-position:
+    0 0,
+    0 8px,
+    8px -8px,
+    -8px 0;
+  background-size: 16px 16px;
+}
+
+.storybook-color-field__opacity-slider {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  appearance: none;
+  background: linear-gradient(to right, transparent, var(--current-color));
+  cursor: pointer;
+}
+
+.storybook-color-field__opacity-slider::-webkit-slider-thumb {
+  width: 20px;
+  height: 20px;
+  appearance: none;
+  border: 4px solid var(--neutral_00);
+  border-radius: 999px;
+  background-color: var(--neutral_00);
+  box-shadow: var(--shadow_md);
+}
+
+.storybook-color-field__opacity-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 4px solid var(--neutral_00);
+  border-radius: 999px;
+  background-color: var(--neutral_00);
+  box-shadow: var(--shadow_md);
+}
+
+@keyframes storybook-color-field-panel-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(calc(var(--spacing_1) * -1)) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

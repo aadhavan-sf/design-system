@@ -40,7 +40,7 @@ export default {
 
 export const Playground = {
   render: (args) => (
-    <div className="storybook-sidebar-story-surface">
+    <div className="flex min-h-screen items-start justify-center gap-10 bg-neutral-100 p-8">
       <Sidebar {...args} />
     </div>
   ),
@@ -52,7 +52,7 @@ export const Playground = {
 
 export const Variants = {
   render: () => (
-    <div className="storybook-sidebar-story-surface">
+    <div className="flex min-h-screen items-start justify-center gap-10 bg-neutral-100 p-8">
       <Sidebar type="expanded" />
       <Sidebar type="collapsed" />
     </div>
@@ -61,7 +61,7 @@ export const Variants = {
 
 export const ItemStates = {
   render: () => (
-    <div className="storybook-sidebar-story-states">
+    <div className="grid grid-cols-[max-content_max-content] gap-x-16 gap-y-5 p-5">
       {['default', 'hover', 'focused', 'disabled'].map((state) => (
         <SidebarItem
           key={`expanded-default-${state}`}

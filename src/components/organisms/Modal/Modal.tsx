@@ -81,6 +81,24 @@ const MODAL_CONTENT: Record<ModalState, ModalContent> = {
   },
 };
 
+function buildClassName(parts: Array<string | false | null | undefined>) {
+  return parts.filter(Boolean).join(' ');
+}
+
+function getModalIconClassName(state: ModalState) {
+  const stateClasses: Record<ModalState, string> = {
+    error: 'bg-error-50 text-error-600',
+    warning: 'bg-warning-50 text-warning-600',
+    success: 'bg-success-50 text-success-600',
+  };
+
+  return buildClassName([
+    'storybook-modal__icon box-border inline-flex size-12 shrink-0 items-center justify-center p-2',
+    'rounded-40',
+    stateClasses[state],
+  ]);
+}
+
 export function Modal({
   variant = 'status',
   actionCount = 2,
@@ -116,7 +134,7 @@ export function Modal({
   const isOpenControlled = typeof open === 'boolean';
   const isOpen = isOpenControlled ? open : internalOpen;
   const content = MODAL_CONTENT[state];
-  const Icon = content.icon;
+  const StatusIcon = content.icon;
   const resolvedTitle = title ?? content.title;
   const resolvedDescription = description ?? content.description;
   const resolvedPrimaryLabel = primaryLabel ?? (variant === 'demo' ? 'Submit' : content.primaryLabel);
@@ -160,21 +178,20 @@ export function Modal({
 
   if (variant === 'demo') {
     return (
-      <div className="storybook-modal__backdrop">
+      <div className="storybook-modal__backdrop flex min-h-[360px] min-w-full items-center justify-center p-10">
         <section
           aria-labelledby="storybook-modal-title"
           aria-modal="true"
-          className="storybook-modal storybook-modal--demo"
+          className="storybook-modal storybook-modal--demo flex w-[480px] flex-col gap-6 overflow-hidden rounded-16 bg-neutral-0 p-6"
           role="dialog"
         >
-          <div className="storybook-modal__demo-header">
+          <div className="flex w-full items-center justify-between gap-4">
             <Text
               as="h2"
               id="storybook-modal-title"
               variant="text-lg"
               weight="semibold"
-              color="currentColor"
-              className="storybook-modal__demo-title"
+              className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-neutral-900"
             >
               {title ?? 'Add menu Item'}
             </Text>
@@ -183,7 +200,7 @@ export function Modal({
               <button
                 type="button"
                 aria-label={closeButtonLabel}
-                className="storybook-modal__close-button"
+                className="storybook-modal__close-button inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-4 border-0 bg-transparent p-0 text-neutral-600 transition-[background-color,color,box-shadow] duration-[160ms] ease-out hover:bg-neutral-25 hover:text-neutral-800 focus-visible:outline-none focus-visible:shadow-focus-neutral"
                 onClick={handleCloseClick}
               >
                 <X size={24} weight="regular" />
@@ -191,7 +208,7 @@ export function Modal({
             )}
           </div>
 
-          <div className="storybook-modal__actions storybook-modal__actions--demo">
+          <div className="flex w-full items-center justify-end gap-4">
             {showSecondaryAction && (
               <Button
                 destructive={secondaryButtonDestructive}
@@ -222,27 +239,26 @@ export function Modal({
   }
 
   return (
-    <div className="storybook-modal__backdrop">
+    <div className="storybook-modal__backdrop flex min-h-[360px] min-w-full items-center justify-center p-10">
       <section
         aria-labelledby="storybook-modal-title"
         aria-describedby="storybook-modal-description"
         aria-modal="true"
-        className="storybook-modal"
+        className="storybook-modal flex w-[540px] items-start gap-4 overflow-hidden rounded-16 bg-neutral-0 p-6"
         role="dialog"
       >
-        <div className={`storybook-modal__icon storybook-modal__icon--${state}`}>
-          <Icon size={24} weight="regular" />
+        <div className={getModalIconClassName(state)}>
+          <StatusIcon size={24} weight="regular" />
         </div>
 
-        <div className="storybook-modal__content">
-          <div className="storybook-modal__copy">
+        <div className="flex min-w-0 flex-[1_0_0] flex-col gap-8">
+          <div className="flex flex-col gap-2">
             <Text
               as="h2"
               id="storybook-modal-title"
               variant="text-lg"
               weight="semibold"
-              color="currentColor"
-              className="storybook-modal__title"
+              className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-neutral-900"
             >
               {resolvedTitle}
             </Text>
@@ -252,14 +268,13 @@ export function Modal({
               id="storybook-modal-description"
               variant="text-sm"
               weight="regular"
-              color="currentColor"
-              className="storybook-modal__description"
+              className="w-full text-neutral-600"
             >
               {resolvedDescription}
             </Text>
           </div>
 
-          <div className="storybook-modal__actions">
+          <div className="flex items-center justify-end gap-4">
             {showSecondaryAction && (
               <Button
                 destructive={secondaryButtonDestructive}

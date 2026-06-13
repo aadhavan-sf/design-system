@@ -1,18 +1,82 @@
 import {
+  useEffect,
   useRef,
   useState,
   type ChangeEvent,
   type PointerEvent,
 } from 'react';
 
-import { getFieldClassName } from '../textFieldState';
+import {
+  buildClassName,
+  textFieldFocusVisibleClassName,
+  textFieldPlaceholderTrackingClass,
+  type NormalizedTextFieldState,
+} from '../textField.constants';
 import type { BaseTextFieldInputProps } from './InputFields';
+
+import './textareaField.css';
 
 const MIN_TEXTAREA_HEIGHT = 112;
 
+function getTextAreaFieldClassName(state: NormalizedTextFieldState | string) {
+  const placeholderClasses =
+    state === 'error'
+      ? 'placeholder:text-error-600'
+      : 'placeholder:text-neutral-300';
+
+  const baseClasses = [
+    'box-border block w-full min-w-0 resize-none px-[14px] py-3',
+    'rounded-8 border border-solid bg-neutral-0',
+    'font-sans text-ds-text-sm font-normal text-neutral-700',
+    'placeholder:font-sans placeholder:text-ds-text-sm placeholder:font-normal',
+    textFieldPlaceholderTrackingClass,
+    placeholderClasses,
+    'transition-[border-color,background-color,color,box-shadow] duration-150 ease-out',
+    'focus:outline-none focus-visible:border-neutral-500',
+  ];
+
+  if (state === 'disabled') {
+    return buildClassName([
+      ...baseClasses,
+      'cursor-not-allowed border-neutral-200 bg-neutral-25 text-neutral-300',
+      'disabled:cursor-not-allowed',
+    ]);
+  }
+
+  if (state === 'error') {
+    return buildClassName([
+      ...baseClasses,
+      'border-error-600 text-error-600',
+    ]);
+  }
+
+  if (state === 'active') {
+    return buildClassName([
+      ...baseClasses,
+      'border-neutral-500 caret-neutral-700',
+    ]);
+  }
+
+  return buildClassName([
+    ...baseClasses,
+    'border-neutral-200',
+  ]);
+}
+
+function getResizeMarkClassName(state: NormalizedTextFieldState | string) {
+  return buildClassName([
+    'storybook-textarea-field__resize-mark',
+    'absolute bottom-1 right-1 inline-flex size-[14px] items-center justify-center',
+    'appearance-none border-0 bg-transparent p-0',
+    textFieldFocusVisibleClassName,
+    state === 'disabled'
+      ? 'cursor-not-allowed text-neutral-300'
+      : 'cursor-ns-resize text-neutral-400',
+  ]);
+}
+
 export function TextArea({
   disabled,
-  hasValue,
   onChange,
   placeholder,
   state,
@@ -20,6 +84,16 @@ export function TextArea({
 }: BaseTextFieldInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [height, setHeight] = useState(MIN_TEXTAREA_HEIGHT);
+  const [isFocused, setIsFocused] = useState(false);
+  const isActive = state === 'active';
+  const isEmpty = value.length === 0;
+  const showFakeCaret = isActive && isEmpty && !isFocused && !disabled;
+
+  useEffect(() => {
+    if (isActive && isEmpty && !disabled) {
+      textareaRef.current?.focus();
+    }
+  }, [isActive, isEmpty, disabled]);
 
   const handleResizeStart = (event: PointerEvent<HTMLButtonElement>) => {
     if (disabled || !textareaRef.current) {
@@ -47,34 +121,31 @@ export function TextArea({
   };
 
   return (
-    <div className="storybook-textfield__textarea-wrap">
+    <div className="relative w-full">
+      {showFakeCaret && (
+        <span
+          className="storybook-textarea-field__caret pointer-events-none absolute top-[14px] left-[14px] z-[1] h-4 w-px bg-neutral-700"
+          aria-hidden="true"
+        />
+      )}
+
       <textarea
         ref={textareaRef}
         value={value}
         disabled={disabled}
-        placeholder={placeholder}
+        placeholder={isActive && isEmpty ? '' : placeholder}
         onChange={(event: ChangeEvent<HTMLTextAreaElement>) => onChange(event.target.value)}
-        style={{ height }}
-        className={getFieldClassName({
-          state,
-          hasValue,
-          className: 'storybook-textfield__field--paragraph',
-        })}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        style={{ height, minHeight: MIN_TEXTAREA_HEIGHT }}
+        className={getTextAreaFieldClassName(state)}
       />
+
       <button
         type="button"
         aria-label="Resize text area"
         disabled={disabled}
-        className={[
-          'storybook-textfield__resize-mark',
-          'border-0',
-          'bg-transparent',
-          'p-0',
-          'focus-visible:shadow-focus-brand',
-          disabled ? 'text-neutral-300' : 'text-neutral-400',
-        ]
-          .filter(Boolean)
-          .join(' ')}
+        className={getResizeMarkClassName(state)}
         onPointerDown={handleResizeStart}
       >
         <svg

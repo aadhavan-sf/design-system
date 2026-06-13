@@ -1,48 +1,36 @@
 .ds-spacing {
   display: flex;
   flex-direction: column;
-  @apply gap-6 font-sans text-ds-text-strong;
 }
 
 .ds-spacing__header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  @apply gap-4;
-}
-
-.ds-spacing__eyebrow {
-  @apply text-ds-text-sm font-semibold text-brand-600;
-}
-
-.ds-spacing__title {
-  @apply mt-1 text-ds-display-xs font-semibold text-ds-text-strong;
 }
 
 .ds-spacing__preview {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  @apply gap-4;
 }
 
 .ds-spacing__preview > div {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  @apply rounded-ds border border-ds-border bg-ds-surface-subtle;
+  border-width: 1px;
+  border-style: solid;
 }
 
 .ds-spacing__preview span {
   display: inline-flex;
   align-items: center;
   min-height: 40px;
-  @apply rounded-ds bg-ds-surface px-3 text-ds-text-sm font-medium text-ds-text shadow-xs;
 }
 
 .ds-spacing__list {
   display: flex;
   flex-direction: column;
-  @apply gap-2;
 }
 
 .ds-spacing-row {
@@ -50,17 +38,13 @@
   grid-template-columns: minmax(160px, 220px) minmax(140px, 1fr) 64px;
   align-items: center;
   min-height: 56px;
-  @apply gap-4 rounded-ds border border-ds-border bg-ds-surface px-3 py-2;
+  border-width: 1px;
+  border-style: solid;
 }
 
 .ds-spacing-row__label {
   display: flex;
   flex-direction: column;
-  @apply gap-1;
-}
-
-.ds-spacing-row__name {
-  @apply text-ds-text-md font-semibold;
 }
 
 .ds-spacing-row__bar-wrap {
@@ -72,12 +56,10 @@
 .ds-spacing-row__bar {
   min-width: 1px;
   height: 16px;
-  @apply rounded-full bg-brand-500;
 }
 
 .ds-spacing-row__value {
   text-align: right;
-  @apply text-ds-text-sm font-medium text-ds-text-muted;
 }
 
 @media (max-width: 640px) {
@@ -88,7 +70,6 @@
 
   .ds-spacing-row {
     grid-template-columns: 1fr;
-    @apply gap-2;
   }
 
   .ds-spacing-row__value {

@@ -49,7 +49,7 @@ export const Playground = {
 
 export const CalendarDayStates = {
   render: () => (
-    <div className="datepicker-story-row">
+    <div className="flex max-w-[320px] flex-wrap items-start gap-4">
       <DatePickerCalendarDay label="12" />
       <DatePickerCalendarDay label="12" state="hover" />
       <DatePickerCalendarDay label="12" state="focus" />
@@ -59,13 +59,16 @@ export const CalendarDayStates = {
       <DatePickerCalendarDay label="12" state="hover" today />
       <DatePickerCalendarDay label="12" state="focus" today />
       <DatePickerCalendarDay label="12" state="on-range" />
+      <DatePickerCalendarDay label="10" state="selected" rangePosition="start" />
+      <DatePickerCalendarDay label="11" state="on-range" rangePosition="middle" />
+      <DatePickerCalendarDay label="12" state="selected" rangePosition="end" />
     </div>
   ),
 };
 
 export const PresetListItemStates = {
   render: () => (
-    <div className="datepicker-story-list-grid">
+    <div className="grid grid-cols-[repeat(2,160px)] gap-4">
       <DatePickerListItem label="List item" />
       <DatePickerListItem label="List item" selected />
       <DatePickerListItem label="List item" state="hover" />
@@ -76,7 +79,7 @@ export const PresetListItemStates = {
 
 export const DatePickerVariants = {
   render: () => (
-    <div className="datepicker-story-grid">
+    <div className="flex flex-col items-start gap-4">
       <DatePicker type="single-date" />
       <DatePicker type="month" />
       <DatePicker type="date-range" />

@@ -6,9 +6,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
-  line-height: 0;
-  vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
 
   cursor: pointer;
@@ -32,35 +29,10 @@
   cursor: not-allowed;
 }
 
-.storybook-checkbox--sm {
-  width: 16px;
-  height: 16px;
-}
-
-.storybook-checkbox--mid {
-  width: 20px;
-  height: 20px;
-}
-
 .storybook-checkbox__icon {
   display: flex;
   align-items: center;
   justify-content: center;
 
   transition: opacity 160ms ease;
-}
-
-.checkbox-story-row,
-.checkbox-story-stack {
-  display: flex;
-  align-items: center;
-}
-
-.checkbox-story-row {
-  @apply gap-12;
-}
-
-.checkbox-story-stack {
-  flex-direction: column;
-  @apply gap-8;
 }

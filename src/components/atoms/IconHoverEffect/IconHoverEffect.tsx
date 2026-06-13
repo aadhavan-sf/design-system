@@ -16,12 +16,12 @@ import {
 import './iconHoverEffect.css';
 
 type NormalizedType = 'default' | 'destructive';
-type NormalizedSize = 'sm' | 'md' | 'lg';
+type NormalizedSize = 'sm' | 'md' | 'lg' | 'xl';
 type NormalizedState = 'default' | 'hover';
 type NormalizedIcon = 'copy' | 'download' | 'eye' | 'pencil' | 'repeat';
 
 export type IconHoverEffectType = NormalizedType | 'Default' | 'Destructive' | 'Delete';
-export type IconHoverEffectSize = NormalizedSize | 'Small' | 'Medium' | 'Large';
+export type IconHoverEffectSize = NormalizedSize | 'Small' | 'Medium' | 'Large' | 'XLarge';
 export type IconHoverEffectState = NormalizedState | 'Default' | 'Hover';
 export type IconHoverEffectIcon = NormalizedIcon | 'Copy' | 'Download' | 'Eye' | 'Pencil' | 'Repeat';
 
@@ -34,8 +34,8 @@ export interface IconHoverEffectProps extends Omit<ButtonHTMLAttributes<HTMLButt
   type?: IconHoverEffectType;
 }
 
-function buildClassName(parts: Array<string | false | undefined>) {
-  return parts.filter(Boolean).join(' ');
+function buildClassName(parts: Array<string | false | null | undefined>) {
+  return parts.flat().filter(Boolean).join(' ');
 }
 
 function normalizeValue<T extends string>(value: string, aliases: Record<string, T> = {}) {
@@ -43,8 +43,12 @@ function normalizeValue<T extends string>(value: string, aliases: Record<string,
 }
 
 function getIconSize(size: NormalizedSize) {
-  if (size === 'lg') {
+  if (size === 'xl') {
     return 24;
+  }
+
+  if (size === 'lg') {
+    return 20;
   }
 
   if (size === 'md') {
@@ -52,6 +56,61 @@ function getIconSize(size: NormalizedSize) {
   }
 
   return 16;
+}
+
+function getIconHoverEffectSizeClasses(size: NormalizedSize) {
+  return size === 'lg' ? 'rounded-2 p-2' : 'rounded-1 p-1';
+}
+
+function getIconHoverEffectStateClasses({
+  state,
+  type,
+}: {
+  state: NormalizedState;
+  type: NormalizedType;
+}) {
+  if (type === 'destructive') {
+    return state === 'hover'
+      ? 'bg-error-50 text-error-600'
+      : 'bg-transparent text-error-600';
+  }
+
+  return state === 'hover'
+    ? 'bg-neutral-50 text-neutral-600'
+    : 'bg-transparent text-neutral-600';
+}
+
+function getIconHoverEffectHoverClasses(type: NormalizedType) {
+  return type === 'destructive'
+    ? 'enabled:hover:bg-error-50'
+    : 'enabled:hover:bg-neutral-50';
+}
+
+function getIconHoverEffectFocusClasses(type: NormalizedType) {
+  return type === 'destructive'
+    ? 'focus-visible:shadow-focus-error'
+    : 'focus-visible:shadow-focus-neutral';
+}
+
+function getIconHoverEffectClassName({
+  className,
+  size,
+  state,
+  type,
+}: {
+  className?: string;
+  size: NormalizedSize;
+  state: NormalizedState;
+  type: NormalizedType;
+}) {
+  return buildClassName([
+    'storybook-icon-hover-effect border-0',
+    getIconHoverEffectSizeClasses(size),
+    getIconHoverEffectStateClasses({ state, type }),
+    getIconHoverEffectHoverClasses(type),
+    getIconHoverEffectFocusClasses(type),
+    className,
+  ]);
 }
 
 function renderIcon({
@@ -67,7 +126,7 @@ function renderIcon({
 }) {
   const iconProps: IconProps = {
     'aria-hidden': true,
-    className: 'storybook-icon-hover-effect__icon shrink-0',
+    className: 'shrink-0',
     size: getIconSize(size),
     weight: 'regular',
   };
@@ -115,6 +174,7 @@ export function IconHoverEffect({
     Small: 'sm',
     Medium: 'md',
     Large: 'lg',
+    XLarge: 'xl',
   }) as NormalizedSize;
   const normalizedState = normalizeValue(state, {
     Default: 'default',
@@ -127,14 +187,6 @@ export function IconHoverEffect({
     Pencil: 'pencil',
     Repeat: 'repeat',
   }) as NormalizedIcon;
-  const stateClasses =
-    normalizedType === 'destructive'
-      ? normalizedState === 'hover'
-        ? 'bg-error-50 text-error-600 hover:bg-error-50 focus-visible:shadow-focus-error'
-        : 'bg-transparent text-error-600 hover:bg-error-50 focus-visible:shadow-focus-error'
-      : normalizedState === 'hover'
-        ? 'bg-neutral-50 text-neutral-600 hover:bg-neutral-50 focus-visible:shadow-focus-neutral'
-        : 'bg-transparent text-neutral-600 hover:bg-neutral-50 focus-visible:shadow-focus-neutral';
   const resolvedAriaLabel =
     ariaLabel ?? (normalizedType === 'destructive' ? 'Delete' : 'Icon action');
 
@@ -142,18 +194,12 @@ export function IconHoverEffect({
     <button
       type="button"
       aria-label={resolvedAriaLabel}
-      className={buildClassName([
-        'storybook-icon-hover-effect',
-        'rounded-1',
-        'border-0',
-        'p-1',
-        stateClasses,
-        `storybook-icon-hover-effect--${normalizedType}`,
-        `storybook-icon-hover-effect--${normalizedSize}`,
-        normalizedType === 'destructive' && 'storybook-icon-hover-effect--trash-motion',
-        normalizedType !== 'destructive' && `storybook-icon-hover-effect--icon-${normalizedIcon}`,
+      className={getIconHoverEffectClassName({
         className,
-      ])}
+        size: normalizedSize,
+        state: normalizedState,
+        type: normalizedType,
+      })}
       onClick={onClick}
       {...props}
     >

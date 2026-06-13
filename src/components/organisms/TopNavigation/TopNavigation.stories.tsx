@@ -39,7 +39,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
   render: (args) => (
-    <div className="top-navigation-story-surface">
+    <div className="flex min-h-screen items-center justify-center bg-neutral-100 p-8">
       <TopNavigation {...args} />
     </div>
   ),
@@ -57,7 +57,7 @@ export const Playground: Story = {
 
 export const Variant: Story = {
   render: () => (
-    <div className="top-navigation-story-surface">
+    <div className="flex min-h-screen items-center justify-center bg-neutral-100 p-8">
       <TopNavigation />
     </div>
   ),
@@ -65,7 +65,7 @@ export const Variant: Story = {
 
 export const ItemStates: Story = {
   render: () => (
-    <div className="top-navigation-item-story-grid">
+    <div className="grid grid-cols-[max-content_max-content] gap-x-4 gap-y-5 p-5">
       {(['default', 'hover', 'focused', 'disabled'] satisfies TopNavigationItemState[]).map((state) => (
         <TopNavigationItem
           key={`unpressed-${state}`}

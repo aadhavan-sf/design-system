@@ -5,7 +5,7 @@
   "type": "module",
   "homepage": "https://aadhavan-sf.github.io/superfans-dashboard-ui-components/",
   "scripts": {
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006 --host 127.0.0.1 --ci --no-open",
     "build-storybook": "storybook build && touch storybook-static/.nojekyll",
     "predeploy": "npm run build-storybook",
     "deploy": "gh-pages -d storybook-static --dotfiles --add",

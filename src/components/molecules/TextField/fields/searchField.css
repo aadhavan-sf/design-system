@@ -1,0 +1,14 @@
+.storybook-search-field__caret {
+  animation: storybook-search-field-caret-blink 1s step-end infinite;
+}
+
+@keyframes storybook-search-field-caret-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}

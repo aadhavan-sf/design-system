@@ -47,6 +47,7 @@ export type UploadItemState =
   | 'Completed + 1 Loader'
   | 'Completed + 1 Hover';
 export type UploadMultipleState = 'complete' | 'add-empty' | 'add-hover' | 'add-loader';
+export type UploadDropzoneSize = 'default' | 'small';
 
 type NormalizedLayout = 'horizontal' | 'vertical';
 type NormalizedMode = 'single' | 'multiple';
@@ -67,6 +68,7 @@ export interface ImageAspectRatioProps {
 
 export interface UploadFileBaseProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onDrop'> {
   layout?: UploadLayout;
+  size?: UploadDropzoneSize;
   state?: UploadDropzoneState;
   supportingText?: boolean;
   title?: string;
@@ -112,13 +114,16 @@ export interface UploadFileProps {
   disabled?: boolean;
   imageUrls?: string[];
   className?: string;
+  size?: UploadDropzoneSize;
+  title?: string;
+  description?: string;
   onFilesChange?: (files: File[]) => void;
   onReplace?: () => void;
   onDelete?: () => void;
 }
 
 function buildClassName(parts: Array<string | false | null | undefined>) {
-  return parts.filter(Boolean).join(' ');
+  return parts.flat().filter(Boolean).join(' ');
 }
 
 function normalizeValue<T extends string>(value: string | undefined, aliases: Record<string, T> = {}) {
@@ -163,6 +168,156 @@ function getPreviewUrls(files: File[]) {
     .map((file) => URL.createObjectURL(file));
 }
 
+export const UPLOAD_FILE_INPUT_CLASSNAME = 'storybook-upload-file__input';
+
+function getTileImageClassName(status: NormalizedTileStatus) {
+  return buildClassName([
+    'storybook-upload-tile__image size-full',
+    status === 'loader' && 'blur-[2px]',
+  ]);
+}
+
+function getTileScrimClassName(status: NormalizedTileStatus) {
+  return buildClassName([
+    'absolute inset-0',
+    status === 'loader' ? 'bg-black/30' : 'bg-black/20',
+  ]);
+}
+function getTileSizeClassName(size: NormalizedTileSize) {
+  const sizeClasses = {
+    square: 'h-[72px] w-[72px]',
+    iphone: 'h-[155px] w-[72px]',
+    ipad: 'h-[104px] w-[72px]',
+    android: 'h-[158px] w-[72px]',
+  };
+
+  return sizeClasses[size];
+}
+
+function getTileClassName({
+  size,
+  status,
+  type,
+  className,
+}: {
+  size: NormalizedTileSize;
+  status: NormalizedTileStatus;
+  type: NormalizedTileType;
+  className?: string;
+}) {
+  const isUploader = type === 'uploader';
+
+  return buildClassName([
+    'storybook-upload-tile relative box-border shrink-0 overflow-hidden border border-solid border-neutral-200 rounded-4',
+    getTileSizeClassName(size),
+    isUploader && 'inline-flex items-center justify-center rounded-8 border-dashed bg-neutral-0 text-brand-400',
+    className,
+  ]);
+}
+
+function getDropzoneClassName({
+  layout,
+  size = 'default',
+  visualState,
+  isDisabled,
+  className,
+}: {
+  layout: NormalizedLayout;
+  size?: UploadDropzoneSize;
+  visualState: NormalizedDropzoneState;
+  isDisabled: boolean;
+  className?: string;
+}) {
+  const isHorizontal = layout === 'horizontal';
+  const isHovered = visualState === 'hover';
+  const isFocused = visualState === 'focus';
+  const isSmall = size === 'small';
+
+  return buildClassName([
+    'storybook-upload-dropzone box-border flex cursor-pointer border border-dashed border-neutral-200',
+    'rounded-8 bg-neutral-0 font-sans text-neutral-900 text-left',
+    'transition-[background-color,box-shadow,color] duration-150 ease-out',
+    'focus-visible:outline-none',
+    isSmall ? 'w-full' : 'w-[500px]',
+    isHorizontal
+      ? isSmall
+        ? 'items-start gap-2 p-3'
+        : 'items-start gap-3 p-4'
+      : isSmall
+        ? 'min-h-24 flex-col items-center justify-center gap-3 px-4 py-4 text-center'
+        : 'min-h-[128px] flex-col items-center justify-center gap-4 px-[54px] py-6 text-center',
+    isDisabled && 'cursor-not-allowed bg-neutral-50 text-neutral-400',
+    !isDisabled && isHovered && 'bg-neutral-25',
+    !isDisabled && !isHovered && 'hover:bg-neutral-25',
+    !isDisabled && isFocused && 'shadow-focus-brand',
+    !isDisabled && 'focus-visible:bg-neutral-0 focus-visible:shadow-focus-brand',
+    className,
+  ]);
+}
+
+function getDropzoneIconClassName(isDisabled: boolean) {
+  return buildClassName([
+    'shrink-0',
+    isDisabled ? 'text-neutral-400' : 'text-brand-400',
+  ]);
+}
+
+function getDropzoneCopyClassName(layout: NormalizedLayout, size: UploadDropzoneSize = 'default') {
+  return buildClassName([
+    'flex min-w-0 flex-col gap-1',
+    layout === 'horizontal' && size === 'default' && 'w-[252px]',
+    layout === 'vertical' && 'items-center',
+  ]);
+}
+
+function getDropzoneDescriptionClassName(isDisabled: boolean) {
+  return buildClassName([
+    'whitespace-nowrap',
+    isDisabled ? 'text-current' : 'text-neutral-600',
+  ]);
+}
+
+function getUploadItemClassName({
+  isMultiple,
+  className,
+}: {
+  isMultiple: boolean;
+  className?: string;
+}) {
+  return buildClassName([
+    'storybook-upload-item box-border w-[500px] rounded-8 border border-solid border-neutral-200',
+    isMultiple
+      ? 'flex flex-col bg-neutral-0 p-3'
+      : 'flex min-h-[110px] items-start gap-4 overflow-hidden bg-neutral-25 p-3',
+    className,
+  ]);
+}
+
+function getUploadActionClassName({
+  destructive,
+  hover,
+}: {
+  destructive?: boolean;
+  hover?: boolean;
+}) {
+  return buildClassName([
+    'storybook-upload-action inline-flex items-center justify-center gap-2 border-0 bg-transparent',
+    'cursor-pointer transition-[background-color,color,transform] duration-150 ease-out',
+    'focus-visible:outline-none focus-visible:shadow-focus-neutral',
+    destructive
+      ? buildClassName([
+          'storybook-upload-action--destructive p-0 text-error-600',
+          hover && 'storybook-upload-action--hover text-error-700',
+          'hover:text-error-700',
+        ])
+      : buildClassName([
+          'rounded-8 border border-solid border-neutral-300 px-[14px] py-2 text-neutral-700',
+          hover && 'bg-neutral-50 text-neutral-800',
+          'hover:bg-neutral-50 hover:text-neutral-800',
+        ]),
+  ]);
+}
+
 export function ImageAspectRatio({
   size = 'ipad',
   status = 'default',
@@ -191,33 +346,34 @@ export function ImageAspectRatio({
 
   return (
     <div
-      className={buildClassName([
-        'storybook-upload-tile',
-        `storybook-upload-tile--${normalizedSize}`,
-        `storybook-upload-tile--${normalizedStatus}`,
-        `storybook-upload-tile--${normalizedType}`,
+      className={getTileClassName({
+        size: normalizedSize,
+        status: normalizedStatus,
+        type: normalizedType,
         className,
-      ])}
+      })}
     >
       {isUploader ? (
         <Plus
           aria-hidden="true"
-          className="storybook-upload-tile__plus"
+          className="text-brand-400"
           size={32}
           weight="regular"
         />
       ) : (
         <>
           <div
-            className="storybook-upload-tile__image"
+            className={getTileImageClassName(normalizedStatus)}
             data-image-index={index % 8}
             style={imageStyle}
           />
-          {normalizedStatus !== 'default' && <span className="storybook-upload-tile__scrim" />}
+          {normalizedStatus !== 'default' && (
+            <span className={getTileScrimClassName(normalizedStatus)} />
+          )}
           {normalizedStatus === 'loader' && (
             <CircleNotch
               aria-hidden="true"
-              className="storybook-upload-tile__loader"
+              className="absolute top-1/2 left-1/2 z-[1] -translate-x-1/2 -translate-y-1/2 text-neutral-0"
               size={24}
               weight="regular"
             />
@@ -230,6 +386,7 @@ export function ImageAspectRatio({
 
 export function UploadFileBase({
   layout = 'horizontal',
+  size = 'default',
   state = 'enabled',
   supportingText = true,
   title = 'Drag and drop or browse files',
@@ -268,12 +425,13 @@ export function UploadFileBase({
     <button
       type="button"
       disabled={isDisabled}
-      className={buildClassName([
-        'storybook-upload-dropzone',
-        `storybook-upload-dropzone--${normalizedLayout}`,
-        `storybook-upload-dropzone--${visualState}`,
+      className={getDropzoneClassName({
+        layout: normalizedLayout,
+        size,
+        visualState,
+        isDisabled,
         className,
-      ])}
+      })}
       onClick={isDisabled ? undefined : onBrowse}
       onDragLeave={() => setIsDragging(false)}
       onDragOver={(event) => {
@@ -284,27 +442,27 @@ export function UploadFileBase({
     >
       <MonitorArrowUp
         aria-hidden="true"
-        className="storybook-upload-dropzone__icon"
+        className={getDropzoneIconClassName(isDisabled)}
         size={24}
         weight="regular"
       />
-      <span className="storybook-upload-dropzone__copy">
+      <span className={getDropzoneCopyClassName(normalizedLayout, size)}>
         <Text
           as="span"
-          variant="text-md"
+          variant={size === 'small' ? 'text-sm' : 'text-md'}
           weight="medium"
           color="currentColor"
-          className="storybook-upload-dropzone__title"
+          className="whitespace-nowrap"
         >
           {title}
         </Text>
         {supportingText && (
           <Text
             as="span"
-            variant="text-sm"
+            variant={size === 'small' ? 'text-xs' : 'text-sm'}
             weight="regular"
             color="currentColor"
-            className="storybook-upload-dropzone__description"
+            className={getDropzoneDescriptionClassName(isDisabled)}
           >
             {description}
           </Text>
@@ -321,19 +479,15 @@ function UploadActionButton({
   label,
   onClick,
 }: UploadActionButtonProps) {
-  const Icon = icon;
+  const IconComponent = icon;
 
   return (
     <button
       type="button"
-      className={buildClassName([
-        'storybook-upload-action',
-        destructive && 'storybook-upload-action--destructive',
-        hover && 'storybook-upload-action--hover',
-      ])}
+      className={getUploadActionClassName({ destructive, hover })}
       onClick={onClick}
     >
-      <Icon aria-hidden="true" size={20} weight="regular" />
+      <IconComponent aria-hidden="true" size={20} weight="regular" />
       <Text
         as="span"
         variant="text-sm"
@@ -380,11 +534,12 @@ export function UploadFileItem({
     ? 'loader'
     : normalizedState === 'add-hover' ? 'hovered' : 'default';
   const addTileType = normalizedState === 'add-empty' ? 'uploader' : 'image';
+  const isHovered = normalizedState === 'completed-hover';
 
   if (isMultiple) {
     return (
-      <div className={buildClassName(['storybook-upload-item', 'storybook-upload-item--multiple', className])}>
-        <div className="storybook-upload-grid">
+      <div className={getUploadItemClassName({ isMultiple: true, className })}>
+        <div className="flex flex-wrap items-center gap-2">
           {Array.from({ length: tileCount }).map((_, index) => (
             <ImageAspectRatio
               key={`image-${index}`}
@@ -408,25 +563,17 @@ export function UploadFileItem({
   }
 
   return (
-    <div
-      className={buildClassName([
-        'storybook-upload-item',
-        'storybook-upload-item--single',
-        normalizedState === 'completed-hover' && 'storybook-upload-item--hover',
-        className,
-      ])}
-    >
-      <div className="storybook-upload-item__thumbnail">
-        <div className="storybook-upload-item__thumbnail-image" />
+    <div className={getUploadItemClassName({ isMultiple: false, className })}>
+      <div className="h-[86px] w-[86px] shrink-0 overflow-hidden rounded-8 border border-solid border-neutral-200 bg-neutral-200">
+        <div className="storybook-upload-item__thumbnail-image h-full w-full" />
       </div>
-      <div className="storybook-upload-item__content">
-        <div className="storybook-upload-item__copy">
+      <div className="flex min-h-[86px] min-w-0 flex-1 flex-col justify-center gap-2">
+        <div className="flex flex-col gap-1">
           <Text
             as="span"
             variant="text-sm"
             weight="medium"
-            color="currentColor"
-            className="storybook-upload-item__name"
+            className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-neutral-900"
           >
             {displayedFile.name}
           </Text>
@@ -434,22 +581,21 @@ export function UploadFileItem({
             as="span"
             variant="text-xs"
             weight="regular"
-            color="currentColor"
-            className="storybook-upload-item__size"
+            className="text-neutral-600"
           >
             {displayedFile.size}
           </Text>
         </div>
-        <div className="storybook-upload-item__actions">
+        <div className="flex items-center justify-between gap-3">
           <UploadActionButton
-            hover={normalizedState === 'completed-hover'}
+            hover={isHovered}
             icon={Repeat}
             label={replaceLabel}
             onClick={onReplace}
           />
           <UploadActionButton
             destructive
-            hover={normalizedState === 'completed-hover'}
+            hover={isHovered}
             icon={Trash}
             label={deleteLabel}
             onClick={onDelete}
@@ -474,6 +620,9 @@ export function UploadFile({
   disabled = false,
   imageUrls = [],
   className,
+  size = 'default',
+  title,
+  description,
   onFilesChange,
   onReplace,
   onDelete,
@@ -527,15 +676,15 @@ export function UploadFile({
   return (
     <div
       className={buildClassName([
-        'storybook-upload-file',
-        `storybook-upload-file--${normalizedLayout}`,
+        'storybook-upload-file relative flex flex-col gap-2',
+        size === 'small' ? 'w-full' : 'w-[500px]',
         className,
       ])}
     >
       <input
         ref={inputRef}
         accept={accept}
-        className="storybook-upload-file__input"
+        className={UPLOAD_FILE_INPUT_CLASSNAME}
         disabled={disabled}
         multiple={multiple ?? isMultiple}
         type="file"
@@ -560,8 +709,11 @@ export function UploadFile({
         <UploadFileBase
           disabled={disabled}
           layout={normalizedLayout}
+          size={size}
           state={dropzoneState}
           supportingText={supportingText}
+          title={title}
+          description={description}
           onBrowse={() => inputRef.current?.click()}
           onDropFiles={commitFiles}
         />

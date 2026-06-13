@@ -1,53 +1,35 @@
 .ds-shadows {
   display: flex;
   flex-direction: column;
-  @apply gap-6 font-sans text-ds-text-strong;
 }
 
 .ds-shadows__header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  @apply gap-4;
-}
-
-.ds-shadows__eyebrow {
-  @apply text-ds-text-sm font-semibold text-brand-600;
-}
-
-.ds-shadows__title {
-  @apply mt-1 text-ds-display-xs font-semibold text-ds-text-strong;
 }
 
 .ds-shadows__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  @apply gap-5;
 }
 
 .ds-shadow-card {
   display: flex;
   flex-direction: column;
-  @apply gap-4 rounded-ds border border-ds-border bg-ds-surface p-4;
+  border-width: 1px;
+  border-style: solid;
 }
 
 .ds-shadow-card__preview {
   min-height: 112px;
-  @apply rounded-ds border border-ds-border bg-neutral-0;
+  border-width: 1px;
+  border-style: solid;
 }
 
 .ds-shadow-card__meta {
   display: flex;
   flex-direction: column;
-  @apply gap-2;
-}
-
-.ds-shadow-card__name {
-  @apply text-ds-text-lg font-semibold text-ds-text-strong;
-}
-
-.ds-shadow-card__value {
-  @apply text-ds-text-xs text-ds-text-muted;
 }
 
 @media (max-width: 640px) {

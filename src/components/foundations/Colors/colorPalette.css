@@ -1,29 +1,22 @@
 .ds-palette {
   display: flex;
   flex-direction: column;
-  @apply gap-6 font-sans;
 }
 
 .ds-section__header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  @apply mb-2;
-}
-
-.ds-section__title {
-  @apply text-ds-text-lg font-semibold text-ds-text-strong;
 }
 
 .ds-section__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 160px));
-  @apply gap-4;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
 .ds-swatch {
-  overflow: hidden;
-  @apply rounded-3 border border-ds-border bg-ds-surface shadow-lg;
+  border-width: 1px;
+  border-style: solid;
 }
 
 .ds-swatch__chip {
@@ -34,14 +27,8 @@
 .ds-swatch__meta {
   display: flex;
   flex-direction: column;
-  @apply gap-1 px-3 pb-3;
 }
 
-.ds-swatch__name {
-  @apply text-ds-text-lg font-medium text-ds-text-strong;
-}
-
-.ds-swatch__hex {
-  text-transform: uppercase;
-  @apply text-ds-text-md font-normal text-ds-text-muted;
+.ds-swatch__meta code {
+  width: fit-content;
 }

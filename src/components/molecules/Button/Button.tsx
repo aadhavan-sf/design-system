@@ -18,6 +18,10 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
 }
 
+function buildClassName(parts: Array<string | false | null | undefined>) {
+  return parts.flat().filter(Boolean).join(' ');
+}
+
 function getButtonVariantClasses({
   destructive,
   hierarchy,
@@ -39,15 +43,26 @@ function getButtonVariantClasses({
       return 'border-error-600 bg-error-600 text-neutral-0 shadow-focus-error';
     }
 
-    return 'border-error-600 bg-error-600 text-neutral-0 shadow-xs hover:border-error-700 hover:bg-error-700 focus-visible:shadow-focus-error';
+    return [
+      'border-error-600 bg-error-600 text-neutral-0',
+      'enabled:hover:border-error-700 enabled:hover:bg-error-700',
+      'focus-visible:shadow-focus-error',
+    ].join(' ');
   }
 
   if (hierarchy === 'link-color' && destructive) {
     if (isDisabled) {
-      return 'border-transparent bg-transparent text-error-300 shadow-none';
+      return 'border-transparent bg-transparent p-0 text-error-300 shadow-none';
     }
 
-    return 'border-transparent bg-transparent text-error-600 shadow-none hover:text-error-700';
+    if (isFocus) {
+      return 'border-transparent bg-transparent p-0 text-error-600 shadow-none';
+    }
+
+    return [
+      'border-transparent bg-transparent p-0 text-error-600 shadow-none',
+      'enabled:hover:text-error-700',
+    ].join(' ');
   }
 
   if (hierarchy === 'primary') {
@@ -59,7 +74,11 @@ function getButtonVariantClasses({
       return 'border-brand-400 bg-brand-400 text-neutral-0 shadow-focus-brand';
     }
 
-    return 'border-brand-400 bg-brand-400 text-neutral-0 shadow-xs hover:border-brand-700 hover:bg-brand-700 hover:shadow-sm focus-visible:shadow-focus-brand';
+    return [
+      'border-brand-400 bg-brand-400 text-neutral-0 shadow-xs',
+      'enabled:hover:border-brand-700 enabled:hover:bg-brand-700 enabled:hover:shadow-sm',
+      'focus-visible:shadow-focus-brand',
+    ].join(' ');
   }
 
   if (hierarchy === 'secondary') {
@@ -71,38 +90,103 @@ function getButtonVariantClasses({
       return 'border-neutral-300 bg-transparent text-neutral-700 shadow-focus-neutral';
     }
 
-    return 'border-neutral-300 bg-transparent text-neutral-700 shadow-none hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 focus-visible:shadow-focus-neutral';
+    return [
+      'border-neutral-300 bg-transparent text-neutral-700 shadow-none',
+      'enabled:hover:border-neutral-300 enabled:hover:bg-neutral-50 enabled:hover:text-neutral-800',
+      'focus-visible:shadow-focus-neutral',
+    ].join(' ');
   }
 
   if (hierarchy === 'link-grey') {
     if (isDisabled) {
-      return 'border-transparent bg-transparent text-neutral-300 shadow-none';
+      return 'border-transparent bg-transparent p-0 text-neutral-300 shadow-none';
     }
 
-    return 'border-transparent bg-transparent text-neutral-600 shadow-none hover:text-neutral-800';
+    if (isFocus) {
+      return 'border-transparent bg-transparent p-0 text-neutral-600 shadow-none';
+    }
+
+    return [
+      'border-transparent bg-transparent p-0 text-neutral-600 shadow-none',
+      'enabled:hover:text-neutral-800',
+    ].join(' ');
   }
 
   if (isDisabled) {
-    return 'border-transparent bg-transparent text-neutral-300 shadow-none';
+    return 'border-transparent bg-transparent p-0 text-neutral-300 shadow-none';
   }
 
-  return 'border-transparent bg-transparent text-brand-400 shadow-none hover:text-brand-700';
+  if (isFocus) {
+    return 'border-transparent bg-transparent p-0 text-brand-400 shadow-none';
+  }
+
+  return [
+    'border-transparent bg-transparent p-0 text-brand-400 shadow-none',
+    'enabled:hover:text-brand-700',
+  ].join(' ');
 }
 
-function getButtonSizeClasses(size: ButtonSize, isIconOnly: boolean) {
+function getButtonIconClassName(side: 'left' | 'right') {
+  return buildClassName([
+    side === 'left'
+      ? 'storybook-button__icon--left'
+      : 'storybook-button__icon--right',
+    'shrink-0 h-5 w-5',
+  ]);
+}
+
+function getButtonClassName({
+  className,
+  destructive,
+  hierarchy,
+  isIconOnly,
+  size,
+  state,
+}: {
+  className?: string;
+  destructive: boolean;
+  hierarchy: ButtonHierarchy;
+  isIconOnly: boolean;
+  size: ButtonSize;
+  state: ButtonState;
+}) {
+  return buildClassName([
+    'storybook-button min-w-max rounded-ds border border-solid font-sans font-semibold no-underline',
+    getButtonVariantClasses({ destructive, hierarchy, state }),
+    getButtonSizeClasses(size, isIconOnly, hierarchy),
+    className,
+  ]);
+}
+
+function getButtonSizeClasses(
+  size: ButtonSize,
+  isIconOnly: boolean,
+  hierarchy: ButtonHierarchy,
+) {
+  const isLink = hierarchy === 'link-grey' || hierarchy === 'link-color';
+
+  if (isLink) {
+    return {
+      small: 'text-ds-text-sm',
+      medium: 'text-ds-text-sm',
+      large: 'text-ds-text-md',
+      xlarge: 'text-ds-text-md',
+    }[size];
+  }
+
   if (isIconOnly) {
     return {
       small: 'p-2 text-ds-text-sm',
       medium: 'p-3 text-ds-text-sm',
       large: 'p-3 text-ds-text-md',
-      xlarge: 'p-custom-14 text-ds-text-md',
+      xlarge: 'p-[14px] text-ds-text-md',
     }[size];
   }
 
   return {
-    small: 'px-custom-14 py-2 text-ds-text-sm',
-    medium: 'px-4 py-custom-10 text-ds-text-sm',
-    large: 'px-custom-18 py-custom-10 text-ds-text-md',
+    small: 'px-[14px] py-2 text-ds-text-sm',
+    medium: 'px-4 py-2.5 text-ds-text-sm',
+    large: 'px-[18px] py-2.5 text-ds-text-md',
     xlarge: 'px-5 py-3 text-ds-text-md',
   }[size];
 }
@@ -126,39 +210,24 @@ export const Button = ({
     />
   );
   const isIconOnly = icon === 'only';
-  const variantClasses = getButtonVariantClasses({
-    destructive,
-    hierarchy,
-    state,
-  });
-  const sizeClasses = getButtonSizeClasses(size, isIconOnly);
 
   return (
     <button
       type="button"
       disabled={state === 'disabled'}
-      className={[
-        'storybook-button',
-        'rounded-ds',
-        'border',
-        'border-solid',
-        'font-sans',
-        'font-semibold',
-        variantClasses,
-        sizeClasses,
-        `storybook-button--${hierarchy}`,
-        destructive && 'storybook-button--destructive',
-        `storybook-button--${size}`,
-        isIconOnly && 'storybook-button--icon-only',
+      className={getButtonClassName({
         className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
+        destructive,
+        hierarchy,
+        isIconOnly,
+        size,
+        state,
+      })}
       {...props}
     >
       <span className="storybook-button__content gap-2">
         {(icon === 'left' || icon === 'only') && (
-          <span className="storybook-button__icon--left">
+          <span className={getButtonIconClassName('left')}>
             {iconElement}
           </span>
         )}
@@ -176,7 +245,7 @@ export const Button = ({
         )}
 
         {icon === 'right' && (
-          <span className="storybook-button__icon--right">
+          <span className={getButtonIconClassName('right')}>
             {iconElement}
           </span>
         )}

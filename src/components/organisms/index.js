@@ -1,6 +1,7 @@
 export {
   LeftPanel,
   LeftPanelItem,
+  LeftPanelMenuItem,
   ThemeStatus,
 } from './LeftPanel/index.js';
 export { Modal } from './Modal/index.js';

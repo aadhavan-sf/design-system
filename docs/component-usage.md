@@ -68,6 +68,10 @@ Indeterminate:
 
 ## RadioButton
 
+`RadioButton` is a **presentational control**. It does not save data by itself. Selection survives a browser refresh only when the **parent app** loads the saved value and passes it back in as `pressed`.
+
+### Controlled usage (use in production)
+
 ```jsx
 const [selected, setSelected] = useState(false);
 
@@ -77,6 +81,39 @@ const [selected, setSelected] = useState(false);
   size="mid"
 />;
 ```
+
+### Radio groups (e.g. Visibility: Visible / Hidden / Conditional)
+
+Use one piece of state for the group, not one boolean per button:
+
+```jsx
+const [visibility, setVisibility] = useState(savedVisibility); // from API / block config
+
+{options.map((option) => (
+  <RadioButton
+    key={option.id}
+    pressed={visibility === option.id}
+    onPressedChange={() => setVisibility(option.id)}
+    size="sm"
+  />
+))}
+```
+
+On change, **persist to your backend** (or block settings store). On page load, **hydrate** `useState` from that saved record — not from a hardcoded default.
+
+### Demo-only patterns (Storybook / templates)
+
+These are fine for documentation but **must be replaced in a live product**:
+
+| Pattern | Why it resets on refresh |
+|---------|--------------------------|
+| `useState('visible')` with a fixed default | React remounts; memory is cleared |
+| `defaultPressed` without a parent save | Only sets the first render |
+| `useState(false)` in Storybook Playground | Demo-only local state |
+
+**HomePage template example:** `RightPanel` in `HomePage.tsx` uses `useState<VisibilityId>('visible')` so Storybook always opens on Visible. In production, replace that default with the block’s saved visibility from your API and call your save API inside `handleVisibilitySelect`.
+
+Uncontrolled usage (`defaultPressed` only) is for isolated Storybook demos, not for settings that must persist.
 
 ## Button
 

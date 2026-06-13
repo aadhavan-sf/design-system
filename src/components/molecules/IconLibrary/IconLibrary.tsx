@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { createElement, useMemo, useState } from 'react';
+import { createElement, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Bell,
@@ -9,7 +9,9 @@ import {
   HouseSimple,
 } from '@phosphor-icons/react';
 
+import { IconHoverEffect } from '../../atoms/IconHoverEffect';
 import { DropdownList } from '../DropdownList';
+import { UploadFileBase, UPLOAD_FILE_INPUT_CLASSNAME } from '../UploadFile';
 import { Text } from '../../foundations/Typography';
 import {
   iconLibraryDropdownOptions,
@@ -24,6 +26,12 @@ const ITEM_SIZES = ['sm', 'md'];
 const LIBRARY_STATES = ['default', 'dropdown-upload-icon', 'uploaded-icon'];
 const LIBRARY_SIZES = ['small', 'large'];
 const GRID_STATES = ['default', 'icon-not-selected'];
+
+const UPLOADED_PICKER_OPTIONS = [
+  { value: 'bell', label: 'Notifications', icon: Bell },
+  { value: 'bell-ringing', label: 'Notifications ringing', icon: BellRinging },
+  { value: 'bell-simple', label: 'Simple notifications', icon: BellSimple },
+];
 
 function buildClassName(parts) {
   return parts.filter(Boolean).join(' ');
@@ -53,6 +61,28 @@ function getMergedOptions(...optionGroups) {
 
 function getIconItemSize(size) {
   return size === 'md' ? 20 : 16;
+}
+
+function getIconLibraryItemClassName({
+  size,
+  state,
+  pressed,
+  className,
+}) {
+  const isSm = size === 'sm';
+
+  return buildClassName([
+    'storybook-icon-library-item inline-flex shrink-0 cursor-pointer items-center justify-center border-0 bg-neutral-0 text-neutral-600',
+    isSm ? 'size-6 rounded-1 p-1' : 'size-8 rounded-1 p-2',
+    state === 'hover' && 'bg-neutral-50',
+    'hover:bg-neutral-50',
+    pressed && 'rounded-1 border border-solid border-brand-100 bg-brand-25 text-brand-400',
+    state === 'focused' && 'bg-neutral-0 shadow-focus-brand',
+    state === 'focused' && pressed && 'bg-brand-25',
+    state === 'disabled' && 'cursor-not-allowed bg-neutral-50 text-neutral-300',
+    state === 'disabled' && pressed && 'border-brand-100 bg-brand-25 text-brand-100',
+    className,
+  ]);
 }
 
 function IconGlyph({
@@ -103,17 +133,16 @@ export function IconLibraryItem({
       aria-pressed={pressed}
       aria-label={ariaLabel ?? 'Select icon'}
       disabled={normalizedState === 'disabled'}
-      className={buildClassName([
-        'storybook-icon-library-item',
-        `storybook-icon-library-item--${normalizedSize}`,
-        `storybook-icon-library-item--${normalizedState}`,
-        pressed && 'storybook-icon-library-item--pressed',
+      className={getIconLibraryItemClassName({
+        size: normalizedSize,
+        state: normalizedState,
+        pressed,
         className,
-      ])}
+      })}
       onClick={onClick}
     >
       <IconGlyph
-        className="storybook-icon-library-item__icon"
+        className="shrink-0"
         icon={icon}
         size={getIconItemSize(normalizedSize)}
       />
@@ -158,11 +187,11 @@ export function IconLibraryGrid({
   return (
     <div
       className={buildClassName([
-        'storybook-icon-library-grid',
+        'flex w-[400px] items-start justify-end gap-2 rounded-2 border border-solid border-neutral-200 bg-neutral-0 p-3',
         className,
       ])}
     >
-      <div className="storybook-icon-library-grid__icons">
+      <div className="flex min-w-0 flex-[1_0_0] flex-wrap content-start items-center gap-x-4 gap-y-3">
         {iconOptions.map((option) => (
           <IconLibraryItem
             key={option.value}
@@ -175,7 +204,7 @@ export function IconLibraryGrid({
         ))}
       </div>
       <span
-        className="storybook-icon-library-grid__scrollbar"
+        className="h-[60px] w-2 shrink-0 rounded-2 bg-neutral-100"
         aria-hidden="true"
       />
     </div>
@@ -192,6 +221,138 @@ IconLibraryGrid.propTypes = {
   onIconSelect: PropTypes.func,
   selectedValue: PropTypes.string,
   state: PropTypes.oneOf([...GRID_STATES, 'Default', 'Icon not selected']),
+};
+
+function IconLibraryUpload({
+  onUpload,
+}) {
+  const inputRef = useRef(null);
+
+  return (
+    <div className="relative w-full">
+      <input
+        ref={inputRef}
+        accept=".svg,.png,image/svg+xml,image/png"
+        className={UPLOAD_FILE_INPUT_CLASSNAME}
+        type="file"
+        onChange={(event) => {
+          onUpload?.(event.target.files?.[0] ?? null);
+          event.target.value = '';
+        }}
+      />
+      <UploadFileBase
+        size="small"
+        layout="horizontal"
+        title="Upload Your Icon"
+        description="24x24 SVG or PNG"
+        supportingText
+        onBrowse={() => inputRef.current?.click()}
+      />
+    </div>
+  );
+}
+
+IconLibraryUpload.propTypes = {
+  onUpload: PropTypes.func,
+};
+
+function IconPickerPopover({
+  iconOptions = smallPickerOptions,
+  onIconSelect,
+  onRemoveUploadedIcon,
+  onRepeatUploadedIcon,
+  onUpload,
+  selectedValue,
+  state,
+  uploadedIcon = BellRinging,
+}) {
+  const normalizedState = normalizeValue(state, {
+    Default: 'default',
+    'Dropdown + Upload Icon': 'dropdown-upload-icon',
+    'Uploaded Icon': 'uploaded-icon',
+  });
+  const isUploadedState = normalizedState === 'uploaded-icon';
+  const resolvedIconOptions = isUploadedState ? UPLOADED_PICKER_OPTIONS : iconOptions;
+
+  return (
+    <div className="storybook-icon-library-popover flex w-[216px] flex-col gap-4 rounded-2 bg-neutral-0 p-4 shadow-md">
+      <Text
+        as="p"
+        variant="text-xs"
+        weight="medium"
+        className="m-0 text-neutral-600"
+      >
+        Choose Icon
+      </Text>
+
+      <div className="flex items-center gap-2">
+        {resolvedIconOptions.map((option) => (
+          <IconLibraryItem
+            key={option.value}
+            ariaLabel={option.label}
+            icon={option.icon}
+            pressed={option.value === selectedValue}
+            size="md"
+            onClick={() => onIconSelect?.(option)}
+          />
+        ))}
+      </div>
+
+      <div className="relative flex h-4 w-full items-center justify-center">
+        <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-neutral-200" />
+        <Text
+          as="span"
+          variant="text-xs"
+          weight="medium"
+          className="storybook-icon-library-separator__label relative z-[1] bg-neutral-0 px-1 text-neutral-200"
+        >
+          OR
+        </Text>
+      </div>
+
+      {isUploadedState ? (
+        <div className="flex items-center justify-between gap-2">
+          <IconLibraryItem
+            ariaLabel="Uploaded icon"
+            icon={uploadedIcon}
+            pressed
+            size="md"
+          />
+          <span className="inline-flex items-center gap-2">
+            <IconHoverEffect
+              ariaLabel="Replace uploaded icon"
+              icon="repeat"
+              size="sm"
+              onClick={onRepeatUploadedIcon}
+            />
+            <IconHoverEffect
+              ariaLabel="Delete uploaded icon"
+              type="destructive"
+              size="sm"
+              onClick={onRemoveUploadedIcon}
+            />
+          </span>
+        </div>
+      ) : (
+        <IconLibraryUpload onUpload={onUpload} />
+      )}
+    </div>
+  );
+}
+
+IconPickerPopover.propTypes = {
+  iconOptions: PropTypes.arrayOf(PropTypes.shape({
+    icon: PropTypes.elementType.isRequired,
+    label: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+  })),
+  onIconSelect: PropTypes.func,
+  onRemoveUploadedIcon: PropTypes.func,
+  onRepeatUploadedIcon: PropTypes.func,
+  onUpload: PropTypes.func,
+  selectedValue: PropTypes.string,
+  state: PropTypes.oneOf([...LIBRARY_STATES, 'Default', 'Dropdown + Upload Icon', 'Uploaded Icon']),
+  uploadedIcon: PropTypes.elementType,
 };
 
 export function IconLibrary({
@@ -237,13 +398,6 @@ export function IconLibrary({
   );
   const SelectedIcon = selectedOption?.icon ?? BellRinging;
   const displayLabel = selectedLabel ?? getCategoryLabel(resolvedCategoryValue);
-  const pickerOptions = normalizedState === 'uploaded-icon'
-    ? [
-      { value: 'bell', label: 'Notifications', icon: Bell },
-      { value: 'bell-ringing', label: 'Notifications ringing', icon: BellRinging },
-      { value: 'bell-simple', label: 'Simple notifications', icon: BellSimple },
-    ]
-    : iconOptions;
 
   const togglePanel = (panel) => {
     const nextPanel = activePanel === panel ? null : panel;
@@ -281,7 +435,7 @@ export function IconLibrary({
   return (
     <div
       className={buildClassName([
-        'storybook-icon-library',
+        'storybook-icon-library relative flex w-[216px] flex-col gap-3',
         className,
       ])}
     >
@@ -289,29 +443,28 @@ export function IconLibrary({
         as="label"
         variant="text-sm"
         weight="medium"
-        color="currentColor"
-        className="storybook-icon-library__label"
+        className="block text-neutral-600"
       >
         {label}
       </Text>
 
-      <div className="storybook-icon-library__field-row">
+      <div className="flex items-center gap-2">
         <button
           type="button"
-          className="storybook-icon-library__icon-preview"
+          className="storybook-icon-library__icon-preview box-border inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-2 border border-solid border-neutral-200 bg-neutral-0 p-0 text-neutral-700 transition-[background-color,box-shadow] duration-150 ease-out hover:bg-neutral-25 focus-visible:outline-none focus-visible:shadow-focus-brand"
           aria-label="Choose icon"
           aria-expanded={isPickerOpen}
           onClick={() => togglePanel('picker')}
         >
           <IconGlyph
-            className="storybook-icon-library__preview-icon"
+            className="shrink-0"
             icon={SelectedIcon}
             size={20}
           />
         </button>
         <button
           type="button"
-          className="storybook-icon-library__select"
+          className="storybook-icon-library__select box-border inline-flex h-11 min-w-0 flex-[1_0_0] cursor-pointer items-center justify-between gap-2 rounded-2 border border-solid border-neutral-200 bg-neutral-0 px-[14px] py-3 text-neutral-700 transition-[background-color,box-shadow] duration-150 ease-out hover:bg-neutral-25 focus-visible:outline-none focus-visible:shadow-focus-brand"
           aria-expanded={isDropdownOpen}
           onClick={() => togglePanel('dropdown')}
         >
@@ -319,14 +472,13 @@ export function IconLibrary({
             as="span"
             variant="text-sm"
             weight="medium"
-            color="currentColor"
-            className="storybook-icon-library__select-label"
+            className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
           >
             {displayLabel}
           </Text>
           <CaretUpDown
             aria-hidden="true"
-            className="storybook-icon-library__caret"
+            className="shrink-0 text-neutral-700"
             size={20}
             weight="regular"
           />
@@ -334,10 +486,10 @@ export function IconLibrary({
       </div>
 
       {isPickerOpen && (
-        <DropdownList
-          variant="icon-picker"
-          iconOptions={pickerOptions}
+        <IconPickerPopover
+          iconOptions={iconOptions}
           selectedValue={resolvedSelectedValue}
+          state={normalizedState}
           uploadedIcon={normalizedState === 'uploaded-icon' ? uploadedIcon ?? BellRinging : undefined}
           onIconSelect={handleIconSelect}
           onRemoveUploadedIcon={onRemoveUploadedIcon}
@@ -352,6 +504,8 @@ export function IconLibrary({
             items={iconLibraryDropdownOptions}
             selectedValues={[resolvedCategoryValue]}
             variant="text"
+            size="sm"
+            className="w-[164px]"
             onItemSelect={handleDropdownSelect}
           />
         </div>

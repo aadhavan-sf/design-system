@@ -22,6 +22,7 @@ export type SliderLabelPosition =
 type NormalizedSliderMode = 'single' | 'range';
 type NormalizedSliderStyle = 'classic' | 'dotted';
 type NormalizedLabelPosition = 'none' | 'bottom' | 'top' | 'floating-bottom' | 'floating-top';
+type LabelOffset = 'none' | 'top' | 'bottom';
 
 export interface SliderProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'style'> {
   min?: number;
@@ -44,7 +45,7 @@ export interface SliderProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onCha
 }
 
 function buildClassName(parts: Array<string | false | null | undefined>) {
-  return parts.filter(Boolean).join(' ');
+  return parts.flat().filter(Boolean).join(' ');
 }
 
 function normalizeValue<T extends string>(value: string | undefined, aliases: Record<string, T> = {}) {
@@ -67,7 +68,7 @@ function getPercent(value: number, min: number, max: number) {
   return ((value - min) / (max - min)) * 100;
 }
 
-function getLabelOffset(labelPosition: NormalizedLabelPosition) {
+function getLabelOffset(labelPosition: NormalizedLabelPosition): LabelOffset {
   if (labelPosition === 'top' || labelPosition === 'floating-top') {
     return 'top';
   }
@@ -79,7 +80,125 @@ function getLabelOffset(labelPosition: NormalizedLabelPosition) {
   return 'none';
 }
 
-function SliderValueLabel({ value, position }: { value: number; position: NormalizedLabelPosition }) {
+function getSliderLabelPaddingClasses(labelOffset: LabelOffset) {
+  if (labelOffset === 'top') {
+    return 'py-8 pt-10';
+  }
+
+  if (labelOffset === 'bottom') {
+    return 'py-8 pb-10';
+  }
+
+  return '';
+}
+
+function getSliderShellClassName({
+  disabled,
+  labelOffset,
+  normalizedStyle,
+  className,
+}: {
+  disabled: boolean;
+  labelOffset: LabelOffset;
+  normalizedStyle: NormalizedSliderStyle;
+  className?: string;
+}) {
+  return buildClassName([
+    'storybook-slider w-[320px] text-neutral-800',
+    getSliderLabelPaddingClasses(labelOffset),
+    normalizedStyle === 'dotted' && 'storybook-slider--dotted',
+    disabled && 'storybook-slider--disabled opacity-[0.55]',
+    className,
+  ]);
+}
+
+function getSliderRailClasses(disabled: boolean) {
+  return disabled ? 'bg-neutral-50' : 'bg-neutral-100';
+}
+
+function getSliderProgressClasses(disabled: boolean) {
+  return disabled ? 'bg-brand-100' : 'bg-brand-400';
+}
+
+function getSliderStepClasses(active: boolean) {
+  return active ? 'bg-neutral-0' : 'bg-neutral-400';
+}
+
+function getSliderThumbClasses(disabled: boolean, style: NormalizedSliderStyle) {
+  if (style === 'dotted') {
+    return disabled
+      ? 'border-0 bg-neutral-0 shadow-xs'
+      : 'border-0 bg-neutral-0 shadow-md';
+  }
+
+  return disabled
+    ? 'border-2 border-solid border-brand-100 bg-neutral-0 shadow-xs'
+    : 'border-2 border-solid border-brand-400 bg-neutral-0 shadow-md';
+}
+
+function getSliderRailClassName(disabled: boolean) {
+  return buildClassName([
+    'storybook-slider__rail rounded-6',
+    getSliderRailClasses(disabled),
+  ]);
+}
+
+function getSliderProgressClassName(disabled: boolean) {
+  return buildClassName([
+    'storybook-slider__progress z-[1] rounded-6',
+    getSliderProgressClasses(disabled),
+  ]);
+}
+
+function getSliderStepClassName(active: boolean) {
+  return buildClassName([
+    'storybook-slider__step size-1.5 rounded-full',
+    getSliderStepClasses(active),
+  ]);
+}
+
+function getSliderThumbClassName(disabled: boolean, style: NormalizedSliderStyle) {
+  return buildClassName([
+    'storybook-slider__thumb box-border rounded-full',
+    getSliderThumbClasses(disabled, style),
+  ]);
+}
+
+function getSliderInputClassName(variant?: 'start' | 'end') {
+  return buildClassName([
+    'storybook-slider__input absolute inset-0 m-0 h-full w-full cursor-pointer opacity-0',
+    variant === 'start' && 'storybook-slider__input--start z-[6]',
+    variant === 'end' && 'storybook-slider__input--end z-[7]',
+    !variant && 'z-[5]',
+    'disabled:cursor-not-allowed',
+  ]);
+}
+
+function getValueLabelClassName(labelOffset: LabelOffset) {
+  return buildClassName([
+    'storybook-slider__value-label',
+    labelOffset === 'top' && 'storybook-slider__value-label--top',
+    labelOffset === 'bottom' && 'storybook-slider__value-label--bottom',
+  ]);
+}
+
+function getFloatingLabelClassName(labelOffset: LabelOffset) {
+  return buildClassName([
+    'storybook-slider__floating-label',
+    labelOffset === 'top' && 'storybook-slider__floating-label--top',
+    labelOffset === 'bottom' && 'storybook-slider__floating-label--bottom',
+  ]);
+}
+
+function SliderValueLabel({
+  labelOffset,
+  value,
+  position,
+}: {
+  labelOffset: LabelOffset;
+  value: number;
+  position: NormalizedLabelPosition;
+}) {
   if (position === 'none') {
     return null;
   }
@@ -88,17 +207,24 @@ function SliderValueLabel({ value, position }: { value: number; position: Normal
 
   if (isFloating) {
     return (
-      <div className="storybook-slider__floating-label" aria-hidden="true">
+      <div
+        className={getFloatingLabelClassName(labelOffset)}
+        aria-hidden="true"
+      >
         <Text
           as="span"
           variant="text-sm"
           weight="medium"
-          color="currentColor"
-          className="storybook-slider__floating-label-text"
+          className="box-border inline-flex h-9 min-w-10 items-center justify-center whitespace-nowrap rounded-2 bg-neutral-0 px-3 py-2 text-neutral-800 shadow-md"
         >
           {value}
         </Text>
-        <span className="storybook-slider__floating-label-arrow" />
+        <span
+          className={buildClassName([
+            'storybook-slider__floating-label-arrow text-neutral-0',
+            labelOffset === 'bottom' && 'storybook-slider__floating-label-arrow--bottom',
+          ])}
+        />
       </div>
     );
   }
@@ -108,8 +234,10 @@ function SliderValueLabel({ value, position }: { value: number; position: Normal
       as="span"
       variant="text-md"
       weight="medium"
-      color="currentColor"
-      className="storybook-slider__value-label"
+      className={buildClassName([
+        'text-neutral-800',
+        getValueLabelClassName(labelOffset),
+      ])}
       aria-hidden="true"
     >
       {value}
@@ -206,38 +334,38 @@ export function Slider({
 
   return (
     <div
-      className={buildClassName([
-        'storybook-slider',
-        `storybook-slider--${normalizedStyle}`,
-        `storybook-slider--${normalizedMode}`,
-        `storybook-slider--labels-${labelOffset}`,
-        disabled && 'storybook-slider--disabled',
+      className={getSliderShellClassName({
+        disabled,
+        labelOffset,
+        normalizedStyle,
         className,
-      ])}
+      })}
       {...props}
     >
-      <div className="storybook-slider__control">
-        <div className="storybook-slider__rail" />
+      <div className="storybook-slider__control relative h-6 w-[320px] rounded-2">
+        <div className={getSliderRailClassName(disabled)} />
 
         {normalizedStyle === 'dotted' && (
-          <div className="storybook-slider__steps" aria-hidden="true">
-            {steps.map((stepPosition) => (
-              <span
-                key={stepPosition}
-                className={buildClassName([
-                  'storybook-slider__step',
-                  stepPosition >= progressStart
-                    && stepPosition <= progressEnd
-                    && 'storybook-slider__step--active',
-                ])}
-                style={{ left: `${stepPosition}%` }}
-              />
-            ))}
+          <div
+            className="storybook-slider__steps"
+            aria-hidden="true"
+          >
+            {steps.map((stepPosition) => {
+              const isActive = stepPosition >= progressStart && stepPosition <= progressEnd;
+
+              return (
+                <span
+                  key={stepPosition}
+                  className={getSliderStepClassName(isActive)}
+                  style={{ left: `${stepPosition}%` }}
+                />
+              );
+            })}
           </div>
         )}
 
         <div
-          className="storybook-slider__progress"
+          className={getSliderProgressClassName(disabled)}
           style={{
             left: `${progressStart}%`,
             width: `${progressEnd - progressStart}%`,
@@ -247,20 +375,28 @@ export function Slider({
         {isRange ? (
           <>
             <div
-              className="storybook-slider__thumb storybook-slider__thumb--start"
+              className={getSliderThumbClassName(disabled, normalizedStyle)}
               style={{ left: `${progressStart}%` }}
             >
-              <SliderValueLabel value={currentRange[0]} position={normalizedLabelPosition} />
+              <SliderValueLabel
+                labelOffset={labelOffset}
+                value={currentRange[0]}
+                position={normalizedLabelPosition}
+              />
             </div>
             <div
-              className="storybook-slider__thumb storybook-slider__thumb--end"
+              className={getSliderThumbClassName(disabled, normalizedStyle)}
               style={{ left: `${progressEnd}%` }}
             >
-              <SliderValueLabel value={currentRange[1]} position={normalizedLabelPosition} />
+              <SliderValueLabel
+                labelOffset={labelOffset}
+                value={currentRange[1]}
+                position={normalizedLabelPosition}
+              />
             </div>
             <input
               aria-label="Minimum value"
-              className="storybook-slider__input storybook-slider__input--start"
+              className={getSliderInputClassName('start')}
               disabled={disabled}
               max={max}
               min={min}
@@ -271,7 +407,7 @@ export function Slider({
             />
             <input
               aria-label="Maximum value"
-              className="storybook-slider__input storybook-slider__input--end"
+              className={getSliderInputClassName('end')}
               disabled={disabled}
               max={max}
               min={min}
@@ -284,14 +420,18 @@ export function Slider({
         ) : (
           <>
             <div
-              className="storybook-slider__thumb"
+              className={getSliderThumbClassName(disabled, normalizedStyle)}
               style={{ left: `${progressEnd}%` }}
             >
-              <SliderValueLabel value={currentValue} position={normalizedLabelPosition} />
+              <SliderValueLabel
+                labelOffset={labelOffset}
+                value={currentValue}
+                position={normalizedLabelPosition}
+              />
             </div>
             <input
               aria-label="Slider value"
-              className="storybook-slider__input"
+              className={getSliderInputClassName()}
               disabled={disabled}
               max={max}
               min={min}

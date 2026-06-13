@@ -1,6 +1,4 @@
 .storybook-toggle {
-  position: relative;
-
   display: inline-flex;
   align-items: center;
 
@@ -19,30 +17,10 @@
   cursor: not-allowed;
 }
 
-.storybook-toggle--sm {
-  width: 36px;
-  height: 20px;
-}
-
-.storybook-toggle--mid {
-  width: 44px;
-  height: 24px;
-}
-
 .storybook-toggle__thumb {
   display: block;
 
   transition: transform 160ms ease;
-}
-
-.storybook-toggle--sm .storybook-toggle__thumb {
-  width: 16px;
-  height: 16px;
-}
-
-.storybook-toggle--mid .storybook-toggle__thumb {
-  width: 20px;
-  height: 20px;
 }
 
 .storybook-toggle--sm.storybook-toggle--pressed
@@ -53,19 +31,4 @@
 .storybook-toggle--mid.storybook-toggle--pressed
 .storybook-toggle__thumb {
   transform: translateX(20px);
-}
-
-.toggle-story-row,
-.toggle-story-stack {
-  display: flex;
-  align-items: center;
-}
-
-.toggle-story-row {
-  @apply gap-12;
-}
-
-.toggle-story-stack {
-  flex-direction: column;
-  @apply gap-8;
 }

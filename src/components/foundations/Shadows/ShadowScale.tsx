@@ -15,16 +15,26 @@ interface ShadowCardProps {
 
 const SHADOW_STEPS = Object.keys(shadows) as ShadowKey[];
 
+const shadowClassNames: Record<ShadowKey, string> = {
+  xs: 'shadow-xs',
+  sm: 'shadow-sm',
+  md: 'shadow-md',
+  lg: 'shadow-lg',
+  xl: 'shadow-xl',
+  '2xl': 'shadow-2xl',
+  '3xl': 'shadow-3xl',
+};
+
 function ShadowCard({ name, value }: ShadowCardProps) {
   return (
-    <div className="ds-shadow-card">
-      <div className="ds-shadow-card__preview" style={{ boxShadow: shadows[name] }} />
-      <div className="ds-shadow-card__meta">
-        <Text as="span" variant="text-lg" weight="semibold" className="ds-shadow-card__name">
+    <div className="ds-shadow-card gap-4 rounded-8 border-ds-border bg-ds-surface p-4">
+      <div className={`ds-shadow-card__preview rounded-8 border-ds-border bg-neutral-0 ${shadowClassNames[name]}`} />
+      <div className="ds-shadow-card__meta gap-2">
+        <Text as="span" variant="text-lg" weight="semibold">
           {name}
         </Text>
-        <code>{`--shadow_${name}`}</code>
-        <Text as="span" variant="text-xs" weight="regular" color="var(--neutral_500)" className="ds-shadow-card__value">
+        <code>{shadowClassNames[name]}</code>
+        <Text as="span" variant="text-xs" weight="regular" className="text-ds-text-muted">
           {value}
         </Text>
       </div>
@@ -34,20 +44,20 @@ function ShadowCard({ name, value }: ShadowCardProps) {
 
 export function ShadowScale({ showValues = true }: ShadowScaleProps) {
   return (
-    <div className="ds-shadows">
-      <div className="ds-shadows__header">
+    <div className="ds-shadows gap-6 font-sans text-ds-text-strong">
+      <div className="ds-shadows__header gap-4">
         <div>
-          <Text as="span" variant="text-sm" weight="semibold" color="var(--brand_600)" className="ds-shadows__eyebrow">
+          <Text as="span" variant="text-sm" weight="semibold" className="text-brand-600">
             Shadow
           </Text>
-          <Text as="h2" variant="display-xs" weight="semibold" className="ds-shadows__title">
+          <Text as="h2" variant="display-xs" weight="semibold" className="mt-1">
             Elevation scale
           </Text>
         </div>
-        <code>var(--shadow_*)</code>
+        <code>shadow-*</code>
       </div>
 
-      <div className="ds-shadows__grid">
+      <div className="ds-shadows__grid gap-5">
         {SHADOW_STEPS.map((name) => (
           <ShadowCard
             key={name}

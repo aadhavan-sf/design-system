@@ -1,0 +1,16 @@
+.storybook-datepicker-field__panel {
+  animation: storybook-datepicker-field-popover-enter 150ms ease-out;
+  transform-origin: top center;
+}
+
+@keyframes storybook-datepicker-field-popover-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(calc(var(--spacing_1) * -1)) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

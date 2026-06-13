@@ -1,212 +1,86 @@
-.storybook-help-icon {
-  position: relative;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  @apply size-4 font-sans text-neutral-400;
-}
-
-.storybook-help-icon__trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  @apply size-4 border-0 bg-transparent p-0 text-current;
-}
-
-.storybook-help-icon__trigger:focus-visible {
-  @apply rounded-full outline-2 outline-offset-2 outline-brand-300;
-}
-
-.storybook-help-icon__trigger svg {
-  display: block;
-}
-
-.storybook-help-icon__popover {
-  position: absolute;
-  z-index: 20;
-
-  display: flex;
-  flex-direction: column;
-
-  pointer-events: none;
-}
-
-.storybook-help-icon__content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  @apply gap-1;
-
-  min-width: max-content;
-  max-width: 320px;
-  @apply px-3 py-2;
-
-  @apply rounded-ds bg-neutral-900 text-neutral-0 shadow-md;
-}
-
-.storybook-help-icon__popover--supporting .storybook-help-icon__content {
-  width: 296px;
-  min-width: 296px;
-  @apply p-3;
-}
-
-.storybook-help-icon__title,
-.storybook-help-icon__description {
-  display: block;
-  @apply text-ds-text-xs text-neutral-0;
-}
-
-.storybook-help-icon__title {
-  white-space: nowrap;
-  @apply font-medium;
-}
-
-.storybook-help-icon__popover--supporting .storybook-help-icon__title {
-  white-space: normal;
-  @apply font-semibold;
-}
-
-.storybook-help-icon__description {
-  @apply font-normal;
-}
-
 .storybook-help-icon__popover--top-no-arrow,
 .storybook-help-icon__popover--top-arrow {
   bottom: 20px;
   left: 50%;
-
   align-items: center;
-
   transform: translateX(-50%);
 }
 
 .storybook-help-icon__popover--top-left {
   right: -12px;
   bottom: 20px;
-
   align-items: flex-end;
 }
 
 .storybook-help-icon__popover--top-right {
   bottom: 20px;
   left: -12px;
-
   align-items: flex-start;
 }
 
 .storybook-help-icon__popover--bottom {
   top: 20px;
   left: 50%;
-
   align-items: center;
-
   transform: translateX(-50%);
 }
 
 .storybook-help-icon__popover--left {
   top: 50%;
   right: 20px;
-
   flex-direction: row;
   align-items: center;
-
   transform: translateY(-50%);
 }
 
 .storybook-help-icon__popover--right {
   top: 50%;
   left: 20px;
-
   flex-direction: row;
   align-items: center;
-
   transform: translateY(-50%);
 }
 
 .storybook-help-icon__popover--arrow::after {
   content: '';
-
   width: 0;
   height: 0;
-
   border-style: solid;
 }
 
 .storybook-help-icon__popover--top-arrow::after {
   border-width: 6px 8px 0;
-  border-color: transparent;
-  @apply border-t-neutral-900;
+  border-color: var(--neutral_900) transparent transparent;
 }
 
 .storybook-help-icon__popover--top-left::after,
 .storybook-help-icon__popover--top-right::after {
   border-width: 6px 8px 0;
-  border-color: transparent;
-  @apply border-t-neutral-900;
+  border-color: var(--neutral_900) transparent transparent;
 }
 
 .storybook-help-icon__popover--top-left::after {
-  @apply mr-6;
+  /* Align arrow tip to 16px trigger center: popover offset (12px) + half icon (8px) - half arrow (8px) */
+  margin-right: var(--spacing_3);
 }
 
 .storybook-help-icon__popover--top-right::after {
-  @apply ml-6;
+  margin-left: var(--spacing_3);
 }
 
 .storybook-help-icon__popover--bottom::after {
   order: -1;
-
   border-width: 0 8px 6px;
-  border-color: transparent;
-  @apply border-b-neutral-900;
+  border-color: transparent transparent var(--neutral_900);
 }
 
 .storybook-help-icon__popover--left::after {
   border-width: 8px 0 8px 6px;
-  border-color: transparent;
-  @apply border-l-neutral-900;
+  border-color: transparent transparent transparent var(--neutral_900);
 }
 
 .storybook-help-icon__popover--right::after {
   order: -1;
-
   border-width: 8px 6px 8px 0;
-  border-color: transparent;
-  @apply border-r-neutral-900;
-}
-
-.help-icon-story-grid,
-.help-icon-story-stack {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.help-icon-story-grid {
-  @apply gap-4;
-}
-
-.help-icon-story-stack {
-  flex-direction: column;
-  @apply gap-16;
-
-  min-width: 320px;
-  @apply p-16;
-}
-
-.help-icon-story-stack--wide {
-  @apply gap-24;
-  min-width: 460px;
-}
-
-.help-icon-story-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  min-width: 360px;
-  min-height: 72px;
+  border-color: transparent var(--neutral_900) transparent transparent;
 }

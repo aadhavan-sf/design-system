@@ -1,9 +1,10 @@
 // @ts-nocheck
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 
 import { Text } from '../../foundations/Typography';
+import { Button } from '../Button';
 
 import './datePicker.css';
 
@@ -97,9 +98,208 @@ function getDayWeight(state, today) {
   return state === 'selected' || today ? 'semibold' : 'regular';
 }
 
-function buildClassName(parts) {
-  return parts.filter(Boolean).join(' ');
+function getRangeDayPosition(dayLabel, monthIndex, year, rangeStart, rangeEnd) {
+  if (!rangeStart) {
+    return 'none';
+  }
+
+  const dayNumber = dateToNumber({ day: dayLabel, monthIndex, year });
+  const startNumber = dateToNumber(rangeStart);
+
+  if (!rangeEnd) {
+    return dayNumber === startNumber ? 'single' : 'none';
+  }
+
+  const endNumber = dateToNumber(rangeEnd);
+  const low = Math.min(startNumber, endNumber);
+  const high = Math.max(startNumber, endNumber);
+
+  if (dayNumber < low || dayNumber > high) {
+    return 'none';
+  }
+
+  if (low === high) {
+    return 'single';
+  }
+
+  if (dayNumber === low) {
+    return 'start';
+  }
+
+  if (dayNumber === high) {
+    return 'end';
+  }
+
+  return 'middle';
 }
+
+function getCalendarDayBorderRadiusClassName({
+  normalizedState,
+  rangePosition,
+  size,
+}: {
+  normalizedState: string;
+  rangePosition: string;
+  size: string;
+}) {
+  const isDaySize = size === 'day';
+
+  if (!isDaySize) {
+    return 'rounded-4';
+  }
+
+  if (normalizedState === 'on-range' || rangePosition === 'middle') {
+    return 'rounded-none';
+  }
+
+  if (normalizedState === 'selected') {
+    if (rangePosition === 'start') {
+      return 'rounded-l-4 rounded-r-none';
+    }
+
+    if (rangePosition === 'end') {
+      return 'rounded-r-4 rounded-l-none';
+    }
+
+    return 'rounded-4';
+  }
+
+  return 'rounded-4';
+}
+
+function getCalendarDayClassName({
+  isInteractive,
+  normalizedState,
+  rangePosition,
+  size,
+  today,
+}: {
+  isInteractive: boolean;
+  normalizedState: string;
+  rangePosition: string;
+  size: string;
+  today: boolean;
+}) {
+  const isDaySize = size === 'day';
+  const baseClasses = [
+    'storybook-datepicker-day',
+    'relative box-border inline-flex flex-col items-center justify-center border-0',
+    getCalendarDayBorderRadiusClassName({ normalizedState, rangePosition, size }),
+    isDaySize ? 'size-10 px-3 py-[10px]' : 'h-10 px-1.5',
+    !isDaySize && 'w-[70px]',
+    today && isInteractive && 'gap-2.5',
+    normalizedState === 'selected' && !isDaySize && 'px-2',
+  ];
+
+  if (!isInteractive) {
+    return buildClassName([
+      ...baseClasses,
+      'cursor-default bg-transparent',
+    ]);
+  }
+
+  return buildClassName([
+    ...baseClasses,
+    'transition-[background-color,box-shadow] duration-150 ease-out',
+    'focus-visible:outline-none',
+    normalizedState === 'disabled' && 'cursor-not-allowed bg-transparent',
+    normalizedState === 'selected' && 'cursor-pointer bg-brand-400 hover:bg-brand-700 focus-visible:shadow-focus-brand',
+    normalizedState === 'focus' && 'cursor-pointer bg-neutral-0 shadow-focus-brand',
+    normalizedState === 'hover' && 'cursor-pointer bg-neutral-50',
+    normalizedState === 'on-range' && 'cursor-pointer bg-brand-50',
+    normalizedState === 'enable' && 'cursor-pointer bg-transparent hover:bg-neutral-50 focus-visible:bg-neutral-0 focus-visible:shadow-focus-brand',
+  ]);
+}
+
+function getCalendarDayTextClassName({
+  normalizedState,
+  today,
+}: {
+  normalizedState: string;
+  today: boolean;
+}) {
+  if (normalizedState === 'selected') {
+    return 'text-neutral-0';
+  }
+
+  if (normalizedState === 'disabled') {
+    return 'text-neutral-300';
+  }
+
+  if (normalizedState === 'on-range') {
+    return 'text-neutral-900';
+  }
+
+  if (today && ['enable', 'hover', 'focus'].includes(normalizedState)) {
+    return 'text-neutral-900';
+  }
+
+  return 'text-neutral-800';
+}
+
+function getListItemClassName({
+  normalizedState,
+  selected,
+}: {
+  normalizedState: string;
+  selected: boolean;
+}) {
+  return buildClassName([
+    'storybook-datepicker-list-item',
+    'box-border inline-flex w-full items-center rounded-8 border-0',
+    'px-3 py-[10px] cursor-pointer',
+    'transition-[background-color] duration-150 ease-out',
+    'focus-visible:outline-none focus-visible:shadow-focus-brand',
+    selected ? 'bg-brand-400 hover:bg-brand-700' : 'bg-neutral-0 hover:bg-brand-50',
+    !selected && normalizedState === 'hover' && 'bg-brand-50',
+  ]);
+}
+
+function getListItemTextClassName(selected: boolean) {
+  return selected ? 'text-neutral-0' : 'text-neutral-800';
+}
+
+function buildClassName(parts) {
+  return parts.flat().filter(Boolean).join(' ');
+}
+
+function getDatePickerShellClassName({
+  isWide,
+  withPresets,
+  className,
+}) {
+  return buildClassName([
+    'storybook-datepicker flex w-fit items-start overflow-hidden rounded-8 border border-solid border-neutral-200 bg-neutral-0 shadow-md',
+    isWide && 'min-w-[592px]',
+    withPresets && 'min-w-[744px]',
+    className,
+  ]);
+}
+
+function getDatePickerPanelClassName(fixed = false) {
+  return buildClassName([
+    'flex flex-col items-start p-2',
+    fixed && 'box-border h-[304px] w-[296px]',
+  ]);
+}
+
+function getDatePickerNavButtonClassName() {
+  return buildClassName([
+    'storybook-datepicker__nav-button inline-flex h-9 items-center justify-center rounded-4 border-0 bg-transparent p-2.5 text-neutral-900',
+    'hover:bg-neutral-50 focus-visible:outline-none focus-visible:shadow-focus-brand',
+  ]);
+}
+
+function getDatePickerTitleButtonClassName() {
+  return buildClassName([
+    'storybook-datepicker__title-button inline-flex h-9 items-center justify-center rounded-1.5 border-0 bg-transparent px-[14px] py-2.5 text-neutral-900',
+    'focus-visible:outline-none focus-visible:shadow-focus-brand',
+  ]);
+}
+
+const DATE_PICKER_DAY_GRID_CLASS_NAME = 'grid w-[280px] grid-cols-[repeat(7,40px)]';
+const DATE_PICKER_DAY_ROWS_CLASS_NAME = 'grid-auto-rows-[40px]';
+const DATE_PICKER_PERIOD_GRID_CLASS_NAME = 'grid w-[280px] flex-1 grid-cols-[repeat(4,70px)] place-content-center';
 
 function getMonthIndex(month) {
   const normalizedMonth = String(month).slice(0, 3).toLowerCase();
@@ -181,11 +381,80 @@ function getDateRangeDays(startDate, endDate, monthIndex, year) {
     .map((day) => day.label);
 }
 
+function getRangeSelectedDaysForMonth(startDate, endDate, monthIndex, year) {
+  return [startDate, endDate]
+    .filter(Boolean)
+    .filter((date) => isSameMonthYear(date, { monthIndex, year }))
+    .map((date) => date.day);
+}
+
+function getAdjacentMonth(monthIndex, year) {
+  if (monthIndex === 11) {
+    return { monthIndex: 0, year: year + 1 };
+  }
+
+  return { monthIndex: monthIndex + 1, year };
+}
+
+function toPickerDate(date) {
+  return {
+    day: String(date.getDate()),
+    monthIndex: date.getMonth(),
+    year: date.getFullYear(),
+  };
+}
+
+function getPresetRange(preset) {
+  const now = new Date();
+
+  if (preset === 'Yesterday') {
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    const date = toPickerDate(yesterday);
+
+    return [date, date];
+  }
+
+  if (preset === 'This week') {
+    const start = new Date(now);
+    start.setDate(now.getDate() - now.getDay());
+
+    return [toPickerDate(start), toPickerDate(now)];
+  }
+
+  if (preset === 'Last week') {
+    const end = new Date(now);
+    end.setDate(now.getDate() - now.getDay() - 1);
+    const start = new Date(end);
+    start.setDate(end.getDate() - 6);
+
+    return [toPickerDate(start), toPickerDate(end)];
+  }
+
+  if (preset === 'This month') {
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    return [toPickerDate(start), toPickerDate(now)];
+  }
+
+  if (preset === 'Last month') {
+    const start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const end = new Date(now.getFullYear(), now.getMonth(), 0);
+
+    return [toPickerDate(start), toPickerDate(end)];
+  }
+
+  const today = toPickerDate(now);
+
+  return [today, today];
+}
+
 export function DatePickerCalendarDay({
   label = '12',
   state = 'enable',
   today = false,
   size = 'day',
+  rangePosition = 'none',
   as: Component = 'button',
   className,
   ...props
@@ -199,10 +468,13 @@ export function DatePickerCalendarDay({
       type={isInteractive ? 'button' : undefined}
       disabled={isInteractive && isDisabled ? true : undefined}
       className={buildClassName([
-        'storybook-datepicker-day',
-        `storybook-datepicker-day--${size}`,
-        `storybook-datepicker-day--${normalizedState}`,
-        today && 'storybook-datepicker-day--today',
+        getCalendarDayClassName({
+          isInteractive,
+          normalizedState,
+          rangePosition,
+          size,
+          today,
+        }),
         className,
       ])}
       {...props}
@@ -211,13 +483,15 @@ export function DatePickerCalendarDay({
         as="span"
         variant="text-sm"
         weight={getDayWeight(normalizedState, today)}
-        color="currentColor"
-        className="storybook-datepicker-day__label"
+        className={buildClassName([
+          'storybook-datepicker-day__label w-full whitespace-nowrap text-center font-sans text-ds-text-sm',
+          getCalendarDayTextClassName({ normalizedState, today }),
+        ])}
       >
         {label}
       </Text>
       {today && normalizedState !== 'selected' && (
-        <span className="storybook-datepicker-day__today-dot" />
+        <span className="storybook-datepicker-day__today-dot absolute left-1/2 top-[30px] size-1 -translate-x-1/2 rounded-full bg-brand-400" />
       )}
     </Component>
   );
@@ -236,6 +510,7 @@ DatePickerCalendarDay.propTypes = {
   ]),
   today: PropTypes.bool,
   size: PropTypes.oneOf(['day', 'month', 'year']),
+  rangePosition: PropTypes.oneOf(['none', 'single', 'start', 'end', 'middle']),
   as: PropTypes.elementType,
   className: PropTypes.string,
   onClick: PropTypes.func,
@@ -254,9 +529,7 @@ export function DatePickerListItem({
     <button
       type="button"
       className={buildClassName([
-        'storybook-datepicker-list-item',
-        selected && 'storybook-datepicker-list-item--selected',
-        normalizedState === 'hover' && 'storybook-datepicker-list-item--hover',
+        getListItemClassName({ normalizedState, selected }),
         className,
       ])}
       {...props}
@@ -265,7 +538,10 @@ export function DatePickerListItem({
         as="span"
         variant="text-sm"
         weight={selected ? 'semibold' : 'medium'}
-        color="currentColor"
+        className={buildClassName([
+          'font-sans text-ds-text-sm',
+          getListItemTextClassName(selected),
+        ])}
       >
         {label}
       </Text>
@@ -281,21 +557,29 @@ DatePickerListItem.propTypes = {
   onClick: PropTypes.func,
 };
 
+function getInitialView(normalizedType) {
+  if (normalizedType === 'month') {
+    return 'month';
+  }
+
+  if (normalizedType === 'year') {
+    return 'year';
+  }
+
+  return 'day';
+}
+
 function DatePickerHeader({
   label,
-  previousActive = false,
   onPrevious,
   onNext,
   onTitleClick,
 }) {
   return (
-    <div className="storybook-datepicker__header">
+    <div className="flex w-full items-center justify-between">
       <button
         type="button"
-        className={buildClassName([
-          'storybook-datepicker__nav-button',
-          previousActive && 'storybook-datepicker__nav-button--active',
-        ])}
+        className={getDatePickerNavButtonClassName()}
         aria-label="Previous"
         onClick={onPrevious}
       >
@@ -304,14 +588,14 @@ function DatePickerHeader({
 
       <button
         type="button"
-        className="storybook-datepicker__title-button"
+        className={getDatePickerTitleButtonClassName()}
         onClick={onTitleClick}
       >
         <Text
           as="span"
           variant="text-sm"
           weight="semibold"
-          color="currentColor"
+          className="text-neutral-900"
         >
           {label}
         </Text>
@@ -319,7 +603,7 @@ function DatePickerHeader({
 
       <button
         type="button"
-        className="storybook-datepicker__nav-button"
+        className={getDatePickerNavButtonClassName()}
         aria-label="Next"
         onClick={onNext}
       >
@@ -331,7 +615,6 @@ function DatePickerHeader({
 
 DatePickerHeader.propTypes = {
   label: PropTypes.string.isRequired,
-  previousActive: PropTypes.bool,
   onPrevious: PropTypes.func,
   onNext: PropTypes.func,
   onTitleClick: PropTypes.func,
@@ -345,27 +628,28 @@ function CalendarMonth({
   selectedDays = ['8'],
   today = '',
   rangeDays = [],
-  previousActive = false,
+  rangeStart = null,
+  rangeEnd = null,
   onPrevious,
   onNext,
   onTitleClick,
   onDaySelect,
+  className,
 }) {
   const resolvedDays = days ?? buildCalendarDays(monthIndex, year);
   const selectedDaySet = new Set(selectedDays);
   const rangeDaySet = new Set(rangeDays);
 
   return (
-    <div className="storybook-datepicker__calendar">
+    <div className={buildClassName(['flex flex-col gap-1', className])}>
       <DatePickerHeader
         label={monthLabel ?? getMonthYearLabel(monthIndex, year)}
-        previousActive={previousActive}
         onPrevious={onPrevious}
         onNext={onNext}
         onTitleClick={onTitleClick}
       />
 
-      <div className="storybook-datepicker__weekdays">
+      <div className={DATE_PICKER_DAY_GRID_CLASS_NAME}>
         {weekDays.map((day, index) => (
           <DatePickerCalendarDay
             key={`${day}-${index}`}
@@ -375,7 +659,10 @@ function CalendarMonth({
         ))}
       </div>
 
-      <div className="storybook-datepicker__day-grid">
+      <div className={buildClassName([
+        DATE_PICKER_DAY_GRID_CLASS_NAME,
+        DATE_PICKER_DAY_ROWS_CLASS_NAME,
+      ])}>
         {resolvedDays.map((day, index) => {
           const isDisabled = day.state === 'disabled';
           const isSelected = !isDisabled && selectedDaySet.has(day.label);
@@ -385,16 +672,20 @@ function CalendarMonth({
             : isOnRange
               ? 'on-range'
               : day.state ?? 'enable';
+          const rangePosition = isDisabled
+            ? 'none'
+            : getRangeDayPosition(day.label, monthIndex, year, rangeStart, rangeEnd);
 
           return (
             <DatePickerCalendarDay
               key={`${day.label}-${index}`}
               label={day.label}
               state={state}
+              rangePosition={rangePosition}
               today={!isDisabled && day.label === today}
               onClick={() => {
                 if (!isDisabled) {
-                  onDaySelect?.(day.label);
+                  onDaySelect?.(day.label, monthIndex, year);
                 }
               }}
             />
@@ -416,11 +707,21 @@ CalendarMonth.propTypes = {
   selectedDays: PropTypes.arrayOf(PropTypes.string),
   today: PropTypes.string,
   rangeDays: PropTypes.arrayOf(PropTypes.string),
-  previousActive: PropTypes.bool,
+  rangeStart: PropTypes.shape({
+    day: PropTypes.string,
+    monthIndex: PropTypes.number,
+    year: PropTypes.number,
+  }),
+  rangeEnd: PropTypes.shape({
+    day: PropTypes.string,
+    monthIndex: PropTypes.number,
+    year: PropTypes.number,
+  }),
   onPrevious: PropTypes.func,
   onNext: PropTypes.func,
   onTitleClick: PropTypes.func,
   onDaySelect: PropTypes.func,
+  className: PropTypes.string,
 };
 
 function CalendarYearGrid({
@@ -431,7 +732,7 @@ function CalendarYearGrid({
   onSelect,
 }) {
   return (
-    <div className={`storybook-datepicker__${size}-grid`}>
+    <div className={DATE_PICKER_PERIOD_GRID_CLASS_NAME}>
       {items.map((item) => (
         <DatePickerCalendarDay
           key={item}
@@ -476,11 +777,7 @@ export function DatePicker({
     ? Number(selectedYear) || todayDate.year
     : todayDate.year;
   const initialDay = selectedDay ?? todayDate.day;
-  const [view, setView] = useState(
-    normalizedType === 'month'
-      ? 'month'
-      : normalizedType === 'year' ? 'year' : 'day'
-  );
+  const [view, setView] = useState(() => getInitialView(normalizedType));
   const [visibleMonthIndex, setVisibleMonthIndex] = useState(initialMonthIndex);
   const [visibleYear, setVisibleYear] = useState(initialYear);
   const [yearRangeStart, setYearRangeStart] = useState(
@@ -493,15 +790,30 @@ export function DatePicker({
   });
   const [internalSelectedMonth, setInternalSelectedMonth] = useState(monthNames[initialMonthIndex]);
   const [internalSelectedYear, setInternalSelectedYear] = useState(String(initialYear));
-  const [internalRange, setInternalRange] = useState([
-    { day: rangeStart ?? initialDay, monthIndex: initialMonthIndex, year: initialYear },
-    rangeEnd === undefined
-      ? null
-      : { day: rangeEnd, monthIndex: initialMonthIndex, year: initialYear },
-  ]);
-  const [internalPreset, setInternalPreset] = useState(selectedPreset);
+  const [internalPreset, setInternalPreset] = useState(
+    normalizedType === 'with-presets' ? selectedPreset : null
+  );
+  const [internalRange, setInternalRange] = useState(() => {
+    if (normalizedType === 'with-presets') {
+      const [start, end] = getPresetRange(selectedPreset);
+
+      return [start, end];
+    }
+
+    return [
+      { day: rangeStart ?? initialDay, monthIndex: initialMonthIndex, year: initialYear },
+      rangeEnd === undefined
+        ? null
+        : { day: rangeEnd, monthIndex: initialMonthIndex, year: initialYear },
+    ];
+  });
   const isWide =
     normalizedType === 'with-presets' || normalizedType === 'dual-dates';
+
+  useEffect(() => {
+    setView(getInitialView(normalizedType));
+  }, [normalizedType]);
+
   const emitSelect = (value, meta) => {
     onSelect?.(value, meta);
   };
@@ -511,9 +823,10 @@ export function DatePicker({
     setSelectedDate(nextDate);
     emitSelect(nextDate, { type: 'day' });
   };
-  const handleRangeDaySelect = (day) => {
-    const nextDate = { day, monthIndex: visibleMonthIndex, year: visibleYear };
+  const handleRangeDaySelect = (day, monthIndex, year) => {
+    const nextDate = { day, monthIndex, year };
 
+    setInternalPreset(null);
     setInternalRange(([start, end]) => {
       if (!start || (start && end)) {
         return [nextDate, null];
@@ -542,7 +855,12 @@ export function DatePicker({
     setView('month');
   };
   const handlePresetSelect = (preset) => {
+    const [start, end] = getPresetRange(preset);
+
     setInternalPreset(preset);
+    setInternalRange([start, end]);
+    setVisibleMonthIndex(start.monthIndex);
+    setVisibleYear(start.year);
     emitSelect(preset, { type: 'preset' });
   };
   const selectedDaysForVisibleMonth = isSameMonthYear(selectedDate, {
@@ -551,19 +869,11 @@ export function DatePicker({
   }) ? [selectedDate.day] : [];
   const rangeStartValue = internalRange[0];
   const rangeEndValue = internalRange[1];
-  const rangeSelectedDays = internalRange
-    .filter(Boolean)
-    .filter((date) => isSameMonthYear(date, {
-      monthIndex: visibleMonthIndex,
-      year: visibleYear,
-    }))
-    .map((date) => date.day);
-  const rangeDaysForVisibleMonth = getDateRangeDays(
-    rangeStartValue,
-    rangeEndValue,
-    visibleMonthIndex,
-    visibleYear
-  );
+  const nextVisibleMonth = getAdjacentMonth(visibleMonthIndex, visibleYear);
+  const getRangeDaysForMonth = (monthIndex, year) =>
+    getRangeSelectedDaysForMonth(rangeStartValue, rangeEndValue, monthIndex, year);
+  const getRangeMiddleDaysForMonth = (monthIndex, year) =>
+    getDateRangeDays(rangeStartValue, rangeEndValue, monthIndex, year);
   const goToPreviousMonth = () => {
     setVisibleMonthIndex((currentMonth) => {
       if (currentMonth > 0) {
@@ -589,10 +899,9 @@ export function DatePicker({
   const goToPreviousYearRange = () => setYearRangeStart((currentYear) => currentYear - 12);
   const goToNextYearRange = () => setYearRangeStart((currentYear) => currentYear + 12);
   const renderMonthPanel = () => (
-    <div className="storybook-datepicker__panel storybook-datepicker__panel--fixed">
+    <div className={getDatePickerPanelClassName(true)}>
       <DatePickerHeader
         label={String(visibleYear)}
-        previousActive
         onPrevious={goToPreviousYear}
         onNext={goToNextYear}
         onTitleClick={() => setView('year')}
@@ -612,7 +921,7 @@ export function DatePicker({
     );
 
     return (
-      <div className="storybook-datepicker__panel storybook-datepicker__panel--fixed">
+      <div className={getDatePickerPanelClassName(true)}>
         <DatePickerHeader
           label={getVisibleYearRange(yearRangeStart)}
           onPrevious={goToPreviousYearRange}
@@ -640,12 +949,14 @@ export function DatePicker({
 
     if (normalizedType === 'date-range') {
       return (
-        <div className="storybook-datepicker__panel">
+        <div className={getDatePickerPanelClassName()}>
           <CalendarMonth
             monthIndex={visibleMonthIndex}
             year={visibleYear}
-            selectedDays={rangeSelectedDays}
-            rangeDays={rangeDaysForVisibleMonth}
+            selectedDays={getRangeDaysForMonth(visibleMonthIndex, visibleYear)}
+            rangeDays={getRangeMiddleDaysForMonth(visibleMonthIndex, visibleYear)}
+            rangeStart={rangeStartValue}
+            rangeEnd={rangeEndValue}
             today={getTodayForMonth(todayDate, visibleMonthIndex, visibleYear)}
             onPrevious={goToPreviousMonth}
             onNext={goToNextMonth}
@@ -659,24 +970,26 @@ export function DatePicker({
     if (normalizedType === 'with-presets') {
       return (
         <>
-          <div className="storybook-datepicker__presets">
+          <div className="box-border flex w-40 flex-col gap-1 self-stretch border-r border-solid border-neutral-200 p-2">
             {presetItems.map((item) => (
               <DatePickerListItem
                 key={item}
                 label={item}
                 selected={item === internalPreset}
-                state={item === 'Last week' ? 'hover' : 'default'}
                 onClick={() => handlePresetSelect(item)}
               />
             ))}
           </div>
-          <div className="storybook-datepicker__wide-content">
-            <div className="storybook-datepicker__dual-calendars">
+          <div className="flex flex-col">
+            <div className="flex items-start">
               <CalendarMonth
+                className="p-2"
                 monthIndex={visibleMonthIndex}
                 year={visibleYear}
-                selectedDays={rangeSelectedDays}
-                rangeDays={rangeDaysForVisibleMonth}
+                selectedDays={getRangeDaysForMonth(visibleMonthIndex, visibleYear)}
+                rangeDays={getRangeMiddleDaysForMonth(visibleMonthIndex, visibleYear)}
+                rangeStart={rangeStartValue}
+                rangeEnd={rangeEndValue}
                 today={getTodayForMonth(todayDate, visibleMonthIndex, visibleYear)}
                 onPrevious={goToPreviousMonth}
                 onNext={goToNextMonth}
@@ -684,47 +997,34 @@ export function DatePicker({
                 onDaySelect={handleRangeDaySelect}
               />
               <CalendarMonth
-                monthIndex={(visibleMonthIndex + 1) % 12}
-                year={visibleMonthIndex === 11 ? visibleYear + 1 : visibleYear}
-                selectedDays={[]}
-                rangeDays={[]}
+                className="border-l border-solid border-neutral-200 p-2"
+                monthIndex={nextVisibleMonth.monthIndex}
+                year={nextVisibleMonth.year}
+                selectedDays={getRangeDaysForMonth(nextVisibleMonth.monthIndex, nextVisibleMonth.year)}
+                rangeDays={getRangeMiddleDaysForMonth(nextVisibleMonth.monthIndex, nextVisibleMonth.year)}
+                rangeStart={rangeStartValue}
+                rangeEnd={rangeEndValue}
                 today={getTodayForMonth(
                   todayDate,
-                  (visibleMonthIndex + 1) % 12,
-                  visibleMonthIndex === 11 ? visibleYear + 1 : visibleYear
+                  nextVisibleMonth.monthIndex,
+                  nextVisibleMonth.year
                 )}
                 onDaySelect={handleRangeDaySelect}
               />
             </div>
-            <div className="storybook-datepicker__bottom-panel">
-              <button
-                type="button"
-                className="storybook-datepicker__action storybook-datepicker__action--secondary"
+            <div className="box-border flex w-[592px] items-start justify-end gap-3 rounded-br-2 border-t border-solid border-neutral-200 p-3">
+              <Button
+                hierarchy="secondary"
+                label="Cancel"
+                size="small"
                 onClick={onCancel}
-              >
-                <Text
-                  as="span"
-                  variant="text-sm"
-                  weight="semibold"
-                  color="currentColor"
-                >
-                  Cancel
-                </Text>
-              </button>
-              <button
-                type="button"
-                className="storybook-datepicker__action storybook-datepicker__action--primary"
+              />
+              <Button
+                hierarchy="primary"
+                label="Apply"
+                size="small"
                 onClick={onApply}
-              >
-                <Text
-                  as="span"
-                  variant="text-sm"
-                  weight="semibold"
-                  color="currentColor"
-                >
-                  Apply
-                </Text>
-              </button>
+              />
             </div>
           </div>
         </>
@@ -733,12 +1033,15 @@ export function DatePicker({
 
     if (normalizedType === 'dual-dates') {
       return (
-        <div className="storybook-datepicker__dual-calendars">
+        <div className="flex items-start">
           <CalendarMonth
+            className="p-2"
             monthIndex={visibleMonthIndex}
             year={visibleYear}
-            selectedDays={rangeSelectedDays}
-            rangeDays={rangeDaysForVisibleMonth}
+            selectedDays={getRangeDaysForMonth(visibleMonthIndex, visibleYear)}
+            rangeDays={getRangeMiddleDaysForMonth(visibleMonthIndex, visibleYear)}
+            rangeStart={rangeStartValue}
+            rangeEnd={rangeEndValue}
             today={getTodayForMonth(todayDate, visibleMonthIndex, visibleYear)}
             onPrevious={goToPreviousMonth}
             onNext={goToNextMonth}
@@ -746,14 +1049,17 @@ export function DatePicker({
             onDaySelect={handleRangeDaySelect}
           />
           <CalendarMonth
-            monthIndex={(visibleMonthIndex + 1) % 12}
-            year={visibleMonthIndex === 11 ? visibleYear + 1 : visibleYear}
-            selectedDays={[]}
-            rangeDays={[]}
+            className="border-l border-solid border-neutral-200 p-2"
+            monthIndex={nextVisibleMonth.monthIndex}
+            year={nextVisibleMonth.year}
+            selectedDays={getRangeDaysForMonth(nextVisibleMonth.monthIndex, nextVisibleMonth.year)}
+            rangeDays={getRangeMiddleDaysForMonth(nextVisibleMonth.monthIndex, nextVisibleMonth.year)}
+            rangeStart={rangeStartValue}
+            rangeEnd={rangeEndValue}
             today={getTodayForMonth(
               todayDate,
-              (visibleMonthIndex + 1) % 12,
-              visibleMonthIndex === 11 ? visibleYear + 1 : visibleYear
+              nextVisibleMonth.monthIndex,
+              nextVisibleMonth.year
             )}
             onDaySelect={handleRangeDaySelect}
           />
@@ -762,7 +1068,7 @@ export function DatePicker({
     }
 
     return (
-      <div className="storybook-datepicker__panel">
+      <div className={getDatePickerPanelClassName()}>
         <CalendarMonth
           monthIndex={visibleMonthIndex}
           year={visibleYear}
@@ -779,12 +1085,11 @@ export function DatePicker({
 
   return (
     <div
-      className={buildClassName([
-        'storybook-datepicker',
-        isWide && 'storybook-datepicker--wide',
-        normalizedType === 'with-presets' && 'storybook-datepicker--with-presets',
+      className={getDatePickerShellClassName({
+        isWide,
+        withPresets: normalizedType === 'with-presets',
         className,
-      ])}
+      })}
     >
       {renderMainContent()}
     </div>
