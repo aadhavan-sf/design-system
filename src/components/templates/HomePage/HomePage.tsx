@@ -80,6 +80,91 @@ function buildClassName(parts: Array<string | false | null | undefined>) {
   return parts.flat().filter(Boolean).join(' ');
 }
 
+function getHomePageShellClassName() {
+  return 'storybook-home-page box-border h-dvh min-w-[1280px] w-full overflow-hidden bg-neutral-25 font-sans text-neutral-900';
+}
+
+function getHomePageSidebarClassName() {
+  return 'storybook-home-page__sidebar h-full min-w-0 w-full';
+}
+
+function getHomePageLeftPanelClassName() {
+  return 'storybook-home-page__left-panel box-border min-w-0 bg-transparent';
+}
+
+function getHomePageLeftPanelSurfaceClassName() {
+  return buildClassName([
+    'storybook-home-page__left-panel-surface h-full w-full rounded-6',
+    'px-[var(--home-template-panel-padding)]',
+  ]);
+}
+
+function getHomePageCanvasClassName() {
+  return 'storybook-home-page__canvas box-border flex flex-col items-center gap-8 bg-transparent px-4';
+}
+
+function getHomePagePreviewLaneClassName() {
+  return 'storybook-home-page__preview-lane grid flex-1 gap-8';
+}
+
+function getHomePageCollectionSelectClassName() {
+  return 'storybook-home-page__collection-select mx-auto w-[var(--home-template-collection-width)]';
+}
+
+function getHomePagePreviewStackClassName() {
+  return 'storybook-home-page__preview-stack flex h-full w-max max-w-full flex-col items-center justify-center gap-4';
+}
+
+function getHomePagePhoneClassName() {
+  return buildClassName([
+    'storybook-home-page-phone block h-auto w-[var(--home-template-preview-phone-width)] max-h-[var(--home-template-preview-phone-max-height)] object-contain',
+    'drop-shadow-[0_32px_52px_rgba(10,13,18,0.14)]',
+  ]);
+}
+
+function getHomePageRightPanelShellClassName() {
+  return 'storybook-home-page__right-panel box-border min-w-0 bg-transparent';
+}
+
+function getHomePageRightPanelClassName() {
+  return buildClassName([
+    'storybook-home-page-right-panel',
+    'box-border flex h-full min-h-0 w-full flex-col gap-6 overflow-y-auto rounded-6 border border-solid border-neutral-100 bg-neutral-0 py-6 text-neutral-900',
+    'px-[var(--home-template-panel-padding)]',
+  ]);
+}
+
+function getHomePageVisibilityOptionClassName() {
+  return buildClassName([
+    'storybook-home-page-visibility-option',
+    'flex min-h-5 w-full cursor-pointer items-center gap-2 rounded-1 border-0 bg-transparent p-0 text-neutral-700',
+    'focus-visible:outline-none focus-visible:shadow-focus-brand',
+  ]);
+}
+
+function getHomePageFilterCardClassName() {
+  return buildClassName([
+    'storybook-home-page-filter-card',
+    'grid grid-cols-[20px_1fr] gap-2 rounded-16 bg-neutral-25 p-4',
+  ]);
+}
+
+function getHomePageFilterCardSetupClassName() {
+  return buildClassName([
+    'storybook-home-page-filter-card__setup',
+    'inline-flex w-max max-w-full cursor-pointer items-center justify-start gap-2 border-0 bg-transparent p-0 text-brand-400',
+    'focus-visible:outline-none focus-visible:shadow-focus-brand',
+  ]);
+}
+
+function getHomePageCustomBlocksLinkClassName() {
+  return buildClassName([
+    'storybook-home-page-custom-blocks-link',
+    'inline-flex w-max max-w-full cursor-pointer items-center justify-start gap-1 border-0 bg-transparent p-0 text-brand-400',
+    'focus-visible:outline-none focus-visible:shadow-focus-brand',
+  ]);
+}
+
 function formatLastSavedAt(date = new Date()) {
   const parts = new Intl.DateTimeFormat('en-IN', {
     timeZone: 'Asia/Kolkata',
@@ -111,7 +196,7 @@ function formatLastSavedAt(date = new Date()) {
 function PhonePreview() {
   return (
     <img
-      className="storybook-home-page-phone block h-auto object-contain drop-shadow-[0_32px_52px_rgba(10,13,18,0.14)]"
+      className={getHomePagePhoneClassName()}
       src={mobilePreviewImage}
       alt="Mobile storefront preview"
     />
@@ -136,11 +221,7 @@ function VisibilityOption({
 
   return (
     <div
-      className={buildClassName([
-        'storybook-home-page-visibility-option',
-        'flex min-h-5 w-full cursor-pointer items-center gap-2 rounded-1 border-0 bg-transparent p-0 text-neutral-700',
-        'focus-visible:outline-none focus-visible:shadow-focus-brand',
-      ])}
+      className={getHomePageVisibilityOptionClassName()}
       role="radio"
       aria-checked={checked}
       tabIndex={0}
@@ -165,7 +246,7 @@ function VisibilityOption({
       {isImageIcon ? (
         <img
           aria-hidden="true"
-          className="storybook-home-page-visibility-option__icon storybook-home-page-visibility-option__icon--image block size-4 shrink-0"
+          className="block size-4 shrink-0"
           src={icon}
           alt=""
         />
@@ -185,15 +266,10 @@ function ConditionalFilterCard({
   isConditional,
 }: ConditionalFilterCardProps) {
   return (
-    <article
-      className={buildClassName([
-        'storybook-home-page-filter-card',
-        'grid gap-2 rounded-16 bg-neutral-25 p-4',
-      ])}
-    >
+    <article className={getHomePageFilterCardClassName()}>
       <img
         aria-hidden="true"
-        className="storybook-home-page-filter-card__icon size-5"
+        className="size-5 shrink-0"
         src={eyeConditionIcon}
         alt=""
       />
@@ -208,22 +284,22 @@ function ConditionalFilterCard({
             Conditional Filter
           </Text>
           {isConditional ? (
-            <ul className="storybook-home-page-filter-card__conditions m-0 list-none p-0">
-              <li className="storybook-home-page-filter-card__condition">
+            <ul className="m-0 flex list-none flex-col gap-1 p-0">
+              <li className="m-0 flex min-h-[var(--type-text-sm-line)] items-center gap-1">
                 <span
                   aria-hidden="true"
-                  className="storybook-home-page-filter-card__condition-marker"
+                  className="size-1 shrink-0 rounded-full bg-neutral-600"
                 />
-                <Text as="span" variant="text-xs" weight="medium" className="text-neutral-600">
+                <Text as="span" variant="text-sm" weight="medium" className="text-neutral-600">
                   Customers (x3)
                 </Text>
               </li>
-              <li className="storybook-home-page-filter-card__condition">
+              <li className="m-0 flex min-h-[var(--type-text-sm-line)] items-center gap-1">
                 <span
                   aria-hidden="true"
-                  className="storybook-home-page-filter-card__condition-marker"
+                  className="size-1 shrink-0 rounded-full bg-neutral-600"
                 />
-                <Text as="span" variant="text-xs" weight="medium" className="text-neutral-600">
+                <Text as="span" variant="text-sm" weight="medium" className="text-neutral-600">
                   Time (x1)
                 </Text>
               </li>
@@ -231,7 +307,7 @@ function ConditionalFilterCard({
           ) : (
             <Text
               as="p"
-              variant="text-xs"
+              variant="text-sm"
               weight="medium"
               className="text-neutral-600"
             >
@@ -241,11 +317,7 @@ function ConditionalFilterCard({
         </div>
         <button
           type="button"
-          className={buildClassName([
-            'storybook-home-page-filter-card__setup',
-            'inline-flex w-max max-w-full cursor-pointer items-center justify-start gap-2 border-0 bg-transparent p-0 text-brand-400',
-            'focus-visible:outline-none focus-visible:shadow-focus-brand',
-          ])}
+          className={getHomePageFilterCardSetupClassName()}
         >
           {isConditional && (
             <PencilSimple
@@ -256,7 +328,7 @@ function ConditionalFilterCard({
           )}
           <Text
             as="span"
-            variant="text-xs"
+            variant="text-sm"
             weight="semibold"
             color="currentColor"
           >
@@ -295,10 +367,7 @@ function RightPanel({
 
   return (
     <aside
-      className={buildClassName([
-        'storybook-home-page-right-panel',
-        'box-border flex h-full w-full flex-col gap-6 overflow-y-auto rounded-6 border border-solid border-neutral-100 bg-neutral-0 py-6 text-neutral-900',
-      ])}
+      className={getHomePageRightPanelClassName()}
       aria-label="Home page properties"
     >
       <div className="flex flex-col gap-3">
@@ -316,18 +385,14 @@ function RightPanel({
           Properties
         </Text>
         <div className="flex flex-col gap-3 text-neutral-600">
-          <Text as="p" variant="text-xs" weight="regular" className="text-neutral-600">
+          <Text as="p" variant="text-sm" weight="regular" className="text-neutral-600">
             To customise custom blocks, go to the custom blocks settings under theme settings.
           </Text>
           <button
             type="button"
-            className={buildClassName([
-              'storybook-home-page-custom-blocks-link',
-              'inline-flex w-max max-w-full cursor-pointer items-center justify-start gap-1 border-0 bg-transparent p-0 text-brand-400',
-              'focus-visible:outline-none focus-visible:shadow-focus-brand',
-            ])}
+            className={getHomePageCustomBlocksLinkClassName()}
           >
-            <Text as="span" variant="text-xs" weight="semibold" color="currentColor">
+            <Text as="span" variant="text-sm" weight="semibold" color="currentColor">
               Edit Custom Blocks
             </Text>
             <ArrowSquareOut
@@ -371,7 +436,7 @@ function RightPanel({
           ))}
         </div>
         {selectedVisibility?.helper && (
-          <Text as="p" variant="text-xs" weight="regular" className="text-neutral-600">
+          <Text as="p" variant="text-sm" weight="regular" className="text-neutral-600">
             {selectedVisibility.helper}
           </Text>
         )}
@@ -394,15 +459,15 @@ export function HomePage() {
   };
 
   return (
-    <div className="storybook-home-page box-border bg-neutral-25 font-sans text-neutral-900">
+    <div className={getHomePageShellClassName()}>
       <TemplateSidebar
         activeItemId="active-theme"
-        className="storybook-home-page__sidebar"
+        className={getHomePageSidebarClassName()}
       />
 
-      <div className="storybook-home-page__left-panel box-border bg-transparent">
+      <div className={getHomePageLeftPanelClassName()}>
         <TemplateLeftPanel
-          className="storybook-home-page__left-panel-surface rounded-6"
+          className={getHomePageLeftPanelSurfaceClassName()}
           type="fixed-blocks"
           title="Version 1"
           status="draft"
@@ -419,10 +484,10 @@ export function HomePage() {
         />
       </div>
 
-      <main className="storybook-home-page__canvas box-border flex flex-col items-center gap-8 bg-transparent px-4">
+      <main className={getHomePageCanvasClassName()}>
         <TopNavigation />
-        <div className="storybook-home-page__preview-lane grid gap-8">
-          <div className="storybook-home-page__collection-select">
+        <div className={getHomePagePreviewLaneClassName()}>
+          <div className={getHomePageCollectionSelectClassName()}>
             <TextField
               type="dropdown"
               fluid
@@ -435,21 +500,21 @@ export function HomePage() {
               astriks={false}
             />
           </div>
-          <div className="storybook-home-page__preview-stack flex flex-col items-center justify-center gap-4">
+          <div className={getHomePagePreviewStackClassName()}>
             <PhonePreview />
           </div>
           <Text
             as="span"
-            variant="text-xs"
+            variant="text-sm"
             weight="regular"
-            className="storybook-home-page__last-saved text-neutral-600"
+            className="text-neutral-600"
           >
             Last saved: {lastSavedAt}
           </Text>
         </div>
       </main>
 
-      <div className="storybook-home-page__right-panel flex bg-transparent">
+      <div className={getHomePageRightPanelShellClassName()}>
         <RightPanel onDesignChange={handleDesignChange} />
       </div>
     </div>

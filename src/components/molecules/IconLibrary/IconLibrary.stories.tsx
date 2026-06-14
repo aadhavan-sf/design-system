@@ -119,8 +119,13 @@ export const LargePicker = {
 
 export const IconItemStates = {
   render: () => (
-    <div className="flex flex-col gap-3">
-      {['default', 'hover', 'focused', 'disabled'].map((state) => (
+    <div className="flex flex-col gap-4">
+      {[
+        { state: 'default', label: 'Default' },
+        { state: 'hover', label: 'Hover' },
+        { state: 'focused', label: 'Focused' },
+        { state: 'disabled', label: 'Disabled' },
+      ].map(({ state, label }) => (
         <div
           key={state}
           className="flex items-center gap-4"
@@ -129,32 +134,31 @@ export const IconItemStates = {
             as="span"
             variant="text-xs"
             weight="medium"
-            color="var(--neutral_600)"
-            style={{ width: 64 }}
+            className="w-16 text-neutral-600"
           >
-            {state}
+            {label}
           </Text>
           <IconLibraryItem
             icon={HouseSimple}
-            size="sm"
-            state={state}
-          />
-          <IconLibraryItem
-            icon={HouseSimple}
-            size="sm"
-            state={state}
-            pressed
-          />
-          <IconLibraryItem
-            icon={HouseSimple}
             size="md"
             state={state}
           />
           <IconLibraryItem
             icon={HouseSimple}
+            pressed
             size="md"
             state={state}
+          />
+          <IconLibraryItem
+            icon={HouseSimple}
+            size="sm"
+            state={state}
+          />
+          <IconLibraryItem
+            icon={HouseSimple}
             pressed
+            size="sm"
+            state={state}
           />
         </div>
       ))}

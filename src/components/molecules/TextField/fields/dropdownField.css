@@ -1,9 +1,11 @@
-.storybook-multiselect-two-line-field {
+button.storybook-dropdown-field {
   margin: 0;
   appearance: none;
   -webkit-appearance: none;
   cursor: pointer;
+}
 
+.storybook-dropdown-field {
   transition:
     border-color 150ms ease-out,
     background-color 150ms ease-out,
@@ -11,10 +13,10 @@
     box-shadow 150ms ease-out;
 }
 
-.storybook-multiselect-two-line-field:focus-visible {
+.storybook-dropdown-field:focus-visible {
   outline: none;
 }
 
-.storybook-multiselect-two-line-field[aria-disabled='true'] {
+.storybook-dropdown-field:disabled {
   cursor: not-allowed;
 }

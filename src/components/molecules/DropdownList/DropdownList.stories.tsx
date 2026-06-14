@@ -48,7 +48,7 @@ export const Playground = {
 
 export const Variants = {
   render: () => (
-    <div className="storybook-dropdown-list-story-grid gap-x-16 gap-y-24">
+    <div className="grid grid-cols-[repeat(3,240px)] items-start gap-x-16 gap-y-24">
       {variants.map((variant) => (
         <DropdownList
           key={variant}

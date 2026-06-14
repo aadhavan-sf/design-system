@@ -6,6 +6,7 @@ import { Text } from '../../foundations/Typography';
 import './tabs.css';
 
 export type TabSize = 'sm' | 'md';
+export type TabCount = 2 | 3 | 4 | 5;
 export type TabState = 'default' | 'hover' | 'focused' | 'disabled' | 'Default' | 'Hover' | 'Focused' | 'Disabled';
 export type TabIconPosition = 'left' | 'right' | 'Left' | 'Right';
 export type TabsType = 'no-segment' | 'segments' | 'No Segment' | 'Segemnts' | 'Segments';
@@ -34,6 +35,7 @@ export type TabConfig = {
 
 export interface TabsProps {
   tabs?: Array<string | TabConfig>;
+  tabCount?: TabCount;
   activeIndex?: number;
   defaultActiveIndex?: number;
   type?: TabsType;
@@ -53,7 +55,7 @@ function normalizeValue<T extends string>(value: string | undefined, aliases: Re
 }
 
 function buildClassName(parts: Array<string | false | null | undefined>) {
-  return parts.filter(Boolean).join(' ');
+  return parts.flat().filter(Boolean).join(' ');
 }
 
 function getTextVariant(size: TabSize) {
@@ -109,12 +111,34 @@ function getTabItemVariantClasses({
   ].join(' ');
 }
 
+function getTabItemClassName({
+  className,
+  layoutClasses,
+  variantClasses,
+}: {
+  className?: string;
+  layoutClasses: string;
+  variantClasses: string;
+}) {
+  return buildClassName([
+    'storybook-tab-item',
+    'inline-flex items-center justify-center gap-1 rounded-2 border-0 font-sans',
+    layoutClasses,
+    variantClasses,
+    className,
+  ]);
+}
+
 function getTabsTypeClasses(type: NormalizedTabsType) {
   if (type === 'segments') {
     return 'gap-2 rounded-3 border border-solid border-neutral-100 bg-neutral-0 p-1';
   }
 
   return 'gap-2';
+}
+
+function createDefaultTabs(count: TabCount) {
+  return Array.from({ length: count }, () => 'Dynamic');
 }
 
 export function TabItem({
@@ -143,9 +167,11 @@ export function TabItem({
     state: normalizedState,
   });
 
+  const layoutClasses = 'px-3 py-1.5';
+
   const icon = showIcons ? (
     <House
-      className="storybook-tab-item__icon"
+      className="storybook-tab-item__icon shrink-0"
       size={16}
       weight={pressed ? 'fill' : 'regular'}
     />
@@ -155,15 +181,11 @@ export function TabItem({
     <button
       type="button"
       disabled={isDisabled}
-      className={buildClassName([
-        'storybook-tab-item',
-        'gap-1 rounded-2 border-0 px-3 py-1.5 font-sans',
-        variantClasses,
-        `storybook-tab-item--${size}`,
-        `storybook-tab-item--${normalizedState}`,
-        pressed && 'storybook-tab-item--pressed',
+      className={getTabItemClassName({
         className,
-      ])}
+        layoutClasses,
+        variantClasses,
+      })}
       {...props}
     >
       {normalizedIconPosition === 'left' && icon}
@@ -172,7 +194,7 @@ export function TabItem({
         variant={getTextVariant(size)}
         weight={getTextWeight({ pressed, size })}
         color="currentColor"
-        className="storybook-tab-item__label"
+        className="storybook-tab-item__label max-w-[160px] overflow-hidden text-center text-ellipsis whitespace-nowrap"
       >
         {label}
       </Text>
@@ -182,7 +204,8 @@ export function TabItem({
 }
 
 export function Tabs({
-  tabs = ['Dynamic', 'Dynamic'],
+  tabs,
+  tabCount = 2,
   activeIndex,
   defaultActiveIndex = 0,
   type = 'no-segment',
@@ -192,6 +215,7 @@ export function Tabs({
   className,
   onTabChange,
 }: TabsProps) {
+  const resolvedTabs = tabs ?? createDefaultTabs(tabCount);
   const [internalActiveIndex, setInternalActiveIndex] = useState(defaultActiveIndex);
   const isControlled = typeof activeIndex === 'number';
   const resolvedActiveIndex = isControlled ? activeIndex : internalActiveIndex;
@@ -208,12 +232,11 @@ export function Tabs({
         'storybook-tabs',
         'inline-flex items-start',
         typeClasses,
-        `storybook-tabs--${normalizedType}`,
         className,
       ])}
       role="tablist"
     >
-      {tabs.map((tab, index) => {
+      {resolvedTabs.map((tab, index) => {
         const isStringTab = typeof tab === 'string';
         const label = isStringTab ? tab : tab.label;
         const disabled = isStringTab ? false : tab.disabled;

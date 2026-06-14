@@ -50,6 +50,10 @@ const weightClassNames: Record<TextWeight, string> = {
   bold: 'font-bold',
 };
 
+function buildClassName(parts: Array<string | false | null | undefined>) {
+  return parts.flat().filter(Boolean).join(' ');
+}
+
 function hasTailwindTextColor(className?: string) {
   return className?.split(/\s+/).some((value) =>
     /^!?text-(?:ds-text(?:-strong|-muted)?|(?:brand|neutral|error|warning|success)-\d+|special-[\w-]+)$/.test(value),
@@ -73,15 +77,13 @@ export function Text({
 
   return (
     <Component
-      className={[
+      className={buildClassName([
         'm-0 font-sans',
         defaultColorClassName,
         variantClassNames[variant],
         weightClassNames[weight],
         className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
+      ])}
       style={{ ...colorStyle, ...style }}
       {...props}
     >

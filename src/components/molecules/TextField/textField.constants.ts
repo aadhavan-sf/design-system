@@ -166,3 +166,56 @@ export const textFieldFocusVisibleClassName =
 
 export const textFieldPopoverPanelClassName =
   'absolute left-0 top-full z-[100] mt-2';
+
+export const textFieldFakeCaretBaseClassName =
+  'pointer-events-none absolute z-[1] h-3.5 w-px bg-neutral-700';
+
+export function getTextFieldFakeCaretClassName({
+  animationClassName,
+  leftClassName = 'left-[14px]',
+  variant = 'centered',
+}: {
+  animationClassName: string;
+  leftClassName?: string;
+  variant?: 'centered' | 'first-line';
+}) {
+  const positionClassName =
+    variant === 'first-line'
+      ? 'top-[15px]'
+      : 'top-0 bottom-0 my-auto';
+
+  return buildClassName([
+    animationClassName,
+    textFieldFakeCaretBaseClassName,
+    positionClassName,
+    leftClassName,
+  ]);
+}
+
+export function getMultiselectSelectedChipStateClasses(
+  state: NormalizedTextFieldState | string
+) {
+  const baseClasses = [
+    '!border-transparent',
+    '[&_.storybook-chip__icon]:text-current',
+  ];
+
+  if (state === 'error') {
+    return buildClassName([
+      ...baseClasses,
+      '!bg-neutral-50 !text-error-600',
+    ]);
+  }
+
+  if (state === 'disabled') {
+    return buildClassName([
+      ...baseClasses,
+      '!bg-neutral-100 !text-neutral-400',
+    ]);
+  }
+
+  return buildClassName([
+    ...baseClasses,
+    '!bg-neutral-50 !text-neutral-600',
+  ]);
+}

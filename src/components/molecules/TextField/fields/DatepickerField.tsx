@@ -4,9 +4,9 @@ import { CalendarBlank } from '@phosphor-icons/react';
 import { DatePicker } from '../../DatePicker';
 import {
   buildClassName,
-  textFieldFocusVisibleClassName,
   textFieldPlaceholderTrackingClass,
   textFieldPopoverPanelClassName,
+  textFieldTrackingClass,
   type NormalizedTextFieldState,
 } from '../textField.constants';
 
@@ -104,7 +104,15 @@ function getDatePickerSelectionFromValue(value: string) {
   };
 }
 
-function getDatepickerShellClassName({
+function getDatepickerShellLayoutClasses() {
+  return buildClassName([
+    'storybook-datepicker-field',
+    'box-border flex h-11 w-full min-w-0 items-center px-[14px] py-3',
+    'rounded-8 border border-solid bg-neutral-0',
+  ]);
+}
+
+function getDatepickerShellStateClasses({
   isOpen,
   state,
 }: {
@@ -113,75 +121,106 @@ function getDatepickerShellClassName({
 }) {
   const isActive = state === 'active' || isOpen;
 
-  const baseClasses = [
-    'storybook-datepicker-field',
-    'box-border flex h-11 w-full min-w-0 items-center px-[14px] py-3',
-    'rounded-8 border border-solid bg-neutral-0',
-    'transition-[border-color,background-color,color,box-shadow] duration-150 ease-out',
-    'focus-within:outline-none',
-  ];
-
   if (state === 'disabled') {
-    return buildClassName([
-      ...baseClasses,
-      'cursor-not-allowed border-neutral-200 bg-neutral-25',
-    ]);
+    return 'border-neutral-200 bg-neutral-25';
   }
 
   if (state === 'error') {
-    return buildClassName([
-      ...baseClasses,
-      'border-error-600',
-    ]);
+    return 'border-error-600';
   }
 
   if (isActive) {
-    return buildClassName([
-      ...baseClasses,
-      'border-neutral-500',
-    ]);
+    return 'border-neutral-500';
   }
 
+  return 'border-neutral-200 focus-within:border-neutral-500';
+}
+
+function getDatepickerShellClassName({
+  isOpen,
+  state,
+}: {
+  isOpen: boolean;
+  state: NormalizedTextFieldState | string;
+}) {
   return buildClassName([
-    ...baseClasses,
-    'border-neutral-200 focus-within:border-neutral-500',
+    getDatepickerShellLayoutClasses(),
+    getDatepickerShellStateClasses({ isOpen, state }),
   ]);
+}
+
+function getDatepickerInputTypographyClasses() {
+  return buildClassName([
+    'font-sans text-ds-text-sm font-normal',
+    textFieldTrackingClass,
+  ]);
+}
+
+function getDatepickerInputPlaceholderClasses(state: NormalizedTextFieldState | string) {
+  if (state === 'error') {
+    return 'placeholder:text-error-600';
+  }
+
+  return 'placeholder:text-neutral-300';
+}
+
+function getDatepickerInputStateClasses(state: NormalizedTextFieldState | string) {
+  if (state === 'disabled') {
+    return 'text-neutral-300';
+  }
+
+  if (state === 'error') {
+    return 'text-error-600';
+  }
+
+  return 'text-neutral-700';
 }
 
 function getDatepickerInputClassName(state: NormalizedTextFieldState | string) {
-  const placeholderClasses =
-    state === 'error'
-      ? 'placeholder:text-error-600'
-      : 'placeholder:text-neutral-300';
-
   return buildClassName([
-    'min-w-0 flex-1 border-0 bg-transparent py-0 pl-0 pr-0',
-    'font-sans text-ds-text-sm font-normal text-neutral-700',
+    'storybook-datepicker-field__input',
+    'min-w-0 flex-1 border-0 bg-transparent p-0',
+    getDatepickerInputTypographyClasses(),
     'placeholder:font-sans placeholder:text-ds-text-sm placeholder:font-normal',
     textFieldPlaceholderTrackingClass,
-    placeholderClasses,
-    'focus:outline-none',
-    state === 'disabled' && 'cursor-not-allowed text-neutral-300 disabled:cursor-not-allowed',
-    state === 'error' && 'text-error-600',
+    getDatepickerInputPlaceholderClasses(state),
+    getDatepickerInputStateClasses(state),
   ]);
 }
 
-function getCalendarButtonClassName(state: NormalizedTextFieldState | string) {
-  const baseClasses = [
+function getCalendarButtonLayoutClasses() {
+  return buildClassName([
+    'storybook-datepicker-field__calendar-button',
     'inline-flex shrink-0 items-center justify-center',
     'border-0 bg-transparent p-0',
-    textFieldFocusVisibleClassName,
-  ];
+    'focus-visible:shadow-focus-brand',
+  ]);
+}
 
+function getCalendarButtonStateClasses(state: NormalizedTextFieldState | string) {
   if (state === 'error') {
-    return buildClassName([...baseClasses, 'cursor-pointer text-error-600']);
+    return 'text-error-600';
   }
 
   if (state === 'disabled') {
-    return buildClassName([...baseClasses, 'cursor-not-allowed text-neutral-300']);
+    return 'text-neutral-300';
   }
 
-  return buildClassName([...baseClasses, 'cursor-pointer text-neutral-600']);
+  return 'text-neutral-600';
+}
+
+function getCalendarButtonClassName(state: NormalizedTextFieldState | string) {
+  return buildClassName([
+    getCalendarButtonLayoutClasses(),
+    getCalendarButtonStateClasses(state),
+  ]);
+}
+
+function getDatepickerPanelClassName() {
+  return buildClassName([
+    'storybook-datepicker-field__panel',
+    textFieldPopoverPanelClassName,
+  ]);
 }
 
 export function DatepickerField({
@@ -247,10 +286,7 @@ export function DatepickerField({
       </div>
 
       {isOpen && !disabled && (
-        <div className={buildClassName([
-          'storybook-datepicker-field__panel',
-          textFieldPopoverPanelClassName,
-        ])}>
+        <div className={getDatepickerPanelClassName()}>
           <TextFieldDatePicker
             type={datePickerType}
             {...datePickerProps}

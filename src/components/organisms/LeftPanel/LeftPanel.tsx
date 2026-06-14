@@ -66,6 +66,73 @@ function buildClassName(parts) {
   return parts.flat().filter(Boolean).join(' ');
 }
 
+function getLeftPanelShellClassName({
+  className,
+  isThemeSettings,
+}) {
+  return buildClassName([
+    'storybook-left-panel box-border flex h-full min-h-0 w-full flex-col overflow-hidden rounded-6 border border-solid border-neutral-100 bg-neutral-0 p-6 font-sans',
+    isThemeSettings ? 'justify-start' : 'justify-between',
+    className,
+  ]);
+}
+
+function getLeftPanelBodyClassName() {
+  return 'storybook-left-panel__body flex w-full flex-col gap-4';
+}
+
+function getLeftPanelContentClassName() {
+  return 'storybook-left-panel__content flex w-full flex-col gap-6';
+}
+
+function getLeftPanelPageHeadingClassName() {
+  return 'storybook-left-panel__page-heading flex w-full items-center justify-between gap-6';
+}
+
+function getLeftPanelBlockSectionsClassName() {
+  return 'storybook-left-panel__block-sections flex w-full flex-col gap-6';
+}
+
+function getLeftPanelSectionClassName() {
+  return 'storybook-left-panel-section flex w-full flex-col gap-4';
+}
+
+function getLeftPanelSectionTitleClassName() {
+  return 'storybook-left-panel-section__title w-full uppercase tracking-[0.2em] text-neutral-600';
+}
+
+function getLeftPanelSectionItemsClassName() {
+  return 'storybook-left-panel-section__items flex w-full flex-col gap-0';
+}
+
+function getLeftPanelThemeClassName() {
+  return 'storybook-left-panel-theme flex w-full flex-col gap-6';
+}
+
+function getLeftPanelThemeItemsClassName() {
+  return 'storybook-left-panel-theme__items flex w-full flex-col gap-4';
+}
+
+function getLeftPanelFooterClassName() {
+  return 'storybook-left-panel-footer -mx-6 flex w-[calc(100%+3rem)] shrink-0 flex-col items-center gap-2';
+}
+
+function getLeftPanelFooterButtonClassName() {
+  return 'storybook-left-panel-footer__button inline-flex w-[calc(100%-3rem)] items-center justify-center gap-2 rounded-2 border-0 bg-transparent px-3 py-2 font-sans text-neutral-700 focus-visible:shadow-focus-brand';
+}
+
+function getLeftPanelBackButtonClassName() {
+  return 'storybook-left-panel__back inline-flex size-5 shrink-0 items-center justify-center rounded-2 border-0 bg-transparent p-0 text-neutral-900 focus-visible:shadow-focus-brand';
+}
+
+function getLeftPanelAddButtonClassName() {
+  return 'storybook-left-panel-add inline-flex shrink-0 items-center justify-center gap-2 rounded-2 border border-solid border-neutral-300 bg-neutral-0 px-3 py-2 font-sans text-neutral-700 focus-visible:shadow-focus-brand';
+}
+
+function getLeftPanelInsertClassName() {
+  return 'storybook-left-panel-insert flex h-4 w-full items-center justify-center border-0 bg-transparent p-0 text-brand-400 opacity-0';
+}
+
 function getLeftPanelItemClassName({
   state,
   pressed,
@@ -80,7 +147,7 @@ function getLeftPanelItemClassName({
   const isFocused = state === 'focused';
 
   return buildClassName([
-    'storybook-left-panel-item relative box-border flex h-11 w-full cursor-pointer items-center justify-center rounded-2 border border-solid px-2 py-3 text-left font-sans transition-[background-color,border-color,color,box-shadow,opacity,transform] duration-[160ms] ease-out focus-visible:outline-none focus-visible:shadow-focus-brand',
+    'storybook-left-panel-item relative box-border flex h-11 w-full items-center justify-center rounded-2 border border-solid px-2 py-3 text-left font-sans focus-visible:shadow-focus-brand',
     !pressed && !hidden && !dragging && 'border-transparent',
     !pressed && !hidden && !isDisabled && !dragging && 'bg-transparent text-neutral-700 hover:bg-neutral-25 hover:text-neutral-700',
     !pressed && !hidden && isHover && 'bg-neutral-25 text-neutral-700',
@@ -90,9 +157,9 @@ function getLeftPanelItemClassName({
     pressed && !hidden && !isDisabled && isHover && 'border-brand-400 bg-brand-25 text-brand-400',
     pressed && !hidden && !isDisabled && isFocused && 'border-brand-400 bg-brand-25 text-brand-400 shadow-focus-brand',
     hidden && 'border-transparent bg-transparent text-neutral-700 hover:border-transparent hover:bg-neutral-25 hover:text-neutral-700',
-    dragging && 'pointer-events-none border-brand-400 bg-brand-25 text-brand-400 shadow-lg',
-    isDisabled && !pressed && 'cursor-not-allowed border-transparent bg-neutral-50 text-neutral-300',
-    pressed && isDisabled && 'cursor-not-allowed border-brand-200 bg-brand-25 text-brand-200',
+    dragging && 'pointer-events-none border-brand-400 bg-brand-25 text-brand-400 shadow-lg z-[3]',
+    isDisabled && !pressed && 'border-transparent bg-neutral-50 text-neutral-300',
+    pressed && isDisabled && 'border-brand-200 bg-brand-25 text-brand-200',
     isHover && 'storybook-left-panel-item--hover',
     isFocused && 'storybook-left-panel-item--focused',
     pressed && 'storybook-left-panel-item--pressed',
@@ -112,14 +179,14 @@ function getLeftPanelMenuItemClassName({
   const isDisabled = state === 'disabled';
 
   return buildClassName([
-    'storybook-left-panel-menu-item box-border flex w-full cursor-pointer items-center gap-2 rounded-2 border border-solid p-3 text-left font-sans transition-[background-color,border-color,color,box-shadow] duration-[160ms] ease-out focus-visible:outline-none focus-visible:shadow-focus-brand',
+    'storybook-left-panel-menu-item box-border flex w-full items-center gap-2 rounded-2 border border-solid p-3 text-left font-sans focus-visible:shadow-focus-brand',
     pressed && !isDisabled && 'border-brand-400 bg-brand-25 text-brand-400',
     pressed && !isDisabled && state === 'hover' && 'bg-brand-25',
     pressed && !isDisabled && state === 'focused' && 'border-brand-400 bg-brand-25 shadow-focus-brand',
     !pressed && !isDisabled && 'border-neutral-100 bg-neutral-0 text-neutral-600 hover:bg-neutral-50',
     !pressed && state === 'hover' && 'bg-neutral-50',
     !pressed && state === 'focused' && 'border-neutral-100 bg-neutral-0 shadow-focus-brand',
-    isDisabled && 'cursor-not-allowed border-neutral-100 bg-neutral-50 text-neutral-300',
+    isDisabled && 'border-neutral-100 bg-neutral-50 text-neutral-300',
     pressed && isDisabled && 'border-brand-200 bg-brand-25 text-brand-200',
     state === 'hover' && 'storybook-left-panel-menu-item--hover',
     state === 'focused' && 'storybook-left-panel-menu-item--focused',
@@ -251,7 +318,7 @@ export function LeftPanelItem({
       }}
     >
       <span className={buildClassName([
-        'storybook-left-panel-item__main flex min-w-0 items-center gap-2',
+        'storybook-left-panel-item__main flex min-w-0 flex-[1_1_0] items-center gap-2',
         hidden && (showHiddenTrash
           ? 'storybook-left-panel-item__main--actions-expanded'
           : 'storybook-left-panel-item__main--actions-single'),
@@ -259,7 +326,7 @@ export function LeftPanelItem({
         <LeadingIcon
           aria-hidden="true"
           className={buildClassName([
-            'storybook-left-panel-item__leading-icon size-5 shrink-0 transition-[color,transform] duration-[160ms] ease-out',
+            'storybook-left-panel-item__leading-icon size-5 shrink-0',
             isInactive && 'text-neutral-600',
             !isInactive && 'text-current',
           ])}
@@ -283,7 +350,7 @@ export function LeftPanelItem({
       </span>
       {hasActions && (
         <span className={buildClassName([
-          'storybook-left-panel-item__actions inline-flex items-center justify-end',
+          'storybook-left-panel-item__actions absolute right-2 inline-flex flex-none items-center justify-end',
           !hidden && 'gap-3',
           hidden && (showHiddenTrash
             ? 'storybook-left-panel-item__actions--expanded'
@@ -294,7 +361,7 @@ export function LeftPanelItem({
           <span
             aria-label={hidden ? 'Show block' : 'Hide block'}
             className={buildClassName([
-              'storybook-left-panel-item__action storybook-left-panel-item__action--visibility relative inline-flex shrink-0 cursor-pointer items-center justify-center rounded-1',
+              'storybook-left-panel-item__action storybook-left-panel-item__action--visibility relative inline-flex size-5 shrink-0 items-center justify-center rounded-1',
               visibilityAnimating && 'storybook-left-panel-item__action--visibility-animating',
               visibilityAnimating &&
                 visibilityAnimationDirection === 'show' &&
@@ -315,7 +382,7 @@ export function LeftPanelItem({
           <span
             aria-label="Delete block"
             className={buildClassName([
-              'storybook-left-panel-item__action storybook-left-panel-item__action--delete relative inline-flex shrink-0 cursor-pointer items-center justify-center rounded-1',
+              'storybook-left-panel-item__action storybook-left-panel-item__action--delete relative inline-flex size-5 shrink-0 items-center justify-center rounded-1',
               hidden && (showHiddenTrash
                 ? 'storybook-left-panel-item__action--delete-visible'
                 : 'storybook-left-panel-item__action--delete-collapsed'),
@@ -366,7 +433,7 @@ function LeftPanelInsertControl({
     <button
       type="button"
       aria-label={label}
-      className="storybook-left-panel-insert flex w-full cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-brand-400 opacity-0 transition-[opacity,transform] duration-[160ms] ease-out"
+      className={getLeftPanelInsertClassName()}
       onClick={onClick}
     >
       <span className="h-0.5 flex-[1_1_0] bg-current" />
@@ -436,7 +503,7 @@ function PanelHeader({
         <button
           type="button"
           aria-label="Go back"
-          className="storybook-left-panel__back inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-2 border-0 bg-transparent p-0 text-neutral-900 focus-visible:outline-none focus-visible:shadow-focus-brand"
+          className={getLeftPanelBackButtonClassName()}
           onClick={onBack}
         >
           <CaretLeft size={20} weight="regular" />
@@ -465,7 +532,7 @@ function AddBlockButton({ onClick }) {
   return (
     <button
       type="button"
-      className="storybook-left-panel-add inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-2 border border-solid border-neutral-300 bg-neutral-0 px-3 py-2 text-neutral-700 focus-visible:outline-none focus-visible:shadow-focus-brand"
+      className={getLeftPanelAddButtonClassName()}
       onClick={onClick}
     >
       <Plus
@@ -492,11 +559,11 @@ AddBlockButton.propTypes = {
 
 function FooterAction({ label, onClick }) {
   return (
-    <footer className="storybook-left-panel-footer shrink-0">
+    <footer className={getLeftPanelFooterClassName()}>
       <span className="storybook-left-panel-footer__divider h-px w-full bg-neutral-100" />
       <button
         type="button"
-        className="storybook-left-panel-footer__button cursor-pointer rounded-2 border-0 bg-transparent px-3 py-2 text-neutral-700 focus-visible:outline-none focus-visible:shadow-focus-brand"
+        className={getLeftPanelFooterButtonClassName()}
         onClick={onClick}
       >
         <PencilSimple
@@ -545,17 +612,17 @@ function BlockSection({
   const sectionKey = title.toLowerCase();
 
   return (
-    <section className="storybook-left-panel-section">
+    <section className={getLeftPanelSectionClassName()}>
       <Text
         as="h3"
         variant="text-xs"
         weight="regular"
-        className="storybook-left-panel-section__title w-full uppercase text-neutral-600"
+        className={getLeftPanelSectionTitleClassName()}
       >
         {title}
       </Text>
       <div
-        className="storybook-left-panel-section__items transition-transform duration-[180ms] ease-out"
+        className={getLeftPanelSectionItemsClassName()}
         ref={(node) => setSectionRef?.(sectionKey, node)}
       >
         {items.map((item, index) => {
@@ -570,7 +637,7 @@ function BlockSection({
           return (
             <div
               key={itemId}
-              className="storybook-left-panel-section__item-group flex w-full flex-col transition-transform duration-[180ms] ease-out"
+              className="storybook-left-panel-section__item-group flex w-full flex-col"
               ref={(node) => getItemRef?.(sectionKey, itemId, node)}
             >
               <LeftPanelItem
@@ -644,21 +711,21 @@ function ThemeSettingsContent({
   onItemSelect,
 }) {
   return (
-    <div className="storybook-left-panel-theme">
+    <div className={getLeftPanelThemeClassName()}>
       {sections.map((section) => (
         <section
           key={section.title}
-          className="storybook-left-panel-section"
+          className={getLeftPanelSectionClassName()}
         >
           <Text
             as="h3"
             variant="text-xs"
             weight="regular"
-            className="storybook-left-panel-section__title w-full uppercase text-neutral-600"
+            className={getLeftPanelSectionTitleClassName()}
           >
             {section.title}
           </Text>
-          <div className="storybook-left-panel-theme__items">
+          <div className={getLeftPanelThemeItemsClassName()}>
             {section.items.map((item) => {
               const itemId = item.id ?? item.label;
 
@@ -982,13 +1049,12 @@ export function LeftPanel({
   return (
     <aside
       aria-label={resolvedPageTitle}
-      className={buildClassName([
-        'storybook-left-panel box-border flex h-full min-h-0 w-full flex-col overflow-hidden rounded-6 border border-solid border-neutral-100 bg-neutral-0 font-sans',
-        isThemeSettings ? 'justify-start' : 'justify-between',
+      className={getLeftPanelShellClassName({
         className,
-      ])}
+        isThemeSettings,
+      })}
     >
-      <div className="storybook-left-panel__body">
+      <div className={getLeftPanelBodyClassName()}>
         <PanelHeader
           status={status}
           title={title}
@@ -997,8 +1063,8 @@ export function LeftPanel({
 
         <div className="storybook-left-panel__divider h-px w-full shrink-0 bg-neutral-100" />
 
-        <main className="storybook-left-panel__content">
-          <div className="storybook-left-panel__page-heading">
+        <main className={getLeftPanelContentClassName()}>
+          <div className={getLeftPanelPageHeadingClassName()}>
             <Text
               as="h2"
               variant="text-md"
@@ -1017,7 +1083,7 @@ export function LeftPanel({
               onItemSelect={handleItemSelect}
             />
           ) : (
-            <div className="storybook-left-panel__block-sections">
+            <div className={getLeftPanelBlockSectionsClassName()}>
               {resolvedType === 'fixed-blocks' && (
                 <>
                   <BlockSection

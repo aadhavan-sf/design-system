@@ -1,3 +1,25 @@
+input.storybook-input-field {
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.storybook-input-field {
+  transition:
+    border-color 150ms ease-out,
+    background-color 150ms ease-out,
+    color 150ms ease-out,
+    box-shadow 150ms ease-out;
+}
+
+.storybook-input-field:focus-visible {
+  outline: none;
+}
+
+.storybook-input-field:disabled {
+  cursor: not-allowed;
+}
+
 .storybook-input-field__caret {
   animation: storybook-input-field-caret-blink 1s step-end infinite;
 }

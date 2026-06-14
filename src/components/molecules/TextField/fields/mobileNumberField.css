@@ -1,3 +1,52 @@
+.storybook-mobile-field {
+  transition:
+    border-color 150ms ease-out,
+    background-color 150ms ease-out,
+    color 150ms ease-out,
+    box-shadow 150ms ease-out;
+}
+
+.storybook-mobile-field:focus-within {
+  outline: none;
+}
+
+.storybook-mobile-field:has(input:disabled) {
+  cursor: not-allowed;
+}
+
+button.storybook-mobile-field__country-button {
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.storybook-mobile-field__country-button {
+  transition: color 150ms ease-out;
+}
+
+button.storybook-mobile-field__country-button:focus-visible {
+  outline: none;
+}
+
+button.storybook-mobile-field__country-button:disabled {
+  cursor: not-allowed;
+}
+
+input.storybook-mobile-field__input {
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.storybook-mobile-field__input:focus {
+  outline: none;
+}
+
+.storybook-mobile-field__input:disabled {
+  cursor: not-allowed;
+}
+
 .storybook-mobile-field__caret {
   animation: storybook-mobile-field-caret-blink 1s step-end infinite;
 }

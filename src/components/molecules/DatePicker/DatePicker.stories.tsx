@@ -2,7 +2,6 @@
 import {
   DatePicker,
   DatePickerCalendarDay,
-  DatePickerListItem,
 } from './DatePicker';
 
 export default {
@@ -14,7 +13,7 @@ export default {
     docs: {
       description: {
         component:
-          'Date picker atom built from the Figma calendar day, preset list item, and full date picker designs.',
+          'Date picker molecule built from the Figma calendar day and date picker designs.',
       },
     },
   },
@@ -27,8 +26,8 @@ export default {
         'month',
         'year',
         'date-range',
-        'with-presets',
         'dual-dates',
+        'with-presets',
       ],
     },
     selectedDay: { control: 'text' },
@@ -36,14 +35,12 @@ export default {
     selectedYear: { control: 'text' },
     rangeStart: { control: 'text' },
     rangeEnd: { control: 'text' },
-    selectedPreset: { control: 'text' },
   },
 };
 
 export const Playground = {
   args: {
     type: 'single-date',
-    selectedPreset: 'Today',
   },
 };
 
@@ -66,24 +63,29 @@ export const CalendarDayStates = {
   ),
 };
 
-export const PresetListItemStates = {
-  render: () => (
-    <div className="grid grid-cols-[repeat(2,160px)] gap-4">
-      <DatePickerListItem label="List item" />
-      <DatePickerListItem label="List item" selected />
-      <DatePickerListItem label="List item" state="hover" />
-      <DatePickerListItem label="List item" selected state="hover" />
-    </div>
-  ),
-};
-
 export const DatePickerVariants = {
   render: () => (
     <div className="flex flex-col items-start gap-4">
       <DatePicker type="single-date" />
       <DatePicker type="month" />
       <DatePicker type="date-range" />
+      <DatePicker type="dual-dates" />
       <DatePicker type="with-presets" />
     </div>
   ),
+};
+
+export const WithPresets = {
+  args: {
+    type: 'with-presets',
+    selectedPreset: 'today',
+  },
+};
+
+export const DualDates = {
+  args: {
+    type: 'dual-dates',
+    rangeStartDate: { day: '23', monthIndex: 5, year: 2024 },
+    rangeEndDate: { day: '4', monthIndex: 6, year: 2024 },
+  },
 };

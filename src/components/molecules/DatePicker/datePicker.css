@@ -1,7 +1,7 @@
 button.storybook-datepicker__nav-button,
 button.storybook-datepicker__title-button,
-button.storybook-datepicker-list-item,
-button.storybook-datepicker-day {
+button.storybook-datepicker-day,
+button.storybook-datepicker__preset {
   margin: 0;
   appearance: none;
   -webkit-appearance: none;
@@ -10,6 +10,55 @@ button.storybook-datepicker-day {
 .storybook-datepicker {
   animation: storybook-datepicker-enter 150ms ease-out;
   transform-origin: top center;
+}
+
+button.storybook-datepicker-day {
+  cursor: pointer;
+
+  transition:
+    background-color 160ms ease,
+    box-shadow 160ms ease,
+    color 160ms ease;
+}
+
+button.storybook-datepicker-day:disabled {
+  cursor: not-allowed;
+}
+
+div.storybook-datepicker-day {
+  cursor: default;
+}
+
+.storybook-datepicker-day__range-endpoint {
+  transition:
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+button.storybook-datepicker-day:focus-visible,
+button.storybook-datepicker__nav-button:focus-visible,
+button.storybook-datepicker__title-button:focus-visible,
+button.storybook-datepicker__preset:focus-visible {
+  outline: none;
+}
+
+button.storybook-datepicker__nav-button,
+button.storybook-datepicker__title-button,
+button.storybook-datepicker__preset {
+  cursor: pointer;
+
+  transition:
+    background-color 160ms ease,
+    box-shadow 160ms ease,
+    color 160ms ease;
+}
+
+.storybook-datepicker-day__today-dot {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+
+  transform: translateX(-50%);
 }
 
 @keyframes storybook-datepicker-enter {

@@ -1,6 +1,5 @@
 import { Text } from '../Typography';
 import { shadowValues, shadows } from '../../../styling/theme/shadows';
-import './shadowScale.css';
 
 type ShadowKey = keyof typeof shadows;
 
@@ -25,11 +24,42 @@ const shadowClassNames: Record<ShadowKey, string> = {
   '3xl': 'shadow-3xl',
 };
 
+function buildClassName(parts: Array<string | false | null | undefined>) {
+  return parts.flat().filter(Boolean).join(' ');
+}
+
+function getShadowScaleClassName() {
+  return 'flex flex-col gap-6 font-sans text-ds-text-strong';
+}
+
+function getShadowHeaderClassName() {
+  return 'flex items-end justify-between gap-4 max-sm:flex-col max-sm:items-start';
+}
+
+function getShadowGridClassName() {
+  return 'grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-5';
+}
+
+function getShadowCardClassName() {
+  return 'flex flex-col gap-4 rounded-8 border border-solid border-ds-border bg-ds-surface p-4';
+}
+
+function getShadowCardPreviewClassName(shadowClassName: string) {
+  return buildClassName([
+    'min-h-28 rounded-8 border border-solid border-ds-border bg-neutral-0',
+    shadowClassName,
+  ]);
+}
+
+function getShadowCardMetaClassName() {
+  return 'flex flex-col gap-2';
+}
+
 function ShadowCard({ name, value }: ShadowCardProps) {
   return (
-    <div className="ds-shadow-card gap-4 rounded-8 border-ds-border bg-ds-surface p-4">
-      <div className={`ds-shadow-card__preview rounded-8 border-ds-border bg-neutral-0 ${shadowClassNames[name]}`} />
-      <div className="ds-shadow-card__meta gap-2">
+    <div className={getShadowCardClassName()}>
+      <div className={getShadowCardPreviewClassName(shadowClassNames[name])} />
+      <div className={getShadowCardMetaClassName()}>
         <Text as="span" variant="text-lg" weight="semibold">
           {name}
         </Text>
@@ -44,8 +74,8 @@ function ShadowCard({ name, value }: ShadowCardProps) {
 
 export function ShadowScale({ showValues = true }: ShadowScaleProps) {
   return (
-    <div className="ds-shadows gap-6 font-sans text-ds-text-strong">
-      <div className="ds-shadows__header gap-4">
+    <div className={getShadowScaleClassName()}>
+      <div className={getShadowHeaderClassName()}>
         <div>
           <Text as="span" variant="text-sm" weight="semibold" className="text-brand-600">
             Shadow
@@ -57,7 +87,7 @@ export function ShadowScale({ showValues = true }: ShadowScaleProps) {
         <code>shadow-*</code>
       </div>
 
-      <div className="ds-shadows__grid gap-5">
+      <div className={getShadowGridClassName()}>
         {SHADOW_STEPS.map((name) => (
           <ShadowCard
             key={name}

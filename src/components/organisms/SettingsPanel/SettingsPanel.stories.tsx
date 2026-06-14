@@ -3,6 +3,7 @@ import { fn } from 'storybook/test';
 
 import {
   SettingsPanel,
+  SettingsPanelBetaTag,
   SettingsPanelItem,
 } from './SettingsPanel';
 
@@ -36,6 +37,9 @@ export default {
       control: 'object',
     },
     warningLabels: {
+      control: 'object',
+    },
+    betaLabels: {
       control: 'object',
     },
   },
@@ -72,9 +76,22 @@ export const Variants = {
   ),
 };
 
+export const BetaTag = {
+  render: () => (
+    <div className="flex flex-col gap-4 p-5">
+      <SettingsPanelItem label="Manage Stores" showBeta showIcon={false} />
+      <SettingsPanelItem label="Store Switcher" pressed showBeta showIcon={false} />
+      <SettingsPanelBetaTag />
+    </div>
+  ),
+  parameters: {
+    layout: 'centered',
+  },
+};
+
 export const MenuItemStates = {
   render: () => (
-    <div className="grid grid-cols-2 gap-x-[86px] gap-y-[68px] p-5 [grid-template-columns:repeat(2,285px)]">
+    <div className="grid grid-cols-[repeat(2,285px)] gap-x-[86px] gap-y-[68px] p-5">
       {['default', 'hover', 'focused', 'disabled'].map((state) => (
         <SettingsPanelItem
           key={`unpressed-${state}`}

@@ -6,6 +6,7 @@ import { DropdownList } from '../../DropdownList';
 import { Text } from '../../../foundations/Typography';
 import {
   buildClassName,
+  getMultiselectSelectedChipStateClasses,
   textFieldDropdownMenuClassName,
   textFieldTrackingClass,
   type NormalizedTextFieldState,
@@ -15,45 +16,40 @@ import type { DropdownFieldProps } from './DropdownField';
 
 import './multiselectOneLineField.css';
 
-function getMultiselectOneLineFieldClassName(state: NormalizedTextFieldState | string) {
-  const baseClasses = [
+function getMultiselectOneLineFieldLayoutClasses() {
+  return buildClassName([
     'storybook-multiselect-one-line-field',
     'box-border flex h-11 w-full min-w-0 items-center justify-between gap-2',
     'rounded-8 border border-solid bg-neutral-0 px-[14px] py-3',
-    'font-sans text-ds-text-sm font-normal text-neutral-700',
-    'transition-[border-color,background-color,color,box-shadow] duration-150 ease-out',
-    'focus:outline-none focus-visible:border-neutral-500',
-    'm-0 cursor-pointer appearance-none text-left font-[inherit]',
-  ];
-
-  if (state === 'disabled') {
-    return buildClassName([
-      ...baseClasses,
-      'cursor-not-allowed border-neutral-200 bg-neutral-25 text-neutral-300',
-    ]);
-  }
-
-  if (state === 'error') {
-    return buildClassName([
-      ...baseClasses,
-      'border-error-600 text-error-600',
-    ]);
-  }
-
-  if (state === 'active') {
-    return buildClassName([
-      ...baseClasses,
-      'border-neutral-500',
-    ]);
-  }
-
-  return buildClassName([
-    ...baseClasses,
-    'border-neutral-200',
+    'text-left',
+    'focus-visible:border-neutral-500',
   ]);
 }
 
-function getDropdownDisplayTextClassName({
+function getMultiselectOneLineFieldStateClasses(state: NormalizedTextFieldState | string) {
+  if (state === 'disabled') {
+    return 'border-neutral-200 bg-neutral-25';
+  }
+
+  if (state === 'error') {
+    return 'border-error-600';
+  }
+
+  if (state === 'active') {
+    return 'border-neutral-500';
+  }
+
+  return 'border-neutral-200';
+}
+
+function getMultiselectOneLineFieldClassName(state: NormalizedTextFieldState | string) {
+  return buildClassName([
+    getMultiselectOneLineFieldLayoutClasses(),
+    getMultiselectOneLineFieldStateClasses(state),
+  ]);
+}
+
+function getMultiselectDisplayTextClassName({
   hasValue,
   state,
 }: {
@@ -75,6 +71,14 @@ function getDropdownDisplayTextClassName({
   return 'text-neutral-700';
 }
 
+function getMultiselectDisplayTextLayoutClasses() {
+  return buildClassName([
+    'min-w-0 overflow-hidden text-ellipsis whitespace-nowrap',
+    'font-sans text-ds-text-sm font-normal',
+    textFieldTrackingClass,
+  ]);
+}
+
 function getTrailingIconClassName(state: NormalizedTextFieldState | string) {
   if (state === 'error') {
     return 'shrink-0 text-error-600';
@@ -87,6 +91,20 @@ function getTrailingIconClassName(state: NormalizedTextFieldState | string) {
   return 'shrink-0 text-neutral-600';
 }
 
+function getSelectedChipsContainerClassName() {
+  return 'flex w-full min-w-0 items-center justify-start gap-1';
+}
+
+function getSelectedChipLayoutClasses(index: number) {
+  return buildClassName([
+    'storybook-multiselect-one-line-field__selected-chip',
+    '[&_.storybook-chip__label]:text-left',
+    'min-w-0 max-w-full justify-start gap-2 border-0',
+    'h-[30px] rounded-2 px-2 py-[7px]',
+    index === 0 ? 'flex-[0_0_auto]' : 'flex-[1_1_0]',
+  ]);
+}
+
 function getSelectedChipClassName({
   index,
   state,
@@ -95,13 +113,8 @@ function getSelectedChipClassName({
   state: NormalizedTextFieldState | string;
 }) {
   return buildClassName([
-    'storybook-multiselect-one-line-field__selected-chip',
-    'min-w-0 max-w-full justify-start gap-2 border-0',
-    'h-[30px] rounded-2 px-2 py-[7px]',
-    index === 0 ? 'flex-[0_0_auto]' : 'flex-[1_1_0]',
-    state === 'error' && '!bg-neutral-50 !text-error-600',
-    state === 'disabled' && 'bg-neutral-100 !text-neutral-400',
-    state !== 'disabled' && state !== 'error' && 'bg-neutral-50 text-neutral-600',
+    getSelectedChipLayoutClasses(index),
+    getMultiselectSelectedChipStateClasses(state),
   ]);
 }
 
@@ -172,7 +185,7 @@ export function MultiselectOneLine({
       >
         <span className="flex min-w-0 flex-[1_0_0] items-center gap-1">
           {hasValue ? (
-            <span className="flex w-full min-w-0 items-center justify-start gap-1">
+            <span className={getSelectedChipsContainerClassName()}>
               {visibleSelectedItems.map((item, index) => (
                 <Chip
                   key={item.value}
@@ -181,7 +194,7 @@ export function MultiselectOneLine({
                   size="md"
                   shape="rounded"
                   icon="right"
-                  state={disabled ? 'disabled' : 'default'}
+                  state="default"
                   disabled={disabled}
                   className={getSelectedChipClassName({ index, state })}
                   onClick={(event) => {
@@ -197,9 +210,8 @@ export function MultiselectOneLine({
               variant="text-sm"
               weight="regular"
               className={buildClassName([
-                'min-w-0 overflow-hidden text-ellipsis whitespace-nowrap font-sans text-ds-text-sm font-normal',
-                textFieldTrackingClass,
-                getDropdownDisplayTextClassName({ hasValue, state }),
+                getMultiselectDisplayTextLayoutClasses(),
+                getMultiselectDisplayTextClassName({ hasValue, state }),
               ])}
             >
               {displayValue}

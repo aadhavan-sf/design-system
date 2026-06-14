@@ -8,8 +8,9 @@ import {
 
 import {
   buildClassName,
-  textFieldFocusVisibleClassName,
+  getTextFieldFakeCaretClassName,
   textFieldPlaceholderTrackingClass,
+  textFieldTrackingClass,
   type NormalizedTextFieldState,
 } from '../textField.constants';
 import type { BaseTextFieldInputProps } from './InputFields';
@@ -18,60 +19,78 @@ import './textareaField.css';
 
 const MIN_TEXTAREA_HEIGHT = 112;
 
-function getTextAreaFieldClassName(state: NormalizedTextFieldState | string) {
-  const placeholderClasses =
-    state === 'error'
-      ? 'placeholder:text-error-600'
-      : 'placeholder:text-neutral-300';
-
-  const baseClasses = [
+function getTextAreaFieldLayoutClasses() {
+  return buildClassName([
+    'storybook-textarea-field',
     'box-border block w-full min-w-0 resize-none px-[14px] py-3',
     'rounded-8 border border-solid bg-neutral-0',
-    'font-sans text-ds-text-sm font-normal text-neutral-700',
-    'placeholder:font-sans placeholder:text-ds-text-sm placeholder:font-normal',
-    textFieldPlaceholderTrackingClass,
-    placeholderClasses,
-    'transition-[border-color,background-color,color,box-shadow] duration-150 ease-out',
-    'focus:outline-none focus-visible:border-neutral-500',
-  ];
+    'focus-visible:border-neutral-500',
+  ]);
+}
 
+function getTextAreaFieldTypographyClasses() {
+  return buildClassName([
+    'font-sans text-ds-text-sm font-normal',
+    textFieldTrackingClass,
+  ]);
+}
+
+function getTextAreaFieldPlaceholderClasses(state: NormalizedTextFieldState | string) {
+  if (state === 'error') {
+    return 'placeholder:text-error-600';
+  }
+
+  return 'placeholder:text-neutral-300';
+}
+
+function getTextAreaFieldStateClasses(state: NormalizedTextFieldState | string) {
   if (state === 'disabled') {
-    return buildClassName([
-      ...baseClasses,
-      'cursor-not-allowed border-neutral-200 bg-neutral-25 text-neutral-300',
-      'disabled:cursor-not-allowed',
-    ]);
+    return 'border-neutral-200 bg-neutral-25 text-neutral-300';
   }
 
   if (state === 'error') {
-    return buildClassName([
-      ...baseClasses,
-      'border-error-600 text-error-600',
-    ]);
+    return 'border-error-600 text-error-600';
   }
 
   if (state === 'active') {
-    return buildClassName([
-      ...baseClasses,
-      'border-neutral-500 caret-neutral-700',
-    ]);
+    return 'border-neutral-500 caret-neutral-700';
   }
 
+  return 'border-neutral-200 text-neutral-700';
+}
+
+function getTextAreaFieldClassName(state: NormalizedTextFieldState | string) {
   return buildClassName([
-    ...baseClasses,
-    'border-neutral-200',
+    getTextAreaFieldLayoutClasses(),
+    getTextAreaFieldTypographyClasses(),
+    'placeholder:font-sans placeholder:text-ds-text-sm placeholder:font-normal',
+    textFieldPlaceholderTrackingClass,
+    getTextAreaFieldPlaceholderClasses(state),
+    getTextAreaFieldStateClasses(state),
   ]);
+}
+
+function getResizeMarkLayoutClasses() {
+  return buildClassName([
+    'storybook-textarea-field__resize-mark',
+    'absolute bottom-1 right-1 inline-flex size-[14px] items-center justify-center',
+    'border-0 bg-transparent p-0',
+    'focus-visible:shadow-focus-brand',
+  ]);
+}
+
+function getResizeMarkStateClasses(state: NormalizedTextFieldState | string) {
+  if (state === 'disabled') {
+    return 'text-neutral-300';
+  }
+
+  return 'text-neutral-400';
 }
 
 function getResizeMarkClassName(state: NormalizedTextFieldState | string) {
   return buildClassName([
-    'storybook-textarea-field__resize-mark',
-    'absolute bottom-1 right-1 inline-flex size-[14px] items-center justify-center',
-    'appearance-none border-0 bg-transparent p-0',
-    textFieldFocusVisibleClassName,
-    state === 'disabled'
-      ? 'cursor-not-allowed text-neutral-300'
-      : 'cursor-ns-resize text-neutral-400',
+    getResizeMarkLayoutClasses(),
+    getResizeMarkStateClasses(state),
   ]);
 }
 
@@ -124,7 +143,10 @@ export function TextArea({
     <div className="relative w-full">
       {showFakeCaret && (
         <span
-          className="storybook-textarea-field__caret pointer-events-none absolute top-[14px] left-[14px] z-[1] h-4 w-px bg-neutral-700"
+          className={getTextFieldFakeCaretClassName({
+            animationClassName: 'storybook-textarea-field__caret',
+            variant: 'first-line',
+          })}
           aria-hidden="true"
         />
       )}

@@ -9,9 +9,10 @@ import { CaretDown } from '@phosphor-icons/react';
 import { DropdownList } from '../../DropdownList';
 import {
   buildClassName,
-  textFieldFocusVisibleClassName,
+  getTextFieldFakeCaretClassName,
   textFieldPlaceholderTrackingClass,
   textFieldPopoverPanelClassName,
+  textFieldTrackingClass,
   countryOptions,
   type NormalizedTextFieldState,
 } from '../textField.constants';
@@ -83,39 +84,34 @@ function getMobileValueFromInput(inputValue: string, currentCountryCode: string)
   };
 }
 
-function getMobileFieldShellClassName(state: NormalizedTextFieldState | string) {
-  const baseClasses = [
+function getMobileFieldShellLayoutClasses() {
+  return buildClassName([
     'storybook-mobile-field',
     'box-border flex min-h-11 w-full min-w-0 items-stretch',
     'rounded-8 border border-solid bg-neutral-0',
-    'transition-[border-color,background-color,color,box-shadow] duration-150 ease-out',
-    'focus-within:outline-none',
-  ];
+  ]);
+}
 
+function getMobileFieldShellStateClasses(state: NormalizedTextFieldState | string) {
   if (state === 'disabled') {
-    return buildClassName([
-      ...baseClasses,
-      'border-neutral-200 bg-neutral-25',
-    ]);
+    return 'border-neutral-200 bg-neutral-25';
   }
 
   if (state === 'error') {
-    return buildClassName([
-      ...baseClasses,
-      'border-error-600',
-    ]);
+    return 'border-error-600';
   }
 
   if (state === 'active') {
-    return buildClassName([
-      ...baseClasses,
-      'border-neutral-500',
-    ]);
+    return 'border-neutral-500';
   }
 
+  return 'border-neutral-200 focus-within:border-neutral-500';
+}
+
+function getMobileFieldShellClassName(state: NormalizedTextFieldState | string) {
   return buildClassName([
-    ...baseClasses,
-    'border-neutral-200 focus-within:border-neutral-500',
+    getMobileFieldShellLayoutClasses(),
+    getMobileFieldShellStateClasses(state),
   ]);
 }
 
@@ -131,50 +127,94 @@ function getDividerClassName(state: NormalizedTextFieldState | string) {
   return 'bg-neutral-200';
 }
 
-function getCountryCodeButtonClassName(state: NormalizedTextFieldState | string) {
-  const baseClasses = [
-    'inline-flex h-full shrink-0 items-center gap-1 border-0 bg-transparent px-3 py-3',
-    'appearance-none text-left font-[inherit]',
-    'transition-[color] duration-150 ease-out',
-    textFieldFocusVisibleClassName,
-  ];
-
-  if (state === 'disabled') {
-    return buildClassName([
-      ...baseClasses,
-      'cursor-not-allowed text-neutral-300',
-    ]);
-  }
-
-  if (state === 'error') {
-    return buildClassName([
-      ...baseClasses,
-      'cursor-pointer text-error-600',
-    ]);
-  }
-
+function getCountryCodeButtonLayoutClasses() {
   return buildClassName([
-    ...baseClasses,
-    'cursor-pointer text-neutral-600',
+    'storybook-mobile-field__country-button',
+    'inline-flex h-full shrink-0 items-center gap-1',
+    'border-0 bg-transparent px-3 py-3 text-left',
+    'focus-visible:shadow-focus-brand',
   ]);
 }
 
-function getMobileInputClassName(state: NormalizedTextFieldState | string) {
-  const placeholderClasses =
-    state === 'error'
-      ? 'placeholder:text-error-600'
-      : 'placeholder:text-neutral-300';
+function getCountryCodeButtonStateClasses(state: NormalizedTextFieldState | string) {
+  if (state === 'disabled') {
+    return 'text-neutral-300';
+  }
 
+  if (state === 'error') {
+    return 'text-error-600';
+  }
+
+  return 'text-neutral-600';
+}
+
+function getCountryCodeButtonClassName(state: NormalizedTextFieldState | string) {
   return buildClassName([
+    getCountryCodeButtonLayoutClasses(),
+    getCountryCodeButtonStateClasses(state),
+  ]);
+}
+
+function getCountryCodeLabelClassName() {
+  return buildClassName([
+    'font-sans text-ds-text-sm font-medium',
+    textFieldTrackingClass,
+  ]);
+}
+
+function getPhoneInputSectionClassName() {
+  return 'flex min-w-0 flex-1 items-center self-stretch py-3 pl-[14px] pr-[14px]';
+}
+
+function getMobileInputTypographyClasses() {
+  return buildClassName([
+    'font-sans text-ds-text-sm font-normal',
+    textFieldTrackingClass,
+  ]);
+}
+
+function getMobileInputPlaceholderClasses(state: NormalizedTextFieldState | string) {
+  if (state === 'error') {
+    return 'placeholder:text-error-600';
+  }
+
+  return 'placeholder:text-neutral-300';
+}
+
+function getMobileInputStateClasses(state: NormalizedTextFieldState | string) {
+  if (state === 'disabled') {
+    return 'text-neutral-300';
+  }
+
+  if (state === 'error') {
+    return 'text-error-600';
+  }
+
+  if (state === 'active') {
+    return 'text-neutral-700 caret-neutral-700';
+  }
+
+  return 'text-neutral-700';
+}
+
+function getMobileInputClassName(state: NormalizedTextFieldState | string) {
+  return buildClassName([
+    'storybook-mobile-field__input',
     'block w-full min-w-0 border-0 bg-transparent p-0',
-    'font-sans text-ds-text-sm font-normal text-neutral-700',
+    getMobileInputTypographyClasses(),
     'placeholder:font-sans placeholder:text-ds-text-sm placeholder:font-normal',
     textFieldPlaceholderTrackingClass,
-    placeholderClasses,
-    'focus:outline-none',
-    state === 'disabled' && 'cursor-not-allowed text-neutral-300 disabled:cursor-not-allowed',
-    state === 'error' && 'text-error-600',
-    state === 'active' && 'caret-neutral-700',
+    getMobileInputPlaceholderClasses(state),
+    getMobileInputStateClasses(state),
+  ]);
+}
+
+function getCountryMenuClassName() {
+  return buildClassName([
+    'storybook-mobile-field__country-menu',
+    textFieldPopoverPanelClassName,
+    'box-border max-h-[280px] w-max overflow-y-auto',
+    'rounded-8 border border-solid border-neutral-100 bg-neutral-0 shadow-sm',
   ]);
 }
 
@@ -252,7 +292,7 @@ export function MobileNumberField({
             aria-haspopup="listbox"
             aria-label={`Selected country code ${selectedCountry.code}`}
           >
-            <span className="font-sans text-ds-text-sm font-medium">
+            <span className={getCountryCodeLabelClassName()}>
               {selectedCountry.code}
             </span>
             <CaretDown size={20} weight="regular" />
@@ -267,11 +307,14 @@ export function MobileNumberField({
           aria-hidden="true"
         />
 
-        <div className="flex min-w-0 flex-1 items-center self-stretch py-3 pl-[14px] pr-[14px]">
+        <div className={getPhoneInputSectionClassName()}>
           <div className="relative min-w-0 flex-1">
             {showFakeCaret && (
               <span
-                className="storybook-mobile-field__caret pointer-events-none absolute top-1/2 left-0 z-[1] h-4 w-px -translate-y-1/2 bg-neutral-700"
+                className={getTextFieldFakeCaretClassName({
+                  animationClassName: 'storybook-mobile-field__caret',
+                  leftClassName: 'left-0',
+                })}
                 aria-hidden="true"
               />
             )}
@@ -294,11 +337,7 @@ export function MobileNumberField({
 
       {isCountryOpen && !disabled && (
         <div
-          className={buildClassName([
-            'storybook-mobile-field__country-menu',
-            textFieldPopoverPanelClassName,
-            'box-border max-h-[280px] w-max overflow-y-auto rounded-8 border border-solid border-neutral-100 bg-neutral-0 shadow-sm',
-          ])}
+          className={getCountryMenuClassName()}
           style={countryMenuMinWidth ? { minWidth: countryMenuMinWidth } : undefined}
         >
           <DropdownList

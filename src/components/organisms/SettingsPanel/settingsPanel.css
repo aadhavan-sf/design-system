@@ -4,3 +4,83 @@ button.storybook-settings-panel-item {
   appearance: none;
   -webkit-appearance: none;
 }
+
+button.storybook-settings-panel-item {
+  cursor: pointer;
+
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+button.storybook-settings-panel-item:disabled {
+  cursor: not-allowed;
+}
+
+button.storybook-settings-panel__help {
+  cursor: pointer;
+
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+button.storybook-settings-panel-item:focus-visible,
+button.storybook-settings-panel__help:focus-visible {
+  outline: none;
+}
+
+/* BETA tag — shine sweep (new feature indicator, active tab only) */
+.storybook-settings-panel-beta-tag {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.storybook-settings-panel-beta-tag::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    110deg,
+    transparent 32%,
+    rgb(255 255 255 / 0.75) 50%,
+    transparent 68%
+  );
+  transform: translateX(-120%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.storybook-settings-panel-beta-tag--shine::after {
+  opacity: 1;
+  animation: storybook-settings-panel-beta-shine 0.9s ease-in-out 3 forwards;
+}
+
+@keyframes storybook-settings-panel-beta-shine {
+  0% {
+    transform: translateX(-120%);
+    opacity: 1;
+  }
+
+  22% {
+    transform: translateX(120%);
+    opacity: 1;
+  }
+
+  23%,
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .storybook-settings-panel-beta-tag--shine::after {
+    animation: none;
+  }
+}

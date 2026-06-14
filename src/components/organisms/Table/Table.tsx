@@ -112,7 +112,7 @@ const DEFAULT_ROWS = [
 ];
 
 function buildClassName(parts) {
-  return parts.filter(Boolean).join(' ');
+  return parts.flat().filter(Boolean).join(' ');
 }
 
 function normalizeValue(value, aliases = {}) {
@@ -165,6 +165,87 @@ function getResolvedView(view) {
   });
 }
 
+const TABLE_CHIP_TONE_CLASSES = {
+  error: 'bg-error-50 text-error-600',
+  success: 'bg-success-50 text-success-700',
+  warning: 'bg-warning-50 text-warning-700',
+};
+
+const TABLE_EMPTY_ICON_CLASSES = {
+  brand: 'bg-brand-50 text-brand-400',
+  cloud: 'storybook-table-empty__icon--cloud text-neutral-0',
+  warning: 'bg-warning-50 text-warning-700',
+};
+
+function getTableHeaderLabelClassName({
+  state,
+  className,
+}) {
+  const isDisabled = state === 'disabled';
+  const isHover = state === 'hover';
+
+  return buildClassName([
+    'inline-flex min-w-0 items-center gap-1',
+    isDisabled && 'text-neutral-300',
+    !isDisabled && !isHover && 'text-neutral-700',
+    isHover && 'text-neutral-800',
+    state === 'hover' && 'storybook-table-header-label--hover',
+    className,
+  ]);
+}
+
+function getTableHeaderCellClassName({
+  color,
+  empty,
+}) {
+  return buildClassName([
+    'storybook-table-header-cell box-border flex h-11 min-w-0 items-center gap-3 border-0 px-6 py-3 max-[900px]:px-4',
+    color === 'gray' ? 'bg-neutral-25' : 'bg-neutral-0',
+    empty && 'justify-center',
+  ]);
+}
+
+function getTableCellClassName({
+  state,
+  style,
+}) {
+  const isHover = state === 'hover';
+  const isDisabled = state === 'disabled';
+
+  return buildClassName([
+    'storybook-table-cell box-border flex h-[72px] min-w-0 items-center gap-3 border-0 bg-neutral-0 px-6 py-6 max-[900px]:px-4 max-[900px]:py-5',
+    style === 'actions' && 'justify-center gap-2 px-4 py-5',
+    (style === 'badge' || style === 'badges') && 'justify-start',
+    style === 'lead' && 'text-neutral-800',
+    style === 'text' && 'text-neutral-600',
+    style === 'trend' && 'text-neutral-600',
+    style === 'checkbox' && 'text-neutral-800',
+    isHover && 'bg-neutral-50',
+    isDisabled && 'bg-neutral-25 text-neutral-300',
+    `storybook-table-cell--${style}`,
+    isHover && 'storybook-table-cell--hover',
+    isDisabled && 'storybook-table-cell--disabled',
+  ]);
+}
+
+function getFilterInputClassName({
+  type,
+  wide,
+}) {
+  return buildClassName([
+    'storybook-table-filter-input box-border inline-flex h-[42px] min-w-0 items-center gap-2 rounded-2 border border-solid border-neutral-100 bg-neutral-0 px-3 py-2.5 text-neutral-600 focus-within:outline-none focus-within:shadow-focus-brand max-[640px]:max-w-none',
+    wide ? 'w-full max-w-[240px]' : 'w-full max-w-[200px]',
+  ]);
+}
+
+function getTableActionButtonClassName() {
+  return buildClassName([
+    'storybook-table-action inline-flex size-7 items-center justify-center rounded-2 border-0 bg-transparent p-1 text-neutral-600',
+    'hover:bg-neutral-50 hover:text-neutral-800',
+    'focus-visible:outline-none focus-visible:shadow-focus-brand',
+  ]);
+}
+
 export function TableHeader({
   label = 'Company',
   arrow = 'none',
@@ -178,11 +259,10 @@ export function TableHeader({
 
   return (
     <span
-      className={buildClassName([
-        'storybook-table-header-label',
-        `storybook-table-header-label--${resolvedState}`,
+      className={getTableHeaderLabelClassName({
+        state: resolvedState,
         className,
-      ])}
+      })}
     >
       <Text
         as="span"
@@ -195,7 +275,7 @@ export function TableHeader({
       {helpIcon && (
         <Question
           aria-hidden="true"
-          className="storybook-table-header-label__icon"
+          className="size-4 shrink-0"
           size={16}
           weight="regular"
         />
@@ -203,7 +283,7 @@ export function TableHeader({
       {resolvedArrow !== 'none' && (
         <ArrowIcon
           aria-hidden="true"
-          className="storybook-table-header-label__icon"
+          className="size-4 shrink-0"
           size={16}
           weight="regular"
         />
@@ -236,11 +316,10 @@ export function TableHeaderCell({
 
   return (
     <div
-      className={buildClassName([
-        'storybook-table-header-cell',
-        `storybook-table-header-cell--${resolvedColor}`,
-        !text && 'storybook-table-header-cell--empty',
-      ])}
+      className={getTableHeaderCellClassName({
+        color: resolvedColor,
+        empty: !text,
+      })}
       role="columnheader"
     >
       {checkbox && <CheckBox size="mid" />}
@@ -269,7 +348,7 @@ TableHeaderCell.propTypes = {
 function StatusIcon({ icon }) {
   const iconProps = {
     'aria-hidden': true,
-    className: 'storybook-table-chip__icon',
+    className: 'size-3 shrink-0',
     size: 12,
     weight: 'regular',
   };
@@ -296,14 +375,19 @@ function TableChip({
   tone = 'success',
 }) {
   return (
-    <span className={buildClassName(['storybook-table-chip', `storybook-table-chip--${tone}`])}>
+    <span className={buildClassName([
+      'inline-flex items-center justify-center gap-1 rounded-2 px-2 py-1',
+      tone === 'info'
+        ? 'storybook-table-chip--info'
+        : (TABLE_CHIP_TONE_CLASSES[tone] ?? TABLE_CHIP_TONE_CLASSES.success),
+    ])}>
       {icon && <StatusIcon icon={icon} />}
       <Text
         as="span"
         variant="text-xs"
         weight="medium"
         color="currentColor"
-        className="storybook-table-chip__label"
+        className="shrink-0"
       >
         {label}
       </Text>
@@ -323,17 +407,17 @@ function DeliveryBar({ value = 72 }) {
   const error = 10;
 
   return (
-    <span className="storybook-table-delivery">
+    <span className="flex h-2 w-full overflow-hidden rounded-4">
       <span
-        className="storybook-table-delivery__segment storybook-table-delivery__segment--success"
+        className="storybook-table-delivery__segment bg-success-300"
         style={{ flexGrow: green }}
       />
       <span
-        className="storybook-table-delivery__segment storybook-table-delivery__segment--warning"
+        className="storybook-table-delivery__segment bg-warning-200"
         style={{ flexGrow: warning }}
       />
       <span
-        className="storybook-table-delivery__segment storybook-table-delivery__segment--error"
+        className="storybook-table-delivery__segment bg-error-500"
         style={{ flexGrow: error }}
       />
     </span>
@@ -350,15 +434,15 @@ function AvatarBlock({
   supportingValue = 'olivia@untitledui.com',
 }) {
   return (
-    <span className="storybook-table-avatar-cell">
-      <span className="storybook-table-avatar" aria-hidden="true" />
-      <span className="storybook-table-avatar-cell__copy">
+    <span className="inline-flex min-w-0 items-center gap-3">
+      <span className="storybook-table-avatar size-10 shrink-0 rounded-full" aria-hidden="true" />
+      <span className="flex min-w-0 flex-col text-neutral-800">
         <Text
           as="span"
           variant="text-sm"
           weight="medium"
           color="currentColor"
-          className="storybook-table-cell__truncate"
+          className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
         >
           {value}
         </Text>
@@ -368,7 +452,7 @@ function AvatarBlock({
             variant="text-sm"
             weight="regular"
             color="currentColor"
-            className="storybook-table-cell__truncate"
+            className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-neutral-600"
           >
             {supportingValue}
           </Text>
@@ -388,11 +472,11 @@ function ActionButtons({ actionIcon = 'eye' }) {
   const FirstIcon = actionIcon === 'edit' ? PencilSimple : Eye;
 
   return (
-    <span className="storybook-table-actions">
-      <button type="button" className="storybook-table-action" aria-label={actionIcon === 'edit' ? 'Edit' : 'View'}>
+    <span className="inline-flex items-center gap-1">
+      <button type="button" className={getTableActionButtonClassName()} aria-label={actionIcon === 'edit' ? 'Edit' : 'View'}>
         <FirstIcon size={20} weight="regular" />
       </button>
-      <button type="button" className="storybook-table-action" aria-label="More actions">
+      <button type="button" className={getTableActionButtonClassName()} aria-label="More actions">
         <DotsThreeVertical size={20} weight="bold" />
       </button>
     </span>
@@ -430,11 +514,10 @@ export function TableCell({
 
   return (
     <div
-      className={buildClassName([
-        'storybook-table-cell',
-        `storybook-table-cell--${resolvedStyle}`,
-        `storybook-table-cell--${resolvedState}`,
-      ])}
+      className={getTableCellClassName({
+        state: resolvedState,
+        style: resolvedStyle,
+      })}
       role="cell"
     >
       {resolvedStyle === 'lead' && (
@@ -443,7 +526,7 @@ export function TableCell({
           variant="text-sm"
           weight="semibold"
           color="currentColor"
-          className="storybook-table-cell__truncate"
+          className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
         >
           {value}
         </Text>
@@ -454,7 +537,7 @@ export function TableCell({
           variant="text-sm"
           weight="regular"
           color="currentColor"
-          className="storybook-table-cell__truncate"
+          className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
         >
           {value}
         </Text>
@@ -467,7 +550,7 @@ export function TableCell({
             variant="text-sm"
             weight="semibold"
             color="currentColor"
-            className="storybook-table-cell__truncate"
+            className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
           >
             {value}
           </Text>
@@ -488,7 +571,7 @@ export function TableCell({
         />
       )}
       {resolvedStyle === 'badges' && (
-        <span className="storybook-table-badges">
+        <span className="inline-flex min-w-0 items-center gap-1">
           {resolvedBadges.map((badge, index) => (
             <TableChip
               key={`${badge.label}-${index}`}
@@ -544,23 +627,24 @@ function FilterInput({
   icon,
   label,
   type = 'search',
+  wide = false,
 }) {
   const Icon = icon;
 
   return (
-    <span className={buildClassName(['storybook-table-filter-input', `storybook-table-filter-input--${type}`])}>
-      {Icon && <Icon size={20} weight="regular" />}
+    <span className={getFilterInputClassName({ type, wide })}>
+      {Icon && <Icon className="size-5 shrink-0" size={20} weight="regular" />}
       <Text
         as="span"
         variant="text-sm"
         weight="regular"
         color="currentColor"
-        className="storybook-table-filter-input__label"
+        className="min-w-0 flex-[1_1_0] overflow-hidden text-ellipsis whitespace-nowrap text-neutral-300"
       >
         {label}
       </Text>
-      {type === 'select' && <CaretUpDown size={20} weight="regular" />}
-      {type === 'date' && <CalendarBlank size={20} weight="regular" />}
+      {type === 'select' && <CaretUpDown className="size-5 shrink-0" size={20} weight="regular" />}
+      {type === 'date' && <CalendarBlank className="size-5 shrink-0" size={20} weight="regular" />}
     </span>
   );
 }
@@ -569,6 +653,7 @@ FilterInput.propTypes = {
   icon: PropTypes.elementType,
   label: PropTypes.string.isRequired,
   type: PropTypes.oneOf(['date', 'search', 'select']),
+  wide: PropTypes.bool,
 };
 
 export function TableFilters({
@@ -584,21 +669,21 @@ export function TableFilters({
   const showRefresh = resolvedStyle === 'advanced';
 
   return (
-    <div className="storybook-table-filters">
+    <div className="flex w-full max-w-[1257px] items-center justify-between gap-4 max-[900px]:flex-col max-[900px]:items-start">
       <Text
         as="h2"
         variant="display-xs"
         weight="semibold"
-        color="currentColor"
-        className="storybook-table-filters__title"
+        className="shrink-0 text-neutral-900"
       >
         {title}
       </Text>
-      <div className="storybook-table-filters__actions">
+      <div className="flex min-w-0 flex-wrap items-center justify-end gap-4 max-[900px]:w-full max-[900px]:justify-start">
         {showSearch && resolvedStyle !== 'button-only' && resolvedStyle !== 'advanced' && !showSelect && (
           <FilterInput
             icon={MagnifyingGlass}
             label="Search"
+            wide
           />
         )}
         {showSearch && showSelect && (
@@ -620,7 +705,11 @@ export function TableFilters({
           />
         )}
         {showButton && showRefresh && (
-          <button type="button" className="storybook-table-icon-button" aria-label="Refresh filters">
+          <button
+            type="button"
+            className="storybook-table-icon-button inline-flex size-[42px] cursor-pointer items-center justify-center rounded-2 border border-solid border-neutral-100 bg-neutral-0 p-1 text-neutral-600 hover:bg-neutral-50 hover:text-neutral-800 focus-visible:outline-none focus-visible:shadow-focus-brand"
+            aria-label="Refresh filters"
+          >
             <ArrowsClockwise size={20} weight="regular" />
           </button>
         )}
@@ -633,7 +722,10 @@ export function TableFilters({
           />
         )}
         {showButton && showRefresh && (
-          <button type="button" className="storybook-table-clear">
+          <button
+            type="button"
+            className="storybook-table-clear cursor-pointer rounded-2 border-0 bg-transparent p-0 font-sans text-ds-text-sm font-semibold text-brand-400 focus-visible:outline-none focus-visible:shadow-focus-brand"
+          >
             Clear Filters
           </button>
         )}
@@ -689,16 +781,19 @@ export function TableEmptyState({
   const Icon = config.icon;
 
   return (
-    <div className="storybook-table-empty">
-      <div className={buildClassName(['storybook-table-empty__icon', `storybook-table-empty__icon--${config.iconTone}`])}>
+    <div className="flex min-h-[240px] flex-col items-center justify-center gap-6 bg-neutral-0 px-8 pb-12 pt-10 text-center">
+      <div className={buildClassName([
+        'inline-flex size-12 items-center justify-center rounded-[28px]',
+        TABLE_EMPTY_ICON_CLASSES[config.iconTone],
+      ])}>
         <Icon size={24} weight="regular" />
       </div>
-      <div className="storybook-table-empty__copy">
+      <div className="storybook-table-empty__copy flex w-[352px] flex-col gap-1">
         <Text
           as="h3"
           variant="text-md"
           weight="semibold"
-          color="currentColor"
+          className="text-neutral-900"
         >
           {config.title}
         </Text>
@@ -706,12 +801,12 @@ export function TableEmptyState({
           as="p"
           variant="text-sm"
           weight="regular"
-          color="currentColor"
+          className="text-neutral-600"
         >
           {config.description}
         </Text>
       </div>
-      <div className="storybook-table-empty__actions">
+      <div className="grid w-[352px] grid-cols-2 gap-3">
         <Button
           hierarchy="secondary"
           label={config.secondaryLabel}
@@ -783,10 +878,17 @@ export function Table({
   };
 
   return (
-    <section className={buildClassName(['storybook-table', `storybook-table--${resolvedType}`, `storybook-table--${resolvedView}`])}>
-      <div className="storybook-table__scroll">
+    <section className={buildClassName([
+      'storybook-table box-border w-full min-w-0 max-w-full overflow-hidden rounded-2 border border-solid border-neutral-100 bg-neutral-0',
+      `storybook-table--${resolvedType}`,
+      `storybook-table--${resolvedView}`,
+    ])}>
+      <div className="w-full overflow-x-auto">
         <div
-          className="storybook-table__grid"
+          className={buildClassName([
+            'storybook-table__grid grid w-full min-w-[720px] bg-neutral-100 max-[900px]:min-w-[640px]',
+            resolvedType === 'with-border' ? 'gap-px' : 'gap-y-px',
+          ])}
           style={{ gridTemplateColumns }}
           role="table"
         >
@@ -831,7 +933,7 @@ export function Table({
           alignment={paginationAlignment}
           breakpoint={paginationBreakpoint}
           currentPage={activePage}
-          className="storybook-table__pagination"
+          className="storybook-table__pagination max-w-full border-t border-solid border-neutral-100 px-6 pb-4 pt-3 max-[900px]:justify-start max-[900px]:px-4"
           nextDisabled={Number.isFinite(activePageNumber) && activePageNumber >= lastPage}
           onNext={handleNext}
           onPageChange={updatePage}

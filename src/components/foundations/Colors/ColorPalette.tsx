@@ -1,6 +1,5 @@
 import { Text } from '../Typography';
 import { colorHex } from '../../../styling/theme/colors';
-import './colorPalette.css';
 
 type ColorGroup = 'neutral' | 'brand' | 'error' | 'warning' | 'success';
 type ColorStep = number | string;
@@ -67,13 +66,41 @@ const colorClassNames: Record<ColorGroup, Record<string, string>> = {
   },
 };
 
+function buildClassName(parts: Array<string | false | null | undefined>) {
+  return parts.flat().filter(Boolean).join(' ');
+}
+
+function getColorPaletteClassName() {
+  return 'flex flex-col gap-6 font-sans';
+}
+
+function getColorSectionHeaderClassName() {
+  return 'mb-2 flex items-baseline justify-between';
+}
+
+function getColorSectionGridClassName() {
+  return 'grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4';
+}
+
+function getColorSwatchClassName() {
+  return 'overflow-hidden rounded-12 border border-solid border-ds-border bg-ds-surface shadow-lg';
+}
+
+function getColorSwatchChipClassName(colorClassName: string) {
+  return buildClassName(['h-20 w-full', colorClassName]);
+}
+
+function getColorSwatchMetaClassName() {
+  return 'flex flex-col gap-0.5 px-3 pb-3';
+}
+
 function Swatch({ group, step, hex, showHex }: SwatchProps) {
   const tokenName = `${group}-${step}`;
 
   return (
-    <div className="ds-swatch overflow-hidden rounded-12 border-ds-border bg-ds-surface shadow-lg" title={`${group} ${step}`}>
-      <div className={`ds-swatch__chip ${colorClassNames[group][String(step)]}`} />
-      <div className="ds-swatch__meta gap-0.5 px-3 pb-3">
+    <div className={getColorSwatchClassName()} title={`${group} ${step}`}>
+      <div className={getColorSwatchChipClassName(colorClassNames[group][String(step)])} />
+      <div className={getColorSwatchMetaClassName()}>
         <Text as="span" variant="text-lg" weight="medium">
           {step}
         </Text>
@@ -82,9 +109,9 @@ function Swatch({ group, step, hex, showHex }: SwatchProps) {
             {hex}
           </Text>
         ) : null}
-        <code>{`bg-${tokenName}`}</code>
-        <code>{`text-${tokenName}`}</code>
-        <code>{`border-${tokenName}`}</code>
+        <code className="w-fit">{`bg-${tokenName}`}</code>
+        <code className="w-fit">{`text-${tokenName}`}</code>
+        <code className="w-fit">{`border-${tokenName}`}</code>
       </div>
     </div>
   );
@@ -92,9 +119,9 @@ function Swatch({ group, step, hex, showHex }: SwatchProps) {
 
 function SpecialSwatch({ name, colorClassName, tokenName, hex, showHex }: SpecialSwatchProps) {
   return (
-    <div className="ds-swatch overflow-hidden rounded-12 border-ds-border bg-ds-surface shadow-lg" title={name}>
-      <div className={`ds-swatch__chip ${colorClassName}`} />
-      <div className="ds-swatch__meta gap-0.5 px-3 pb-3">
+    <div className={getColorSwatchClassName()} title={name}>
+      <div className={getColorSwatchChipClassName(colorClassName)} />
+      <div className={getColorSwatchMetaClassName()}>
         <Text as="span" variant="text-lg" weight="medium">
           {name}
         </Text>
@@ -103,9 +130,9 @@ function SpecialSwatch({ name, colorClassName, tokenName, hex, showHex }: Specia
             {hex}
           </Text>
         ) : null}
-        <code>{`bg-${tokenName}`}</code>
-        <code>{`text-${tokenName}`}</code>
-        <code>{`border-${tokenName}`}</code>
+        <code className="w-fit">{`bg-${tokenName}`}</code>
+        <code className="w-fit">{`text-${tokenName}`}</code>
+        <code className="w-fit">{`border-${tokenName}`}</code>
       </div>
     </div>
   );
@@ -113,7 +140,7 @@ function SpecialSwatch({ name, colorClassName, tokenName, hex, showHex }: Specia
 
 export function ColorPalette({ showHex = true }: ColorPaletteProps) {
   return (
-    <div className="ds-palette gap-6 font-sans">
+    <div className={getColorPaletteClassName()}>
       <Section title="Neutral" group="neutral" steps={[0, 25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]} showHex={showHex} />
       <Section title="Brand" group="brand" steps={[25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900]} showHex={showHex} />
       <Section title="Error" group="error" steps={[25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900]} showHex={showHex} />
@@ -121,12 +148,12 @@ export function ColorPalette({ showHex = true }: ColorPaletteProps) {
       <Section title="Success" group="success" steps={[25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900]} showHex={showHex} />
 
       <div>
-        <div className="ds-section__header mb-2">
+        <div className={getColorSectionHeaderClassName()}>
           <Text as="h2" variant="text-lg" weight="semibold">
             Special Colors
           </Text>
         </div>
-        <div className="ds-section__grid gap-4">
+        <div className={getColorSectionGridClassName()}>
           <SpecialSwatch name="off-white" tokenName="special-offwhite" colorClassName="bg-special-offwhite" hex={colorHex.special.offwhite} showHex={showHex} />
           <SpecialSwatch name="lightening" tokenName="special-lightening" colorClassName="bg-special-lightening" hex={colorHex.special.lightening} showHex={showHex} />
           <SpecialSwatch name="midnight-black" tokenName="special-midnight-black" colorClassName="bg-special-midnight-black" hex={colorHex.special.midnightBlack} showHex={showHex} />
@@ -139,12 +166,12 @@ export function ColorPalette({ showHex = true }: ColorPaletteProps) {
 function Section({ title, group, steps, showHex }: SectionProps) {
   return (
     <div>
-      <div className="ds-section__header mb-2">
+      <div className={getColorSectionHeaderClassName()}>
         <Text as="h2" variant="text-lg" weight="semibold">
           {title}
         </Text>
       </div>
-      <div className="ds-section__grid gap-4">
+      <div className={getColorSectionGridClassName()}>
         {steps.map((step) => (
           <Swatch
             key={`${group}-${step}`}

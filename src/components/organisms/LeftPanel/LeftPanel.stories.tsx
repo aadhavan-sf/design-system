@@ -82,7 +82,7 @@ export const Variants = {
 
 export const ItemStates = {
   render: () => (
-    <div className="storybook-left-panel-item-story-grid grid grid-cols-[236px_236px] gap-x-24 gap-y-16 p-5">
+    <div className="grid grid-cols-[236px_236px] gap-x-24 gap-y-16 p-5">
       {['default', 'hover', 'focused', 'disabled'].map((state) => (
         <LeftPanelItem
           key={`default-${state}`}

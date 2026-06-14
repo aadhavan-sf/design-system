@@ -1,3 +1,48 @@
+.storybook-datepicker-field {
+  transition:
+    border-color 150ms ease-out,
+    background-color 150ms ease-out,
+    color 150ms ease-out,
+    box-shadow 150ms ease-out;
+}
+
+.storybook-datepicker-field:focus-within {
+  outline: none;
+}
+
+.storybook-datepicker-field:has(input:disabled) {
+  cursor: not-allowed;
+}
+
+input.storybook-datepicker-field__input {
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.storybook-datepicker-field__input:focus {
+  outline: none;
+}
+
+.storybook-datepicker-field__input:disabled {
+  cursor: not-allowed;
+}
+
+button.storybook-datepicker-field__calendar-button {
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+button.storybook-datepicker-field__calendar-button:focus-visible {
+  outline: none;
+}
+
+button.storybook-datepicker-field__calendar-button:disabled {
+  cursor: not-allowed;
+}
+
 .storybook-datepicker-field__panel {
   animation: storybook-datepicker-field-popover-enter 150ms ease-out;
   transform-origin: top center;

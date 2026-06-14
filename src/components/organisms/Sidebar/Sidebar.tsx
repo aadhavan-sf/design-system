@@ -93,6 +93,17 @@ function normalizeValue(value, aliases = {}) {
   return aliases[value] ?? value;
 }
 
+function getSidebarShellClassName({
+  isCollapsed,
+  className,
+}) {
+  return buildClassName([
+    'storybook-sidebar relative box-border flex h-full min-h-0 w-full flex-col justify-between border-0 border-r border-solid border-neutral-100 bg-neutral-0 font-sans',
+    isCollapsed && 'storybook-sidebar--collapsed',
+    className,
+  ]);
+}
+
 function getSidebarItemClassName({
   state,
   pressed,
@@ -469,18 +480,17 @@ export function Sidebar({
 
   return (
     <aside
-      className={buildClassName([
-        'storybook-sidebar relative box-border flex h-[952px] flex-col justify-between border-r border-solid border-neutral-100 bg-neutral-0 font-sans',
-        isCollapsed ? 'storybook-sidebar--collapsed w-[60px]' : 'w-[216px]',
+      className={getSidebarShellClassName({
+        isCollapsed,
         className,
-      ])}
+      })}
     >
       <div className="flex flex-col gap-6 pt-6">
         <header className={buildClassName([
           'flex items-center',
-          isCollapsed ? 'justify-center p-0' : 'pl-3 pr-5',
+          isCollapsed ? 'justify-center p-0' : 'px-4',
         ])}>
-          <div className="inline-flex items-center px-1 py-3">
+          <div className="inline-flex items-center py-3">
             <SuperfansBrand
               alt={isCollapsed ? brandLabel : `${brandLabel} logo`}
               variant={isCollapsed ? 'mark' : 'logo'}
@@ -489,52 +499,54 @@ export function Sidebar({
         </header>
 
         {!isCollapsed ? (
-          <div className="relative mx-4">
-            <button
-              ref={storeButtonRef}
-              type="button"
-              aria-expanded={isStoreDropdownOpen}
-              aria-controls="storybook-sidebar-store-dropdown"
-              className="storybook-sidebar-store box-border flex h-11 w-full cursor-pointer items-center justify-between gap-2 rounded-2 border border-solid border-neutral-200 bg-neutral-0 px-[14px] py-2.5 focus-visible:outline-none focus-visible:shadow-focus-brand"
-              onClick={() => setIsStoreDropdownOpen((currentValue) => !currentValue)}
-            >
-              <Text
-                as="span"
-                variant="text-sm"
-                weight="regular"
-                className={buildClassName([
-                  'min-w-0 overflow-hidden text-ellipsis whitespace-nowrap',
-                  selectedStore ? 'text-neutral-700' : 'text-neutral-300',
-                ])}
+          <div className="px-4">
+            <div className="relative">
+              <button
+                ref={storeButtonRef}
+                type="button"
+                aria-expanded={isStoreDropdownOpen}
+                aria-controls="storybook-sidebar-store-dropdown"
+                className="storybook-sidebar-store box-border flex h-11 w-full cursor-pointer items-center justify-between gap-2 rounded-2 border border-solid border-neutral-200 bg-neutral-0 px-[14px] py-2.5 focus-visible:outline-none focus-visible:shadow-focus-brand"
+                onClick={() => setIsStoreDropdownOpen((currentValue) => !currentValue)}
               >
-                {selectedStore?.name ?? storePlaceholder}
-              </Text>
-              <CaretUpDown
-                aria-hidden="true"
-                className="size-5 shrink-0 text-neutral-600"
-                size={20}
-                weight="regular"
-              />
-            </button>
-
-            {isStoreDropdownOpen && (
-              <div
-                ref={storeDropdownRef}
-                id="storybook-sidebar-store-dropdown"
-                className="storybook-sidebar-store-dropdown absolute left-0 z-20 w-full"
-              >
-                <DropdownList
-                  items={storeOptions.map((store) => ({
-                    label: store.name,
-                    value: store.id,
-                  }))}
-                  selectedValues={selectedStore ? [selectedStore.id] : []}
-                  variant="check-right"
-                  className="w-full"
-                  onItemSelect={handleStoreSelect}
+                <Text
+                  as="span"
+                  variant="text-sm"
+                  weight="regular"
+                  className={buildClassName([
+                    'min-w-0 overflow-hidden text-ellipsis whitespace-nowrap',
+                    selectedStore ? 'text-neutral-700' : 'text-neutral-300',
+                  ])}
+                >
+                  {selectedStore?.name ?? storePlaceholder}
+                </Text>
+                <CaretUpDown
+                  aria-hidden="true"
+                  className="size-5 shrink-0 text-neutral-600"
+                  size={20}
+                  weight="regular"
                 />
-              </div>
-            )}
+              </button>
+
+              {isStoreDropdownOpen && (
+                <div
+                  ref={storeDropdownRef}
+                  id="storybook-sidebar-store-dropdown"
+                  className="storybook-sidebar-store-dropdown absolute inset-x-0 z-20"
+                >
+                  <DropdownList
+                    items={storeOptions.map((store) => ({
+                      label: store.name,
+                      value: store.id,
+                    }))}
+                    selectedValues={selectedStore ? [selectedStore.id] : []}
+                    variant="check-right"
+                    fullWidth
+                    onItemSelect={handleStoreSelect}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         ) : (
           <button

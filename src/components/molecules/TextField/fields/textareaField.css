@@ -1,10 +1,47 @@
-.storybook-textarea-field__caret {
-  animation: storybook-textarea-field-caret-blink 1s step-end infinite;
+textarea.storybook-textarea-field {
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.storybook-textarea-field {
+  transition:
+    border-color 150ms ease-out,
+    background-color 150ms ease-out,
+    color 150ms ease-out,
+    box-shadow 150ms ease-out;
+}
+
+.storybook-textarea-field:focus-visible {
+  outline: none;
+}
+
+.storybook-textarea-field:disabled {
+  cursor: not-allowed;
+}
+
+button.storybook-textarea-field__resize-mark {
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: ns-resize;
+}
+
+button.storybook-textarea-field__resize-mark:focus-visible {
+  outline: none;
+}
+
+button.storybook-textarea-field__resize-mark:disabled {
+  cursor: not-allowed;
 }
 
 .storybook-textarea-field__resize-mark svg {
   transform: rotate(45deg);
   transform-origin: center;
+}
+
+.storybook-textarea-field__caret {
+  animation: storybook-textarea-field-caret-blink 1s step-end infinite;
 }
 
 @keyframes storybook-textarea-field-caret-blink {

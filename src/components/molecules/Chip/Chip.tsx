@@ -13,11 +13,13 @@ export type ChipSize = string;
 export type ChipShape = string;
 export type ChipIconName = string;
 export type ChipState = string;
+export type ChipTone = string;
 
 type NormalizedChipType = 'chip' | 'button';
 type NormalizedChipShape = 'pill' | 'rounded';
 type NormalizedChipIcon = 'none' | 'left' | 'right' | 'both' | 'avatar-left' | 'avatar-right' | 'icon-only';
 type NormalizedChipState = 'default' | 'hover' | 'focused' | 'disabled';
+type NormalizedChipTone = 'neutral' | 'brand';
 type InnerChipIconName = 'arrow' | 'avatar' | 'close';
 
 export interface ChipProps extends Omit<HTMLAttributes<HTMLElement>, 'style' | 'onClick'> {
@@ -31,6 +33,7 @@ export interface ChipProps extends Omit<HTMLAttributes<HTMLElement>, 'style' | '
   active?: boolean;
   defaultActive?: boolean;
   state?: ChipState;
+  tone?: ChipTone;
   disabled?: boolean;
   onClick?: (event: MouseEvent<HTMLElement>) => void;
   onActiveChange?: (active: boolean) => void;
@@ -119,6 +122,7 @@ export function Chip({
   active,
   defaultActive = false,
   state = 'default',
+  tone = 'neutral',
   disabled = false,
   className,
   onClick,
@@ -152,6 +156,10 @@ export function Chip({
     Focused: 'focused',
     Disabled: 'disabled',
   }) as NormalizedChipState;
+  const normalizedTone = normalizeValue(tone, {
+    Neutral: 'neutral',
+    Brand: 'brand',
+  }) as NormalizedChipTone;
   const isButton = normalizedType === 'button';
   const isDisabled = disabled || normalizedState === 'disabled';
   const isActive = isActiveControlled ? active : internalActive;
@@ -174,7 +182,8 @@ export function Chip({
         `storybook-chip--${size}`,
         `storybook-chip--${normalizedShape}`,
         `storybook-chip--state-${normalizedState}`,
-        border && normalizedType === 'chip' && 'storybook-chip--bordered',
+        normalizedTone === 'brand' && 'storybook-chip--tone-brand',
+        border && normalizedType === 'chip' && normalizedTone === 'neutral' && 'storybook-chip--bordered',
         isActive && 'storybook-chip--active',
         isDisabled && 'storybook-chip--disabled',
         normalizedIcon === 'icon-only' && 'storybook-chip--icon-only',

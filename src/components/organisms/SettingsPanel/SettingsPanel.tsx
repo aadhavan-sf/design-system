@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Question,
@@ -7,6 +7,7 @@ import {
 } from '@phosphor-icons/react';
 
 import { Text } from '../../foundations/Typography';
+import { Chip } from '../../molecules/Chip';
 
 import './settingsPanel.css';
 
@@ -25,11 +26,13 @@ const PANEL_CONTENT = {
       'Policies',
       'Global CSS',
       'Metafields',
-      'Other Options',
       'Product Badges',
+      { label: 'Manage Stores', beta: true },
+      { label: 'Store Switcher', beta: true },
       'Other Options',
     ],
     warningLabels: [],
+    betaLabels: ['Manage Stores', 'Store Switcher'],
   },
   'app-distribution': {
     title: 'App Distribution',
@@ -71,6 +74,25 @@ function getResolvedState(state) {
   });
 }
 
+function getSettingsPanelShellClassName(className) {
+  return buildClassName([
+    'storybook-settings-panel box-border flex h-full min-h-0 w-full flex-col items-center overflow-hidden rounded-6 border border-solid border-neutral-50 bg-neutral-0 p-6 font-sans',
+    className,
+  ]);
+}
+
+function getSettingsPanelHelpButtonClassName() {
+  return 'storybook-settings-panel__help inline-flex items-center justify-center gap-1 rounded-2 border-0 bg-transparent p-0 font-sans text-brand-400 focus-visible:shadow-focus-brand';
+}
+
+function getSettingsPanelBetaTagClassName({ className, shine = false }) {
+  return buildClassName([
+    'storybook-settings-panel-beta-tag shrink-0',
+    shine && 'storybook-settings-panel-beta-tag--shine',
+    className,
+  ]);
+}
+
 function getSettingsPanelItemClassName({
   state,
   pressed,
@@ -81,15 +103,15 @@ function getSettingsPanelItemClassName({
   const isFocused = state === 'focused';
 
   return buildClassName([
-    'storybook-settings-panel-item box-border flex h-12 w-full cursor-pointer items-center gap-2 rounded-2 border border-solid p-3 text-left font-sans transition-[background-color,border-color,color,box-shadow] duration-[160ms] ease-out focus-visible:outline-none focus-visible:shadow-focus-brand',
+    'storybook-settings-panel-item box-border flex h-12 w-full items-center gap-2 rounded-2 border border-solid p-3 text-left font-sans focus-visible:shadow-focus-brand',
     pressed && !isDisabled && 'border-brand-400 bg-brand-25 text-brand-400',
     pressed && !isDisabled && isHover && 'bg-brand-25',
     pressed && !isDisabled && isFocused && 'border-brand-400 bg-brand-25 shadow-focus-brand',
     !pressed && !isDisabled && 'border-neutral-100 bg-neutral-0 text-neutral-600 enabled:hover:border-neutral-100 enabled:hover:bg-neutral-50',
     !pressed && !isDisabled && isHover && 'border-neutral-100 bg-neutral-50',
     !pressed && !isDisabled && isFocused && 'border-neutral-100 bg-neutral-0 shadow-focus-brand',
-    isDisabled && !pressed && 'cursor-not-allowed border-neutral-100 bg-neutral-50 text-neutral-300',
-    pressed && isDisabled && 'cursor-not-allowed border-brand-100 bg-brand-25 text-brand-100',
+    isDisabled && !pressed && 'border-neutral-100 bg-neutral-50 text-neutral-300',
+    pressed && isDisabled && 'border-brand-100 bg-brand-25 text-brand-100',
     isHover && 'storybook-settings-panel-item--hover',
     isFocused && 'storybook-settings-panel-item--focused',
     pressed && 'storybook-settings-panel-item--pressed',
@@ -98,9 +120,39 @@ function getSettingsPanelItemClassName({
   ]);
 }
 
+export function SettingsPanelBetaTag({
+  className,
+  shine = false,
+  onShineComplete,
+}) {
+  return (
+    <Chip
+      type="chip"
+      label="BETA"
+      size="sm"
+      shape="rounded"
+      icon="none"
+      tone="brand"
+      className={getSettingsPanelBetaTagClassName({ className, shine })}
+      onAnimationEnd={(event) => {
+        if (event.animationName === 'storybook-settings-panel-beta-shine') {
+          onShineComplete?.();
+        }
+      }}
+    />
+  );
+}
+
+SettingsPanelBetaTag.propTypes = {
+  className: PropTypes.string,
+  shine: PropTypes.bool,
+  onShineComplete: PropTypes.func,
+};
+
 export function SettingsPanelItem({
   label = 'Label',
   pressed = false,
+  showBeta = false,
   showIcon = true,
   state = 'default',
   className,
@@ -108,6 +160,39 @@ export function SettingsPanelItem({
 }) {
   const resolvedState = getResolvedState(state);
   const isDisabled = resolvedState === 'disabled';
+  const [betaShine, setBetaShine] = useState(false);
+  const prevPressedRef = useRef(pressed);
+
+  const triggerBetaShine = () => {
+    setBetaShine(false);
+    requestAnimationFrame(() => setBetaShine(true));
+  };
+
+  useEffect(() => {
+    if (!showBeta || !pressed) {
+      setBetaShine(false);
+      prevPressedRef.current = pressed;
+      return;
+    }
+
+    if (!prevPressedRef.current) {
+      triggerBetaShine();
+    }
+
+    prevPressedRef.current = pressed;
+  }, [pressed, showBeta]);
+
+  const handleClick = () => {
+    if (isDisabled) {
+      return;
+    }
+
+    if (showBeta && pressed) {
+      triggerBetaShine();
+    }
+
+    onClick?.();
+  };
 
   return (
     <button
@@ -118,7 +203,7 @@ export function SettingsPanelItem({
         pressed,
         className,
       })}
-      onClick={isDisabled ? undefined : onClick}
+      onClick={handleClick}
     >
       <Text
         as="span"
@@ -129,10 +214,16 @@ export function SettingsPanelItem({
       >
         {label}
       </Text>
+      {showBeta && (
+        <SettingsPanelBetaTag
+          shine={pressed && betaShine}
+          onShineComplete={() => setBetaShine(false)}
+        />
+      )}
       {showIcon && (
         <Warning
           aria-hidden="true"
-          className="size-5 shrink-0"
+          className="size-5 shrink-0 text-current"
           size={20}
           weight="regular"
         />
@@ -144,6 +235,7 @@ export function SettingsPanelItem({
 SettingsPanelItem.propTypes = {
   label: PropTypes.string,
   pressed: PropTypes.bool,
+  showBeta: PropTypes.bool,
   showIcon: PropTypes.bool,
   state: PropTypes.oneOf([...ITEM_STATES, 'Default', 'Hover', 'Focused', 'Disabled']),
   className: PropTypes.string,
@@ -157,6 +249,7 @@ export function SettingsPanel({
   items,
   activeLabel,
   warningLabels,
+  betaLabels,
   showHelp = true,
   className,
   onHelpClick,
@@ -168,6 +261,7 @@ export function SettingsPanel({
   const resolvedTitle = title ?? panelContent.title;
   const resolvedActiveLabel = activeLabel ?? panelContent.activeLabel;
   const resolvedWarningLabels = warningLabels ?? panelContent.warningLabels;
+  const resolvedBetaLabels = betaLabels ?? panelContent.betaLabels ?? [];
   const [selectedLabel, setSelectedLabel] = useState(resolvedActiveLabel);
 
   const handleItemClick = (itemLabel) => {
@@ -178,10 +272,7 @@ export function SettingsPanel({
   return (
     <aside
       aria-label={resolvedTitle}
-      className={buildClassName([
-        'storybook-settings-panel box-border flex h-full min-h-0 w-full flex-col items-center overflow-hidden rounded-6 border border-solid border-neutral-50 bg-neutral-0 p-6 font-sans',
-        className,
-      ])}
+      className={getSettingsPanelShellClassName(className)}
     >
       <div className="flex w-full flex-col gap-6">
         <header className="flex w-full items-center gap-2">
@@ -189,14 +280,14 @@ export function SettingsPanel({
             as="h2"
             variant="text-md"
             weight="semibold"
-            className="shrink-0 whitespace-nowrap text-neutral-900"
+            className="min-w-0 shrink-0 overflow-hidden text-ellipsis whitespace-nowrap text-neutral-900"
           >
             {resolvedTitle}
           </Text>
           {showHelp && (
             <button
               type="button"
-              className="storybook-settings-panel__help inline-flex cursor-pointer items-center justify-center gap-1 rounded-2 border-0 bg-transparent p-0 text-brand-400 focus-visible:outline-none focus-visible:shadow-focus-brand"
+              className={getSettingsPanelHelpButtonClassName()}
               onClick={onHelpClick}
             >
               <Question aria-hidden="true" className="size-5 shrink-0" size={20} weight="regular" />
@@ -220,6 +311,9 @@ export function SettingsPanel({
             const showIcon = typeof item === 'string'
               ? resolvedWarningLabels.includes(itemLabel)
               : item.showIcon ?? resolvedWarningLabels.includes(itemLabel);
+            const showBeta = typeof item === 'string'
+              ? resolvedBetaLabels.includes(itemLabel)
+              : item.beta ?? resolvedBetaLabels.includes(itemLabel);
             const pressed = itemLabel === selectedLabel;
 
             return (
@@ -227,6 +321,7 @@ export function SettingsPanel({
                 key={`${itemLabel}-${index}`}
                 label={itemLabel}
                 pressed={pressed}
+                showBeta={showBeta}
                 showIcon={showIcon}
                 state={disabled ? 'disabled' : state}
                 onClick={() => handleItemClick(itemLabel)}
@@ -254,12 +349,14 @@ SettingsPanel.propTypes = {
     PropTypes.shape({
       label: PropTypes.string.isRequired,
       disabled: PropTypes.bool,
+      beta: PropTypes.bool,
       showIcon: PropTypes.bool,
       state: PropTypes.oneOf([...ITEM_STATES, 'Default', 'Hover', 'Focused', 'Disabled']),
     }),
   ])),
   activeLabel: PropTypes.string,
   warningLabels: PropTypes.arrayOf(PropTypes.string),
+  betaLabels: PropTypes.arrayOf(PropTypes.string),
   showHelp: PropTypes.bool,
   className: PropTypes.string,
   onHelpClick: PropTypes.func,

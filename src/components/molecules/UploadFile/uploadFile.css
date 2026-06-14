@@ -15,6 +15,45 @@ button.storybook-upload-dropzone {
   margin: 0;
   appearance: none;
   -webkit-appearance: none;
+
+  cursor: pointer;
+
+  transition:
+    background-color 160ms ease,
+    box-shadow 160ms ease,
+    color 160ms ease;
+}
+
+button.storybook-upload-dropzone:focus-visible {
+  outline: none;
+}
+
+button.storybook-upload-dropzone:disabled {
+  cursor: not-allowed;
+}
+
+.storybook-upload-action {
+  cursor: pointer;
+
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.storybook-upload-action:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow_focus-neutral);
+}
+
+.storybook-upload-tile__loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+
+  transform: translate(-50%, -50%);
 }
 
 .storybook-upload-item__thumbnail-image {

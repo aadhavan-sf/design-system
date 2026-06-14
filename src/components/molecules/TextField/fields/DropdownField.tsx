@@ -13,6 +13,8 @@ import {
 } from '../textField.constants';
 import type { DropdownListItem, DropdownListVariant } from '../../DropdownList/DropdownList';
 
+import './dropdownField.css';
+
 export type TextFieldDropdownItem = DropdownListItem;
 
 export interface DropdownFieldProps {
@@ -32,41 +34,36 @@ export interface DropdownFieldProps {
   withIcon: boolean;
 }
 
-function getDropdownFieldClassName(state: NormalizedTextFieldState | string) {
-  const baseClasses = [
+function getDropdownFieldLayoutClasses() {
+  return buildClassName([
     'storybook-dropdown-field',
     'box-border flex h-11 w-full min-w-0 items-center justify-between gap-2',
     'rounded-8 border border-solid bg-neutral-0 px-[14px] py-3',
-    'font-sans text-ds-text-sm font-normal text-neutral-700',
-    'transition-[border-color,background-color,color,box-shadow] duration-150 ease-out',
-    'focus:outline-none focus-visible:border-neutral-500',
-    'm-0 cursor-pointer appearance-none text-left font-[inherit]',
-  ];
+    'text-left',
+    'focus-visible:border-neutral-500',
+  ]);
+}
 
+function getDropdownFieldStateClasses(state: NormalizedTextFieldState | string) {
   if (state === 'disabled') {
-    return buildClassName([
-      ...baseClasses,
-      'storybook-dropdown-field--disabled cursor-not-allowed border-neutral-200 bg-neutral-25 text-neutral-300',
-    ]);
+    return 'border-neutral-200 bg-neutral-25';
   }
 
   if (state === 'error') {
-    return buildClassName([
-      ...baseClasses,
-      'border-error-600 text-error-600',
-    ]);
+    return 'border-error-600';
   }
 
   if (state === 'active') {
-    return buildClassName([
-      ...baseClasses,
-      'border-neutral-500',
-    ]);
+    return 'border-neutral-500';
   }
 
+  return 'border-neutral-200';
+}
+
+function getDropdownFieldClassName(state: NormalizedTextFieldState | string) {
   return buildClassName([
-    ...baseClasses,
-    'border-neutral-200',
+    getDropdownFieldLayoutClasses(),
+    getDropdownFieldStateClasses(state),
   ]);
 }
 
@@ -90,6 +87,14 @@ function getDropdownDisplayTextClassName({
   }
 
   return 'text-neutral-700';
+}
+
+function getDropdownDisplayTextLayoutClasses() {
+  return buildClassName([
+    'min-w-0 overflow-hidden text-ellipsis whitespace-nowrap',
+    'font-sans text-ds-text-sm font-normal',
+    textFieldTrackingClass,
+  ]);
 }
 
 function getTrailingIconClassName(state: NormalizedTextFieldState | string) {
@@ -138,7 +143,6 @@ export function DropdownField({
   });
   const resolvedDropdownListVariant =
     dropdownListVariant ?? (withIcon ? 'icon-left' : 'check-right');
-  const fieldClassName = getDropdownFieldClassName(state);
 
   const handleToggle = () => {
     if (!disabled) {
@@ -151,7 +155,7 @@ export function DropdownField({
       <button
         type="button"
         disabled={disabled}
-        className={fieldClassName}
+        className={getDropdownFieldClassName(state)}
         onClick={handleToggle}
         onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -166,8 +170,7 @@ export function DropdownField({
             variant="text-sm"
             weight="regular"
             className={buildClassName([
-              'min-w-0 overflow-hidden text-ellipsis whitespace-nowrap font-sans text-ds-text-sm font-normal',
-              textFieldTrackingClass,
+              getDropdownDisplayTextLayoutClasses(),
               getDropdownDisplayTextClassName({ hasValue, state }),
             ])}
           >

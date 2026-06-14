@@ -1,6 +1,5 @@
 import { Text } from '../Typography';
 import { spacing, spacingPx } from '../../../styling/theme/spacing.js';
-import './spacingScale.css';
 
 type SpacingKey = string;
 
@@ -37,21 +36,88 @@ const radiusClassNames: Record<SpacingKey, string> = {
   32: 'rounded-128',
 };
 
+function buildClassName(parts: Array<string | false | null | undefined>) {
+  return parts.flat().filter(Boolean).join(' ');
+}
+
+function getSpacingScaleClassName() {
+  return 'flex flex-col gap-6 font-sans text-ds-text-strong';
+}
+
+function getSpacingHeaderClassName() {
+  return 'flex items-end justify-between gap-4 max-sm:flex-col max-sm:items-start';
+}
+
+function getSpacingPreviewGridClassName() {
+  return 'grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4';
+}
+
+function getSpacingPreviewBoxClassName({ gapClassName, paddingClassName }: {
+  gapClassName: string;
+  paddingClassName: string;
+}) {
+  return buildClassName([
+    'flex flex-wrap items-center border border-solid border-ds-border bg-ds-surface-subtle rounded-8',
+    gapClassName,
+    paddingClassName,
+  ]);
+}
+
+function getSpacingPreviewPillClassName() {
+  return 'inline-flex min-h-10 items-center rounded-8 bg-ds-surface px-3 text-ds-text shadow-xs';
+}
+
+function getSpacingListClassName() {
+  return 'flex flex-col gap-2';
+}
+
+function getSpacingRowClassName() {
+  return buildClassName([
+    'grid min-h-14 items-center gap-4 rounded-8 border border-solid border-ds-border bg-ds-surface px-3 py-2',
+    'grid-cols-[minmax(160px,220px)_minmax(140px,1fr)_64px]',
+    'max-sm:grid-cols-1 max-sm:gap-2',
+  ]);
+}
+
+function getSpacingRowLabelClassName() {
+  return 'flex flex-col gap-1';
+}
+
+function getSpacingRowBarWrapClassName() {
+  return 'flex min-h-6 items-center';
+}
+
+function getSpacingRowBarClassName() {
+  return 'h-4 min-w-px rounded-full bg-brand-500';
+}
+
+function getSpacingRowValueClassName() {
+  return 'text-right max-sm:text-left';
+}
+
 function SpacingRow({ step, value }: SpacingRowProps) {
   const tailwindClasses = `p-${step} gap-${step} ${radiusClassNames[step]}`;
 
   return (
-    <div className="ds-spacing-row gap-4 rounded-8 border-ds-border bg-ds-surface px-3 py-2 max-sm:gap-2">
-      <div className="ds-spacing-row__label gap-1">
+    <div className={getSpacingRowClassName()}>
+      <div className={getSpacingRowLabelClassName()}>
         <Text as="span" variant="text-md" weight="semibold">
           {step}
         </Text>
         <code>{tailwindClasses}</code>
       </div>
-      <div className="ds-spacing-row__bar-wrap">
-        <div className="ds-spacing-row__bar rounded-full bg-brand-500" style={{ width: typedSpacing[step] }} />
+      <div className={getSpacingRowBarWrapClassName()}>
+        <div
+          className={getSpacingRowBarClassName()}
+          style={{ width: typedSpacing[step] }}
+        />
       </div>
-      <Text as="span" variant="text-sm" weight="medium" className="ds-spacing-row__value text-ds-text-muted">
+      <Text
+        as="span"
+        variant="text-sm"
+        weight="medium"
+        className={buildClassName(['text-ds-text-muted', getSpacingRowValueClassName()])}
+      >
         {value}
       </Text>
     </div>
@@ -59,11 +125,11 @@ function SpacingRow({ step, value }: SpacingRowProps) {
 }
 
 export function SpacingScale({ showCssVariable = true }: SpacingScaleProps) {
-  const previewPillClassName = 'rounded-8 bg-ds-surface px-3 text-ds-text shadow-xs';
+  const previewPillClassName = getSpacingPreviewPillClassName();
 
   return (
-    <div className="ds-spacing gap-6 font-sans text-ds-text-strong">
-      <div className="ds-spacing__header gap-4">
+    <div className={getSpacingScaleClassName()}>
+      <div className={getSpacingHeaderClassName()}>
         <div>
           <Text as="span" variant="text-sm" weight="semibold" className="text-brand-600">
             Spacing
@@ -75,20 +141,20 @@ export function SpacingScale({ showCssVariable = true }: SpacingScaleProps) {
         {showCssVariable ? <code>Tailwind spacing classes</code> : null}
       </div>
 
-      <div className="ds-spacing__preview gap-4" aria-label="Spacing examples">
-        <div className="gap-2 rounded-8 border-ds-border bg-ds-surface-subtle p-3">
+      <div className={getSpacingPreviewGridClassName()} aria-label="Spacing examples">
+        <div className={getSpacingPreviewBoxClassName({ gapClassName: 'gap-2', paddingClassName: 'p-3' })}>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>gap 2</Text>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>padding 3</Text>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>space 4</Text>
         </div>
-        <div className="gap-4 rounded-8 border-ds-border bg-ds-surface-subtle p-6">
+        <div className={getSpacingPreviewBoxClassName({ gapClassName: 'gap-4', paddingClassName: 'p-6' })}>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>gap 4</Text>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>padding 6</Text>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>space 8</Text>
         </div>
       </div>
 
-      <div className="ds-spacing__list gap-2">
+      <div className={getSpacingListClassName()}>
         {SPACING_STEPS.map((step) => (
           <SpacingRow key={step} step={step} value={typedSpacingPx[step]} />
         ))}

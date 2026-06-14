@@ -73,6 +73,28 @@ function usesControlVariant(variant: string): variant is ControlVariant {
     || variant === 'toggle-right';
 }
 
+function isSingleSelectVariant(variant: string) {
+  return variant === 'radio-left'
+    || variant === 'check-right'
+    || variant === 'icon-right'
+    || variant === 'icon-left'
+    || variant === 'text';
+}
+
+function getDropdownListLabelWeight({
+  isSelected,
+  variant,
+}: {
+  isSelected: boolean;
+  variant: string;
+}) {
+  if (isSelected && (variant === 'text' || variant === 'icon-left')) {
+    return 'medium' as const;
+  }
+
+  return 'regular' as const;
+}
+
 function getDropdownListItemClasses({
   isActive,
   isDisabled,
@@ -83,7 +105,7 @@ function getDropdownListItemClasses({
   isDestructive: boolean;
 }) {
   if (isDisabled) {
-    return 'cursor-not-allowed bg-neutral-0 text-neutral-300';
+    return 'bg-neutral-0 text-neutral-300';
   }
 
   if (isDestructive) {
@@ -91,7 +113,7 @@ function getDropdownListItemClasses({
   }
 
   if (isActive) {
-    return 'bg-neutral-25 text-neutral-800 hover:bg-neutral-25';
+    return 'bg-neutral-25 text-neutral-700 hover:bg-neutral-25';
   }
 
   return 'bg-neutral-0 text-neutral-600 hover:bg-neutral-25';
@@ -129,12 +151,19 @@ function getDropdownListTextVariant(size: DropdownListSize) {
   return size === 'sm' ? 'text-xs' : 'text-sm';
 }
 
+function getDropdownListRowIconClassName(isSelected: boolean) {
+  return buildClassName([
+    'shrink-0',
+    isSelected ? 'text-neutral-700' : 'text-current',
+  ]);
+}
+
 function getIconPickerItemClassName(pressed?: boolean) {
   return buildClassName([
     'storybook-dropdown-list__icon-picker-item',
-    'inline-flex size-8 shrink-0 cursor-pointer items-center justify-center',
-    'rounded-1 border border-solid border-transparent bg-neutral-0 p-1.5 text-neutral-600 shadow-none',
-    'hover:bg-neutral-50 focus-visible:outline-none focus-visible:shadow-focus-brand',
+    'inline-flex size-8 shrink-0 items-center justify-center',
+    'rounded-1 border border-solid border-transparent bg-neutral-0 p-2 text-neutral-600 shadow-none',
+    'hover:bg-neutral-50 focus-visible:shadow-focus-brand',
     pressed && 'border-brand-100 bg-brand-25 text-brand-400',
   ]);
 }
@@ -142,8 +171,8 @@ function getIconPickerItemClassName(pressed?: boolean) {
 function getIconPickerActionClassName(destructive?: boolean) {
   return buildClassName([
     'storybook-dropdown-list__icon-picker-action',
-    'inline-flex size-6 cursor-pointer items-center justify-center rounded-1 border-0 bg-transparent p-1',
-    'focus-visible:outline-none focus-visible:shadow-focus-brand',
+    'inline-flex size-6 items-center justify-center rounded-1 border-0 bg-transparent p-1',
+    'focus-visible:shadow-focus-brand',
     destructive
       ? 'text-error-600 hover:bg-error-50'
       : 'text-neutral-600 hover:bg-neutral-50',
@@ -207,9 +236,9 @@ function IconPickerUpload({
       type="button"
       className={buildClassName([
         'storybook-dropdown-list__icon-picker-upload',
-        'relative flex w-full cursor-pointer items-start gap-2 rounded-2 border border-dashed',
+        'relative flex w-full items-start gap-2 rounded-2 border border-dashed',
         'border-neutral-200 bg-neutral-0 p-3 text-neutral-900 shadow-none',
-        'hover:bg-neutral-25 focus-visible:outline-none focus-visible:shadow-focus-brand',
+        'hover:bg-neutral-25 focus-visible:shadow-focus-brand',
       ])}
       onClick={() => inputRef.current?.click()}
     >
@@ -294,16 +323,16 @@ function IconPickerDropdown({
         ))}
       </div>
 
-      <div className="relative flex h-4 w-full items-center justify-center">
+      <div className="storybook-dropdown-list__icon-picker-separator relative flex h-4 w-full items-center justify-center">
         <span
           aria-hidden="true"
-          className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-neutral-200"
+          className="storybook-dropdown-list__icon-picker-separator-line h-px bg-neutral-200"
         />
         <Text
           as="span"
           variant="text-xs"
           weight="medium"
-          className="relative z-[1] bg-neutral-0 px-1 tracking-[0.2em] text-neutral-200"
+          className="storybook-dropdown-list__icon-picker-separator-label relative z-[1] bg-neutral-0 px-1 tracking-[0.2em] text-neutral-200"
         >
           OR
         </Text>
@@ -371,10 +400,9 @@ function DropdownListItem({
 
   const itemClasses = buildClassName([
     'storybook-dropdown-list__item',
-    'box-border flex w-full shrink-0 cursor-pointer items-center gap-2 border-0',
+    'box-border flex w-full shrink-0 items-center gap-2 border-0 font-sans',
     getDropdownListItemSizeClasses(size),
     getDropdownListItemClasses({ isActive: isSelected, isDisabled, isDestructive }),
-    isDisabled && 'cursor-not-allowed',
   ]);
 
   const handleSelect = () => {
@@ -401,7 +429,7 @@ function DropdownListItem({
     <>
       {variant === 'icon-left' && (
         <Plug
-          className="shrink-0 text-current"
+          className={getDropdownListRowIconClassName(isSelected)}
           size={16}
           weight="regular"
         />
@@ -443,7 +471,7 @@ function DropdownListItem({
       <Text
         as="span"
         variant={getDropdownListTextVariant(size)}
-        weight="regular"
+        weight={getDropdownListLabelWeight({ isSelected, variant })}
         color="currentColor"
         className="storybook-dropdown-list__label min-w-px flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-left"
       >
@@ -464,7 +492,7 @@ function DropdownListItem({
 
       {variant === 'icon-right' && (
         <Plug
-          className="shrink-0 text-current"
+          className={getDropdownListRowIconClassName(isSelected)}
           size={16}
           weight="regular"
         />
@@ -502,6 +530,8 @@ function DropdownListItem({
     <button
       type="button"
       disabled={isDisabled}
+      role="menuitem"
+      aria-selected={isSingleSelectVariant(variant) ? isSelected : undefined}
       className={itemClasses}
       onClick={handleSelect}
     >
@@ -536,7 +566,7 @@ export function DropdownList({
       <div
         className={buildClassName([
           'storybook-dropdown-list',
-          'flex w-[216px] flex-col items-stretch overflow-hidden shadow-md',
+          'flex w-[216px] flex-col items-stretch overflow-hidden rounded-2 bg-neutral-0 shadow-md',
         ])}
       >
         <IconPickerDropdown
@@ -580,7 +610,7 @@ export function DropdownList({
       updateSelectedValues(nextValues);
     }
 
-    if (variant === 'radio-left' || variant === 'check-right' || variant === 'icon-right') {
+    if (isSingleSelectVariant(variant)) {
       updateSelectedValues([value]);
     }
 

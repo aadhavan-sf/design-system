@@ -8,7 +8,6 @@ export { Chip } from './Chip/index.js';
 export {
   DatePicker,
   DatePickerCalendarDay,
-  DatePickerListItem,
 } from './DatePicker/index.js';
 export { DropdownList } from './DropdownList/index.js';
 export {

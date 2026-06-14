@@ -208,9 +208,9 @@ function getTileClassName({
   const isUploader = type === 'uploader';
 
   return buildClassName([
-    'storybook-upload-tile relative box-border shrink-0 overflow-hidden border border-solid border-neutral-200 rounded-4',
+    'storybook-upload-tile relative box-border shrink-0 overflow-hidden rounded-4 border border-solid border-neutral-200',
     getTileSizeClassName(size),
-    isUploader && 'inline-flex items-center justify-center rounded-8 border-dashed bg-neutral-0 text-brand-400',
+    isUploader && 'inline-flex items-center justify-center rounded-2 border-dashed bg-neutral-0 text-brand-400',
     className,
   ]);
 }
@@ -234,10 +234,8 @@ function getDropzoneClassName({
   const isSmall = size === 'small';
 
   return buildClassName([
-    'storybook-upload-dropzone box-border flex cursor-pointer border border-dashed border-neutral-200',
-    'rounded-8 bg-neutral-0 font-sans text-neutral-900 text-left',
-    'transition-[background-color,box-shadow,color] duration-150 ease-out',
-    'focus-visible:outline-none',
+    'storybook-upload-dropzone box-border flex border border-dashed border-neutral-200',
+    'rounded-2 bg-neutral-0 font-sans text-left',
     isSmall ? 'w-full' : 'w-[500px]',
     isHorizontal
       ? isSmall
@@ -270,6 +268,13 @@ function getDropzoneCopyClassName(layout: NormalizedLayout, size: UploadDropzone
   ]);
 }
 
+function getDropzoneTitleClassName(isDisabled: boolean) {
+  return buildClassName([
+    'whitespace-nowrap',
+    isDisabled ? 'text-current' : 'text-neutral-900',
+  ]);
+}
+
 function getDropzoneDescriptionClassName(isDisabled: boolean) {
   return buildClassName([
     'whitespace-nowrap',
@@ -285,7 +290,7 @@ function getUploadItemClassName({
   className?: string;
 }) {
   return buildClassName([
-    'storybook-upload-item box-border w-[500px] rounded-8 border border-solid border-neutral-200',
+    'storybook-upload-item box-border w-[500px] rounded-2 border border-solid border-neutral-200',
     isMultiple
       ? 'flex flex-col bg-neutral-0 p-3'
       : 'flex min-h-[110px] items-start gap-4 overflow-hidden bg-neutral-25 p-3',
@@ -302,8 +307,6 @@ function getUploadActionClassName({
 }) {
   return buildClassName([
     'storybook-upload-action inline-flex items-center justify-center gap-2 border-0 bg-transparent',
-    'cursor-pointer transition-[background-color,color,transform] duration-150 ease-out',
-    'focus-visible:outline-none focus-visible:shadow-focus-neutral',
     destructive
       ? buildClassName([
           'storybook-upload-action--destructive p-0 text-error-600',
@@ -311,7 +314,7 @@ function getUploadActionClassName({
           'hover:text-error-700',
         ])
       : buildClassName([
-          'rounded-8 border border-solid border-neutral-300 px-[14px] py-2 text-neutral-700',
+          'rounded-2 border border-solid border-neutral-300 px-[14px] py-2 text-neutral-700',
           hover && 'bg-neutral-50 text-neutral-800',
           'hover:bg-neutral-50 hover:text-neutral-800',
         ]),
@@ -373,7 +376,7 @@ export function ImageAspectRatio({
           {normalizedStatus === 'loader' && (
             <CircleNotch
               aria-hidden="true"
-              className="absolute top-1/2 left-1/2 z-[1] -translate-x-1/2 -translate-y-1/2 text-neutral-0"
+              className="storybook-upload-tile__loader text-neutral-0"
               size={24}
               weight="regular"
             />
@@ -451,8 +454,7 @@ export function UploadFileBase({
           as="span"
           variant={size === 'small' ? 'text-sm' : 'text-md'}
           weight="medium"
-          color="currentColor"
-          className="whitespace-nowrap"
+          className={getDropzoneTitleClassName(isDisabled)}
         >
           {title}
         </Text>
@@ -461,7 +463,6 @@ export function UploadFileBase({
             as="span"
             variant={size === 'small' ? 'text-xs' : 'text-sm'}
             weight="regular"
-            color="currentColor"
             className={getDropzoneDescriptionClassName(isDisabled)}
           >
             {description}
@@ -564,7 +565,7 @@ export function UploadFileItem({
 
   return (
     <div className={getUploadItemClassName({ isMultiple: false, className })}>
-      <div className="h-[86px] w-[86px] shrink-0 overflow-hidden rounded-8 border border-solid border-neutral-200 bg-neutral-200">
+      <div className="h-[86px] w-[86px] shrink-0 overflow-hidden rounded-2 border border-solid border-neutral-200 bg-neutral-200">
         <div className="storybook-upload-item__thumbnail-image h-full w-full" />
       </div>
       <div className="flex min-h-[86px] min-w-0 flex-1 flex-col justify-center gap-2">

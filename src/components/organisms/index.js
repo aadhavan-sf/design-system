@@ -7,6 +7,7 @@ export {
 export { Modal } from './Modal/index.js';
 export {
   SettingsPanel,
+  SettingsPanelBetaTag,
   SettingsPanelItem,
 } from './SettingsPanel/index.js';
 export {

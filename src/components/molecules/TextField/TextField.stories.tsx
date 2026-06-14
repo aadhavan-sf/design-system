@@ -129,8 +129,8 @@ const meta = {
         'month',
         'year',
         'date-range',
-        'with-presets',
         'dual-dates',
+        'with-presets',
       ],
     },
     datePickerProps: {

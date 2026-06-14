@@ -1,3 +1,20 @@
-.storybook-multiselect-one-line-field__selected-chip .storybook-chip__label {
-  text-align: left;
+.storybook-multiselect-one-line-field {
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+
+  transition:
+    border-color 150ms ease-out,
+    background-color 150ms ease-out,
+    color 150ms ease-out,
+    box-shadow 150ms ease-out;
+}
+
+.storybook-multiselect-one-line-field:focus-visible {
+  outline: none;
+}
+
+.storybook-multiselect-one-line-field[aria-disabled='true'] {
+  cursor: not-allowed;
 }

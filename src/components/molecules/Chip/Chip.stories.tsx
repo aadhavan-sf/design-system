@@ -35,6 +35,10 @@ export default {
       control: 'select',
       options: ['default', 'hover', 'focused', 'disabled'],
     },
+    tone: {
+      control: 'select',
+      options: ['neutral', 'brand'],
+    },
     border: {
       control: 'boolean',
     },
@@ -57,6 +61,17 @@ export const Playground = {
     border: false,
     defaultActive: false,
     state: 'default',
+  },
+};
+
+export const BrandChip = {
+  args: {
+    type: 'chip',
+    label: 'BETA',
+    size: 'sm',
+    shape: 'rounded',
+    icon: 'none',
+    tone: 'brand',
   },
 };
 

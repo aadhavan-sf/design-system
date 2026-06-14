@@ -7,7 +7,9 @@ import {
 
 import {
   buildClassName,
+  getTextFieldFakeCaretClassName,
   textFieldPlaceholderTrackingClass,
+  textFieldTrackingClass,
   type NormalizedTextFieldState,
 } from '../textField.constants';
 
@@ -22,48 +24,48 @@ export interface BaseTextFieldInputProps {
   value: string;
 }
 
-function getInputFieldClassName(state: NormalizedTextFieldState | string) {
-  const placeholderClasses =
-    state === 'error'
-      ? 'placeholder:text-error-600'
-      : 'placeholder:text-neutral-300';
+function getInputFieldTypographyClasses() {
+  return buildClassName([
+    'font-sans text-ds-text-sm font-normal',
+    textFieldTrackingClass,
+  ]);
+}
 
-  const baseClasses = [
-    'box-border h-11 w-full min-w-0 px-[14px] py-3',
-    'rounded-8 border border-solid bg-neutral-0',
-    'font-sans text-ds-text-sm font-normal text-neutral-700',
-    'placeholder:font-sans placeholder:text-ds-text-sm placeholder:font-normal',
-    textFieldPlaceholderTrackingClass,
-    placeholderClasses,
-    'transition-[border-color,background-color,color,box-shadow] duration-150 ease-out',
-    'focus:outline-none focus-visible:border-neutral-500',
-  ];
+function getInputFieldPlaceholderClasses(state: NormalizedTextFieldState | string) {
+  if (state === 'error') {
+    return 'placeholder:text-error-600';
+  }
 
+  return 'placeholder:text-neutral-300';
+}
+
+function getInputFieldStateClasses(state: NormalizedTextFieldState | string) {
   if (state === 'disabled') {
-    return buildClassName([
-      ...baseClasses,
-      'cursor-not-allowed border-neutral-200 bg-neutral-25 text-neutral-300',
-      'disabled:cursor-not-allowed',
-    ]);
+    return 'border-neutral-200 bg-neutral-25 text-neutral-300';
   }
 
   if (state === 'error') {
-    return buildClassName([
-      ...baseClasses,
-      'border-error-600 text-error-600',
-    ]);
+    return 'border-error-600 text-error-600';
   }
 
   if (state === 'active') {
-    return buildClassName([
-      ...baseClasses,
-      'border-neutral-500 caret-neutral-700',
-    ]);
+    return 'border-neutral-500 caret-neutral-700';
   }
 
+  return 'border-neutral-200 text-neutral-700';
+}
+
+function getInputFieldClassName(state: NormalizedTextFieldState | string) {
   return buildClassName([
-    ...baseClasses,
-    'border-neutral-200',
+    'storybook-input-field',
+    'box-border block h-11 w-full min-w-0 px-[14px] py-3',
+    'rounded-8 border border-solid bg-neutral-0',
+    getInputFieldTypographyClasses(),
+    'placeholder:font-sans placeholder:text-ds-text-sm placeholder:font-normal',
+    textFieldPlaceholderTrackingClass,
+    getInputFieldPlaceholderClasses(state),
+    getInputFieldStateClasses(state),
+    'focus-visible:border-neutral-500',
   ]);
 }
 
@@ -87,10 +89,12 @@ export function InputFields({
   }, [isActive, isEmpty, disabled]);
 
   return (
-    <div className="relative w-full">
+    <div className="relative h-11 w-full">
       {showFakeCaret && (
         <span
-          className="storybook-input-field__caret pointer-events-none absolute top-1/2 left-[14px] z-[1] h-4 w-px -translate-y-1/2 bg-neutral-700"
+          className={getTextFieldFakeCaretClassName({
+            animationClassName: 'storybook-input-field__caret',
+          })}
           aria-hidden="true"
         />
       )}

@@ -39,11 +39,17 @@ export default {
 };
 
 export const Playground = {
-  render: (args) => (
-    <div className="flex min-h-screen items-start justify-center gap-10 bg-neutral-100 p-8">
-      <Sidebar {...args} />
-    </div>
-  ),
+  render: (args) => {
+    const isCollapsed = args.type === 'collapsed' || args.type === 'Collapsed';
+
+    return (
+      <div className="flex min-h-screen items-start justify-center gap-10 bg-neutral-100 p-8">
+        <div className={`h-dvh ${isCollapsed ? 'w-[60px]' : 'w-[216px]'}`}>
+          <Sidebar {...args} />
+        </div>
+      </div>
+    );
+  },
   args: {
     type: 'expanded',
     activeItemId: 'active-theme',
@@ -53,8 +59,12 @@ export const Playground = {
 export const Variants = {
   render: () => (
     <div className="flex min-h-screen items-start justify-center gap-10 bg-neutral-100 p-8">
-      <Sidebar type="expanded" />
-      <Sidebar type="collapsed" />
+      <div className="h-dvh w-[216px]">
+        <Sidebar type="expanded" />
+      </div>
+      <div className="h-dvh w-[60px]">
+        <Sidebar type="collapsed" />
+      </div>
     </div>
   ),
 };

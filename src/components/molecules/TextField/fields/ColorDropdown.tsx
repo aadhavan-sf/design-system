@@ -25,40 +25,36 @@ export interface ColorDropdownProps {
   state: NormalizedTextFieldState | string;
 }
 
-function getColorFieldClassName(state: NormalizedTextFieldState | string) {
-  const baseClasses = [
+function getColorFieldLayoutClasses() {
+  return buildClassName([
     'storybook-color-field',
-    'box-border flex h-11 w-full min-w-0 cursor-pointer items-center justify-between gap-2 px-[14px] py-3',
-    'rounded-8 border border-solid bg-neutral-0',
-    'font-sans text-ds-text-sm font-normal text-neutral-700',
-    'transition-[border-color,background-color,color,box-shadow] duration-150 ease-out',
-    'focus:outline-none focus-visible:border-neutral-500',
-  ];
+    'box-border flex h-11 w-full min-w-0 items-center justify-between gap-2',
+    'rounded-8 border border-solid bg-neutral-0 px-[14px] py-3',
+    'text-left',
+    'focus-visible:border-neutral-500',
+  ]);
+}
 
+function getColorFieldStateClasses(state: NormalizedTextFieldState | string) {
   if (state === 'disabled') {
-    return buildClassName([
-      ...baseClasses,
-      'cursor-not-allowed border-neutral-200 bg-neutral-25 text-neutral-300',
-    ]);
+    return 'border-neutral-200 bg-neutral-25';
   }
 
   if (state === 'error') {
-    return buildClassName([
-      ...baseClasses,
-      'border-error-600 text-error-600',
-    ]);
+    return 'border-error-600';
   }
 
   if (state === 'active') {
-    return buildClassName([
-      ...baseClasses,
-      'border-neutral-500',
-    ]);
+    return 'border-neutral-500';
   }
 
+  return 'border-neutral-200';
+}
+
+function getColorFieldClassName(state: NormalizedTextFieldState | string) {
   return buildClassName([
-    ...baseClasses,
-    'border-neutral-200',
+    getColorFieldLayoutClasses(),
+    getColorFieldStateClasses(state),
   ]);
 }
 
@@ -82,6 +78,45 @@ function getColorDisplayTextClassName({
   }
 
   return 'text-neutral-700';
+}
+
+function getColorDisplayTextLayoutClasses() {
+  return buildClassName([
+    'min-w-0 overflow-hidden text-ellipsis whitespace-nowrap',
+    'font-sans text-ds-text-sm font-normal',
+    textFieldTrackingClass,
+  ]);
+}
+
+function getColorPreviewClassName() {
+  return buildClassName([
+    'storybook-color-field__preview',
+    'size-5 shrink-0 rounded-1.5',
+  ]);
+}
+
+function getColorPanelClassName() {
+  return buildClassName([
+    'storybook-color-field__panel',
+    'mt-3 box-border flex w-[296px] flex-col gap-3',
+    'rounded-8 border border-solid border-neutral-100 bg-neutral-0 p-4 shadow-lg',
+  ]);
+}
+
+function getColorHexInputClassName() {
+  return buildClassName([
+    'storybook-color-field__hex-input',
+    'order-2 box-border h-11 w-full px-[14px] py-3',
+    'rounded-8 border border-solid border-neutral-200 bg-neutral-0',
+    'font-sans text-ds-text-sm font-normal text-neutral-700',
+    'placeholder:font-sans placeholder:text-ds-text-sm placeholder:font-normal placeholder:text-neutral-300',
+    textFieldPlaceholderTrackingClass,
+    'focus:border-neutral-500',
+  ]);
+}
+
+function getColorOpacityTrackClassName() {
+  return 'relative order-4 h-5 w-full overflow-hidden rounded-full';
 }
 
 export function ColorDropdown({
@@ -110,7 +145,7 @@ export function ColorDropdown({
         <span className="flex min-w-0 flex-[1_0_0] items-center gap-1">
           {hasValue && (
             <span
-              className="storybook-color-field__preview size-5 shrink-0 rounded-1.5"
+              className={getColorPreviewClassName()}
               style={{ background: color }}
               aria-hidden="true"
             />
@@ -120,8 +155,7 @@ export function ColorDropdown({
             variant="text-sm"
             weight="regular"
             className={buildClassName([
-              'min-w-0 overflow-hidden text-ellipsis whitespace-nowrap font-sans text-ds-text-sm font-normal',
-              textFieldTrackingClass,
+              getColorDisplayTextLayoutClasses(),
               getColorDisplayTextClassName({ hasValue, state }),
             ])}
           >
@@ -131,12 +165,7 @@ export function ColorDropdown({
       </button>
 
       {isOpen && !disabled && (
-        <div
-          className={buildClassName([
-            'storybook-color-field__panel',
-            'mt-3 box-border flex w-[296px] flex-col gap-3 rounded-8 border border-solid border-neutral-100 bg-neutral-0 p-4 shadow-lg',
-          ])}
-        >
+        <div className={getColorPanelClassName()}>
           <HexColorPicker color={color} onChange={onColorChange} />
 
           <input
@@ -144,17 +173,10 @@ export function ColorDropdown({
             value={displayValue}
             onChange={(event: ChangeEvent<HTMLInputElement>) => onColorChange(event.target.value)}
             placeholder="HEX Code"
-            className={buildClassName([
-              'order-2 box-border h-11 w-full px-[14px] py-3',
-              'rounded-8 border border-solid border-neutral-200 bg-neutral-0',
-              'font-sans text-ds-text-sm font-normal text-neutral-700',
-              'placeholder:font-sans placeholder:text-ds-text-sm placeholder:font-normal placeholder:text-neutral-300',
-              textFieldPlaceholderTrackingClass,
-              'focus:border-neutral-500 focus:outline-none',
-            ])}
+            className={getColorHexInputClassName()}
           />
 
-          <div className="relative order-4 h-5 w-full overflow-hidden rounded-full">
+          <div className={getColorOpacityTrackClassName()}>
             <div className="storybook-color-field__opacity-grid" aria-hidden="true" />
             <input
               type="range"

@@ -21,6 +21,18 @@
   @apply bg-neutral-50;
 }
 
+.storybook-chip--tone-brand {
+  @apply border-transparent bg-brand-50 text-brand-400;
+}
+
+.storybook-chip--tone-brand.storybook-chip--chip {
+  @apply bg-brand-50 text-brand-400;
+}
+
+.storybook-chip--tone-brand.storybook-chip--sm {
+  @apply py-1;
+}
+
 .storybook-chip--button {
   @apply border-neutral-400 bg-neutral-0 text-neutral-700;
 
