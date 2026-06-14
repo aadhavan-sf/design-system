@@ -1,6 +1,8 @@
 // @ts-nocheck
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { fn } from 'storybook/test';
 
+import { Popover } from '../Popover';
 import {
   LeftPanel,
   LeftPanelItem,
@@ -9,6 +11,55 @@ import {
 } from './LeftPanel';
 
 const panelFrameClassName = 'h-[846px] w-[284px] shrink-0';
+const BLOCK_POPOVER_GAP = 8;
+
+function getBlockPopoverPosition(panelNode, anchorTop) {
+  if (!panelNode || anchorTop == null) {
+    return null;
+  }
+
+  const panelRect = panelNode.getBoundingClientRect();
+
+  return {
+    left: panelRect.right + BLOCK_POPOVER_GAP,
+    top: anchorTop,
+  };
+}
+
+function BlockLibraryPopoverBackdrop({
+  open,
+  onClose,
+}) {
+  useEffect(() => {
+    if (!open) {
+      return undefined;
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose, open]);
+
+  if (!open) {
+    return null;
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-40"
+      role="presentation"
+      onClick={onClose}
+    />
+  );
+}
 
 export default {
   title: 'Organisms/Left Panel',
@@ -46,21 +97,70 @@ export default {
 };
 
 export const Playground = {
-  render: (args) => (
-    <div className="flex min-h-screen items-start justify-center bg-neutral-100 p-8">
-      <div className="flex flex-col items-center gap-4">
-        <div className={panelFrameClassName}>
-          <LeftPanel {...args} />
+  render: (args) => {
+    const panelRef = useRef(null);
+    const [isBlockPopoverOpen, setIsBlockPopoverOpen] = useState(false);
+    const [blockPopoverPosition, setBlockPopoverPosition] = useState(null);
+
+    const openBlockPopover = useCallback((context) => {
+      setBlockPopoverPosition(getBlockPopoverPosition(panelRef.current, context?.anchorTop));
+      setIsBlockPopoverOpen(true);
+    }, []);
+
+    const closeBlockPopover = useCallback(() => {
+      setIsBlockPopoverOpen(false);
+      setBlockPopoverPosition(null);
+    }, []);
+
+    return (
+      <>
+        <BlockLibraryPopoverBackdrop
+          open={isBlockPopoverOpen}
+          onClose={closeBlockPopover}
+        />
+        <div className="flex min-h-screen items-start justify-center bg-neutral-100 p-8">
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative flex items-start">
+              <div ref={panelRef} className={panelFrameClassName}>
+                <LeftPanel
+                  {...args}
+                  onAddBlock={(context) => {
+                    openBlockPopover(context);
+                    args.onAddBlock?.(context);
+                  }}
+                  onInsertBlock={(context) => {
+                    openBlockPopover(context);
+                    args.onInsertBlock?.(context);
+                  }}
+                />
+              </div>
+              {isBlockPopoverOpen && blockPopoverPosition && (
+                <div
+                  className="fixed z-50"
+                  role="dialog"
+                  aria-label="Add block"
+                  aria-modal="true"
+                  style={blockPopoverPosition}
+                >
+                  <Popover
+                    defaultActiveBlockId="image-banner"
+                    onAddBlock={closeBlockPopover}
+                  />
+                </div>
+              )}
+            </div>
+            <p className="max-w-[284px] text-center text-sm text-neutral-600">
+              Preview note: hide toggles the hidden state. Delete removes the item for this session only; refresh restores the demo list. Use Add Block or the insert control between items to open the block library popover.
+            </p>
+          </div>
         </div>
-        <p className="max-w-[284px] text-center text-sm text-neutral-600">
-          Preview note: hide toggles the hidden state. Delete removes the item for this session only; refresh restores the demo list.
-        </p>
-      </div>
-    </div>
-  ),
+      </>
+    );
+  },
   args: {
     type: 'blocks',
     status: 'draft',
+    pageTitle: 'Home',
   },
 };
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   CaretRight,
   Gear,
@@ -168,6 +168,10 @@ export function TopNavigation({
   onItemChange,
 }: TopNavigationProps) {
   const [selectedIndex, setSelectedIndex] = useState(activeIndex);
+
+  useEffect(() => {
+    setSelectedIndex(activeIndex);
+  }, [activeIndex]);
 
   const handleItemClick = (item: TopNavigationItemConfig, index: number) => {
     setSelectedIndex(index);

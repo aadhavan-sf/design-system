@@ -6,19 +6,56 @@ import {
   PencilSimple,
 } from '@phosphor-icons/react';
 import type { Icon } from '@phosphor-icons/react';
-import { useState, type ComponentType, type KeyboardEvent } from 'react';
+import { useCallback, useEffect, useState, type ComponentType, type KeyboardEvent } from 'react';
 
 import { RadioButton } from '../../atoms/RadioButton';
 import { Button } from '../../molecules/Button';
 import { TextField } from '../../molecules/TextField';
 import { Text } from '../../foundations/Typography';
 import { LeftPanel } from '../../organisms/LeftPanel';
+import { Popover, type PopoverBlock } from '../../organisms/Popover';
 import { Sidebar } from '../../organisms/Sidebar';
 import { TopNavigation } from '../../organisms/TopNavigation';
 
 import eyeConditionIcon from './assets/eye-condition.svg';
 import mobilePreviewImage from './assets/mobile-preview.png';
 import './homePage.css';
+
+const HOME_PAGE_BLOCK_POPOVER_HEIGHT = 536;
+const HOME_PAGE_BLOCK_POPOVER_BOTTOM_PADDING_FALLBACK = 16;
+
+function getHomePageBlockPopoverBottomPadding() {
+  const leftPanel = document.querySelector('.storybook-home-page__left-panel');
+
+  if (!(leftPanel instanceof HTMLElement)) {
+    return HOME_PAGE_BLOCK_POPOVER_BOTTOM_PADDING_FALLBACK;
+  }
+
+  const { paddingBottom } = window.getComputedStyle(leftPanel);
+  const parsed = Number.parseFloat(paddingBottom);
+
+  return Number.isFinite(parsed)
+    ? parsed
+    : HOME_PAGE_BLOCK_POPOVER_BOTTOM_PADDING_FALLBACK;
+}
+
+function clampBlockPopoverTop(anchorTop: number) {
+  const bottomPadding = getHomePageBlockPopoverBottomPadding();
+  const maxTop = Math.max(
+    0,
+    window.innerHeight - HOME_PAGE_BLOCK_POPOVER_HEIGHT - bottomPadding,
+  );
+
+  return Math.min(Math.max(anchorTop, 0), maxTop);
+}
+
+type BlockPopoverAnchor = {
+  top: number;
+};
+
+type BlockPopoverOpenContext = {
+  anchorTop?: number;
+};
 
 type VisibilityId = 'visible' | 'hidden' | 'conditional';
 type VisibilityIcon = Icon | string;
@@ -48,6 +85,95 @@ type RightPanelProps = {
 
 const TemplateLeftPanel = LeftPanel as unknown as ComponentType<Record<string, unknown>>;
 const TemplateSidebar = Sidebar as unknown as ComponentType<Record<string, unknown>>;
+const TemplatePopover = Popover as unknown as ComponentType<Record<string, unknown>>;
+const TemplateTopNavigation = TopNavigation as unknown as ComponentType<Record<string, unknown>>;
+
+const HOME_PAGE_NAV_INDEX = {
+  themeSettings: 0,
+  home: 1,
+  plp: 2,
+  pdp: 3,
+  cart: 4,
+} as const;
+
+const HOME_PAGE_LEFT_PANEL_CONFIGS = {
+  [HOME_PAGE_NAV_INDEX.themeSettings]: {
+    id: 'theme-settings',
+    type: 'theme-settings',
+    pageTitle: 'Theme Settings',
+    selectedItemId: 'app-styling',
+  },
+  [HOME_PAGE_NAV_INDEX.home]: {
+    id: 'home',
+    type: 'fixed-blocks',
+    pageTitle: 'Home',
+    fixedItems: [{ id: 'toolbar', label: 'Toolbar', locked: true }],
+    scrollItems: [
+      { id: 'image-banner', label: 'Imager Banner' },
+      { id: 'content-block', label: 'Content Block' },
+      { id: 'custom-blocks-1', label: 'Custom Blocks #1' },
+      { id: 'custom-blocks-2', label: 'Custom Blocks #1' },
+      { id: 'image-slider', label: 'Image Slider' },
+      { id: 'content-block-2', label: 'Content Block' },
+    ],
+    selectedItemId: 'custom-blocks-1',
+    footerLabel: 'Add New Page',
+    footerIcon: 'plus',
+    showFooter: true,
+  },
+  [HOME_PAGE_NAV_INDEX.plp]: {
+    id: 'plp',
+    type: 'fixed-blocks',
+    pageTitle: 'PLP',
+    fixedItems: [{ id: 'collection-image', label: 'Collection Image', locked: true }],
+    scrollItems: [
+      { id: 'collection-description', label: 'Collection Description' },
+      { id: 'custom-blocks-1', label: 'Custom Blocks #1' },
+      { id: 'sort-and-filter', label: 'Sort & Filter' },
+      { id: 'sub-collection', label: 'Sub Collections' },
+      { id: 'product-grid', label: 'Product Grid' },
+      { id: 'content-block', label: 'Content Block' },
+    ],
+    selectedItemId: 'sub-collection',
+    footerLabel: 'Edit Search Page',
+    showFooter: true,
+  },
+  [HOME_PAGE_NAV_INDEX.pdp]: {
+    id: 'pdp',
+    type: 'fixed-blocks',
+    pageTitle: 'PDP',
+    fixedItems: [{ id: 'toolbar', label: 'Toolbar', locked: true }],
+    secondaryFixedItems: [
+      { id: 'label', label: 'Label' },
+      { id: 'spacer-1', label: 'Spacer' },
+      { id: 'price', label: 'Price' },
+      { id: 'product-image', label: 'Product Image' },
+      { id: 'ratings', label: 'Ratings' },
+      { id: 'product-variant-1', label: 'Product Variant #1' },
+      { id: 'cta', label: 'CTA' },
+    ],
+    secondaryFixedSectionTitle: 'Scroll',
+    scrollItems: [],
+    selectedItemId: 'label',
+    showFooter: false,
+  },
+  [HOME_PAGE_NAV_INDEX.cart]: {
+    id: 'cart',
+    type: 'fixed-blocks',
+    pageTitle: 'Cart',
+    fixedItems: [{ id: 'toolbar', label: 'Toolbar', locked: true }],
+    secondaryFixedItems: [
+      { id: 'line-items', label: 'Line Items' },
+      { id: 'spacer-1', label: 'Spacer' },
+      { id: 'discount-gift-card', label: 'Discount/Gift Card' },
+      { id: 'spacer-2', label: 'Spacer' },
+      { id: 'cta', label: 'CTA' },
+    ],
+    scrollItems: [],
+    selectedItemId: 'discount-gift-card',
+    showFooter: false,
+  },
+};
 
 const scrollStyleOptions = [
   'Scroll with parent',
@@ -103,12 +229,24 @@ function getHomePageCanvasClassName() {
   return 'storybook-home-page__canvas box-border flex flex-col items-center gap-8 bg-transparent px-4';
 }
 
+function getHomePageCanvasBodyClassName() {
+  return 'storybook-home-page__canvas-body relative flex min-h-0 w-full max-w-full flex-1 flex-col items-center';
+}
+
+function getHomePageBlockPopoverLayerClassName() {
+  return 'storybook-home-page__block-popover-layer fixed z-50';
+}
+
+function getHomePageBlockPopoverDialogClassName() {
+  return 'storybook-home-page__block-popover-dialog shrink-0';
+}
+
 function getHomePagePreviewLaneClassName() {
-  return 'storybook-home-page__preview-lane grid flex-1 gap-8';
+  return 'storybook-home-page__preview-lane grid w-full max-w-full flex-1 gap-8';
 }
 
 function getHomePageCollectionSelectClassName() {
-  return 'storybook-home-page__collection-select mx-auto w-[var(--home-template-collection-width)]';
+  return 'storybook-home-page__collection-select w-[var(--home-template-collection-width)] justify-self-center';
 }
 
 function getHomePagePreviewStackClassName() {
@@ -352,7 +490,7 @@ function RightPanel({
 }: RightPanelProps) {
   // Demo default for Storybook only. In production, initialize from saved block settings
   // (e.g. API response) so visibility survives refresh.
-  const [visibility, setVisibility] = useState<VisibilityId>('visible');
+  const [visibility, setVisibility] = useState<VisibilityId>('hidden');
   const selectedVisibility = visibilityOptions.find((option) => option.id === visibility);
   const isConditional = visibility === 'conditional';
 
@@ -449,17 +587,112 @@ function RightPanel({
   );
 }
 
+type BlockPopoverLayerProps = {
+  anchor?: BlockPopoverAnchor | null;
+  onAddBlock?: (block: PopoverBlock) => void;
+  onClose: () => void;
+  open: boolean;
+};
+
+function BlockPopoverLayer({
+  anchor,
+  open,
+  onClose,
+  onAddBlock,
+}: BlockPopoverLayerProps) {
+  useEffect(() => {
+    if (!open) {
+      return undefined;
+    }
+
+    const handleKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose, open]);
+
+  if (!open) {
+    return null;
+  }
+
+  return (
+    <div
+      className={getHomePageBlockPopoverLayerClassName()}
+      role="presentation"
+      style={anchor ? { paddingTop: anchor.top } : undefined}
+      onClick={onClose}
+    >
+      <div
+        className={getHomePageBlockPopoverDialogClassName()}
+        role="dialog"
+        aria-label="Add block"
+        aria-modal="true"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <TemplatePopover
+          defaultActiveBlockId="image-banner"
+          onAddBlock={(block: PopoverBlock) => {
+            onAddBlock?.(block);
+            onClose();
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
 export function HomePage() {
   const [lastSavedAt, setLastSavedAt] = useState(() =>
     formatLastSavedAt()
   );
+  const [isBlockPopoverOpen, setIsBlockPopoverOpen] = useState(false);
+  const [blockPopoverAnchor, setBlockPopoverAnchor] = useState<BlockPopoverAnchor | null>(null);
+  const [activeNavIndex, setActiveNavIndex] = useState(HOME_PAGE_NAV_INDEX.home);
+  const activeLeftPanelConfig = HOME_PAGE_LEFT_PANEL_CONFIGS[activeNavIndex];
 
   const handleDesignChange = () => {
     setLastSavedAt(formatLastSavedAt());
   };
 
+  const openBlockPopover = useCallback((context?: BlockPopoverOpenContext) => {
+    if (context?.anchorTop != null) {
+      setBlockPopoverAnchor({ top: clampBlockPopoverTop(context.anchorTop) });
+    } else {
+      setBlockPopoverAnchor(null);
+    }
+
+    setIsBlockPopoverOpen(true);
+  }, []);
+
+  const closeBlockPopover = useCallback(() => {
+    setIsBlockPopoverOpen(false);
+    setBlockPopoverAnchor(null);
+  }, []);
+
+  const handleBlockAdded = (_block: PopoverBlock) => {
+    handleDesignChange();
+  };
+
+  const handleTopNavigationChange = (_item: unknown, index: number) => {
+    setActiveNavIndex(index);
+    closeBlockPopover();
+  };
+
   return (
     <div className={getHomePageShellClassName()}>
+      <BlockPopoverLayer
+        anchor={blockPopoverAnchor}
+        open={isBlockPopoverOpen}
+        onClose={closeBlockPopover}
+        onAddBlock={handleBlockAdded}
+      />
       <TemplateSidebar
         activeItemId="active-theme"
         className={getHomePageSidebarClassName()}
@@ -467,50 +700,48 @@ export function HomePage() {
 
       <div className={getHomePageLeftPanelClassName()}>
         <TemplateLeftPanel
+          key={activeLeftPanelConfig.id}
           className={getHomePageLeftPanelSurfaceClassName()}
-          type="fixed-blocks"
           title="Version 1"
           status="draft"
-          pageTitle="Home"
-          scrollItems={[
-            { id: 'imager-banner', label: 'Imager Banner' },
-            { id: 'content-block', label: 'Content Block' },
-            { id: 'custom-blocks-1', label: 'Custom Blocks #1' },
-            { id: 'custom-blocks-2', label: 'Custom Blocks #1' },
-            { id: 'image-slider', label: 'Image Slider' },
-            { id: 'content-block-2', label: 'Content Block' },
-          ]}
-          selectedItemId="custom-blocks-1"
+          onAddBlock={openBlockPopover}
+          onInsertBlock={openBlockPopover}
+          {...activeLeftPanelConfig}
         />
       </div>
 
       <main className={getHomePageCanvasClassName()}>
-        <TopNavigation />
-        <div className={getHomePagePreviewLaneClassName()}>
-          <div className={getHomePageCollectionSelectClassName()}>
-            <TextField
-              type="dropdown"
-              fluid
-              label={false}
-              placeholder="Mens Collection"
-              options={['Mens Collection', 'Womens Collection', 'Lifestyle']}
-              dropdownListItems={['Mens Collection', 'Womens Collection', 'Lifestyle']}
-              onSelectedOptionsChange={handleDesignChange}
-              tooltip={false}
-              astriks={false}
-            />
+        <TemplateTopNavigation
+          activeIndex={activeNavIndex}
+          onItemChange={handleTopNavigationChange}
+        />
+        <div className={getHomePageCanvasBodyClassName()}>
+          <div className={getHomePagePreviewLaneClassName()}>
+            <div className={getHomePageCollectionSelectClassName()}>
+              <TextField
+                type="dropdown"
+                fluid
+                label={false}
+                placeholder="Mens Collection"
+                options={['Mens Collection', 'Womens Collection', 'Lifestyle']}
+                dropdownListItems={['Mens Collection', 'Womens Collection', 'Lifestyle']}
+                onSelectedOptionsChange={handleDesignChange}
+                tooltip={false}
+                astriks={false}
+              />
+            </div>
+            <div className={getHomePagePreviewStackClassName()}>
+              <PhonePreview />
+            </div>
+            <Text
+              as="span"
+              variant="text-sm"
+              weight="regular"
+              className="text-neutral-600"
+            >
+              Last saved: {lastSavedAt}
+            </Text>
           </div>
-          <div className={getHomePagePreviewStackClassName()}>
-            <PhonePreview />
-          </div>
-          <Text
-            as="span"
-            variant="text-sm"
-            weight="regular"
-            className="text-neutral-600"
-          >
-            Last saved: {lastSavedAt}
-          </Text>
         </div>
       </main>
 

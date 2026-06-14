@@ -5,6 +5,7 @@ Organisms are complex reusable sections built from molecules and atoms.
 Examples that belong here:
 
 - `Modal`
+- `Popover`
 - `TopNavigation`
 - `Sidebar`
 - `LeftPanel`

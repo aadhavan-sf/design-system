@@ -6,6 +6,11 @@ export {
 } from './LeftPanel/index.js';
 export { Modal } from './Modal/index.js';
 export {
+  Popover,
+  PopoverBlockItem,
+  PopoverPreview,
+} from './Popover/index.js';
+export {
   SettingsPanel,
   SettingsPanelBetaTag,
   SettingsPanelItem,

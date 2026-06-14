@@ -557,7 +557,9 @@ AddBlockButton.propTypes = {
   onClick: PropTypes.func,
 };
 
-function FooterAction({ label, onClick }) {
+function FooterAction({ label, icon = 'pencil', onClick }) {
+  const FooterIcon = icon === 'plus' ? Plus : PencilSimple;
+
   return (
     <footer className={getLeftPanelFooterClassName()}>
       <span className="storybook-left-panel-footer__divider h-px w-full bg-neutral-100" />
@@ -566,7 +568,7 @@ function FooterAction({ label, onClick }) {
         className={getLeftPanelFooterButtonClassName()}
         onClick={onClick}
       >
-        <PencilSimple
+        <FooterIcon
           aria-hidden="true"
           size={20}
           weight="regular"
@@ -586,6 +588,7 @@ function FooterAction({ label, onClick }) {
 
 FooterAction.propTypes = {
   label: PropTypes.string.isRequired,
+  icon: PropTypes.oneOf(['pencil', 'plus']),
   onClick: PropTypes.func,
 };
 
@@ -596,6 +599,7 @@ function BlockSection({
   hiddenItemIds = [],
   hiddenTrashSuppressedItemIds = [],
   items,
+  sectionKey,
   selectedItemId,
   title,
   getItemRef,
@@ -609,7 +613,7 @@ function BlockSection({
   onItemSelect,
   setSectionRef,
 }) {
-  const sectionKey = title.toLowerCase();
+  const resolvedSectionKey = sectionKey ?? title.toLowerCase();
 
   return (
     <section className={getLeftPanelSectionClassName()}>
@@ -623,7 +627,7 @@ function BlockSection({
       </Text>
       <div
         className={getLeftPanelSectionItemsClassName()}
-        ref={(node) => setSectionRef?.(sectionKey, node)}
+        ref={(node) => setSectionRef?.(resolvedSectionKey, node)}
       >
         {items.map((item, index) => {
           const itemId = item.id ?? item.label;
@@ -638,7 +642,7 @@ function BlockSection({
             <div
               key={itemId}
               className="storybook-left-panel-section__item-group flex w-full flex-col"
-              ref={(node) => getItemRef?.(sectionKey, itemId, node)}
+              ref={(node) => getItemRef?.(resolvedSectionKey, itemId, node)}
             >
               <LeftPanelItem
                 deleting={isDeleting}
@@ -656,7 +660,7 @@ function BlockSection({
                 onDragHandlePointerDown={(event) => onDragStart?.(event, {
                   item,
                   itemId,
-                  sectionKey,
+                  sectionKey: resolvedSectionKey,
                 })}
                 onPointerLeave={() => onItemPointerLeave?.(itemId)}
                 onVisibilityClick={() => onHideItem?.(item, itemId)}
@@ -664,10 +668,11 @@ function BlockSection({
               />
               {index < items.length - 1 && (
                 <LeftPanelInsertControl
-                  onClick={() => onInsertBlock?.({
+                  onClick={(event) => onInsertBlock?.({
                     afterItem: item,
                     afterItemId: itemId,
                     index,
+                    anchorTop: event.currentTarget.getBoundingClientRect().top,
                   })}
                 />
               )}
@@ -766,9 +771,14 @@ export function LeftPanel({
   status = 'draft',
   selectedItemId,
   fixedItems = DEFAULT_FIXED_ITEMS,
+  secondaryFixedItems,
+  secondaryFixedSectionTitle = 'Fixed',
   scrollItems = DEFAULT_BLOCK_ITEMS,
   themeSections = DEFAULT_THEME_SECTIONS,
   footerLabel = 'Edit Search Page',
+  footerIcon = 'pencil',
+  showFooter = true,
+  showScrollSection,
   className,
   onAddBlock,
   onBack,
@@ -779,6 +789,7 @@ export function LeftPanel({
   const resolvedType = getResolvedType(type);
   const isThemeSettings = resolvedType === 'theme-settings';
   const resolvedPageTitle = pageTitle ?? (isThemeSettings ? 'Theme Settings' : 'Home');
+  const shouldShowScrollSection = showScrollSection ?? scrollItems.length > 0;
   const initialSelectedItem = selectedItemId ?? (
     isThemeSettings ? 'app-styling' : 'custom-blocks-1'
   );
@@ -786,6 +797,7 @@ export function LeftPanel({
   const [deletedItemIds, setDeletedItemIds] = useState([]);
   const [deletingItemIds, setDeletingItemIds] = useState([]);
   const [orderedFixedItems, setOrderedFixedItems] = useState(fixedItems);
+  const [orderedSecondaryFixedItems, setOrderedSecondaryFixedItems] = useState(secondaryFixedItems ?? []);
   const [orderedScrollItems, setOrderedScrollItems] = useState(scrollItems);
   const [dragState, setDragState] = useState(null);
   const [hiddenItemIds, setHiddenItemIds] = useState([]);
@@ -797,6 +809,9 @@ export function LeftPanel({
   const itemRefs = useRef({});
   const sectionRefs = useRef({});
   const visibleFixedItems = orderedFixedItems.filter((item) => !deletedItemIds.includes(item.id ?? item.label));
+  const visibleSecondaryFixedItems = orderedSecondaryFixedItems.filter(
+    (item) => !deletedItemIds.includes(item.id ?? item.label),
+  );
   const visibleScrollItems = orderedScrollItems.filter((item) => !deletedItemIds.includes(item.id ?? item.label));
 
   useEffect(() => () => {
@@ -830,7 +845,9 @@ export function LeftPanel({
 
       const sectionItems = currentDragState.sectionKey === 'fixed'
         ? visibleFixedItems
-        : visibleScrollItems;
+        : currentDragState.sectionKey === 'fixed-secondary'
+          ? visibleSecondaryFixedItems
+          : visibleScrollItems;
 
       const targetItem = sectionItems.find((item) => {
         const itemId = item.id ?? item.label;
@@ -874,6 +891,8 @@ export function LeftPanel({
 
       if (currentDragState.sectionKey === 'fixed') {
         setOrderedFixedItems(moveItem);
+      } else if (currentDragState.sectionKey === 'fixed-secondary') {
+        setOrderedSecondaryFixedItems(moveItem);
       } else {
         setOrderedScrollItems(moveItem);
       }
@@ -912,7 +931,7 @@ export function LeftPanel({
       window.removeEventListener('pointerup', handlePointerUp);
       window.removeEventListener('pointercancel', handlePointerUp);
     };
-  }, [dragState, onItemChange, visibleFixedItems, visibleScrollItems]);
+  }, [dragState, onItemChange, visibleFixedItems, visibleSecondaryFixedItems, visibleScrollItems]);
 
   const setSectionRef = (sectionKey, node) => {
     sectionRefs.current[sectionKey] = node;
@@ -1073,7 +1092,13 @@ export function LeftPanel({
             >
               {resolvedPageTitle}
             </Text>
-            {!isThemeSettings && <AddBlockButton onClick={onAddBlock} />}
+            {!isThemeSettings && (
+              <AddBlockButton
+                onClick={(event) => onAddBlock?.({
+                  anchorTop: event.currentTarget.getBoundingClientRect().top,
+                })}
+              />
+            )}
           </div>
 
           {isThemeSettings ? (
@@ -1084,7 +1109,7 @@ export function LeftPanel({
             />
           ) : (
             <div className={getLeftPanelBlockSectionsClassName()}>
-              {resolvedType === 'fixed-blocks' && (
+              {resolvedType === 'fixed-blocks' && visibleFixedItems.length > 0 && (
                 <>
                   <BlockSection
                     activeDragItemId={dragState?.itemId}
@@ -1093,6 +1118,7 @@ export function LeftPanel({
                     hiddenItemIds={hiddenItemIds}
                     hiddenTrashSuppressedItemIds={hiddenTrashSuppressedItemIds}
                     items={visibleFixedItems}
+                    sectionKey="fixed"
                     selectedItemId={internalSelectedItemId}
                     title="Fixed"
                     getItemRef={getItemRef}
@@ -1106,36 +1132,70 @@ export function LeftPanel({
                     onItemSelect={handleItemSelect}
                     setSectionRef={setSectionRef}
                   />
-                  <div className="storybook-left-panel__divider h-px w-full shrink-0 bg-neutral-100" />
+                  {(visibleSecondaryFixedItems.length > 0 || shouldShowScrollSection) && (
+                    <div className="storybook-left-panel__divider h-px w-full shrink-0 bg-neutral-100" />
+                  )}
                 </>
               )}
-              <BlockSection
-                activeDragItemId={dragState?.itemId}
-                activeDragOffsetY={dragState?.offsetY ?? 0}
-                deletingItemIds={deletingItemIds}
-                hiddenItemIds={hiddenItemIds}
-                hiddenTrashSuppressedItemIds={hiddenTrashSuppressedItemIds}
-                items={visibleScrollItems}
-                selectedItemId={internalSelectedItemId}
-                title="Scrolls"
-                getItemRef={getItemRef}
-                visibilityAnimatingItemIds={visibilityAnimatingItemIds}
-                visibilityRestoringItemIds={visibilityRestoringItemIds}
-                onDeleteItem={handleDeleteItem}
-                onDragStart={handleDragStart}
-                onHideItem={handleHideItem}
-                onInsertBlock={onInsertBlock}
-                onItemPointerLeave={handleItemPointerLeave}
-                onItemSelect={handleItemSelect}
-                setSectionRef={setSectionRef}
-              />
+              {resolvedType === 'fixed-blocks' && visibleSecondaryFixedItems.length > 0 && (
+                <>
+                  <BlockSection
+                    activeDragItemId={dragState?.itemId}
+                    activeDragOffsetY={dragState?.offsetY ?? 0}
+                    deletingItemIds={deletingItemIds}
+                    hiddenItemIds={hiddenItemIds}
+                    hiddenTrashSuppressedItemIds={hiddenTrashSuppressedItemIds}
+                    items={visibleSecondaryFixedItems}
+                    sectionKey="fixed-secondary"
+                    selectedItemId={internalSelectedItemId}
+                    title={secondaryFixedSectionTitle}
+                    getItemRef={getItemRef}
+                    visibilityAnimatingItemIds={visibilityAnimatingItemIds}
+                    visibilityRestoringItemIds={visibilityRestoringItemIds}
+                    onDeleteItem={handleDeleteItem}
+                    onDragStart={handleDragStart}
+                    onHideItem={handleHideItem}
+                    onInsertBlock={onInsertBlock}
+                    onItemPointerLeave={handleItemPointerLeave}
+                    onItemSelect={handleItemSelect}
+                    setSectionRef={setSectionRef}
+                  />
+                  {shouldShowScrollSection && (
+                    <div className="storybook-left-panel__divider h-px w-full shrink-0 bg-neutral-100" />
+                  )}
+                </>
+              )}
+              {shouldShowScrollSection && (
+                <BlockSection
+                  activeDragItemId={dragState?.itemId}
+                  activeDragOffsetY={dragState?.offsetY ?? 0}
+                  deletingItemIds={deletingItemIds}
+                  hiddenItemIds={hiddenItemIds}
+                  hiddenTrashSuppressedItemIds={hiddenTrashSuppressedItemIds}
+                  items={visibleScrollItems}
+                  sectionKey="scrolls"
+                  selectedItemId={internalSelectedItemId}
+                  title="Scrolls"
+                  getItemRef={getItemRef}
+                  visibilityAnimatingItemIds={visibilityAnimatingItemIds}
+                  visibilityRestoringItemIds={visibilityRestoringItemIds}
+                  onDeleteItem={handleDeleteItem}
+                  onDragStart={handleDragStart}
+                  onHideItem={handleHideItem}
+                  onInsertBlock={onInsertBlock}
+                  onItemPointerLeave={handleItemPointerLeave}
+                  onItemSelect={handleItemSelect}
+                  setSectionRef={setSectionRef}
+                />
+              )}
             </div>
           )}
         </main>
       </div>
 
-      {!isThemeSettings && (
+      {!isThemeSettings && showFooter && (
         <FooterAction
+          icon={footerIcon}
           label={footerLabel}
           onClick={onFooterClick}
         />
@@ -1167,12 +1227,17 @@ LeftPanel.propTypes = {
   status: PropTypes.oneOf([...STATUS_OPTIONS, 'Draft', 'Active']),
   selectedItemId: PropTypes.string,
   fixedItems: PropTypes.arrayOf(blockItemShape),
+  secondaryFixedItems: PropTypes.arrayOf(blockItemShape),
+  secondaryFixedSectionTitle: PropTypes.string,
   scrollItems: PropTypes.arrayOf(blockItemShape),
   themeSections: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(blockItemShape).isRequired,
   })),
   footerLabel: PropTypes.string,
+  footerIcon: PropTypes.oneOf(['pencil', 'plus']),
+  showFooter: PropTypes.bool,
+  showScrollSection: PropTypes.bool,
   className: PropTypes.string,
   onAddBlock: PropTypes.func,
   onBack: PropTypes.func,
