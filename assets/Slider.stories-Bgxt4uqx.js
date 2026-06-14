@@ -1,0 +1,79 @@
+import{a as e,n as t}from"./chunk-DnJy8xQt.js";import{a as n}from"./iframe-CiW47GNV.js";import{t as r}from"./jsx-runtime-DxP0NviS.js";import{t as i}from"./Typography-VHhF8HGF.js";import{t as a}from"./Typography-CHZPSMKC.js";var o=t((()=>{}));function s(e){return e.flat().filter(Boolean).join(` `)}function c(e,t={}){if(e!==void 0)return t[e]??e}function l(e,t,n){return Math.min(Math.max(Number(e),t),n)}function u(e,t,n){return n===t?0:(e-t)/(n-t)*100}function d(e){return e===`top`||e===`floating-top`?`top`:e===`bottom`||e===`floating-bottom`?`bottom`:`none`}function f(e){return e===`top`?`py-8 pt-10`:e===`bottom`?`py-8 pb-10`:``}function p({disabled:e,labelOffset:t,normalizedStyle:n,className:r}){return s([`storybook-slider w-[320px] text-neutral-800`,f(t),n===`dotted`&&`storybook-slider--dotted`,e&&`storybook-slider--disabled opacity-[0.55]`,r])}function m(e){return e?`bg-neutral-50`:`bg-neutral-100`}function h(e){return e?`bg-brand-100`:`bg-brand-400`}function g(e){return e?`bg-neutral-0`:`bg-neutral-400`}function _(e,t){return t===`dotted`?e?`border-0 bg-neutral-0 shadow-xs`:`border-0 bg-neutral-0 shadow-md`:e?`border-2 border-solid border-brand-100 bg-neutral-0 shadow-xs`:`border-2 border-solid border-brand-400 bg-neutral-0 shadow-md`}function v(e){return s([`storybook-slider__rail rounded-6`,m(e)])}function y(e){return s([`storybook-slider__progress z-[1] rounded-6`,h(e)])}function b(e){return s([`storybook-slider__step size-1.5 rounded-full`,g(e)])}function x(e,t){return s([`storybook-slider__thumb box-border rounded-full`,_(e,t)])}function S(e){return s([`storybook-slider__input absolute inset-0 m-0 h-full w-full cursor-pointer opacity-0`,e===`start`&&`storybook-slider__input--start z-[6]`,e===`end`&&`storybook-slider__input--end z-[7]`,!e&&`z-[5]`,`disabled:cursor-not-allowed`])}function C(e){return s([`storybook-slider__value-label`,e===`top`&&`storybook-slider__value-label--top`,e===`bottom`&&`storybook-slider__value-label--bottom`])}function w(e){return s([`storybook-slider__floating-label`,e===`top`&&`storybook-slider__floating-label--top`,e===`bottom`&&`storybook-slider__floating-label--bottom`])}function T({labelOffset:e,value:t,position:n}){return n===`none`?null:n===`floating-bottom`||n===`floating-top`?(0,O.jsxs)(`div`,{className:w(e),"aria-hidden":`true`,children:[(0,O.jsx)(i,{as:`span`,variant:`text-sm`,weight:`medium`,className:`box-border inline-flex h-9 min-w-10 items-center justify-center whitespace-nowrap rounded-2 bg-neutral-0 px-3 py-2 text-neutral-800 shadow-md`,children:t}),(0,O.jsx)(`span`,{className:s([`storybook-slider__floating-label-arrow text-neutral-0`,e===`bottom`&&`storybook-slider__floating-label-arrow--bottom`])})]}):(0,O.jsx)(i,{as:`span`,variant:`text-md`,weight:`medium`,className:s([`text-neutral-800`,C(e)]),"aria-hidden":`true`,children:t})}function E({min:e=0,max:t=100,step:n=1,value:r,defaultValue:i=25,startValue:a,endValue:o,defaultStartValue:s=25,defaultEndValue:f=50,mode:m,state:h,style:g=`classic`,labelPosition:_,label:C,disabled:w=!1,className:E,onChange:k,onRangeChange:A,...j}){let M=c(m??h,{Normal:`single`,Difference:`range`,normal:`single`,difference:`range`})??`single`,N=c(g,{Classic:`classic`,Dotted:`dotted`}),P=c(_??C,{None:`none`,Bottom:`bottom`,Top:`top`,"Floating Bottom":`floating-bottom`,"Floating Top":`floating-top`})??`none`,[F,I]=(0,D.useState)(i),[L,R]=(0,D.useState)([s,f]),z=M===`range`,B=l(r??F,e,t),V=(0,D.useMemo)(()=>{let n=l(a??L[0],e,t),r=l(o??L[1],e,t);return[Math.min(n,r),Math.max(n,r)]},[o,L,t,e,a]),H=z?u(V[0],e,t):0,U=u(z?V[1]:B,e,t),W=(0,D.useMemo)(()=>Array.from({length:9},(e,t)=>t*12.5),[]),G=d(P),K=n=>{let r=l(n.target.value,e,t);I(r),k?.(r)},q=n=>{let r=[Math.min(l(n.target.value,e,t),V[1]),V[1]];R(r),A?.(r)},J=n=>{let r=Math.max(l(n.target.value,e,t),V[0]),i=[V[0],r];R(i),A?.(i)};return(0,O.jsx)(`div`,{className:p({disabled:w,labelOffset:G,normalizedStyle:N,className:E}),...j,children:(0,O.jsxs)(`div`,{className:`storybook-slider__control relative h-6 w-[320px] rounded-2`,children:[(0,O.jsx)(`div`,{className:v(w)}),N===`dotted`&&(0,O.jsx)(`div`,{className:`storybook-slider__steps`,"aria-hidden":`true`,children:W.map(e=>(0,O.jsx)(`span`,{className:b(e>=H&&e<=U),style:{left:`${e}%`}},e))}),(0,O.jsx)(`div`,{className:y(w),style:{left:`${H}%`,width:`${U-H}%`}}),z?(0,O.jsxs)(O.Fragment,{children:[(0,O.jsx)(`div`,{className:x(w,N),style:{left:`${H}%`},children:(0,O.jsx)(T,{labelOffset:G,value:V[0],position:P})}),(0,O.jsx)(`div`,{className:x(w,N),style:{left:`${U}%`},children:(0,O.jsx)(T,{labelOffset:G,value:V[1],position:P})}),(0,O.jsx)(`input`,{"aria-label":`Minimum value`,className:S(`start`),disabled:w,max:t,min:e,step:n,type:`range`,value:V[0],onChange:q}),(0,O.jsx)(`input`,{"aria-label":`Maximum value`,className:S(`end`),disabled:w,max:t,min:e,step:n,type:`range`,value:V[1],onChange:J})]}):(0,O.jsxs)(O.Fragment,{children:[(0,O.jsx)(`div`,{className:x(w,N),style:{left:`${U}%`},children:(0,O.jsx)(T,{labelOffset:G,value:B,position:P})}),(0,O.jsx)(`input`,{"aria-label":`Slider value`,className:S(),disabled:w,max:t,min:e,step:n,type:`range`,value:B,onChange:K})]})]})})}var D,O,k=t((()=>{D=e(n(),1),a(),o(),O=r(),E.__docgenInfo={description:``,methods:[],displayName:`Slider`,props:{min:{required:!1,tsType:{name:`number`},description:``,defaultValue:{value:`0`,computed:!1}},max:{required:!1,tsType:{name:`number`},description:``,defaultValue:{value:`100`,computed:!1}},step:{required:!1,tsType:{name:`number`},description:``,defaultValue:{value:`1`,computed:!1}},value:{required:!1,tsType:{name:`number`},description:``},defaultValue:{required:!1,tsType:{name:`number`},description:``,defaultValue:{value:`25`,computed:!1}},startValue:{required:!1,tsType:{name:`number`},description:``},endValue:{required:!1,tsType:{name:`number`},description:``},defaultStartValue:{required:!1,tsType:{name:`number`},description:``,defaultValue:{value:`25`,computed:!1}},defaultEndValue:{required:!1,tsType:{name:`number`},description:``,defaultValue:{value:`50`,computed:!1}},mode:{required:!1,tsType:{name:`union`,raw:`'single' | 'range' | 'normal' | 'difference' | 'Normal' | 'Difference'`,elements:[{name:`literal`,value:`'single'`},{name:`literal`,value:`'range'`},{name:`literal`,value:`'normal'`},{name:`literal`,value:`'difference'`},{name:`literal`,value:`'Normal'`},{name:`literal`,value:`'Difference'`}]},description:``},state:{required:!1,tsType:{name:`union`,raw:`'Normal' | 'Difference' | 'normal' | 'difference'`,elements:[{name:`literal`,value:`'Normal'`},{name:`literal`,value:`'Difference'`},{name:`literal`,value:`'normal'`},{name:`literal`,value:`'difference'`}]},description:``},style:{required:!1,tsType:{name:`union`,raw:`'classic' | 'dotted' | 'Classic' | 'Dotted'`,elements:[{name:`literal`,value:`'classic'`},{name:`literal`,value:`'dotted'`},{name:`literal`,value:`'Classic'`},{name:`literal`,value:`'Dotted'`}]},description:``,defaultValue:{value:`'classic'`,computed:!1}},labelPosition:{required:!1,tsType:{name:`union`,raw:`| 'none'
+| 'bottom'
+| 'top'
+| 'floating-bottom'
+| 'floating-top'
+| 'None'
+| 'Bottom'
+| 'Top'
+| 'Floating Bottom'
+| 'Floating Top'`,elements:[{name:`literal`,value:`'none'`},{name:`literal`,value:`'bottom'`},{name:`literal`,value:`'top'`},{name:`literal`,value:`'floating-bottom'`},{name:`literal`,value:`'floating-top'`},{name:`literal`,value:`'None'`},{name:`literal`,value:`'Bottom'`},{name:`literal`,value:`'Top'`},{name:`literal`,value:`'Floating Bottom'`},{name:`literal`,value:`'Floating Top'`}]},description:``},label:{required:!1,tsType:{name:`union`,raw:`| 'none'
+| 'bottom'
+| 'top'
+| 'floating-bottom'
+| 'floating-top'
+| 'None'
+| 'Bottom'
+| 'Top'
+| 'Floating Bottom'
+| 'Floating Top'`,elements:[{name:`literal`,value:`'none'`},{name:`literal`,value:`'bottom'`},{name:`literal`,value:`'top'`},{name:`literal`,value:`'floating-bottom'`},{name:`literal`,value:`'floating-top'`},{name:`literal`,value:`'None'`},{name:`literal`,value:`'Bottom'`},{name:`literal`,value:`'Top'`},{name:`literal`,value:`'Floating Bottom'`},{name:`literal`,value:`'Floating Top'`}]},description:``},disabled:{required:!1,tsType:{name:`boolean`},description:``,defaultValue:{value:`false`,computed:!1}},onChange:{required:!1,tsType:{name:`signature`,type:`function`,raw:`(value: number) => void`,signature:{arguments:[{type:{name:`number`},name:`value`}],return:{name:`void`}}},description:``},onRangeChange:{required:!1,tsType:{name:`signature`,type:`function`,raw:`(range: [number, number]) => void`,signature:{arguments:[{type:{name:`tuple`,raw:`[number, number]`,elements:[{name:`number`},{name:`number`}]},name:`range`}],return:{name:`void`}}},description:``}},composes:[`Omit`]}}));function A({style:e=`classic`,mode:t=`single`,labelPosition:n=`none`,values:r=I}){return(0,M.jsx)(`div`,{className:`flex flex-wrap items-start gap-x-16 gap-y-12`,children:r.map(r=>{let i=Array.isArray(r)?r.join(`-`):r;return t===`range`?(0,M.jsx)(E,{style:e,mode:`range`,labelPosition:n,startValue:r[0],endValue:r[1]},i):(0,M.jsx)(E,{style:e,labelPosition:n,value:r},i)})})}function j({style:e,title:t}){return(0,M.jsxs)(`div`,{className:`flex flex-col gap-12`,children:[(0,M.jsx)(`h3`,{className:`text-ds-text-md font-medium text-neutral-800`,children:t}),(0,M.jsxs)(`div`,{className:`flex flex-col gap-12`,children:[(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`p`,{className:`mb-2 text-ds-text-sm text-neutral-600`,children:`Single · None · Bottom · Floating bottom`}),(0,M.jsx)(A,{style:e,labelPosition:`none`}),(0,M.jsx)(A,{style:e,labelPosition:`bottom`}),(0,M.jsx)(A,{style:e,labelPosition:`floating-bottom`})]}),(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`p`,{className:`mb-2 text-ds-text-sm text-neutral-600`,children:`Single · Top · Floating top`}),(0,M.jsx)(A,{style:e,labelPosition:`top`}),(0,M.jsx)(A,{style:e,labelPosition:`floating-top`})]}),(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`p`,{className:`mb-2 text-ds-text-sm text-neutral-600`,children:`Range · None · Bottom · Floating bottom`}),(0,M.jsx)(A,{style:e,mode:`range`,labelPosition:`none`,values:L}),(0,M.jsx)(A,{style:e,mode:`range`,labelPosition:`bottom`,values:L}),(0,M.jsx)(A,{style:e,mode:`range`,labelPosition:`floating-bottom`,values:L})]}),(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`p`,{className:`mb-2 text-ds-text-sm text-neutral-600`,children:`Range · Top · Floating top`}),(0,M.jsx)(A,{style:e,mode:`range`,labelPosition:`top`,values:L}),(0,M.jsx)(A,{style:e,mode:`range`,labelPosition:`floating-top`,values:L})]})]})]})}var M,N,P,F,I,L,R,z,B,V,H;t((()=>{k(),M=r(),{useArgs:N}=__STORYBOOK_MODULE_PREVIEW_API__,P={title:`Molecules/Slider`,component:E,parameters:{layout:`centered`,docs:{description:{component:`Slider with classic and dotted styles, single-value (Normal) and range (Difference) modes, and Figma label placements.`}}},tags:[`autodocs`],argTypes:{style:{control:`select`,options:[`classic`,`dotted`]},mode:{control:`select`,options:[`single`,`range`]},labelPosition:{control:`select`,options:[`none`,`bottom`,`top`,`floating-bottom`,`floating-top`]},disabled:{control:`boolean`},value:{control:`number`},startValue:{control:`number`},endValue:{control:`number`}}},F={render:e=>{let[{endValue:t,startValue:n,value:r},i]=N();return(0,M.jsx)(E,{...e,endValue:t,startValue:n,value:r,onChange:e=>i({value:e}),onRangeChange:e=>i({startValue:e[0],endValue:e[1]})})},args:{style:`classic`,mode:`single`,labelPosition:`none`,value:25,startValue:25,endValue:50,disabled:!1}},I=[25,50,75,100],L=[[25,50],[25,75],[25,100]],R={parameters:{layout:`padded`},render:()=>(0,M.jsxs)(`div`,{className:`flex flex-col gap-12`,children:[(0,M.jsx)(j,{style:`classic`,title:`Classic`}),(0,M.jsx)(j,{style:`dotted`,title:`Dotted`})]})},z={render:()=>(0,M.jsxs)(`div`,{className:`flex flex-col gap-12`,children:[(0,M.jsx)(A,{}),(0,M.jsx)(A,{labelPosition:`bottom`}),(0,M.jsx)(A,{labelPosition:`top`}),(0,M.jsx)(A,{labelPosition:`floating-bottom`}),(0,M.jsx)(A,{labelPosition:`floating-top`})]})},B={render:()=>(0,M.jsxs)(`div`,{className:`flex flex-col gap-12`,children:[(0,M.jsx)(A,{style:`dotted`}),(0,M.jsx)(A,{style:`dotted`,labelPosition:`bottom`}),(0,M.jsx)(A,{style:`dotted`,labelPosition:`top`}),(0,M.jsx)(A,{style:`dotted`,labelPosition:`floating-bottom`}),(0,M.jsx)(A,{style:`dotted`,labelPosition:`floating-top`})]})},V={render:()=>(0,M.jsxs)(`div`,{className:`flex flex-wrap items-start gap-x-16 gap-y-12`,children:[(0,M.jsxs)(`div`,{className:`flex flex-col gap-8`,children:[(0,M.jsx)(E,{mode:`range`,startValue:25,endValue:50}),(0,M.jsx)(E,{mode:`range`,startValue:25,endValue:75,labelPosition:`bottom`}),(0,M.jsx)(E,{mode:`range`,startValue:25,endValue:100,labelPosition:`floating-top`})]}),(0,M.jsxs)(`div`,{className:`flex flex-col gap-8`,children:[(0,M.jsx)(E,{mode:`range`,style:`dotted`,startValue:25,endValue:50}),(0,M.jsx)(E,{mode:`range`,style:`dotted`,startValue:25,endValue:75,labelPosition:`bottom`}),(0,M.jsx)(E,{mode:`range`,style:`dotted`,startValue:25,endValue:100,labelPosition:`floating-top`})]})]})},F.parameters={...F.parameters,docs:{...F.parameters?.docs,source:{originalSource:`{
+  render: args => {
+    const [{
+      endValue,
+      startValue,
+      value
+    }, updateArgs] = useArgs();
+    return <Slider {...args} endValue={endValue} startValue={startValue} value={value} onChange={nextValue => updateArgs({
+      value: nextValue
+    })} onRangeChange={nextRange => updateArgs({
+      startValue: nextRange[0],
+      endValue: nextRange[1]
+    })} />;
+  },
+  args: {
+    style: 'classic',
+    mode: 'single',
+    labelPosition: 'none',
+    value: 25,
+    startValue: 25,
+    endValue: 50,
+    disabled: false
+  }
+}`,...F.parameters?.docs?.source}}},R.parameters={...R.parameters,docs:{...R.parameters?.docs,source:{originalSource:`{
+  parameters: {
+    layout: 'padded'
+  },
+  render: () => <div className="flex flex-col gap-12">
+      <StyleSection style="classic" title="Classic" />
+      <StyleSection style="dotted" title="Dotted" />
+    </div>
+}`,...R.parameters?.docs?.source}}},z.parameters={...z.parameters,docs:{...z.parameters?.docs,source:{originalSource:`{
+  render: () => <div className="flex flex-col gap-12">
+      <SliderGrid />
+      <SliderGrid labelPosition="bottom" />
+      <SliderGrid labelPosition="top" />
+      <SliderGrid labelPosition="floating-bottom" />
+      <SliderGrid labelPosition="floating-top" />
+    </div>
+}`,...z.parameters?.docs?.source}}},B.parameters={...B.parameters,docs:{...B.parameters?.docs,source:{originalSource:`{
+  render: () => <div className="flex flex-col gap-12">
+      <SliderGrid style="dotted" />
+      <SliderGrid style="dotted" labelPosition="bottom" />
+      <SliderGrid style="dotted" labelPosition="top" />
+      <SliderGrid style="dotted" labelPosition="floating-bottom" />
+      <SliderGrid style="dotted" labelPosition="floating-top" />
+    </div>
+}`,...B.parameters?.docs?.source}}},V.parameters={...V.parameters,docs:{...V.parameters?.docs,source:{originalSource:`{
+  render: () => <div className="flex flex-wrap items-start gap-x-16 gap-y-12">
+      <div className="flex flex-col gap-8">
+        <Slider mode="range" startValue={25} endValue={50} />
+        <Slider mode="range" startValue={25} endValue={75} labelPosition="bottom" />
+        <Slider mode="range" startValue={25} endValue={100} labelPosition="floating-top" />
+      </div>
+      <div className="flex flex-col gap-8">
+        <Slider mode="range" style="dotted" startValue={25} endValue={50} />
+        <Slider mode="range" style="dotted" startValue={25} endValue={75} labelPosition="bottom" />
+        <Slider mode="range" style="dotted" startValue={25} endValue={100} labelPosition="floating-top" />
+      </div>
+    </div>
+}`,...V.parameters?.docs?.source}}},H=[`Playground`,`FigmaDesign`,`Classic`,`Dotted`,`Range`]}))();export{z as Classic,B as Dotted,R as FigmaDesign,F as Playground,V as Range,H as __namedExportsOrder,P as default};
