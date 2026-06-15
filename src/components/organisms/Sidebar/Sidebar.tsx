@@ -208,9 +208,9 @@ function SuperfansBrand({
       alt={alt}
       className={buildClassName([
         'storybook-sidebar-brand-image block shrink-0 object-contain',
-        variant === 'logo' && 'h-6 w-[151px]',
-        variant === 'mark' && 'h-6 w-[26px]',
-        variant === 'avatar' && 'rounded-2',
+        variant === 'logo' && 'w-[151px]',
+        variant === 'mark' && 'w-[26px]',
+        variant === 'avatar' && 'storybook-sidebar-brand-image--avatar rounded-2',
         variant === 'avatar' && (sidebarCollapsed ? 'size-9' : 'size-[38px]'),
       ])}
       src={imageSrc}
@@ -486,77 +486,79 @@ export function Sidebar({
       })}
     >
       <div className="flex flex-col gap-6 pt-6">
-        <header className={buildClassName([
-          'flex items-center',
-          isCollapsed ? 'justify-center p-0' : 'px-4',
-        ])}>
-          <div className="inline-flex items-center py-3">
-            <SuperfansBrand
-              alt={isCollapsed ? brandLabel : `${brandLabel} logo`}
-              variant={isCollapsed ? 'mark' : 'logo'}
-            />
-          </div>
-        </header>
-
-        {!isCollapsed ? (
-          <div className="px-4">
-            <div className="relative">
-              <button
-                ref={storeButtonRef}
-                type="button"
-                aria-expanded={isStoreDropdownOpen}
-                aria-controls="storybook-sidebar-store-dropdown"
-                className="storybook-sidebar-store box-border flex h-11 w-full cursor-pointer items-center justify-between gap-2 rounded-2 border border-solid border-neutral-200 bg-neutral-0 px-[14px] py-2.5 focus-visible:outline-none focus-visible:shadow-focus-brand"
-                onClick={() => setIsStoreDropdownOpen((currentValue) => !currentValue)}
-              >
-                <Text
-                  as="span"
-                  variant="text-sm"
-                  weight="regular"
-                  className={buildClassName([
-                    'min-w-0 overflow-hidden text-ellipsis whitespace-nowrap',
-                    selectedStore ? 'text-neutral-700' : 'text-neutral-300',
-                  ])}
-                >
-                  {selectedStore?.name ?? storePlaceholder}
-                </Text>
-                <CaretUpDown
-                  aria-hidden="true"
-                  className="size-5 shrink-0 text-neutral-600"
-                  size={20}
-                  weight="regular"
-                />
-              </button>
-
-              {isStoreDropdownOpen && (
-                <div
-                  ref={storeDropdownRef}
-                  id="storybook-sidebar-store-dropdown"
-                  className="storybook-sidebar-store-dropdown absolute inset-x-0 z-20"
-                >
-                  <DropdownList
-                    items={storeOptions.map((store) => ({
-                      label: store.name,
-                      value: store.id,
-                    }))}
-                    selectedValues={selectedStore ? [selectedStore.id] : []}
-                    variant="check-right"
-                    fullWidth
-                    onItemSelect={handleStoreSelect}
-                  />
-                </div>
-              )}
+        <div className="flex flex-col gap-4">
+          <header className={buildClassName([
+            'storybook-sidebar-brand-header flex h-[40px] items-center',
+            isCollapsed ? 'justify-center p-0' : 'px-4',
+          ])}>
+            <div className="inline-flex h-full items-center">
+              <SuperfansBrand
+                alt={isCollapsed ? brandLabel : `${brandLabel} logo`}
+                variant={isCollapsed ? 'mark' : 'logo'}
+              />
             </div>
-          </div>
-        ) : (
-          <button
-            type="button"
-            aria-label="Switch store"
-            className="storybook-sidebar-icon-button inline-flex cursor-pointer items-center justify-center self-center rounded-2 border border-solid border-neutral-100 bg-neutral-0 p-2 text-neutral-600 focus-visible:outline-none focus-visible:shadow-focus-brand"
-          >
-            {renderSidebarIcon('repeat', 'storybook-sidebar-icon-button__icon size-[18px] shrink-0')}
-          </button>
-        )}
+          </header>
+
+          {!isCollapsed ? (
+            <div className="px-4">
+              <div className="relative">
+                <button
+                  ref={storeButtonRef}
+                  type="button"
+                  aria-expanded={isStoreDropdownOpen}
+                  aria-controls="storybook-sidebar-store-dropdown"
+                  className="storybook-sidebar-store box-border flex h-11 w-full cursor-pointer items-center justify-between gap-2 rounded-2 border border-solid border-neutral-200 bg-neutral-0 px-[14px] py-2.5 focus-visible:outline-none focus-visible:shadow-focus-brand"
+                  onClick={() => setIsStoreDropdownOpen((currentValue) => !currentValue)}
+                >
+                  <Text
+                    as="span"
+                    variant="text-sm"
+                    weight="regular"
+                    className={buildClassName([
+                      'min-w-0 overflow-hidden text-ellipsis whitespace-nowrap',
+                      selectedStore ? 'text-neutral-700' : 'text-neutral-300',
+                    ])}
+                  >
+                    {selectedStore?.name ?? storePlaceholder}
+                  </Text>
+                  <CaretUpDown
+                    aria-hidden="true"
+                    className="size-5 shrink-0 text-neutral-600"
+                    size={20}
+                    weight="regular"
+                  />
+                </button>
+
+                {isStoreDropdownOpen && (
+                  <div
+                    ref={storeDropdownRef}
+                    id="storybook-sidebar-store-dropdown"
+                    className="storybook-sidebar-store-dropdown absolute inset-x-0 z-20"
+                  >
+                    <DropdownList
+                      items={storeOptions.map((store) => ({
+                        label: store.name,
+                        value: store.id,
+                      }))}
+                      selectedValues={selectedStore ? [selectedStore.id] : []}
+                      variant="check-right"
+                      fullWidth
+                      onItemSelect={handleStoreSelect}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              aria-label="Switch store"
+              className="storybook-sidebar-icon-button inline-flex cursor-pointer items-center justify-center self-center rounded-2 border border-solid border-neutral-100 bg-neutral-0 p-2 text-neutral-600 focus-visible:outline-none focus-visible:shadow-focus-brand"
+            >
+              {renderSidebarIcon('repeat', 'storybook-sidebar-icon-button__icon size-[18px] shrink-0')}
+            </button>
+          )}
+        </div>
 
         <nav
           aria-label="Sidebar navigation"

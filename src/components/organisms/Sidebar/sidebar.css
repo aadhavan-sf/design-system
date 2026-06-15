@@ -8,6 +8,19 @@ button.storybook-sidebar-preview-popover__copy {
   -webkit-appearance: none;
 }
 
+.storybook-sidebar-brand-header {
+  box-sizing: border-box;
+  height: 40px;
+}
+
+.storybook-sidebar-brand-image {
+  height: 24px;
+}
+
+.storybook-sidebar-brand-image.storybook-sidebar-brand-image--avatar {
+  height: auto;
+}
+
 .storybook-sidebar {
   width: 216px;
 }

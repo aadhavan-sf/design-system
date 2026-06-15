@@ -45,6 +45,10 @@ button.storybook-popover-empty__action {
   width: 63px;
 }
 
+.storybook-popover__tabs .storybook-tab-item[aria-selected="false"] {
+  color: var(--neutral_700);
+}
+
 .storybook-popover__list--empty,
 .storybook-popover-preview {
   box-sizing: border-box;
