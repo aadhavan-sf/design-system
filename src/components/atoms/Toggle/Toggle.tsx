@@ -23,11 +23,7 @@ function buildClassName(parts: Array<string | false | null | undefined>) {
 }
 
 function getToggleTrackSizeClasses(size: ToggleSize) {
-  return size === 'sm' ? 'h-5 w-9' : 'h-6 w-11';
-}
-
-function getToggleThumbSizeClasses(size: ToggleSize) {
-  return size === 'sm' ? 'h-4 w-4' : 'h-5 w-5';
+  return `storybook-toggle--${size}`;
 }
 
 function getToggleStateClasses({
@@ -75,7 +71,6 @@ function getToggleClassName({
   return buildClassName([
     'storybook-toggle relative rounded-full border-0',
     getToggleTrackSizeClasses(size),
-    `storybook-toggle--${size}`,
     isPressed && 'storybook-toggle--pressed',
     'focus-visible:shadow-focus-brand',
     getToggleStateClasses({ isPressed, state }),
@@ -86,15 +81,12 @@ function getToggleClassName({
 
 function getToggleThumbClassName({
   isDisabled,
-  size,
 }: {
   isDisabled: boolean;
-  size: ToggleSize;
 }) {
   return buildClassName([
-    'storybook-toggle__thumb rounded-full bg-neutral-0',
-    getToggleThumbSizeClasses(size),
-    isDisabled ? 'shadow-xs' : 'shadow-sm',
+    'storybook-toggle__thumb',
+    isDisabled ? 'storybook-toggle__thumb--disabled' : 'storybook-toggle__thumb--enabled',
   ]);
 }
 
@@ -153,7 +145,6 @@ export function Toggle({
       <span
         className={getToggleThumbClassName({
           isDisabled,
-          size,
         })}
       />
     </button>
