@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   CaretUpDown,
+  CardsThree,
   Check,
   CopySimple,
   CurrencyCircleDollar,
@@ -34,6 +35,7 @@ const ITEM_STATES = ['default', 'hover', 'focused', 'disabled'];
 const ICON_NAMES = [
   'billing',
   'camera',
+  'cards-three',
   'device',
   'drag',
   'gear',
@@ -165,6 +167,8 @@ function renderSidebarIcon(
       return <CurrencyCircleDollar {...iconProps} />;
     case 'camera':
       return <DeviceMobileCamera {...iconProps} />;
+    case 'cards-three':
+      return <CardsThree {...iconProps} />;
     case 'device':
       return <DeviceMobileSpeaker {...iconProps} />;
     case 'gear':

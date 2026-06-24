@@ -32,7 +32,7 @@ export default {
   
     icon: {
       control: 'select',
-      options: ['none', 'left', 'right', 'only'],
+      options: ['none', 'left', 'right', 'only', 'both'],
     },
   
     destructive: {
@@ -169,6 +169,13 @@ export const Icons = {
         hierarchy="primary"
         size="medium"
         icon="only"
+      />
+
+      <Button
+        hierarchy="primary"
+        size="medium"
+        label="Both Icons"
+        icon="both"
       />
     </div>
   ),

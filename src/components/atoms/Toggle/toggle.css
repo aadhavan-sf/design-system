@@ -1,6 +1,9 @@
 .storybook-toggle {
   display: inline-flex;
   align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  padding: var(--spacing_0_5);
 
   cursor: pointer;
 
@@ -19,16 +22,11 @@
 
 .storybook-toggle__thumb {
   display: block;
+  flex-shrink: 0;
 
-  transition: transform 160ms ease;
+  transition: margin 160ms ease;
 }
 
-.storybook-toggle--sm.storybook-toggle--pressed
-.storybook-toggle__thumb {
-  transform: translateX(16px);
-}
-
-.storybook-toggle--mid.storybook-toggle--pressed
-.storybook-toggle__thumb {
-  transform: translateX(20px);
+.storybook-toggle--pressed .storybook-toggle__thumb {
+  margin-left: auto;
 }

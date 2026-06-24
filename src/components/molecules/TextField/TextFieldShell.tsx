@@ -79,7 +79,7 @@ export function TextFieldShell({
             as="label"
             variant="text-sm"
             weight="medium"
-            className="leading-none text-neutral-600"
+            className="text-neutral-600"
           >
             {labelText}
           </Text>

@@ -73,7 +73,7 @@ function getToggleClassName({
   state: ToggleState;
 }) {
   return buildClassName([
-    'storybook-toggle relative rounded-full border-0 p-0.5',
+    'storybook-toggle relative rounded-full border-0',
     getToggleTrackSizeClasses(size),
     `storybook-toggle--${size}`,
     isPressed && 'storybook-toggle--pressed',

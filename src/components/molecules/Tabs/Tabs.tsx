@@ -1,4 +1,4 @@
-import { useState, type ButtonHTMLAttributes } from 'react';
+import { useState, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import { House } from '@phosphor-icons/react';
 
 import { Text } from '../../foundations/Typography';
@@ -17,6 +17,8 @@ type NormalizedTabsType = 'no-segment' | 'segments';
 
 export interface TabItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
+  icon?: ReactNode;
+  iconOnly?: boolean;
   iconPosition?: TabIconPosition;
   pressed?: boolean;
   showIcons?: boolean;
@@ -27,6 +29,8 @@ export interface TabItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export type TabConfig = {
   label: string;
   disabled?: boolean;
+  icon?: ReactNode;
+  iconOnly?: boolean;
   iconPosition?: TabIconPosition;
   showIcons?: boolean;
   size?: TabSize;
@@ -143,6 +147,8 @@ function createDefaultTabs(count: TabCount) {
 
 export function TabItem({
   label = 'Dynamic',
+  icon,
+  iconOnly = false,
   iconPosition = 'right',
   pressed = false,
   showIcons = true,
@@ -167,15 +173,35 @@ export function TabItem({
     state: normalizedState,
   });
 
-  const layoutClasses = 'px-3 py-1.5';
+  const layoutClasses = iconOnly ? 'size-9 shrink-0 p-0' : 'px-3 py-1.5';
 
-  const icon = showIcons ? (
-    <House
-      className="storybook-tab-item__icon shrink-0"
-      size={16}
-      weight={pressed ? 'fill' : 'regular'}
-    />
-  ) : null;
+  const iconElement = icon ?? (
+    showIcons ? (
+      <House
+        className="storybook-tab-item__icon shrink-0"
+        size={16}
+        weight={pressed ? 'fill' : 'regular'}
+      />
+    ) : null
+  );
+
+  if (iconOnly) {
+    return (
+      <button
+        type="button"
+        disabled={isDisabled}
+        className={getTabItemClassName({
+          className,
+          layoutClasses,
+          variantClasses,
+        })}
+        {...props}
+      >
+        <span className="sr-only">{label}</span>
+        {iconElement}
+      </button>
+    );
+  }
 
   return (
     <button
@@ -188,7 +214,7 @@ export function TabItem({
       })}
       {...props}
     >
-      {normalizedIconPosition === 'left' && icon}
+      {normalizedIconPosition === 'left' && iconElement}
       <Text
         as="span"
         variant={getTextVariant(size)}
@@ -198,7 +224,7 @@ export function TabItem({
       >
         {label}
       </Text>
-      {normalizedIconPosition === 'right' && icon}
+      {normalizedIconPosition === 'right' && iconElement}
     </button>
   );
 }
@@ -241,11 +267,15 @@ export function Tabs({
         const label = isStringTab ? tab : tab.label;
         const disabled = isStringTab ? false : tab.disabled;
         const pressed = index === resolvedActiveIndex;
+        const tabIcon = isStringTab ? undefined : tab.icon;
+        const tabIconOnly = isStringTab ? false : tab.iconOnly;
 
         return (
           <TabItem
             key={`${label}-${index}`}
             aria-selected={pressed}
+            icon={tabIcon}
+            iconOnly={tabIconOnly}
             iconPosition={isStringTab ? iconPosition : tab.iconPosition ?? iconPosition}
             label={label}
             pressed={pressed}

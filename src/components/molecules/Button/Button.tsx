@@ -1,11 +1,11 @@
-import type { ButtonHTMLAttributes } from 'react';
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { CircleIcon } from '@phosphor-icons/react';
 import { Text } from '../../foundations/Typography';
 
 import './button.css';
 
 export type ButtonHierarchy = 'primary' | 'secondary' | 'link-grey' | 'link-color';
-export type ButtonIcon = 'none' | 'left' | 'right' | 'only';
+export type ButtonIcon = 'none' | 'left' | 'right' | 'only' | 'both';
 export type ButtonState = 'default' | 'focus' | 'disabled';
 export type ButtonSize = 'small' | 'medium' | 'large' | 'xlarge';
 
@@ -13,6 +13,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   hierarchy?: ButtonHierarchy;
   destructive?: boolean;
   icon?: ButtonIcon;
+  leadingIcon?: ReactNode;
+  trailingIcon?: ReactNode;
   state?: ButtonState;
   size?: ButtonSize;
   label?: string;
@@ -196,20 +198,26 @@ export const Button = ({
   hierarchy = 'primary',
   destructive = false,
   icon = 'none',
+  leadingIcon,
+  trailingIcon,
   state = 'default',
   size = 'small',
   label,
   className,
   ...props
 }: ButtonProps) => {
-  const iconElement = (
+  const isIconOnly = icon === 'only';
+  const showLeadingIcon = icon === 'left' || icon === 'only' || icon === 'both';
+  const showTrailingIcon = icon === 'right' || icon === 'both';
+  const defaultIconElement = (
     <CircleIcon
       size={20}
       weight="regular"
       color="currentColor"
     />
   );
-  const isIconOnly = icon === 'only';
+  const leadingIconElement = leadingIcon ?? defaultIconElement;
+  const trailingIconElement = trailingIcon ?? defaultIconElement;
 
   return (
     <button
@@ -226,9 +234,9 @@ export const Button = ({
       {...props}
     >
       <span className="storybook-button__content gap-2">
-        {(icon === 'left' || icon === 'only') && (
+        {showLeadingIcon && (
           <span className={getButtonIconClassName('left')}>
-            {iconElement}
+            {leadingIconElement}
           </span>
         )}
 
@@ -244,9 +252,9 @@ export const Button = ({
           </Text>
         )}
 
-        {icon === 'right' && (
+        {showTrailingIcon && (
           <span className={getButtonIconClassName('right')}>
-            {iconElement}
+            {trailingIconElement}
           </span>
         )}
       </span>
