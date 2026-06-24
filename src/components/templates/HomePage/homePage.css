@@ -1,5 +1,6 @@
 button.storybook-home-page-custom-blocks-link,
-button.storybook-home-page-filter-card__setup {
+button.storybook-home-page-filter-card__setup,
+button.storybook-home-page-visibility-label {
   margin: 0;
   appearance: none;
   -webkit-appearance: none;

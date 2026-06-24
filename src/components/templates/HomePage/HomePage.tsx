@@ -6,7 +6,7 @@ import {
   PencilSimple,
 } from '@phosphor-icons/react';
 import type { Icon } from '@phosphor-icons/react';
-import { useCallback, useEffect, useState, type ComponentType, type KeyboardEvent } from 'react';
+import { useCallback, useEffect, useState, type ComponentType } from 'react';
 
 import { RadioButton } from '../../atoms/RadioButton';
 import { Button } from '../../molecules/Button';
@@ -273,9 +273,13 @@ function getHomePageRightPanelClassName() {
 }
 
 function getHomePageVisibilityOptionClassName() {
+  return 'storybook-home-page-visibility-option flex w-full items-center gap-2';
+}
+
+function getHomePageVisibilityLabelClassName() {
   return buildClassName([
-    'storybook-home-page-visibility-option',
-    'flex min-h-5 w-full cursor-pointer items-center gap-2 rounded-1 border-0 bg-transparent p-0 text-neutral-700',
+    'storybook-home-page-visibility-label',
+    'inline-flex min-w-0 flex-1 cursor-pointer items-center gap-2 border-0 bg-transparent p-0 text-left text-neutral-700',
     'focus-visible:outline-none focus-visible:shadow-focus-brand',
   ]);
 }
@@ -350,52 +354,48 @@ function VisibilityOption({
   const isImageIcon = typeof icon === 'string';
   const IconComponent = icon;
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      onSelect();
-    }
-  };
-
   return (
-    <div
-      className={getHomePageVisibilityOptionClassName()}
-      role="radio"
-      aria-checked={checked}
-      tabIndex={0}
-      onClick={onSelect}
-      onKeyDown={handleKeyDown}
-    >
+    <div className={getHomePageVisibilityOptionClassName()}>
       <RadioButton
         size="sm"
         pressed={checked}
         aria-label={label}
-        className="pointer-events-none shrink-0"
-        tabIndex={-1}
+        className="shrink-0"
+        onPressedChange={(nextPressed) => {
+          if (nextPressed) {
+            onSelect();
+          }
+        }}
       />
-      <Text
-        as="span"
-        variant="text-sm"
-        weight="medium"
-        className="text-neutral-700"
+      <button
+        type="button"
+        className={getHomePageVisibilityLabelClassName()}
+        onClick={onSelect}
       >
-        {label}
-      </Text>
-      {isImageIcon ? (
-        <img
-          aria-hidden="true"
-          className="block size-4 shrink-0"
-          src={icon}
-          alt=""
-        />
-      ) : (
-        <IconComponent
-          aria-hidden="true"
-          className="size-4 shrink-0 text-neutral-600"
-          size={16}
-          weight="regular"
-        />
-      )}
+        <Text
+          as="span"
+          variant="text-sm"
+          weight="medium"
+          color="currentColor"
+        >
+          {label}
+        </Text>
+        {isImageIcon ? (
+          <img
+            aria-hidden="true"
+            className="block size-4 shrink-0"
+            src={icon}
+            alt=""
+          />
+        ) : (
+          <IconComponent
+            aria-hidden="true"
+            className="size-4 shrink-0 text-neutral-600"
+            size={16}
+            weight="regular"
+          />
+        )}
+      </button>
     </div>
   );
 }
