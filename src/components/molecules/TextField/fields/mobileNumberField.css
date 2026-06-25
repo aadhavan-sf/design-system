@@ -82,7 +82,7 @@ input.storybook-mobile-field__input {
 @keyframes storybook-mobile-field-popover-enter {
   0% {
     opacity: 0;
-    transform: translateY(calc(var(--spacing_1) * -1)) scale(0.98);
+    transform: translateY(calc(var(--size_1) * -1)) scale(0.98);
   }
 
   100% {

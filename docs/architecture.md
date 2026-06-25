@@ -18,7 +18,7 @@ src/
 
 ## Component Levels
 
-`styling` contains Storybook-facing documentation for foundational design tokens: colors, spacing, shadows, and typography.
+`styling` contains Storybook-facing documentation for foundational design tokens: colors, size scale, shadows, and typography.
 
 `atoms` are simple standalone controls such as `Toggle`, `CheckBox`, and `RadioButton`.
 
@@ -33,7 +33,7 @@ src/
 Shared design decisions belong in `src/styling/theme`.
 
 - `colors.css` and `colors.js` define color tokens.
-- `spacing.css` and `spacing.js` define spacing tokens.
+- `size.css` and `size.js` define the shared size scale tokens.
 - `shadows.css` and `shadows.js` define elevation tokens.
 - `typography.css` defines text styles.
 

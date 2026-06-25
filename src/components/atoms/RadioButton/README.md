@@ -19,17 +19,17 @@ The track is a `16×16px` (`sm`) or `20×20px` (`mid`) circle. The dot is center
 
 ---
 
-## Sizes & spacing
+## Sizes & size tokens
 
-All spacing values come from [`src/styling/theme/spacing.css`](../../../styling/theme/spacing.css).
+All size values come from [`src/styling/theme/size.css`](../../../styling/theme/size.css).
 
 | Token | Value | Used for |
 |-------|-------|----------|
-| `--spacing_0` | `0px` | Track padding (`p-0`) |
-| `--spacing_1_5` | `6px` | Inner dot — `sm` (`h-1.5 w-1.5`) |
-| `--spacing_2` | `8px` | Inner dot — `mid` (`h-2 w-2`) |
-| `--spacing_4` | `16px` | Track — `sm` (`h-4 w-4`) |
-| `--spacing_5` | `20px` | Track — `mid` (`h-5 w-5`) |
+| `--size_0` | `0px` | Track padding (`p-0`) |
+| `--size_1_5` | `6px` | Inner dot — `sm` (`h-1.5 w-1.5`) |
+| `--size_2` | `8px` | Inner dot — `mid` (`h-2 w-2`) |
+| `--size_4` | `16px` | Track — `sm` (`h-4 w-4`) |
+| `--size_5` | `20px` | Track — `mid` (`h-5 w-5`) |
 
 | Prop | Track size | Dot size | Border |
 |------|------------|----------|--------|
@@ -95,7 +95,7 @@ Applied in these places:
 
 RadioButton does **not** use `--shadow_xs`, `--shadow_sm`, `--shadow_md`, or other elevation shadows.
 
-The focus ring uses `--spacing_1` (`4px`) as its spread width via the shadow definition.
+The focus ring uses `--size_1` (`4px`) as its spread width via the shadow definition.
 
 ---
 

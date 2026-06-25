@@ -50,7 +50,7 @@ button.storybook-sidebar-preview-popover__copy {
 }
 
 .storybook-sidebar-store-dropdown {
-  top: calc(100% + var(--spacing_2));
+  top: calc(100% + var(--size_2));
 }
 
 .storybook-sidebar-preview-popover {
@@ -75,14 +75,14 @@ button.storybook-sidebar-preview-popover__copy {
 
 .storybook-sidebar--collapsed .storybook-sidebar-preview-popover {
   right: auto;
-  left: calc(100% + var(--spacing_3));
+  left: calc(100% + var(--size_3));
   bottom: 24px;
 }
 
 @keyframes storybook-sidebar-popover-enter {
   0% {
     opacity: 0;
-    transform: translateY(var(--spacing_1)) scale(0.98);
+    transform: translateY(var(--size_1)) scale(0.98);
   }
 
   100% {
@@ -98,11 +98,11 @@ button.storybook-sidebar-preview-popover__copy {
   }
 
   35% {
-    transform: translateY(calc(var(--spacing_0_5) * -1));
+    transform: translateY(calc(var(--size_0_5) * -1));
   }
 
   70% {
-    transform: translateY(var(--spacing_0_5));
+    transform: translateY(var(--size_0_5));
   }
 }
 

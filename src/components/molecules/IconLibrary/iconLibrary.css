@@ -40,7 +40,7 @@ button.storybook-icon-library__icon-preview {
 @keyframes storybook-icon-library-popover-enter {
   0% {
     opacity: 0;
-    transform: translateY(calc(var(--spacing_1) * -1)) scale(0.98);
+    transform: translateY(calc(var(--size_1) * -1)) scale(0.98);
   }
 
   100% {

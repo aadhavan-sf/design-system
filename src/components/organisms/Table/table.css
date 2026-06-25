@@ -27,7 +27,7 @@ button.storybook-table-icon-button {
 
 .storybook-table-header-cell:last-child {
   justify-content: center;
-  padding-inline: var(--spacing_4);
+  padding-inline: var(--size_4);
 }
 
 .storybook-table-delivery__segment {
@@ -53,7 +53,7 @@ button.storybook-table-icon-button {
 .storybook-table-action[aria-label="View"]::after {
   content: "";
   position: absolute;
-  inset: var(--spacing_1);
+  inset: var(--size_1);
   background: linear-gradient(
     32deg,
     transparent 46%,

@@ -6,8 +6,8 @@ Shared styling foundations live here. Component files should consume these token
 
 - `theme/colors.css`: CSS variables for neutral, brand, error, warning, success, and special colors.
 - `theme/colors.js`: JavaScript color maps for Storybook token documentation.
-- `theme/spacing.css`: CSS variables for the spacing scale.
-- `theme/spacing.js`: JavaScript spacing maps for Storybook token documentation.
+- `theme/size.css`: CSS variables for the shared size scale (padding, gap, radius, and layout dimensions).
+- `theme/size.js`: JavaScript size maps for Storybook token documentation.
 - `theme/shadows.css`: CSS variables for elevation.
 - `theme/shadows.js`: JavaScript shadow maps for Storybook token documentation.
 - `theme/typography.css`: text styles used by the `Text` atom.
@@ -25,7 +25,7 @@ Use tokens in component CSS:
 ```css
 .example {
   color: var(--neutral_900);
-  gap: var(--spacing_4);
+  gap: var(--size_4);
   box-shadow: var(--shadow_sm);
 }
 ```

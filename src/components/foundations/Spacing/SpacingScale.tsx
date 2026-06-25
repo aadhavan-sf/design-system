@@ -1,22 +1,22 @@
 import { Text } from '../Typography';
-import { spacing, spacingPx } from '../../../styling/theme/spacing.js';
+import { size, sizePx } from '../../../styling/theme/size.js';
 
-type SpacingKey = string;
+type SizeKey = string;
 
 interface SpacingScaleProps {
   showCssVariable?: boolean;
 }
 
-interface SpacingRowProps {
-  step: SpacingKey;
+interface SizeRowProps {
+  step: SizeKey;
   value: string;
 }
 
-const typedSpacing = spacing as Record<SpacingKey, string>;
-const typedSpacingPx = spacingPx as Record<SpacingKey, string>;
-const SPACING_STEPS = Object.keys(typedSpacing);
+const typedSize = size as Record<SizeKey, string>;
+const typedSizePx = sizePx as Record<SizeKey, string>;
+const SIZE_STEPS = Object.keys(typedSize);
 
-const radiusClassNames: Record<SpacingKey, string> = {
+const radiusClassNames: Record<SizeKey, string> = {
   0: 'rounded-0',
   0.5: 'rounded-2px',
   1: 'rounded-4',
@@ -38,6 +38,10 @@ const radiusClassNames: Record<SpacingKey, string> = {
 
 function buildClassName(parts: Array<string | false | null | undefined>) {
   return parts.flat().filter(Boolean).join(' ');
+}
+
+function getSizeTokenName(step: SizeKey) {
+  return `--size_${String(step).replace('.', '_')}`;
 }
 
 function getSpacingScaleClassName() {
@@ -95,7 +99,7 @@ function getSpacingRowValueClassName() {
   return 'text-right max-sm:text-left';
 }
 
-function SpacingRow({ step, value }: SpacingRowProps) {
+function SizeRow({ step, value }: SizeRowProps) {
   const tailwindClasses = `p-${step} gap-${step} ${radiusClassNames[step]}`;
 
   return (
@@ -104,12 +108,13 @@ function SpacingRow({ step, value }: SpacingRowProps) {
         <Text as="span" variant="text-md" weight="semibold">
           {step}
         </Text>
+        <code>{getSizeTokenName(step)}</code>
         <code>{tailwindClasses}</code>
       </div>
       <div className={getSpacingRowBarWrapClassName()}>
         <div
           className={getSpacingRowBarClassName()}
-          style={{ width: typedSpacing[step] }}
+          style={{ width: typedSize[step] }}
         />
       </div>
       <Text
@@ -132,31 +137,31 @@ export function SpacingScale({ showCssVariable = true }: SpacingScaleProps) {
       <div className={getSpacingHeaderClassName()}>
         <div>
           <Text as="span" variant="text-sm" weight="semibold" className="text-brand-600">
-            Spacing
+            Size
           </Text>
           <Text as="h2" variant="display-xs" weight="semibold" className="mt-1">
-            4px-based layout scale
+            4px-based size scale
           </Text>
         </div>
-        {showCssVariable ? <code>Tailwind spacing classes</code> : null}
+        {showCssVariable ? <code>Size tokens for padding, gap, radius, and layout</code> : null}
       </div>
 
-      <div className={getSpacingPreviewGridClassName()} aria-label="Spacing examples">
+      <div className={getSpacingPreviewGridClassName()} aria-label="Size scale examples">
         <div className={getSpacingPreviewBoxClassName({ gapClassName: 'gap-2', paddingClassName: 'p-3' })}>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>gap 2</Text>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>padding 3</Text>
-          <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>space 4</Text>
+          <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>radius 4</Text>
         </div>
         <div className={getSpacingPreviewBoxClassName({ gapClassName: 'gap-4', paddingClassName: 'p-6' })}>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>gap 4</Text>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>padding 6</Text>
-          <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>space 8</Text>
+          <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>radius 8</Text>
         </div>
       </div>
 
       <div className={getSpacingListClassName()}>
-        {SPACING_STEPS.map((step) => (
-          <SpacingRow key={step} step={step} value={typedSpacingPx[step]} />
+        {SIZE_STEPS.map((step) => (
+          <SizeRow key={step} step={step} value={typedSizePx[step]} />
         ))}
       </div>
     </div>

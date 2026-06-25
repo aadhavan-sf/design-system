@@ -37,12 +37,12 @@ src/
     theme/
 ```
 
-- `styling`: Storybook-facing token documentation for colors, spacing, shadows, and typography.
+- `styling`: Storybook-facing token documentation for colors, size scale, shadows, and typography.
 - `atoms`: simple standalone controls.
 - `molecules`: reusable components made by combining atoms, labels, icons, and behavior.
 - `organisms`: larger reusable interface sections.
 - `templates`: page-level layout recipes.
-- `styling/theme`: shared design tokens for color, spacing, shadows, and typography.
+- `styling/theme`: shared design tokens for color, size scale, shadows, and typography.
 
 ## Developer Documentation
 

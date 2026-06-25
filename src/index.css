@@ -1,6 +1,6 @@
 @import './styling/theme/colors.css';
 @import './styling/theme/typography.css';
-@import './styling/theme/spacing.css';
+@import './styling/theme/size.css';
 @import './styling/theme/shadows.css';
 
 @tailwind utilities;

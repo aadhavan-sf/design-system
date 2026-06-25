@@ -66,7 +66,7 @@ export const Variants = {
       style={{
         display: 'flex',
         flexWrap: 'wrap',
-        gap: 'var(--spacing_3)',
+        gap: 'var(--size_3)',
       }}
     >
       <Button
@@ -102,7 +102,7 @@ export const DestructiveVariants = {
       style={{
         display: 'flex',
         flexWrap: 'wrap',
-        gap: 'var(--spacing_5)',
+        gap: 'var(--size_5)',
         alignItems: 'center',
       }}
     >
@@ -130,7 +130,7 @@ export const Sizes = {
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'center',
-        gap: 'var(--spacing_3)',
+        gap: 'var(--size_3)',
       }}
     >
       <Button hierarchy="primary" size="small" label="Small" />
@@ -148,7 +148,7 @@ export const Icons = {
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'center',
-        gap: 'var(--spacing_3)',
+        gap: 'var(--size_3)',
       }}
     >
       <Button
@@ -187,7 +187,7 @@ export const Focus = {
       style={{
         display: 'flex',
         flexWrap: 'wrap',
-        gap: 'var(--spacing_4)',
+        gap: 'var(--size_4)',
       }}
     >
       <Button

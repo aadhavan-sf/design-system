@@ -9,13 +9,13 @@ button.storybook-home-page-visibility-label {
 .storybook-home-page {
   --home-template-sidebar-width: clamp(216px, calc(6.25vw + 120px), 240px);
   --home-template-layout-gap: clamp(8px, calc(2.083vw - 24px), 16px);
-  --home-template-panel-padding: var(--spacing_6);
+  --home-template-panel-padding: var(--size_6);
   --home-template-panel-width: clamp(264px, calc(12.5vw + 72px), 312px);
   --home-template-collection-width: clamp(216px, calc(16.667vw - 40px), 280px);
   --home-template-preview-phone-width: clamp(322px, calc(20.313vw + 10px), 400px);
   --home-template-preview-phone-max-height: calc(100dvh - 240px);
   --home-template-shell-height: 100dvh;
-  --home-template-popover-gap: var(--spacing_2);
+  --home-template-popover-gap: var(--size_2);
   --home-template-popover-left: calc(
     var(--home-template-sidebar-width)
     + var(--home-template-layout-gap)
@@ -42,8 +42,8 @@ button.storybook-home-page-visibility-label {
 @media (max-width: 1299px) {
   .storybook-home-page {
     --home-template-sidebar-width: 216px;
-    --home-template-layout-gap: var(--spacing_2);
-    --home-template-panel-padding: var(--spacing_4);
+    --home-template-layout-gap: var(--size_2);
+    --home-template-panel-padding: var(--size_4);
     --home-template-panel-width: 248px;
     --home-template-collection-width: 216px;
     --home-template-preview-phone-width: 322px;
@@ -53,8 +53,8 @@ button.storybook-home-page-visibility-label {
 @media (min-width: 1300px) and (max-width: 1536px) {
   .storybook-home-page {
     --home-template-sidebar-width: 216px;
-    --home-template-layout-gap: var(--spacing_2);
-    --home-template-panel-padding: var(--spacing_6);
+    --home-template-layout-gap: var(--size_2);
+    --home-template-panel-padding: var(--size_6);
     --home-template-panel-width: 264px;
     --home-template-collection-width: 216px;
     --home-template-preview-phone-width: 322px;

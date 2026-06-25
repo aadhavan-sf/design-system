@@ -4,7 +4,7 @@ Components are organized with an atomic design structure so a newcomer can under
 
 ## Structure
 
-- `foundations`: Storybook-facing documentation for typography, colors, spacing, and shadows.
+- `foundations`: Storybook-facing documentation for typography, colors, size scale, and shadows.
 - `atoms`: simple standalone controls.
 - `molecules`: components made by combining atoms, labels, icons, validation, and interaction states.
 - `organisms`: larger reusable sections built from atoms and molecules.
@@ -41,6 +41,6 @@ import { DatePicker } from '../components/molecules/DatePicker';
 ## Component Rules
 
 - Keep component styling next to the component unless it is a shared token.
-- Use tokens from `src/styling/theme` for colors, spacing, shadows, and typography.
+- Use tokens from `src/styling/theme` for colors, size scale, shadows, and typography.
 - Use the `state` prop in stories to force visual examples. Product usage should rely on real browser states and explicit props such as `disabled`, `pressed`, or `indeterminate` when available.
 - Add new components at the lowest useful level. Move upward only when the component combines multiple smaller pieces into a reusable pattern.

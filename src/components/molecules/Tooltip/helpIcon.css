@@ -61,11 +61,11 @@
 
 .storybook-help-icon__popover--top-left::after {
   /* Align arrow tip to 16px trigger center: popover offset (12px) + half icon (8px) - half arrow (8px) */
-  margin-right: var(--spacing_3);
+  margin-right: var(--size_3);
 }
 
 .storybook-help-icon__popover--top-right::after {
-  margin-left: var(--spacing_3);
+  margin-left: var(--size_3);
 }
 
 .storybook-help-icon__popover--bottom::after {

@@ -6,7 +6,7 @@ import type {
 import { SpacingScale } from './SpacingScale';
 
 const meta = {
-  title: 'Foundations/Spacing',
+  title: 'Foundations/Size',
   component: SpacingScale,
   parameters: {
     layout: 'padded',

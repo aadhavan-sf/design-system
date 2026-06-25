@@ -64,7 +64,7 @@ button.storybook-left-panel-insert:focus-visible {
 }
 
 .storybook-left-panel-item {
-  --left-panel-item-actions-width: calc((20px * 2) + var(--spacing_3));
+  --left-panel-item-actions-width: calc((20px * 2) + var(--size_3));
 }
 
 .storybook-left-panel-item:hover,
@@ -96,7 +96,7 @@ button.storybook-left-panel-insert:focus-visible {
 .storybook-left-panel-item--actions-visible .storybook-left-panel-item__main,
 .storybook-left-panel-item--pressed:not(.storybook-left-panel-item--hidden):hover .storybook-left-panel-item__main,
 .storybook-left-panel-item--pressed:not(.storybook-left-panel-item--hidden).storybook-left-panel-item--hover .storybook-left-panel-item__main {
-  max-width: calc(100% - var(--left-panel-item-actions-width) - var(--spacing_2));
+  max-width: calc(100% - var(--left-panel-item-actions-width) - var(--size_2));
   overflow: hidden;
 }
 
@@ -128,7 +128,7 @@ button.storybook-left-panel-insert:focus-visible {
   width: var(--left-panel-item-actions-width);
   opacity: 0;
   pointer-events: none;
-  transform: translateX(var(--spacing_3));
+  transform: translateX(var(--size_3));
 
   transition:
     opacity 180ms ease,
@@ -176,16 +176,16 @@ button.storybook-left-panel-insert:focus-visible {
 
 .storybook-left-panel-item--hidden .storybook-left-panel-item__actions--expanded {
   width: var(--left-panel-item-actions-width);
-  gap: var(--spacing_3);
+  gap: var(--size_3);
 }
 
 .storybook-left-panel-item--hidden .storybook-left-panel-item__main--actions-single {
-  max-width: calc(100% - 20px - var(--spacing_2));
+  max-width: calc(100% - 20px - var(--size_2));
   overflow: hidden;
 }
 
 .storybook-left-panel-item--hidden .storybook-left-panel-item__main--actions-expanded {
-  max-width: calc(100% - var(--left-panel-item-actions-width) - var(--spacing_2));
+  max-width: calc(100% - var(--left-panel-item-actions-width) - var(--size_2));
   overflow: hidden;
 }
 
@@ -194,7 +194,7 @@ button.storybook-left-panel-insert:focus-visible {
   min-width: 0;
   opacity: 0;
   pointer-events: none;
-  transform: translateX(var(--spacing_3));
+  transform: translateX(var(--size_3));
   overflow: hidden;
 }
 
@@ -244,7 +244,7 @@ button.storybook-left-panel-insert:focus-visible {
 
 .storybook-left-panel-item--pressed:disabled:hover .storybook-left-panel-item__main,
 .storybook-left-panel-item--pressed.storybook-left-panel-item--disabled.storybook-left-panel-item--hover .storybook-left-panel-item__main {
-  max-width: calc(100% - var(--left-panel-item-actions-width) - var(--spacing_2));
+  max-width: calc(100% - var(--left-panel-item-actions-width) - var(--size_2));
   overflow: hidden;
 }
 
@@ -252,7 +252,7 @@ button.storybook-left-panel-insert:focus-visible {
 .storybook-left-panel-item--disabled:not(.storybook-left-panel-item--pressed) .storybook-left-panel-item__actions {
   opacity: 0;
   pointer-events: none;
-  transform: translateX(var(--spacing_3));
+  transform: translateX(var(--size_3));
 }
 
 .storybook-left-panel-item--pressed:disabled:hover .storybook-left-panel-item__actions,
@@ -323,22 +323,22 @@ button.storybook-left-panel-insert:focus-visible {
 
   20% {
     opacity: 1;
-    transform: translateX(calc(var(--spacing_1) * -1)) rotate(-8deg);
+    transform: translateX(calc(var(--size_1) * -1)) rotate(-8deg);
   }
 
   40% {
     opacity: 1;
-    transform: translateX(var(--spacing_1)) rotate(8deg);
+    transform: translateX(var(--size_1)) rotate(8deg);
   }
 
   60% {
     opacity: 1;
-    transform: translateX(calc(var(--spacing_1) * -1)) rotate(-6deg);
+    transform: translateX(calc(var(--size_1) * -1)) rotate(-6deg);
   }
 
   80% {
     opacity: 1;
-    transform: translateX(var(--spacing_1)) rotate(6deg);
+    transform: translateX(var(--size_1)) rotate(6deg);
   }
 
   100% {
@@ -355,7 +355,7 @@ button.storybook-left-panel-insert:focus-visible {
 
   100% {
     opacity: 0;
-    transform: translateX(calc(var(--spacing_2) * -1)) scale(0.98);
+    transform: translateX(calc(var(--size_2) * -1)) scale(0.98);
   }
 }
 
@@ -366,11 +366,11 @@ button.storybook-left-panel-insert:focus-visible {
   }
 
   35% {
-    transform: translateY(calc(var(--spacing_0_5) * -1));
+    transform: translateY(calc(var(--size_0_5) * -1));
   }
 
   70% {
-    transform: translateY(var(--spacing_0_5));
+    transform: translateY(var(--size_0_5));
   }
 }
 
@@ -381,6 +381,6 @@ button.storybook-left-panel-insert:focus-visible {
   }
 
   50% {
-    transform: translateY(calc(var(--spacing_0_5) * -1)) scale(1.08);
+    transform: translateY(calc(var(--size_0_5) * -1)) scale(1.08);
   }
 }

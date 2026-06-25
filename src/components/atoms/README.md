@@ -11,4 +11,4 @@ Current atoms:
 
 Atoms should avoid depending on molecules or organisms. If a component needs labels, helper text, layout, validation, or multiple atoms working together, place it in `molecules`.
 
-Foundation documentation for colors, spacing, shadows, and typography lives in `src/components/foundations`.
+Foundation documentation for colors, size scale, shadows, and typography lives in `src/components/foundations`.

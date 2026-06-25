@@ -25,7 +25,7 @@ button.storybook-popover-empty__action {
   display: flex;
   box-sizing: border-box;
   width: 100%;
-  gap: var(--spacing_1_5);
+  gap: var(--size_1_5);
 }
 
 .storybook-popover__tabs .storybook-tab-item {
@@ -89,7 +89,7 @@ button.storybook-popover-empty__action {
 @keyframes storybook-popover-enter {
   0% {
     opacity: 0;
-    transform: translate3d(calc(var(--spacing_2) * -1), calc(var(--spacing_1) * -1), 0) scale(0.98);
+    transform: translate3d(calc(var(--size_2) * -1), calc(var(--size_1) * -1), 0) scale(0.98);
   }
 
   100% {
@@ -115,14 +115,14 @@ button.storybook-popover-empty__action {
 
 .storybook-popover-image-slider__dots {
   position: absolute;
-  bottom: var(--spacing_2);
+  bottom: var(--size_2);
   left: 50%;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing_1);
-  padding: var(--spacing_1) var(--spacing_2);
+  gap: var(--size_1);
+  padding: var(--size_1) var(--size_2);
   border-radius: 999px;
   background-color: var(--neutral_25);
   pointer-events: none;

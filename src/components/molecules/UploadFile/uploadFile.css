@@ -130,14 +130,14 @@ button.storybook-upload-dropzone:disabled {
   }
 
   25% {
-    transform: translateX(calc(var(--spacing_0_5) * -1)) rotate(-8deg);
+    transform: translateX(calc(var(--size_0_5) * -1)) rotate(-8deg);
   }
 
   50% {
-    transform: translateX(var(--spacing_0_5)) rotate(8deg);
+    transform: translateX(var(--size_0_5)) rotate(8deg);
   }
 
   75% {
-    transform: translateX(calc(var(--spacing_0_5) * -1)) rotate(-6deg);
+    transform: translateX(calc(var(--size_0_5) * -1)) rotate(-6deg);
   }
 }

@@ -6,7 +6,7 @@
   --shadow_xl: 0px 20px 24px -4px rgba(10, 13, 18, 0.08), 0px 8px 8px -4px rgba(10, 13, 18, 0.03);
   --shadow_2xl: 0px 24px 48px -12px rgba(10, 13, 18, 0.18);
   --shadow_3xl: 0px 32px 64px -12px rgba(10, 13, 18, 0.14);
-  --shadow_focus-brand: 0 0 0 var(--spacing_1) var(--brand_100);
-  --shadow_focus-neutral: 0 0 0 var(--spacing_1) var(--neutral_100);
-  --shadow_focus-error: 0 0 0 var(--spacing_1) var(--error_100);
+  --shadow_focus-brand: 0 0 0 var(--size_1) var(--brand_100);
+  --shadow_focus-neutral: 0 0 0 var(--size_1) var(--neutral_100);
+  --shadow_focus-error: 0 0 0 var(--size_1) var(--error_100);
 }

@@ -11,15 +11,15 @@ button.storybook-social-feed__comment-send {
 
 .storybook-social-feed {
   --social-feed-sidebar-width: 216px;
-  --social-feed-layout-gap: var(--spacing_4);
-  --social-feed-feed-padding: var(--spacing_6);
-  --social-feed-section-gap: var(--spacing_5);
-  --social-feed-grid-padding: var(--spacing_4);
+  --social-feed-layout-gap: var(--size_4);
+  --social-feed-feed-padding: var(--size_6);
+  --social-feed-section-gap: var(--size_5);
+  --social-feed-grid-padding: var(--size_4);
   --social-feed-mock-width: 545px;
   --social-feed-comments-width: 408px;
   --social-feed-preview-phone-width: 322px;
   --social-feed-scroll-nav-width: 48px;
-  --social-feed-scroll-nav-gap: var(--spacing_6);
+  --social-feed-scroll-nav-gap: var(--size_6);
   --social-feed-design-grid-height: 742px;
   --social-feed-design-mock-height: 710px;
 
@@ -88,7 +88,7 @@ button.storybook-social-feed__comment-send {
 
 .storybook-social-feed__title-row {
   min-height: 28px;
-  gap: var(--spacing_2);
+  gap: var(--size_2);
 }
 
 .storybook-social-feed__title-row .storybook-button {
@@ -98,11 +98,11 @@ button.storybook-social-feed__comment-send {
 .storybook-social-feed__toolbar {
   min-height: 40px;
   justify-content: space-between;
-  gap: var(--spacing_4);
+  gap: var(--size_4);
 }
 
 .storybook-social-feed__toolbar-actions {
-  gap: var(--spacing_3);
+  gap: var(--size_3);
 }
 
 .storybook-social-feed__add-new .storybook-button__icon--right {
@@ -112,8 +112,8 @@ button.storybook-social-feed__comment-send {
   min-width: 2.5rem;
   align-self: stretch;
   border-left: 1px solid rgb(255 255 255 / 24%);
-  padding-inline: var(--spacing_2) var(--spacing_1);
-  margin-left: var(--spacing_1);
+  padding-inline: var(--size_2) var(--size_1);
+  margin-left: var(--size_1);
 }
 
 .storybook-social-feed__grid {
@@ -199,8 +199,8 @@ button.storybook-social-feed__comment-send {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing_2);
-  padding-inline: calc(var(--social-feed-scroll-nav-width) + var(--spacing_2)) var(--spacing_4);
+  gap: var(--size_2);
+  padding-inline: calc(var(--social-feed-scroll-nav-width) + var(--size_2)) var(--size_4);
 }
 
 .storybook-social-feed__phone {
@@ -236,9 +236,9 @@ button.storybook-social-feed__comment-send {
   min-height: 0;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: var(--spacing_6);
-  padding: var(--spacing_6);
-  padding-bottom: var(--spacing_4);
+  gap: var(--size_6);
+  padding: var(--size_6);
+  padding-bottom: var(--size_4);
 }
 
 .storybook-social-feed__comments-header {
@@ -246,7 +246,7 @@ button.storybook-social-feed__comment-send {
   flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing_3);
+  gap: var(--size_3);
 }
 
 .storybook-social-feed__comments-menu {
@@ -269,7 +269,7 @@ button.storybook-social-feed__comment-send {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: var(--spacing_4);
+  gap: var(--size_4);
   min-height: 0;
   overflow-y: auto;
 }
@@ -278,8 +278,8 @@ button.storybook-social-feed__comment-send {
   position: relative;
   display: grid;
   grid-template-columns: 36px minmax(0, 1fr);
-  gap: var(--spacing_2);
-  padding: var(--spacing_2);
+  gap: var(--size_2);
+  padding: var(--size_2);
   border-radius: var(--radius_8);
 }
 
@@ -288,7 +288,7 @@ button.storybook-social-feed__comment-send {
 }
 
 .storybook-social-feed-comment--nested {
-  margin-left: var(--spacing_10);
+  margin-left: var(--size_10);
 }
 
 .storybook-social-feed-comment__avatar {
@@ -329,27 +329,27 @@ button.storybook-social-feed__comment-send {
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: var(--spacing_2);
+  gap: var(--size_2);
 }
 
 .storybook-social-feed-comment__header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--spacing_2);
+  gap: var(--size_2);
 }
 
 .storybook-social-feed-comment__name-row {
   display: inline-flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--spacing_2);
+  gap: var(--size_2);
 }
 
 .storybook-social-feed-comment__header-actions {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing_2);
+  gap: var(--size_2);
 }
 
 .storybook-social-feed-comment__flag {
@@ -385,7 +385,7 @@ button.storybook-social-feed__comment-send {
 .storybook-social-feed-comment__actions {
   display: flex;
   align-items: center;
-  gap: var(--spacing_3);
+  gap: var(--size_3);
 }
 
 .storybook-social-feed-comment__action {
@@ -415,7 +415,7 @@ button.storybook-social-feed__comment-send {
 
 .storybook-social-feed-comment__menu {
   position: absolute;
-  top: calc(100% - var(--spacing_1));
+  top: calc(100% - var(--size_1));
   right: 0;
   z-index: 1;
   width: 153px;
@@ -429,7 +429,7 @@ button.storybook-social-feed__comment-send {
 }
 
 .storybook-social-feed-comment__toggle-replies {
-  margin-left: calc(36px + var(--spacing_2));
+  margin-left: calc(36px + var(--size_2));
   border: 0;
   background: transparent;
   padding: 0;
@@ -446,8 +446,8 @@ button.storybook-social-feed__comment-send {
   flex-shrink: 0;
   grid-template-columns: minmax(0, 1fr) 44px;
   align-items: center;
-  gap: var(--spacing_3);
-  padding: var(--spacing_4) var(--spacing_6);
+  gap: var(--size_3);
+  padding: var(--size_4) var(--size_6);
 }
 
 .storybook-social-feed__comment-send {
