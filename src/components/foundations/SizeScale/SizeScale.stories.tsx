@@ -3,11 +3,11 @@ import type {
   StoryObj,
 } from '@storybook/react-vite';
 
-import { SpacingScale } from './SpacingScale';
+import { SizeScale } from './SizeScale';
 
 const meta = {
-  title: 'Foundations/Size',
-  component: SpacingScale,
+  title: 'Foundations/Size Scale',
+  component: SizeScale,
   parameters: {
     layout: 'padded',
   },
@@ -15,7 +15,7 @@ const meta = {
   argTypes: {
     showCssVariable: { control: 'boolean' },
   },
-} satisfies Meta<typeof SpacingScale>;
+} satisfies Meta<typeof SizeScale>;
 
 export default meta;
 

@@ -3,7 +3,7 @@ import { size, sizePx } from '../../../styling/theme/size.js';
 
 type SizeKey = string;
 
-interface SpacingScaleProps {
+interface SizeScaleProps {
   showCssVariable?: boolean;
 }
 
@@ -44,19 +44,19 @@ function getSizeTokenName(step: SizeKey) {
   return `--size_${String(step).replace('.', '_')}`;
 }
 
-function getSpacingScaleClassName() {
+function getSizeScaleClassName() {
   return 'flex flex-col gap-6 font-sans text-ds-text-strong';
 }
 
-function getSpacingHeaderClassName() {
+function getSizeScaleHeaderClassName() {
   return 'flex items-end justify-between gap-4 max-sm:flex-col max-sm:items-start';
 }
 
-function getSpacingPreviewGridClassName() {
+function getSizeScalePreviewGridClassName() {
   return 'grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4';
 }
 
-function getSpacingPreviewBoxClassName({ gapClassName, paddingClassName }: {
+function getSizeScalePreviewBoxClassName({ gapClassName, paddingClassName }: {
   gapClassName: string;
   paddingClassName: string;
 }) {
@@ -67,15 +67,15 @@ function getSpacingPreviewBoxClassName({ gapClassName, paddingClassName }: {
   ]);
 }
 
-function getSpacingPreviewPillClassName() {
+function getSizeScalePreviewPillClassName() {
   return 'inline-flex min-h-10 items-center rounded-8 bg-ds-surface px-3 text-ds-text shadow-xs';
 }
 
-function getSpacingListClassName() {
+function getSizeScaleListClassName() {
   return 'flex flex-col gap-2';
 }
 
-function getSpacingRowClassName() {
+function getSizeScaleRowClassName() {
   return buildClassName([
     'grid min-h-14 items-center gap-4 rounded-8 border border-solid border-ds-border bg-ds-surface px-3 py-2',
     'grid-cols-[minmax(160px,220px)_minmax(140px,1fr)_64px]',
@@ -83,19 +83,19 @@ function getSpacingRowClassName() {
   ]);
 }
 
-function getSpacingRowLabelClassName() {
+function getSizeScaleRowLabelClassName() {
   return 'flex flex-col gap-1';
 }
 
-function getSpacingRowBarWrapClassName() {
+function getSizeScaleRowBarWrapClassName() {
   return 'flex min-h-6 items-center';
 }
 
-function getSpacingRowBarClassName() {
+function getSizeScaleRowBarClassName() {
   return 'h-4 min-w-px rounded-full bg-brand-500';
 }
 
-function getSpacingRowValueClassName() {
+function getSizeScaleRowValueClassName() {
   return 'text-right max-sm:text-left';
 }
 
@@ -103,17 +103,17 @@ function SizeRow({ step, value }: SizeRowProps) {
   const tailwindClasses = `p-${step} gap-${step} ${radiusClassNames[step]}`;
 
   return (
-    <div className={getSpacingRowClassName()}>
-      <div className={getSpacingRowLabelClassName()}>
+    <div className={getSizeScaleRowClassName()}>
+      <div className={getSizeScaleRowLabelClassName()}>
         <Text as="span" variant="text-md" weight="semibold">
           {step}
         </Text>
         <code>{getSizeTokenName(step)}</code>
         <code>{tailwindClasses}</code>
       </div>
-      <div className={getSpacingRowBarWrapClassName()}>
+      <div className={getSizeScaleRowBarWrapClassName()}>
         <div
-          className={getSpacingRowBarClassName()}
+          className={getSizeScaleRowBarClassName()}
           style={{ width: typedSize[step] }}
         />
       </div>
@@ -121,7 +121,7 @@ function SizeRow({ step, value }: SizeRowProps) {
         as="span"
         variant="text-sm"
         weight="medium"
-        className={buildClassName(['text-ds-text-muted', getSpacingRowValueClassName()])}
+        className={buildClassName(['text-ds-text-muted', getSizeScaleRowValueClassName()])}
       >
         {value}
       </Text>
@@ -129,15 +129,15 @@ function SizeRow({ step, value }: SizeRowProps) {
   );
 }
 
-export function SpacingScale({ showCssVariable = true }: SpacingScaleProps) {
-  const previewPillClassName = getSpacingPreviewPillClassName();
+export function SizeScale({ showCssVariable = true }: SizeScaleProps) {
+  const previewPillClassName = getSizeScalePreviewPillClassName();
 
   return (
-    <div className={getSpacingScaleClassName()}>
-      <div className={getSpacingHeaderClassName()}>
+    <div className={getSizeScaleClassName()}>
+      <div className={getSizeScaleHeaderClassName()}>
         <div>
           <Text as="span" variant="text-sm" weight="semibold" className="text-brand-600">
-            Size
+            Size Scale
           </Text>
           <Text as="h2" variant="display-xs" weight="semibold" className="mt-1">
             4px-based size scale
@@ -146,20 +146,20 @@ export function SpacingScale({ showCssVariable = true }: SpacingScaleProps) {
         {showCssVariable ? <code>Size tokens for padding, gap, radius, and layout</code> : null}
       </div>
 
-      <div className={getSpacingPreviewGridClassName()} aria-label="Size scale examples">
-        <div className={getSpacingPreviewBoxClassName({ gapClassName: 'gap-2', paddingClassName: 'p-3' })}>
+      <div className={getSizeScalePreviewGridClassName()} aria-label="Size scale examples">
+        <div className={getSizeScalePreviewBoxClassName({ gapClassName: 'gap-2', paddingClassName: 'p-3' })}>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>gap 2</Text>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>padding 3</Text>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>radius 4</Text>
         </div>
-        <div className={getSpacingPreviewBoxClassName({ gapClassName: 'gap-4', paddingClassName: 'p-6' })}>
+        <div className={getSizeScalePreviewBoxClassName({ gapClassName: 'gap-4', paddingClassName: 'p-6' })}>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>gap 4</Text>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>padding 6</Text>
           <Text as="span" variant="text-sm" weight="medium" className={previewPillClassName}>radius 8</Text>
         </div>
       </div>
 
-      <div className={getSpacingListClassName()}>
+      <div className={getSizeScaleListClassName()}>
         {SIZE_STEPS.map((step) => (
           <SizeRow key={step} step={step} value={typedSizePx[step]} />
         ))}

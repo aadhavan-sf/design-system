@@ -34,7 +34,7 @@ const preview = {
           'Templates',
           ['Home Page'],
           'Foundations',
-          ['Typography', 'Colors', 'Size', 'Shadows'],
+          ['Typography', 'Colors', 'Size Scale', 'Shadows'],
         ],
       },
     },

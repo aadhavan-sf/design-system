@@ -5,7 +5,7 @@ Foundation components document design tokens in Storybook.
 Current foundation groups:
 
 - `Colors`: color token documentation.
-- `Spacing`: size scale token documentation (`SpacingScale` component).
+- `SizeScale`: size scale token documentation.
 - `Shadows`: elevation token documentation.
 - `Typography`: text scale and weight primitives.
 
