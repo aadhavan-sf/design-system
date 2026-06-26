@@ -1,0 +1,1 @@
+import{n as e}from"./chunk-DnJy8xQt.js";import{r as t}from"./Sidebar-C12trEG5.js";var n=e((()=>{t()})),r,i=e((()=>{r=``+new URL(`mobile-preview-CgpGQSfg.png`,import.meta.url).href}));export{r as n,n as r,i as t};
