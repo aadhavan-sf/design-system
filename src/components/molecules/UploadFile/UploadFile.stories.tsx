@@ -1,199 +1,370 @@
 // @ts-nocheck
 import { fn } from 'storybook/test';
 
+import { UploadFile } from './UploadFile';
 import {
-  ImageAspectRatio,
-  UploadFile,
-  UploadFileBase,
-  UploadFileItem,
-} from './UploadFile';
+  buildMultipleImagesSlotsFromStoryArgs,
+  createMultipleImagesSlotArgTypes,
+  createMultipleImagesSlotArgs,
+  isUploadFileMultipleState,
+  resolveUploadFileDropzoneState,
+  resolveUploadFileLayout,
+  UPLOAD_FILE_DROPZONE_STATE_OPTIONS,
+  UPLOAD_FILE_LAYOUT_OPTIONS,
+  UPLOAD_FILE_MAIN_STATE_OPTIONS,
+  UPLOAD_FILE_MULTIPLE_STATE_OPTIONS,
+} from './uploadFileStory.utils';
+
+import './uploadFile.stories.css';
+
+const ITEM_STATE_OPTIONS = [
+  'Uploading',
+  'Large File',
+  'Unsupported File',
+  'Internet Issue',
+  'Request Failed',
+  'Upload Successful',
+];
+
+const MULTIPLE_IMAGE_SLOT_ARG_TYPES = createMultipleImagesSlotArgTypes();
+const MULTIPLE_IMAGE_SLOT_ARGS = createMultipleImagesSlotArgs();
+
+function UploadFileStory(args) {
+  const {
+    layout = 'Horizontal',
+    showDescription = true,
+    showSupportText = true,
+    dropzoneState = 'Default',
+    filesQueued = false,
+    state = 'Uploading',
+    slots: providedSlots,
+    ...rest
+  } = args;
+
+  const uploadFileProps = { ...rest };
+  for (let index = 1; index <= 10; index += 1) {
+    delete uploadFileProps[`slotState_${index}`];
+  }
+
+  const slots = isUploadFileMultipleState(state)
+    ? providedSlots ?? buildMultipleImagesSlotsFromStoryArgs(args)
+    : providedSlots;
+
+  return (
+    <UploadFile
+      {...uploadFileProps}
+      dropzoneState={resolveUploadFileDropzoneState(dropzoneState)}
+      filesQueued={filesQueued}
+      layout={resolveUploadFileLayout(layout)}
+      showDescription={showDescription}
+      showSupportText={showSupportText}
+      slots={slots}
+      state={state}
+    />
+  );
+}
+
+UploadFileStory.displayName = 'Upload File';
 
 export default {
   title: 'Molecules/Upload File',
   component: UploadFile,
   parameters: {
     layout: 'centered',
+    controls: {
+      sort: 'none',
+    },
     docs: {
+      controls: {
+        sort: 'none',
+      },
       description: {
         component:
-          'Upload file and dropzone molecule with horizontal/vertical dropzones, single uploaded file cards, image queues, and reusable image aspect ratio tiles.',
+          'Single Upload File molecule composed of **Upload File Base** (dropzone), **Upload File Item** (queued upload states), and **Multiple Images** (multi-upload grid). Use Layout, Show Description, Show Support Text, Dropzone State, Files Queued, and State to switch between the three base components. For Multiple Images, pass a custom `slots` array or use the slot controls in Playground to set each tile state individually.',
       },
     },
   },
   tags: ['autodocs'],
   argTypes: {
     layout: {
+      name: 'Layout',
       control: 'select',
-      options: ['horizontal', 'vertical'],
+      options: [...UPLOAD_FILE_LAYOUT_OPTIONS],
+      type: { name: 'enum', value: [...UPLOAD_FILE_LAYOUT_OPTIONS] },
+      if: { arg: 'filesQueued', eq: false },
+      table: { order: 0, defaultValue: { summary: 'Horizontal' } },
     },
-    mode: {
-      control: 'select',
-      options: ['single', 'multiple'],
+    showDescription: {
+      name: 'Show Description',
+      control: 'boolean',
+      if: { arg: 'filesQueued', eq: false },
+      table: { order: 1, defaultValue: { summary: true } },
+    },
+    showSupportText: {
+      name: 'Show Support Text',
+      control: 'boolean',
+      if: { arg: 'filesQueued', eq: false },
+      table: { order: 2, defaultValue: { summary: true } },
     },
     dropzoneState: {
+      name: 'Dropzone State',
       control: 'select',
-      options: ['enabled', 'hover', 'focus', 'disabled'],
-    },
-    multipleState: {
-      control: 'select',
-      options: ['complete', 'add-empty', 'add-hover', 'add-loader'],
+      options: [...UPLOAD_FILE_DROPZONE_STATE_OPTIONS],
+      type: { name: 'enum', value: [...UPLOAD_FILE_DROPZONE_STATE_OPTIONS] },
+      if: { arg: 'filesQueued', eq: false },
+      table: { order: 3, defaultValue: { summary: 'Default' } },
     },
     filesQueued: {
+      name: 'Files Queued',
       control: 'boolean',
+      table: { order: 4, defaultValue: { summary: false } },
     },
-    supportingText: {
-      control: 'boolean',
-    },
-    disabled: {
-      control: 'boolean',
-    },
-    size: {
+    state: {
+      name: 'State',
       control: 'select',
-      options: ['default', 'small'],
+      options: [...UPLOAD_FILE_MAIN_STATE_OPTIONS],
+      type: { name: 'enum', value: [...UPLOAD_FILE_MAIN_STATE_OPTIONS] },
+      table: { order: 5, defaultValue: { summary: 'Uploading' } },
     },
+    progress: {
+      control: { type: 'range', min: 0, max: 100, step: 1 },
+      if: { arg: 'state', eq: 'Uploading' },
+      table: { order: 6 },
+    },
+    showFileSize: {
+      name: 'Show File Size',
+      control: 'boolean',
+      if: { arg: 'state', eq: 'Upload Successful' },
+      table: { order: 7, defaultValue: { summary: true } },
+    },
+    slots: {
+      control: false,
+      table: { disable: true },
+    },
+    ...MULTIPLE_IMAGE_SLOT_ARG_TYPES,
+    onBrowse: { table: { disable: true } },
+    onFilesChange: { table: { disable: true } },
+    onReplace: { table: { disable: true } },
+    onDelete: { table: { disable: true } },
+    onRetry: { table: { disable: true } },
   },
   args: {
+    layout: 'Horizontal',
+    showDescription: true,
+    showSupportText: true,
+    dropzoneState: 'Default',
+    filesQueued: false,
+    state: 'Uploading',
+    progress: 75,
+    showFileSize: true,
+    ...MULTIPLE_IMAGE_SLOT_ARGS,
+    onBrowse: fn(),
     onFilesChange: fn(),
     onReplace: fn(),
     onDelete: fn(),
+    onRetry: fn(),
   },
+  render: (args) => <UploadFileStory {...args} />,
 };
 
 export const Playground = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Interactive playground for the full Upload File molecule. Set State to a Multiple + layout and use the Multiple Image Slots controls to change any tile in row 1 or row 2.',
+      },
+    },
+  },
+};
+
+export const Default = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Default horizontal Upload File Base dropzone with support text. Matches Figma at 416×104.',
+      },
+    },
+  },
   args: {
-    layout: 'horizontal',
-    mode: 'single',
+    layout: 'Horizontal',
+    showDescription: true,
+    showSupportText: true,
+    dropzoneState: 'Default',
     filesQueued: false,
-    dropzoneState: 'enabled',
-    supportingText: true,
-    multipleState: 'complete',
-    fileName: 'File_name.ext',
-    fileSize: '200 KB',
-    disabled: false,
+    state: 'Uploading',
   },
 };
 
-export const DropzoneStates = {
-  render: () => (
-    <div className="flex flex-col gap-8">
-      <div className="flex flex-wrap items-start gap-6">
-        {['enabled', 'hover', 'focus', 'disabled'].map((state) => (
-          <UploadFileBase key={`horizontal-${state}`} state={state} />
-        ))}
-      </div>
-      <div className="flex flex-wrap items-start gap-6">
-        {['enabled', 'hover', 'focus', 'disabled'].map((state) => (
-          <UploadFileBase key={`vertical-${state}`} layout="vertical" state={state} />
-        ))}
-      </div>
-    </div>
-  ),
-};
-
-export const SmallSize = {
+export const UploadFileBaseHorizontal = {
+  name: 'Upload File Base / Horizontal',
   parameters: {
+    controls: { disable: true },
     docs: {
       description: {
-        story:
-          'Compact dropzone used inside constrained layouts such as the Icon Library picker. Full width, tighter padding, and smaller typography.',
+        story: 'Upload File Base rendered horizontally with and without support text.',
       },
     },
   },
   render: () => (
-    <div className="flex w-[216px] flex-col gap-8">
-      <UploadFile
-        size="small"
-        layout="horizontal"
-        title="Upload Your Icon"
-        description="24x24 SVG or PNG"
-      />
-      <UploadFile size="small" layout="vertical" />
+    <div className="flex flex-col gap-4">
+      <UploadFileStory layout="Horizontal" showSupportText state="Uploading" />
+      <UploadFileStory layout="Horizontal" showSupportText={false} state="Uploading" />
     </div>
   ),
 };
 
-export const DisabledStates = {
+export const UploadFileBaseVertical = {
+  name: 'Upload File Base / Vertical',
   parameters: {
+    controls: { disable: true },
     docs: {
       description: {
-        story:
-          'Disabled horizontal and vertical upload dropzones. Both use the disabled button state, neutral_50 surface, neutral_200 dashed border, and neutral_400 text/icon color.',
+        story: 'Upload File Base rendered vertically with and without support text.',
       },
     },
   },
   render: () => (
-    <div className="flex flex-col gap-8">
-      <UploadFileBase layout="horizontal" state="disabled" />
-      <UploadFileBase layout="vertical" state="disabled" />
+    <div className="flex flex-col gap-4">
+      <UploadFileStory layout="Vertical" showSupportText state="Uploading" />
+      <UploadFileStory layout="Vertical" showSupportText={false} state="Uploading" />
     </div>
   ),
 };
 
-export const UploadedItems = {
+export const UploadFileBaseDropzoneStates = {
+  name: 'Upload File Base / Dropzone States',
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Upload File Base default, hover, focus, and disabled dropzone states.',
+      },
+    },
+  },
   render: () => (
-    <div className="flex flex-col gap-8">
-      <div className="flex flex-wrap items-start gap-6">
-        <UploadFileItem />
-        <UploadFileItem state="completed-hover" />
-      </div>
-      <div className="flex flex-wrap items-start gap-6">
-        <UploadFileItem type="multiple" state="complete" />
-        <UploadFileItem type="multiple" state="add-empty" />
-      </div>
-      <div className="flex flex-wrap items-start gap-6">
-        <UploadFileItem type="multiple" state="add-hover" />
-        <UploadFileItem type="multiple" state="add-loader" />
-      </div>
+    <div className="flex flex-col gap-4">
+      {UPLOAD_FILE_DROPZONE_STATE_OPTIONS.map((dropzoneState) => (
+        <UploadFileStory key={dropzoneState} dropzoneState={dropzoneState} state="Uploading" />
+      ))}
     </div>
   ),
 };
 
-export const ComposedLayouts = {
+export const UploadFileItemStates = {
+  name: 'Upload File Item / All States',
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'Upload File Item states shown when Files Queued is enabled: uploading, errors, and success.',
+      },
+    },
+  },
   render: () => (
-    <div className="flex flex-wrap items-start gap-6">
-      <div className="flex flex-col gap-8">
-        <UploadFile layout="horizontal" mode="single" />
-        <UploadFile layout="horizontal" mode="single" filesQueued />
-      </div>
-      <div className="flex flex-col gap-8">
-        <UploadFile layout="horizontal" mode="multiple" />
-        <UploadFile layout="horizontal" mode="multiple" filesQueued />
-      </div>
-      <div className="flex flex-col gap-8">
-        <UploadFile layout="vertical" mode="single" />
-        <UploadFile layout="vertical" mode="single" filesQueued />
-      </div>
-      <div className="flex flex-col gap-8">
-        <UploadFile layout="vertical" mode="multiple" />
-        <UploadFile layout="vertical" mode="multiple" filesQueued />
-      </div>
+    <div className="flex flex-col gap-4">
+      {ITEM_STATE_OPTIONS.map((state) => (
+        <UploadFileStory key={state} filesQueued state={state} />
+      ))}
     </div>
   ),
 };
 
-export const ImageAspectRatios = {
+export const UploadFileItemUploading = {
+  name: 'Upload File Item / Uploading',
+  parameters: {
+    controls: { disable: true },
+  },
+  args: {
+    filesQueued: true,
+    state: 'Uploading',
+    progress: 75,
+  },
+};
+
+export const UploadFileItemUploadSuccessful = {
+  name: 'Upload File Item / Upload Successful',
+  parameters: {
+    controls: { disable: true },
+  },
+  args: {
+    filesQueued: true,
+    state: 'Upload Successful',
+    showFileSize: true,
+  },
+};
+
+export const MultipleImagesAllLayouts = {
+  name: 'Multiple Images / All Layouts',
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'Multiple Images grid for Square, iPad, iPhone, and Android tile layouts with container heights sized for two rows.',
+      },
+    },
+  },
   render: () => (
-    <div className="flex flex-col gap-8">
-      <div className="flex flex-wrap items-start gap-6">
-        {['square', 'iphone', 'ipad', 'android'].map((size) => (
-          <ImageAspectRatio key={`default-${size}`} size={size} />
-        ))}
-      </div>
-      <div className="flex flex-wrap items-start gap-6">
-        {['square', 'iphone', 'ipad', 'android'].map((size) => (
-          <ImageAspectRatio key={`hovered-${size}`} size={size} status="hovered" />
-        ))}
-      </div>
-      <div className="flex flex-wrap items-start gap-6">
-        {['square', 'iphone', 'ipad', 'android'].map((size) => (
-          <ImageAspectRatio key={`loader-${size}`} size={size} status="loader" />
-        ))}
-      </div>
-      <div className="flex flex-wrap items-start gap-6">
-        {['square', 'iphone', 'ipad', 'android'].map((size) => (
-          <ImageAspectRatio key={`uploader-${size}`} size={size} type="uploader" />
-        ))}
-      </div>
+    <div className="flex flex-col gap-6">
+      {UPLOAD_FILE_MULTIPLE_STATE_OPTIONS.map((state) => (
+        <div key={state} className="flex flex-col gap-3">
+          <span className="font-sans text-ds-text-sm text-neutral-700">{state}</span>
+          <UploadFileStory state={state} />
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+export const MultipleImagesSlotEditor = {
+  name: 'Multiple Images / Slot Editor',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use the Multiple Image Slots controls to set Default, Hover, or Loading on any image tile in rows 1–2, and Default, Hover, Focus, or Disabled on the add tile.',
+      },
+    },
+  },
+  args: {
+    state: 'Multiple + Square',
+    slotState_8: 'Hover',
+    slotState_9: 'Loading',
+  },
+};
+
+export const MultipleImagesSquare = {
+  name: 'Multiple Images / Square',
+  parameters: {
+    controls: { disable: true },
+  },
+  args: {
+    state: 'Multiple + Square',
+  },
+};
+
+export const AllStates = {
+  name: 'All States',
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Every Upload File state from Figma across all three base components.',
+      },
+    },
+  },
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <UploadFileStory />
+      {ITEM_STATE_OPTIONS.map((state) => (
+        <UploadFileStory key={state} filesQueued state={state} />
+      ))}
+      {UPLOAD_FILE_MULTIPLE_STATE_OPTIONS.map((state) => (
+        <UploadFileStory key={state} state={state} />
+      ))}
     </div>
   ),
 };

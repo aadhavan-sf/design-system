@@ -1,19 +1,9 @@
+@import './sliderTrack.css';
+
 input[type='range'].storybook-slider__input {
   margin: 0;
   appearance: none;
   -webkit-appearance: none;
-}
-
-.storybook-slider__rail,
-.storybook-slider__progress {
-  position: absolute;
-  top: 4px;
-  height: 16px;
-}
-
-.storybook-slider__rail {
-  right: 0;
-  left: 0;
 }
 
 .storybook-slider__steps {

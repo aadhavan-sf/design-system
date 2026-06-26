@@ -38,16 +38,16 @@ function getButtonVariantClasses({
 
   if (hierarchy === 'primary' && destructive) {
     if (isDisabled) {
-      return 'border-error-300 bg-error-300 text-neutral-0 shadow-none';
+      return 'storybook-button--primary-destructive bg-error-300 text-neutral-0 shadow-none';
     }
 
     if (isFocus) {
-      return 'border-error-600 bg-error-600 text-neutral-0 shadow-focus-error';
+      return 'storybook-button--primary-destructive bg-error-600 text-neutral-0 shadow-focus-error';
     }
 
     return [
-      'border-error-600 bg-error-600 text-neutral-0',
-      'enabled:hover:border-error-700 enabled:hover:bg-error-700',
+      'storybook-button--primary-destructive bg-error-600 text-neutral-0',
+      'enabled:hover:bg-error-700',
       'focus-visible:shadow-focus-error',
     ].join(' ');
   }
@@ -69,33 +69,32 @@ function getButtonVariantClasses({
 
   if (hierarchy === 'primary') {
     if (isDisabled) {
-      return 'border-brand-200 bg-brand-200 text-neutral-0 shadow-none';
+      return 'storybook-button--primary bg-brand-200 text-neutral-0 shadow-none';
     }
 
     if (isFocus) {
-      return 'border-brand-400 bg-brand-400 text-neutral-0 shadow-focus-brand';
+      return 'storybook-button--primary bg-brand-400 text-neutral-0 shadow-focus-brand';
     }
 
     return [
-      'border-brand-400 bg-brand-400 text-neutral-0 shadow-xs',
-      'enabled:hover:border-brand-700 enabled:hover:bg-brand-700 enabled:hover:shadow-sm',
+      'storybook-button--primary bg-brand-400 text-neutral-0 shadow-xs',
+      'enabled:hover:bg-brand-700 enabled:hover:shadow-sm',
       'focus-visible:shadow-focus-brand',
     ].join(' ');
   }
 
   if (hierarchy === 'secondary') {
     if (isDisabled) {
-      return 'border-neutral-200 bg-transparent text-neutral-300 shadow-none';
+      return 'storybook-button--secondary storybook-button--disabled bg-transparent text-neutral-300';
     }
 
     if (isFocus) {
-      return 'border-neutral-300 bg-transparent text-neutral-700 shadow-focus-neutral';
+      return 'storybook-button--secondary storybook-button--focus bg-transparent text-neutral-700';
     }
 
     return [
-      'border-neutral-300 bg-transparent text-neutral-700 shadow-none',
-      'enabled:hover:border-neutral-300 enabled:hover:bg-neutral-50 enabled:hover:text-neutral-800',
-      'focus-visible:shadow-focus-neutral',
+      'storybook-button--secondary bg-transparent text-neutral-700',
+      'enabled:hover:bg-neutral-50 enabled:hover:text-neutral-800',
     ].join(' ');
   }
 
@@ -153,7 +152,7 @@ function getButtonClassName({
   state: ButtonState;
 }) {
   return buildClassName([
-    'storybook-button min-w-max rounded-ds border border-solid font-sans font-semibold no-underline',
+    'storybook-button box-border min-w-max rounded-ds border-0 font-sans font-semibold no-underline',
     getButtonVariantClasses({ destructive, hierarchy, state }),
     getButtonSizeClasses(size, isIconOnly, hierarchy),
     className,

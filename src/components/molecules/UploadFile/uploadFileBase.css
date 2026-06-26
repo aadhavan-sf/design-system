@@ -1,0 +1,45 @@
+button.storybook-upload-file-base {
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  isolation: isolate;
+
+  transition:
+    background-color 160ms ease,
+    box-shadow 160ms ease,
+    color 160ms ease;
+}
+
+.storybook-upload-file-dashed-border {
+  transition: color 160ms ease;
+}
+
+button.storybook-upload-file-base:focus-visible {
+  outline: none;
+}
+
+button.storybook-upload-file-base:disabled {
+  cursor: not-allowed;
+}
+
+.storybook-upload-file-base__title + .storybook-upload-file-base__description,
+.storybook-upload-file-base__title + .storybook-upload-file-base__support {
+  margin-top: var(--size_1);
+}
+
+.storybook-upload-file-base__description + .storybook-upload-file-base__support {
+  margin-top: var(--size_2);
+}
+
+.storybook-upload-file-base__title {
+  line-height: var(--type-text-md-line);
+}
+
+.storybook-upload-file-base__description {
+  line-height: var(--type-text-sm-line);
+}
+
+.storybook-upload-file-base__support {
+  line-height: var(--type-text-xs-line);
+}

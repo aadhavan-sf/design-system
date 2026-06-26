@@ -1,0 +1,3 @@
+.storybook-progress-bar__fill {
+  transition: width 300ms ease-out;
+}

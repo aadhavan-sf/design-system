@@ -9,10 +9,12 @@ Current molecules:
 - `Tooltip`: helper icon trigger with hover and focus popover behavior.
 - `Chip`: display chips and interactive chip buttons.
 - `Slider`: single-value and range slider controls.
+- `ProgressBar`: read-only progress indicator using the classic slider track styling.
 - `Breadcrumb`: breadcrumb item and group patterns.
 - `Pagination`: pagination controls and button variants.
 - `Tabs`: tab item and tab group patterns.
-- `UploadFile`: dropzone, upload item, and image queue patterns.
+- `UploadFileBase`: base dropzone primitive for upload file patterns.
+- `UploadFileItem`: upload progress, success card, and image tile states.
 - `DatePicker`: calendar/list date picker controls.
 - `DropdownList`: dropdown option rows for dropdown fields and menus.
 

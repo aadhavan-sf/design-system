@@ -1,0 +1,3 @@
+button.storybook-upload-file-base:focus-visible .storybook-upload-file-dashed-border {
+  color: var(--brand_400);
+}

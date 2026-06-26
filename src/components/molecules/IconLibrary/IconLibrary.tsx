@@ -6,11 +6,11 @@ import {
   BellRinging,
   BellSimple,
   HouseSimple,
+  MonitorArrowUp,
 } from '@phosphor-icons/react';
 
 import { IconHoverEffect } from '../../atoms/IconHoverEffect';
 import { DropdownField } from '../TextField/fields/DropdownField';
-import { UploadFileBase, UPLOAD_FILE_INPUT_CLASSNAME } from '../UploadFile';
 import { Text } from '../../foundations/Typography';
 import {
   iconLibraryDropdownOptions,
@@ -301,22 +301,43 @@ function IconLibraryUpload({
       <input
         ref={inputRef}
         accept=".svg,.png,image/svg+xml,image/png"
-        className={UPLOAD_FILE_INPUT_CLASSNAME}
+        className="storybook-icon-library-upload__input"
         type="file"
         onChange={(event) => {
           onUpload?.(event.target.files?.[0] ?? null);
           event.target.value = '';
         }}
       />
-      <UploadFileBase
-        className="min-w-0"
-        size="small"
-        layout="horizontal"
-        title="Upload Your Icon"
-        description="24x24 SVG or PNG"
-        supportingText
-        onBrowse={() => inputRef.current?.click()}
-      />
+      <button
+        type="button"
+        className="storybook-icon-library-upload box-border flex w-full items-start gap-2 rounded-2 border border-dashed border-neutral-200 bg-neutral-0 p-3 font-sans text-left hover:bg-neutral-25 focus-visible:border-brand-400 focus-visible:bg-brand-25 focus-visible:outline-none focus-visible:shadow-focus-brand"
+        onClick={() => inputRef.current?.click()}
+      >
+        <MonitorArrowUp
+          aria-hidden="true"
+          className="shrink-0 text-brand-400"
+          size={24}
+          weight="regular"
+        />
+        <span className="flex min-w-0 flex-col gap-1">
+          <Text
+            as="span"
+            variant="text-sm"
+            weight="medium"
+            className="text-neutral-900"
+          >
+            Upload Your Icon
+          </Text>
+          <Text
+            as="span"
+            variant="text-xs"
+            weight="regular"
+            className="text-neutral-600"
+          >
+            24x24 SVG or PNG
+          </Text>
+        </span>
+      </button>
     </div>
   );
 }

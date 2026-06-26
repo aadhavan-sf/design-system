@@ -1,7 +1,6 @@
-export {
-  ImageAspectRatio,
-  UploadFile,
-  UploadFileBase,
-  UploadFileItem,
-  UPLOAD_FILE_INPUT_CLASSNAME,
-} from './UploadFile';
+export { UploadFile } from './UploadFile';
+export type { MultipleImagesSlot } from './MultipleImages';
+export { UploadFileBase } from './UploadFileBase';
+export { UploadFileImageTile } from './UploadFileImageTile';
+export { UploadFileItem } from './UploadFileItem';
+export { MultipleImages } from './MultipleImages';

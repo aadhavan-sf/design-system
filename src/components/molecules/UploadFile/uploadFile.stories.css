@@ -1,0 +1,7 @@
+/*
+ * Scoped to Upload File stories only. Removes Storybook docs' 8px transparent wrapper
+ * border without affecting other components in the catalog.
+ */
+[id*='molecules-upload-file'] .innerZoomElementWrapper > * {
+  border: 0 !important;
+}

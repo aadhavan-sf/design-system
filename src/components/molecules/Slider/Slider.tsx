@@ -1,6 +1,13 @@
 import { useMemo, useState, type ChangeEvent, type HTMLAttributes } from 'react';
 
 import { Text } from '../../foundations/Typography';
+import {
+  buildClassName,
+  clamp,
+  getPercent,
+  getSliderProgressClassName,
+  getSliderRailClassName,
+} from './sliderShared';
 
 import './slider.css';
 
@@ -44,28 +51,12 @@ export interface SliderProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onCha
   onRangeChange?: (range: [number, number]) => void;
 }
 
-function buildClassName(parts: Array<string | false | null | undefined>) {
-  return parts.flat().filter(Boolean).join(' ');
-}
-
 function normalizeValue<T extends string>(value: string | undefined, aliases: Record<string, T> = {}) {
   if (value === undefined) {
     return undefined;
   }
 
   return aliases[value] ?? value;
-}
-
-function clamp(value: number | string, min: number, max: number) {
-  return Math.min(Math.max(Number(value), min), max);
-}
-
-function getPercent(value: number, min: number, max: number) {
-  if (max === min) {
-    return 0;
-  }
-
-  return ((value - min) / (max - min)) * 100;
 }
 
 function getLabelOffset(labelPosition: NormalizedLabelPosition): LabelOffset {
@@ -112,14 +103,6 @@ function getSliderShellClassName({
   ]);
 }
 
-function getSliderRailClasses(disabled: boolean) {
-  return disabled ? 'bg-neutral-50' : 'bg-neutral-100';
-}
-
-function getSliderProgressClasses(disabled: boolean) {
-  return disabled ? 'bg-brand-100' : 'bg-brand-400';
-}
-
 function getSliderStepClasses(active: boolean) {
   return active ? 'bg-neutral-0' : 'bg-neutral-400';
 }
@@ -134,20 +117,6 @@ function getSliderThumbClasses(disabled: boolean, style: NormalizedSliderStyle) 
   return disabled
     ? 'border-2 border-solid border-brand-100 bg-neutral-0 shadow-xs'
     : 'border-2 border-solid border-brand-400 bg-neutral-0 shadow-md';
-}
-
-function getSliderRailClassName(disabled: boolean) {
-  return buildClassName([
-    'storybook-slider__rail rounded-6',
-    getSliderRailClasses(disabled),
-  ]);
-}
-
-function getSliderProgressClassName(disabled: boolean) {
-  return buildClassName([
-    'storybook-slider__progress z-[1] rounded-6',
-    getSliderProgressClasses(disabled),
-  ]);
 }
 
 function getSliderStepClassName(active: boolean) {

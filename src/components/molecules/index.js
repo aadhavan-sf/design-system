@@ -20,6 +20,7 @@ export {
   Pagination,
   PaginationButton,
 } from './Pagination/index.js';
+export { ProgressBar } from './ProgressBar/index.js';
 export { Slider } from './Slider/index.js';
 export {
   TabItem,
@@ -28,8 +29,9 @@ export {
 export { TextField } from './TextField/index.js';
 export { HelpIcon, Tooltip } from './Tooltip/index.js';
 export {
-  ImageAspectRatio,
   UploadFile,
   UploadFileBase,
+  UploadFileImageTile,
   UploadFileItem,
+  MultipleImages,
 } from './UploadFile/index.js';
