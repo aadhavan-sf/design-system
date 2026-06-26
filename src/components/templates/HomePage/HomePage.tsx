@@ -17,8 +17,8 @@ import { Popover, type PopoverBlock } from '../../organisms/Popover';
 import { Sidebar } from '../../organisms/Sidebar';
 import { TopNavigation } from '../../organisms/TopNavigation';
 
-import eyeConditionIcon from './assets/eye-condition.svg';
-import mobilePreviewImage from './assets/mobile-preview.png';
+import eyeConditionIcon from '../../../assets/eye-condition.svg';
+import mobilePreviewImage from '../../../assets/mobile-preview.png';
 import './homePage.css';
 
 const HOME_PAGE_BLOCK_POPOVER_HEIGHT = 536;

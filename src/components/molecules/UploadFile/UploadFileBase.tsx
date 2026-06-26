@@ -76,6 +76,7 @@ const TILE_SIZE_CLASSES: Record<Exclude<NormalizedLayout, 'horizontal' | 'vertic
 export interface UploadFileBaseProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onDrop'> {
   layout?: UploadFileBaseLayout;
   state?: UploadFileBaseState;
+  compact?: boolean;
   /** @deprecated Use showDescription and showSupportText instead. */
   supportingText?: boolean;
   showDescription?: boolean;
@@ -161,6 +162,7 @@ function getDropzoneClassName({
   showSupportText,
   visualState,
   isDisabled,
+  compact,
   className,
 }: {
   layout: NormalizedLayout;
@@ -168,6 +170,7 @@ function getDropzoneClassName({
   showSupportText: boolean;
   visualState: NormalizedState;
   isDisabled: boolean;
+  compact?: boolean;
   className?: string;
 }) {
   if (isTileLayout(layout)) {
@@ -182,32 +185,49 @@ function getDropzoneClassName({
 
   const copyLayoutMode = getCopyLayoutMode(showDescription, showSupportText);
   const isHorizontal = layout === 'horizontal';
+  const widthClass = compact ? 'w-full' : 'w-[416px]';
 
   if (isHorizontal) {
-    const heightClass = {
-      'title-only': 'h-[64px] items-center',
-      partial: 'h-[80px] items-start',
-      full: 'h-[104px] items-start',
-    }[copyLayoutMode];
+    const heightClass = compact
+      ? {
+          'title-only': 'h-[64px] items-center',
+          partial: 'h-[72px] items-start',
+          full: 'h-[88px] items-start',
+        }[copyLayoutMode]
+      : {
+          'title-only': 'h-[64px] items-center',
+          partial: 'h-[80px] items-start',
+          full: 'h-[104px] items-start',
+        }[copyLayoutMode];
 
     return buildClassName([
-      'storybook-upload-file-base relative box-border flex w-[416px] border-0',
-      'rounded-2 bg-neutral-0 p-4 font-sans text-left gap-3',
+      'storybook-upload-file-base relative box-border flex border-0',
+      'rounded-2 bg-neutral-0 font-sans text-left gap-3',
+      compact ? 'p-3' : 'p-4',
+      widthClass,
       heightClass,
       getStateClassName({ visualState, isDisabled }),
       className,
     ]);
   }
 
-  const heightClass = {
-    'title-only': 'h-[116px] flex-col items-center justify-center gap-3',
-    partial: 'h-[140px] flex-col items-center justify-start gap-3',
-    full: 'h-[164px] flex-col items-center justify-start gap-4',
-  }[copyLayoutMode];
+  const heightClass = compact
+    ? {
+        'title-only': 'h-[100px] min-h-[100px] flex-col items-center justify-center gap-3 p-4',
+        partial: 'h-[120px] flex-col items-center justify-start gap-3 p-4',
+        full: 'h-[136px] flex-col items-center justify-start gap-3 p-4',
+      }[copyLayoutMode]
+    : {
+        'title-only': 'h-[116px] flex-col items-center justify-center gap-3',
+        partial: 'h-[140px] flex-col items-center justify-start gap-3',
+        full: 'h-[164px] flex-col items-center justify-start gap-4',
+      }[copyLayoutMode];
 
   return buildClassName([
-    'storybook-upload-file-base relative box-border flex w-[416px] border-0',
-    'rounded-2 bg-neutral-0 px-[54px] py-6 font-sans text-center',
+    'storybook-upload-file-base relative box-border flex border-0',
+    'rounded-2 bg-neutral-0 font-sans text-center',
+    compact ? '' : 'px-[54px] py-6',
+    widthClass,
     heightClass,
     getStateClassName({ visualState, isDisabled }),
     className,
@@ -250,6 +270,7 @@ function getIconClassName(isDisabled: boolean) {
 export function UploadFileBase({
   layout = 'horizontal',
   state = 'default',
+  compact = false,
   supportingText,
   showDescription,
   showSupportText,
@@ -308,6 +329,7 @@ export function UploadFileBase({
         showSupportText: resolvedShowSupportText,
         visualState,
         isDisabled,
+        compact,
         className,
       })}
       onClick={handleClick}
@@ -330,7 +352,7 @@ export function UploadFileBase({
         <Plus
           aria-hidden="true"
           className={getIconClassName(isDisabled)}
-          size={32}
+          size={compact ? 24 : 32}
           weight="regular"
         />
       ) : (

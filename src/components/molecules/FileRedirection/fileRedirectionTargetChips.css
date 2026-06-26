@@ -1,0 +1,27 @@
+.storybook-file-redirection-target-chips .storybook-chip--button.storybook-chip--md {
+  @apply border-neutral-200 bg-transparent px-2 text-neutral-600;
+}
+
+.storybook-file-redirection-target-chips .storybook-chip--button.storybook-chip--md:hover,
+.storybook-file-redirection-target-chips
+  .storybook-chip--button.storybook-chip--md.storybook-chip--state-hover {
+  @apply border-neutral-200 bg-transparent text-neutral-600;
+}
+
+.storybook-file-redirection-target-chips
+  .storybook-chip--button.storybook-chip--md.storybook-chip--active {
+  @apply border-transparent bg-neutral-900 text-neutral-0;
+}
+
+.storybook-file-redirection-target-chips
+  .storybook-chip--button.storybook-chip--md.storybook-chip--active:hover,
+.storybook-file-redirection-target-chips
+  .storybook-chip--button.storybook-chip--md.storybook-chip--active.storybook-chip--state-hover {
+  @apply border-transparent bg-neutral-900 text-neutral-0;
+}
+
+.storybook-file-redirection-target-chips
+  .storybook-chip--button.storybook-chip--md.storybook-chip--active
+  .storybook-chip__label {
+  @apply font-semibold;
+}

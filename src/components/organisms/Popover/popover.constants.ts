@@ -25,11 +25,11 @@ import {
   type IconProps,
 } from '@phosphor-icons/react';
 
-import imageBannerPreview from './assets/image-banner-preview.png';
-import imageSliderSlide1 from './assets/image-slider-slide-1.png';
-import imageSliderSlide2 from './assets/image-slider-slide-2.png';
-import imageSliderSlide3 from './assets/image-slider-slide-3.png';
-import imageSliderSlide4 from './assets/image-slider-slide-4.png';
+import imageBannerPreview from '../../../assets/image-banner-preview.png';
+import imageSliderSlide1 from '../../../assets/image-slider-slide-1.png';
+import imageSliderSlide2 from '../../../assets/image-slider-slide-2.png';
+import imageSliderSlide3 from '../../../assets/image-slider-slide-3.png';
+import imageSliderSlide4 from '../../../assets/image-slider-slide-4.png';
 
 export type PopoverTab = 'built-in' | 'custom' | 'plugin';
 export type PopoverBlockCategory = PopoverTab;

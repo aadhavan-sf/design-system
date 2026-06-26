@@ -28,6 +28,7 @@ export {
 } from './Tabs/index.js';
 export { TextField } from './TextField/index.js';
 export { HelpIcon, Tooltip } from './Tooltip/index.js';
+export { FileRedirection } from './FileRedirection/index.js';
 export {
   UploadFile,
   UploadFileBase,

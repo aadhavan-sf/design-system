@@ -33,7 +33,7 @@ button.storybook-home-page-visibility-label {
     var(--home-template-panel-width)
     var(--home-template-layout-gap);
 
-  background-image: url("./assets/line-background.svg");
+  background-image: url("../../../assets/line-background.svg");
   background-position: center top;
   background-repeat: repeat;
   background-size: 1280px 1080px;

@@ -51,6 +51,7 @@ export interface UploadFileProps {
   accept?: string;
   multiple?: boolean;
   disabled?: boolean;
+  compact?: boolean;
   className?: string;
   onBrowse?: () => void;
   onFilesChange?: (files: File[]) => void;
@@ -96,6 +97,7 @@ export function UploadFile({
   accept,
   multiple = false,
   disabled = false,
+  compact = false,
   className,
   onBrowse,
   onFilesChange,
@@ -135,7 +137,7 @@ export function UploadFile({
     <div
       className={buildClassName([
         'storybook-upload-file relative flex flex-col gap-2',
-        UPLOAD_FILE_WIDTH_CLASS,
+        compact ? 'w-full' : UPLOAD_FILE_WIDTH_CLASS,
         className,
       ])}
     >
@@ -173,6 +175,7 @@ export function UploadFile({
         />
       ) : (
         <UploadFileBase
+          compact={compact}
           description={description}
           disabled={disabled || normalizedDropzoneState === 'disabled'}
           footerText={footerText}

@@ -51,6 +51,14 @@
   @apply min-h-7 px-3;
 }
 
+.storybook-chip--button.storybook-chip--md {
+  @apply px-2.5 py-0.5;
+}
+
+.storybook-chip--button.storybook-chip--lg {
+  @apply px-3 py-0.5;
+}
+
 .storybook-chip--rounded {
   @apply rounded-2;
 }

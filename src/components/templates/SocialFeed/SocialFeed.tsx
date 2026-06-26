@@ -21,7 +21,7 @@ import { TextField } from '../../molecules/TextField';
 import { SettingsPanelBetaTag } from '../../organisms/SettingsPanel';
 import { Sidebar } from '../../organisms/Sidebar';
 
-import mobilePreviewImage from './assets/mobile-preview.png';
+import mobilePreviewImage from '../../../assets/mobile-preview.png';
 import '../../organisms/SettingsPanel/settingsPanel.css';
 import './socialFeed.css';
 

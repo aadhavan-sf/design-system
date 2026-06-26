@@ -23,10 +23,10 @@ import {
 
 import { Text } from '../../foundations/Typography';
 import { DropdownList } from '../../molecules/DropdownList';
-import superfansAvatar from './assets/superfans-avatar.png';
-import superfansLogo from './assets/superfans-logo.png';
-import superfansMark from './assets/superfans-mark.png';
-import sidebarPreviewQr from './assets/sidebar-preview-qr.png';
+import superfansAvatar from '../../../assets/superfans-avatar.png';
+import superfansLogo from '../../../assets/superfans-logo.png';
+import superfansMark from '../../../assets/superfans-mark.png';
+import sidebarPreviewQr from '../../../assets/sidebar-preview-qr.png';
 
 import './sidebar.css';
 

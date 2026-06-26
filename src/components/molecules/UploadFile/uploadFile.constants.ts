@@ -1,7 +1,9 @@
-import uploadFilePreviewImage from './assets/upload-file-preview.png';
-import uploadFileSquarePreviewImage from './assets/upload-file-square-preview.png';
+import uploadFilePreviewImage from '../../../assets/upload-file-preview.png';
+import uploadFileSquarePreviewImage from '../../../assets/upload-file-square-preview.png';
 
 export const UPLOAD_FILE_WIDTH_CLASS = 'w-[416px]';
+
+export const FILE_REDIRECTION_WIDTH_CLASS = 'w-[216px]';
 
 export const UPLOAD_FILE_LAYOUT_OPTIONS = ['Horizontal', 'Vertical'] as const;
 
