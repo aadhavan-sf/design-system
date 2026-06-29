@@ -158,7 +158,7 @@ export const Playground = {
     );
   },
   args: {
-    type: 'blocks',
+    type: 'fixed-blocks',
     status: 'draft',
     pageTitle: 'Home',
   },

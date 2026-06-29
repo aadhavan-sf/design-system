@@ -1,16 +1,16 @@
 // @ts-nocheck
-import { createElement, useMemo, useRef, useState } from 'react';
+import { createElement, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Bell,
   BellRinging,
   BellSimple,
   HouseSimple,
-  MonitorArrowUp,
 } from '@phosphor-icons/react';
 
 import { IconHoverEffect } from '../../atoms/IconHoverEffect';
 import { DropdownField } from '../TextField/fields/DropdownField';
+import { UploadFile } from '../UploadFile/UploadFile';
 import { Text } from '../../foundations/Typography';
 import {
   iconLibraryDropdownOptions,
@@ -291,61 +291,6 @@ IconLibraryGrid.propTypes = {
   state: PropTypes.oneOf([...GRID_STATES, 'Default', 'Icon not selected']),
 };
 
-function IconLibraryUpload({
-  onUpload,
-}) {
-  const inputRef = useRef(null);
-
-  return (
-    <div className="relative min-w-0 w-full overflow-hidden">
-      <input
-        ref={inputRef}
-        accept=".svg,.png,image/svg+xml,image/png"
-        className="storybook-icon-library-upload__input"
-        type="file"
-        onChange={(event) => {
-          onUpload?.(event.target.files?.[0] ?? null);
-          event.target.value = '';
-        }}
-      />
-      <button
-        type="button"
-        className="storybook-icon-library-upload box-border flex w-full items-start gap-2 rounded-2 border border-dashed border-neutral-200 bg-neutral-0 p-3 font-sans text-left hover:bg-neutral-25 focus-visible:border-brand-400 focus-visible:bg-brand-25 focus-visible:outline-none focus-visible:shadow-focus-brand"
-        onClick={() => inputRef.current?.click()}
-      >
-        <MonitorArrowUp
-          aria-hidden="true"
-          className="shrink-0 text-brand-400"
-          size={24}
-          weight="regular"
-        />
-        <span className="flex min-w-0 flex-col gap-1">
-          <Text
-            as="span"
-            variant="text-sm"
-            weight="medium"
-            className="text-neutral-900"
-          >
-            Upload Your Icon
-          </Text>
-          <Text
-            as="span"
-            variant="text-xs"
-            weight="regular"
-            className="text-neutral-600"
-          >
-            24x24 SVG or PNG
-          </Text>
-        </span>
-      </button>
-    </div>
-  );
-}
-
-IconLibraryUpload.propTypes = {
-  onUpload: PropTypes.func,
-};
-
 function IconPickerPopover({
   className,
   iconOptions = smallPickerOptions,
@@ -428,7 +373,16 @@ function IconPickerPopover({
           </span>
         </div>
       ) : (
-        <IconLibraryUpload onUpload={onUpload} />
+        <UploadFile
+          accept=".svg,.png,image/svg+xml,image/png"
+          className="w-full [&_.storybook-upload-file-base>svg:not(.storybook-upload-file-dashed-border)]:size-6"
+          compact
+          description="24x24 SVG or PNG"
+          layout="horizontal"
+          showSupportText={false}
+          title="Upload Your Icon"
+          onFilesChange={(files) => onUpload?.(files[0] ?? null)}
+        />
       )}
     </div>
   );

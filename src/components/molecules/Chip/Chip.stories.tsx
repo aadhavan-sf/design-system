@@ -17,7 +17,7 @@ export default {
   argTypes: {
     type: {
       control: 'select',
-      options: ['chip', 'button'],
+      options: ['chip', 'chip-button'],
     },
     size: {
       control: 'select',
@@ -44,9 +44,11 @@ export default {
     },
     active: {
       control: 'boolean',
+      if: { arg: 'type', eq: 'chip-button' },
     },
     defaultActive: {
-      control: 'boolean',
+      control: false,
+      description: 'Initial pressed state when `active` is not provided.',
     },
   },
 };
@@ -59,7 +61,7 @@ export const Playground = {
     shape: 'pill',
     icon: 'none',
     border: false,
-    defaultActive: false,
+    active: false,
     state: 'default',
   },
 };
@@ -77,12 +79,12 @@ export const BrandChip = {
 
 export const InteractiveChipButton = {
   args: {
-    type: 'button',
+    type: 'chip-button',
     label: 'Label',
     size: 'md',
     shape: 'pill',
     icon: 'right',
-    defaultActive: false,
+    active: false,
     state: 'default',
   },
 };
@@ -92,9 +94,9 @@ export const ChipVariants = {
     const icons = ['none', 'right', 'left', 'both', 'avatar-left', 'avatar-right', 'icon-only'];
 
     return (
-      <div className="chip-story-stack">
+      <div className="flex flex-col gap-8">
         {['pill', 'rounded'].map((shape) => (
-          <div className="chip-story-grid" key={shape}>
+          <div className="flex max-w-[960px] flex-wrap items-center gap-4" key={shape}>
             {icons.map((icon) => (
               ['sm', 'md', 'lg'].map((size) => (
                 <Chip
@@ -126,14 +128,14 @@ export const ChipVariants = {
 
 export const ChipButtons = {
   render: () => (
-    <div className="chip-story-stack">
+    <div className="flex flex-col gap-8">
       {['none', 'right', 'left', 'icon-only'].map((icon) => (
-        <div className="chip-story-row" key={icon}>
+        <div className="flex flex-wrap items-center gap-4" key={icon}>
           {['sm', 'md', 'lg'].map((size) => (
-            <Chip key={`${icon}-${size}`} type="button" icon={icon} size={size} />
+            <Chip key={`${icon}-${size}`} type="chip-button" icon={icon} size={size} />
           ))}
           {['sm', 'md', 'lg'].map((size) => (
-            <Chip key={`${icon}-${size}-active`} type="button" active icon={icon} size={size} />
+            <Chip key={`${icon}-${size}-active`} type="chip-button" active icon={icon} size={size} />
           ))}
         </div>
       ))}
@@ -143,17 +145,17 @@ export const ChipButtons = {
 
 export const ButtonStates = {
   render: () => (
-    <div className="chip-story-stack">
+    <div className="flex flex-col gap-8">
       {['default', 'hover', 'focused', 'disabled'].map((state) => (
-        <div className="chip-story-row" key={state}>
-          <Chip type="button" state={state} />
-          <Chip type="button" active state={state} />
-          <Chip type="button" icon="right" state={state} />
-          <Chip type="button" active icon="right" state={state} />
-          <Chip type="button" icon="left" state={state} />
-          <Chip type="button" active icon="left" state={state} />
-          <Chip type="button" icon="icon-only" state={state} />
-          <Chip type="button" active icon="icon-only" state={state} />
+        <div className="flex flex-wrap items-center gap-4" key={state}>
+          <Chip type="chip-button" state={state} />
+          <Chip type="chip-button" active state={state} />
+          <Chip type="chip-button" icon="right" state={state} />
+          <Chip type="chip-button" active icon="right" state={state} />
+          <Chip type="chip-button" icon="left" state={state} />
+          <Chip type="chip-button" active icon="left" state={state} />
+          <Chip type="chip-button" icon="icon-only" state={state} />
+          <Chip type="chip-button" active icon="icon-only" state={state} />
         </div>
       ))}
     </div>

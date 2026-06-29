@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Question,
@@ -85,13 +85,27 @@ function getSettingsPanelHelpButtonClassName() {
   return 'storybook-settings-panel__help inline-flex items-center justify-center gap-1 rounded-2 border-0 bg-transparent p-0 font-sans text-brand-400 focus-visible:shadow-focus-brand';
 }
 
-function getSettingsPanelBetaTagClassName({ className, shine = false }) {
-  return buildClassName([
-    'storybook-settings-panel-beta-tag shrink-0',
-    shine && 'storybook-settings-panel-beta-tag--shine',
-    className,
-  ]);
+function getSettingsPanelBetaTagClassName(className) {
+  return buildClassName(['shrink-0 bg-brand-50 text-brand-400', className]);
 }
+
+export function SettingsPanelBetaTag({ className }) {
+  return (
+    <Chip
+      type="chip"
+      label="BETA"
+      size="sm"
+      shape="rounded"
+      icon="none"
+      tone="brand"
+      className={getSettingsPanelBetaTagClassName(className)}
+    />
+  );
+}
+
+SettingsPanelBetaTag.propTypes = {
+  className: PropTypes.string,
+};
 
 function getSettingsPanelItemClassName({
   state,
@@ -120,35 +134,6 @@ function getSettingsPanelItemClassName({
   ]);
 }
 
-export function SettingsPanelBetaTag({
-  className,
-  shine = false,
-  onShineComplete,
-}) {
-  return (
-    <Chip
-      type="chip"
-      label="BETA"
-      size="sm"
-      shape="rounded"
-      icon="none"
-      tone="brand"
-      className={getSettingsPanelBetaTagClassName({ className, shine })}
-      onAnimationEnd={(event) => {
-        if (event.animationName === 'storybook-settings-panel-beta-shine') {
-          onShineComplete?.();
-        }
-      }}
-    />
-  );
-}
-
-SettingsPanelBetaTag.propTypes = {
-  className: PropTypes.string,
-  shine: PropTypes.bool,
-  onShineComplete: PropTypes.func,
-};
-
 export function SettingsPanelItem({
   label = 'Label',
   pressed = false,
@@ -160,35 +145,10 @@ export function SettingsPanelItem({
 }) {
   const resolvedState = getResolvedState(state);
   const isDisabled = resolvedState === 'disabled';
-  const [betaShine, setBetaShine] = useState(false);
-  const prevPressedRef = useRef(pressed);
-
-  const triggerBetaShine = () => {
-    setBetaShine(false);
-    requestAnimationFrame(() => setBetaShine(true));
-  };
-
-  useEffect(() => {
-    if (!showBeta || !pressed) {
-      setBetaShine(false);
-      prevPressedRef.current = pressed;
-      return;
-    }
-
-    if (!prevPressedRef.current) {
-      triggerBetaShine();
-    }
-
-    prevPressedRef.current = pressed;
-  }, [pressed, showBeta]);
 
   const handleClick = () => {
     if (isDisabled) {
       return;
-    }
-
-    if (showBeta && pressed) {
-      triggerBetaShine();
     }
 
     onClick?.();
@@ -214,12 +174,7 @@ export function SettingsPanelItem({
       >
         {label}
       </Text>
-      {showBeta && (
-        <SettingsPanelBetaTag
-          shine={pressed && betaShine}
-          onShineComplete={() => setBetaShine(false)}
-        />
-      )}
+      {showBeta && <SettingsPanelBetaTag />}
       {showIcon && (
         <Warning
           aria-hidden="true"

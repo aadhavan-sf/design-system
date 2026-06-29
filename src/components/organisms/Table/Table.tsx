@@ -7,7 +7,7 @@ import {
   ArrowsClockwise,
   CalendarBlank,
   CaretUpDown,
-  CloudArrowDown,
+  Cloud,
   DotsThreeVertical,
   Eye,
   FileText,
@@ -23,6 +23,7 @@ import { CheckBox } from '../../atoms/CheckBox';
 import { Button } from '../../molecules/Button';
 import { Pagination } from '../../molecules/Pagination';
 import { Text } from '../../foundations/Typography';
+import tableAvatarImage from '../../../assets/superfans-avatar.png';
 
 import './table.css';
 
@@ -173,7 +174,7 @@ const TABLE_CHIP_TONE_CLASSES = {
 
 const TABLE_EMPTY_ICON_CLASSES = {
   brand: 'bg-brand-50 text-brand-400',
-  cloud: 'storybook-table-empty__icon--cloud text-neutral-0',
+  cloud: 'bg-neutral-100 text-neutral-600',
   warning: 'bg-warning-50 text-warning-700',
 };
 
@@ -199,7 +200,7 @@ function getTableHeaderCellClassName({
   empty,
 }) {
   return buildClassName([
-    'storybook-table-header-cell box-border flex h-11 min-w-0 items-center gap-3 border-0 px-6 py-3 max-[900px]:px-4',
+    'storybook-table-header-cell box-border flex h-11 min-w-0 items-center gap-3 border-0 px-6 py-3 last:justify-center last:px-4 max-[900px]:px-4',
     color === 'gray' ? 'bg-neutral-25' : 'bg-neutral-0',
     empty && 'justify-center',
   ]);
@@ -435,7 +436,12 @@ function AvatarBlock({
 }) {
   return (
     <span className="inline-flex min-w-0 items-center gap-3">
-      <span className="storybook-table-avatar size-10 shrink-0 rounded-full" aria-hidden="true" />
+      <img
+        alt=""
+        aria-hidden="true"
+        className="size-10 shrink-0 rounded-full object-cover object-center"
+        src={tableAvatarImage}
+      />
       <span className="flex min-w-0 flex-col text-neutral-800">
         <Text
           as="span"
@@ -769,7 +775,7 @@ export function TableEmptyState({
       primaryIcon: 'left',
     },
     upload: {
-      icon: CloudArrowDown,
+      icon: Cloud,
       iconTone: 'cloud',
       title: 'Start by uploading a file',
       description: 'Any assets used in projects will live here. Start creating by uploading your files.',
@@ -788,7 +794,7 @@ export function TableEmptyState({
       ])}>
         <Icon size={24} weight="regular" />
       </div>
-      <div className="storybook-table-empty__copy flex w-[352px] flex-col gap-1">
+      <div className="flex w-[352px] flex-col gap-1">
         <Text
           as="h3"
           variant="text-md"

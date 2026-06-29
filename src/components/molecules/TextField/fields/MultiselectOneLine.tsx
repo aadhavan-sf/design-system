@@ -189,7 +189,7 @@ export function MultiselectOneLine({
               {visibleSelectedItems.map((item, index) => (
                 <Chip
                   key={item.value}
-                  type="button"
+                  type="chip-button"
                   label={item.label}
                   size="md"
                   shape="rounded"

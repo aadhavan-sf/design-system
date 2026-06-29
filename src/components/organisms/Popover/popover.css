@@ -21,34 +21,6 @@ button.storybook-popover-empty__action {
   display: none;
 }
 
-.storybook-popover__tabs.storybook-tabs {
-  display: flex;
-  box-sizing: border-box;
-  width: 100%;
-  gap: var(--size_1_5);
-}
-
-.storybook-popover__tabs .storybook-tab-item {
-  flex: 0 0 auto;
-  min-width: 0;
-}
-
-.storybook-popover__tabs .storybook-tab-item:nth-child(1) {
-  width: 70px;
-}
-
-.storybook-popover__tabs .storybook-tab-item:nth-child(2) {
-  width: 74px;
-}
-
-.storybook-popover__tabs .storybook-tab-item:nth-child(3) {
-  width: 63px;
-}
-
-.storybook-popover__tabs .storybook-tab-item[aria-selected="false"] {
-  color: var(--neutral_700);
-}
-
 .storybook-popover__list--empty,
 .storybook-popover-preview {
   box-sizing: border-box;

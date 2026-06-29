@@ -270,7 +270,7 @@ function IconPickerUpload({
         ref={inputRef}
         type="file"
         accept=".svg,.png,image/svg+xml,image/png"
-        className="storybook-dropdown-list__icon-picker-upload-input"
+        className="sr-only"
         onChange={(event) => onUpload?.(event.target.files?.[0] ?? null)}
       />
     </button>
@@ -326,7 +326,7 @@ function IconPickerDropdown({
       <div className="storybook-dropdown-list__icon-picker-separator relative flex h-4 w-full items-center justify-center">
         <span
           aria-hidden="true"
-          className="storybook-dropdown-list__icon-picker-separator-line h-px bg-neutral-200"
+          className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-neutral-200"
         />
         <Text
           as="span"

@@ -135,7 +135,9 @@ function getSliderThumbClassName(disabled: boolean, style: NormalizedSliderStyle
 
 function getSliderInputClassName(variant?: 'start' | 'end') {
   return buildClassName([
-    'storybook-slider__input absolute inset-0 m-0 h-full w-full cursor-pointer opacity-0',
+    'storybook-slider__input absolute inset-0 m-0 h-full w-full cursor-pointer appearance-none opacity-0',
+    '[&::-webkit-slider-runnable-track]:appearance-none [&::-webkit-slider-thumb]:appearance-none',
+    '[&::-moz-range-track]:appearance-none [&::-moz-range-thumb]:appearance-none',
     variant === 'start' && 'storybook-slider__input--start z-[6]',
     variant === 'end' && 'storybook-slider__input--end z-[7]',
     !variant && 'z-[5]',

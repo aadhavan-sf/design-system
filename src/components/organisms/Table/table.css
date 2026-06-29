@@ -25,11 +25,6 @@ button.storybook-table-icon-button {
   background: var(--neutral_50);
 }
 
-.storybook-table-header-cell:last-child {
-  justify-content: center;
-  padding-inline: var(--size_4);
-}
-
 .storybook-table-delivery__segment {
   min-width: 0;
 }
@@ -37,13 +32,6 @@ button.storybook-table-icon-button {
 .storybook-table-chip--info {
   color: var(--information_700);
   background: var(--information_50);
-}
-
-.storybook-table-avatar {
-  background:
-    radial-gradient(circle at 48% 35%, #2d1f18 0 16%, transparent 17%),
-    radial-gradient(circle at 50% 88%, #8b4f3a 0 34%, transparent 35%),
-    linear-gradient(135deg, #f6d5bf 0%, #c88361 100%);
 }
 
 .storybook-table-action[aria-label="View"] {
@@ -83,15 +71,4 @@ button.storybook-table-icon-button {
     opacity: 1;
     clip-path: inset(0 0 0 0);
   }
-}
-
-.storybook-table-empty__icon--cloud {
-  background:
-    radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.8) 0 32%, transparent 34%),
-    linear-gradient(135deg, var(--neutral_100) 0%, var(--neutral_300) 100%);
-  box-shadow: var(--shadow_xl);
-}
-
-.storybook-table-empty__copy p {
-  margin: 0;
 }

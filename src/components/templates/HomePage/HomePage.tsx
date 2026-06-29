@@ -18,11 +18,33 @@ import { Sidebar } from '../../organisms/Sidebar';
 import { TopNavigation } from '../../organisms/TopNavigation';
 
 import eyeConditionIcon from '../../../assets/eye-condition.svg';
+import lineBackgroundImage from '../../../assets/line-background.svg';
 import mobilePreviewImage from '../../../assets/mobile-preview.png';
-import './homePage.css';
 
 const HOME_PAGE_BLOCK_POPOVER_HEIGHT = 536;
 const HOME_PAGE_BLOCK_POPOVER_BOTTOM_PADDING_FALLBACK = 16;
+const HOME_PAGE_SHELL_BACKGROUND_STYLE = {
+  backgroundImage: `url(${lineBackgroundImage})`,
+} as const;
+
+const HOME_PAGE_SHELL_GRID = [
+  'grid grid-cols-[216px_248px_minmax(0,1fr)_theme(spacing.2)_248px_theme(spacing.2)]',
+  'min-[1300px]:grid-cols-[216px_264px_minmax(0,1fr)_theme(spacing.2)_264px_theme(spacing.2)]',
+  'min-[1537px]:grid-cols-[216px_clamp(264px,calc(12.5vw+72px),312px)_minmax(0,1fr)_theme(spacing.4)_clamp(264px,calc(12.5vw+72px),312px)_theme(spacing.4)]',
+].join(' ');
+
+const HOME_PAGE_SIDEBAR_PANEL_GAP = 'ml-2 min-[1537px]:ml-4';
+
+const HOME_PAGE_LAYOUT_GAP = 'py-2 min-[1537px]:py-4';
+const HOME_PAGE_PANEL_PADDING = 'px-4 min-[1300px]:px-6';
+const HOME_PAGE_POPOVER_BOTTOM = 'bottom-2 min-[1537px]:bottom-4';
+const HOME_PAGE_POPOVER_LEFT = [
+  'pl-[calc(216px+8px+248px+theme(spacing.2))]',
+  'min-[1300px]:pl-[calc(216px+8px+264px+theme(spacing.2))]',
+  'min-[1537px]:pl-[calc(216px+16px+clamp(264px,calc(12.5vw+72px),312px)+theme(spacing.2))]',
+].join(' ');
+const HOME_PAGE_COLLECTION_WIDTH = 'w-[216px] min-[1537px]:w-[clamp(216px,calc(16.667vw-40px),280px)]';
+const HOME_PAGE_PHONE_WIDTH = 'w-[322px] min-[1537px]:w-[clamp(322px,calc(20.313vw+10px),400px)]';
 
 function getHomePageBlockPopoverBottomPadding() {
   const leftPanel = document.querySelector('.storybook-home-page__left-panel');
@@ -206,35 +228,53 @@ function buildClassName(parts: Array<string | false | null | undefined>) {
   return parts.flat().filter(Boolean).join(' ');
 }
 
+const HOME_PAGE_BUTTON_RESET = 'm-0 appearance-none';
+
 function getHomePageShellClassName() {
-  return 'storybook-home-page box-border h-dvh min-w-[1280px] w-full overflow-hidden bg-neutral-25 font-sans text-neutral-900';
+  return buildClassName([
+    'storybook-home-page box-border h-dvh w-full min-w-[1280px] max-[1279px]:w-[1280px] overflow-hidden',
+    'bg-neutral-25 bg-[length:1280px_1080px] bg-top bg-repeat font-sans text-neutral-900',
+    HOME_PAGE_SHELL_GRID,
+  ]);
 }
 
 function getHomePageSidebarClassName() {
-  return 'storybook-home-page__sidebar h-full min-w-0 w-full';
+  return 'storybook-home-page__sidebar col-start-1 row-start-1 h-dvh w-[216px] shrink-0';
 }
 
 function getHomePageLeftPanelClassName() {
-  return 'storybook-home-page__left-panel box-border min-w-0 bg-transparent';
+  return buildClassName([
+    'storybook-home-page__left-panel box-border col-start-2 h-dvh min-w-0 bg-transparent',
+    HOME_PAGE_SIDEBAR_PANEL_GAP,
+    HOME_PAGE_LAYOUT_GAP,
+  ]);
 }
 
 function getHomePageLeftPanelSurfaceClassName() {
   return buildClassName([
-    'storybook-home-page__left-panel-surface h-full w-full rounded-6',
-    'px-[var(--home-template-panel-padding)]',
+    'storybook-home-page__left-panel-surface h-full min-h-0 w-full rounded-6',
+    HOME_PAGE_PANEL_PADDING,
   ]);
 }
 
 function getHomePageCanvasClassName() {
-  return 'storybook-home-page__canvas box-border flex flex-col items-center gap-8 bg-transparent px-4';
+  return buildClassName([
+    'storybook-home-page__canvas box-border col-start-3 col-end-5 flex h-dvh min-w-0 flex-col items-center gap-8 overflow-x-visible overflow-y-auto bg-transparent px-4',
+    HOME_PAGE_LAYOUT_GAP,
+  ]);
 }
 
 function getHomePageCanvasBodyClassName() {
-  return 'storybook-home-page__canvas-body relative flex min-h-0 w-full max-w-full flex-1 flex-col items-center';
+  return 'storybook-home-page__canvas-body relative flex h-full min-h-0 w-full max-w-full flex-1 flex-col items-center overflow-hidden';
 }
 
 function getHomePageBlockPopoverLayerClassName() {
-  return 'storybook-home-page__block-popover-layer fixed z-50';
+  return buildClassName([
+    'storybook-home-page__block-popover-layer fixed inset-x-0 top-0 z-50',
+    'flex items-start justify-start overflow-hidden',
+    HOME_PAGE_POPOVER_BOTTOM,
+    HOME_PAGE_POPOVER_LEFT,
+  ]);
 }
 
 function getHomePageBlockPopoverDialogClassName() {
@@ -242,33 +282,44 @@ function getHomePageBlockPopoverDialogClassName() {
 }
 
 function getHomePagePreviewLaneClassName() {
-  return 'storybook-home-page__preview-lane grid w-full max-w-full flex-1 gap-8';
+  return 'storybook-home-page__preview-lane grid h-full min-h-0 w-full max-w-full flex-[1_1_auto] grid-rows-[auto_minmax(0,1fr)_auto] items-center justify-items-center gap-4';
 }
 
 function getHomePageCollectionSelectClassName() {
-  return 'storybook-home-page__collection-select w-[var(--home-template-collection-width)] justify-self-center';
+  return buildClassName([
+    'storybook-home-page__collection-select shrink-0 justify-self-center',
+    HOME_PAGE_COLLECTION_WIDTH,
+  ]);
 }
 
 function getHomePagePreviewStackClassName() {
-  return 'storybook-home-page__preview-stack flex h-full w-max max-w-full flex-col items-center justify-center gap-4';
+  return 'storybook-home-page__preview-stack flex h-full min-h-0 w-max max-w-full flex-col items-center justify-center overflow-hidden';
 }
 
 function getHomePagePhoneClassName() {
   return buildClassName([
-    'storybook-home-page-phone block h-auto w-[var(--home-template-preview-phone-width)] max-h-[var(--home-template-preview-phone-max-height)] object-contain',
+    'storybook-home-page-phone block h-auto max-h-full w-auto max-w-full object-contain',
+    HOME_PAGE_PHONE_WIDTH,
     'drop-shadow-[0_32px_52px_rgba(10,13,18,0.14)]',
   ]);
 }
 
+function getHomePageLastSavedClassName() {
+  return 'storybook-home-page__last-saved shrink-0 justify-self-center text-neutral-600';
+}
+
 function getHomePageRightPanelShellClassName() {
-  return 'storybook-home-page__right-panel box-border min-w-0 bg-transparent';
+  return buildClassName([
+    'storybook-home-page__right-panel box-border col-start-5 h-dvh min-w-0 bg-transparent',
+    HOME_PAGE_LAYOUT_GAP,
+  ]);
 }
 
 function getHomePageRightPanelClassName() {
   return buildClassName([
     'storybook-home-page-right-panel',
     'box-border flex h-full min-h-0 w-full flex-col gap-6 overflow-y-auto rounded-6 border border-solid border-neutral-100 bg-neutral-0 py-6 text-neutral-900',
-    'px-[var(--home-template-panel-padding)]',
+    HOME_PAGE_PANEL_PADDING,
   ]);
 }
 
@@ -281,6 +332,7 @@ function getHomePageVisibilityLabelClassName() {
     'storybook-home-page-visibility-label',
     'inline-flex min-w-0 flex-1 cursor-pointer items-center gap-2 border-0 bg-transparent p-0 text-left text-neutral-700',
     'focus-visible:outline-none focus-visible:shadow-focus-brand',
+    HOME_PAGE_BUTTON_RESET,
   ]);
 }
 
@@ -296,6 +348,7 @@ function getHomePageFilterCardSetupClassName() {
     'storybook-home-page-filter-card__setup',
     'inline-flex w-max max-w-full cursor-pointer items-center justify-start gap-2 border-0 bg-transparent p-0 text-brand-400',
     'focus-visible:outline-none focus-visible:shadow-focus-brand',
+    HOME_PAGE_BUTTON_RESET,
   ]);
 }
 
@@ -304,6 +357,7 @@ function getHomePageCustomBlocksLinkClassName() {
     'storybook-home-page-custom-blocks-link',
     'inline-flex w-max max-w-full cursor-pointer items-center justify-start gap-1 border-0 bg-transparent p-0 text-brand-400',
     'focus-visible:outline-none focus-visible:shadow-focus-brand',
+    HOME_PAGE_BUTTON_RESET,
   ]);
 }
 
@@ -686,7 +740,7 @@ export function HomePage() {
   };
 
   return (
-    <div className={getHomePageShellClassName()}>
+    <div className={getHomePageShellClassName()} style={HOME_PAGE_SHELL_BACKGROUND_STYLE}>
       <BlockPopoverLayer
         anchor={blockPopoverAnchor}
         open={isBlockPopoverOpen}
@@ -737,7 +791,7 @@ export function HomePage() {
               as="span"
               variant="text-sm"
               weight="regular"
-              className="text-neutral-600"
+              className={getHomePageLastSavedClassName()}
             >
               Last saved: {lastSavedAt}
             </Text>

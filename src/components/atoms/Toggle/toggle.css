@@ -5,72 +5,11 @@ button.storybook-toggle {
 }
 
 .storybook-toggle {
-  --toggle-padding: 2px;
-
-  position: relative;
-  display: inline-block;
-  box-sizing: border-box;
-  flex-shrink: 0;
-  padding: 0;
-  overflow: hidden;
-
-  cursor: pointer;
-
   transition:
     background-color 160ms ease,
     box-shadow 160ms ease;
 }
 
-.storybook-toggle--sm {
-  width: 36px;
-  height: 20px;
-}
-
-.storybook-toggle--mid {
-  width: 44px;
-  height: 24px;
-}
-
-.storybook-toggle:focus-visible {
-  outline: none;
-}
-
-.storybook-toggle:disabled {
-  cursor: not-allowed;
-}
-
 .storybook-toggle__thumb {
-  position: absolute;
-  top: var(--toggle-padding);
-  left: var(--toggle-padding);
-  border-radius: 9999px;
-  background-color: var(--neutral_00);
-
-  transition: transform 160ms ease;
-}
-
-.storybook-toggle--sm .storybook-toggle__thumb {
-  width: 16px;
-  height: 16px;
-}
-
-.storybook-toggle--mid .storybook-toggle__thumb {
-  width: 20px;
-  height: 20px;
-}
-
-.storybook-toggle__thumb--enabled {
-  box-shadow: var(--shadow_sm);
-}
-
-.storybook-toggle__thumb--disabled {
-  box-shadow: var(--shadow_xs);
-}
-
-.storybook-toggle--sm.storybook-toggle--pressed .storybook-toggle__thumb {
-  transform: translateX(16px);
-}
-
-.storybook-toggle--mid.storybook-toggle--pressed .storybook-toggle__thumb {
-  transform: translateX(20px);
+  transition: left 160ms ease;
 }

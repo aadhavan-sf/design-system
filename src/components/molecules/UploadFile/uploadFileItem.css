@@ -1,9 +1,0 @@
-.storybook-upload-item__thumbnail-image {
-  background-color: var(--neutral_200);
-  background-image:
-    linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(12, 18, 32, 0.58) 100%),
-    linear-gradient(145deg, #d2e6f6 0%, #7189a5 42%, #1f2937 100%);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}

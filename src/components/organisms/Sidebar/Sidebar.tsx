@@ -30,8 +30,7 @@ import sidebarPreviewQr from '../../../assets/sidebar-preview-qr.png';
 
 import './sidebar.css';
 
-const SIDEBAR_TYPES = ['expanded', 'collapsed'];
-const ITEM_STATES = ['default', 'hover', 'focused', 'disabled'];
+const SIDEBAR_ITEM_STATES = ['default', 'hover', 'focused', 'disabled'];
 const ICON_NAMES = [
   'billing',
   'camera',
@@ -95,13 +94,9 @@ function normalizeValue(value, aliases = {}) {
   return aliases[value] ?? value;
 }
 
-function getSidebarShellClassName({
-  isCollapsed,
-  className,
-}) {
+function getSidebarShellClassName(className) {
   return buildClassName([
-    'storybook-sidebar relative box-border flex h-full min-h-0 w-full flex-col justify-between border-0 border-r border-solid border-neutral-100 bg-neutral-0 font-sans',
-    isCollapsed && 'storybook-sidebar--collapsed',
+    'storybook-sidebar relative box-border flex h-full min-h-0 w-[216px] flex-col justify-between border-0 border-r border-solid border-neutral-100 bg-neutral-0 font-sans',
     className,
   ]);
 }
@@ -109,16 +104,12 @@ function getSidebarShellClassName({
 function getSidebarItemClassName({
   state,
   pressed,
-  collapsed,
   className,
 }) {
   const isDisabled = state === 'disabled';
 
   return buildClassName([
-    'storybook-sidebar-item inline-flex cursor-pointer border-0 font-sans text-left transition-[background-color,color,box-shadow] duration-[160ms] ease-out focus-visible:outline-none focus-visible:shadow-focus-brand',
-    collapsed
-      ? 'size-9 shrink-0 items-center justify-center gap-0 rounded-2'
-      : 'w-full items-center gap-2 rounded-2 p-2',
+    'storybook-sidebar-item inline-flex w-full cursor-pointer items-center gap-2 rounded-2 border-0 p-2 font-sans text-left transition-[background-color,color,box-shadow] duration-[160ms] ease-out focus-visible:outline-none focus-visible:shadow-focus-brand',
     pressed && !isDisabled && 'text-neutral-0 hover:bg-brand-700 hover:text-neutral-0 focus-visible:bg-brand-400 focus-visible:text-neutral-0 focus-visible:shadow-none',
     pressed && !isDisabled && (state === 'hover' ? 'bg-brand-700' : 'bg-brand-400'),
     pressed && isDisabled && 'cursor-not-allowed bg-brand-100 text-neutral-0',
@@ -200,7 +191,6 @@ function renderSidebarIcon(
 
 function SuperfansBrand({
   alt = '',
-  sidebarCollapsed = false,
   variant = 'mark',
 }) {
   const imageSrc = variant === 'logo'
@@ -211,11 +201,10 @@ function SuperfansBrand({
     <img
       alt={alt}
       className={buildClassName([
-        'storybook-sidebar-brand-image block shrink-0 object-contain',
-        variant === 'logo' && 'w-[151px]',
-        variant === 'mark' && 'w-[26px]',
-        variant === 'avatar' && 'storybook-sidebar-brand-image--avatar rounded-2',
-        variant === 'avatar' && (sidebarCollapsed ? 'size-9' : 'size-[38px]'),
+        'block shrink-0 object-contain',
+        variant === 'logo' && 'h-6 w-[151px]',
+        variant === 'mark' && 'h-6 w-[26px]',
+        variant === 'avatar' && 'size-[38px] rounded-2',
       ])}
       src={imageSrc}
     />
@@ -224,7 +213,6 @@ function SuperfansBrand({
 
 SuperfansBrand.propTypes = {
   alt: PropTypes.string,
-  sidebarCollapsed: PropTypes.bool,
   variant: PropTypes.oneOf(['avatar', 'logo', 'mark']),
 };
 
@@ -233,7 +221,6 @@ export function SidebarItem({
   icon = 'drag',
   pressed = false,
   state = 'default',
-  type = 'expanded',
   className,
   onClick,
 }) {
@@ -243,23 +230,16 @@ export function SidebarItem({
     Focused: 'focused',
     Disabled: 'disabled',
   });
-  const normalizedType = normalizeValue(type, {
-    Expanded: 'expanded',
-    Collapsed: 'collapsed',
-  });
-  const isCollapsed = normalizedType === 'collapsed';
   const isDisabled = normalizedState === 'disabled';
 
   return (
     <button
       type="button"
       aria-current={pressed ? 'page' : undefined}
-      aria-label={isCollapsed ? label : undefined}
       disabled={isDisabled}
       className={getSidebarItemClassName({
         state: normalizedState,
         pressed,
-        collapsed: isCollapsed,
         className,
       })}
       onClick={isDisabled ? undefined : onClick}
@@ -268,17 +248,15 @@ export function SidebarItem({
         'storybook-sidebar-item__icon size-5 shrink-0',
         icon === 'drag' && 'storybook-sidebar-item__icon--drag',
       ]), pressed ? 'fill' : 'regular')}
-      {!isCollapsed && (
-        <Text
-          as="span"
-          variant="text-sm"
-          weight={pressed ? 'semibold' : 'medium'}
-          color="currentColor"
-          className="min-w-0 flex-[1_1_auto] overflow-hidden text-ellipsis whitespace-nowrap"
-        >
-          {label}
-        </Text>
-      )}
+      <Text
+        as="span"
+        variant="text-sm"
+        weight={pressed ? 'semibold' : 'medium'}
+        color="currentColor"
+        className="min-w-0 flex-[1_1_auto] overflow-hidden text-ellipsis whitespace-nowrap"
+      >
+        {label}
+      </Text>
     </button>
   );
 }
@@ -287,15 +265,13 @@ SidebarItem.propTypes = {
   label: PropTypes.string,
   icon: PropTypes.oneOf(ICON_NAMES),
   pressed: PropTypes.bool,
-  state: PropTypes.oneOf([...ITEM_STATES, 'Default', 'Hover', 'Focused', 'Disabled']),
-  type: PropTypes.oneOf([...SIDEBAR_TYPES, 'Expanded', 'Collapsed']),
+  state: PropTypes.oneOf([...SIDEBAR_ITEM_STATES, 'Default', 'Hover', 'Focused', 'Disabled']),
   className: PropTypes.string,
   onClick: PropTypes.func,
 };
 
 function SidebarSection({
   activeItemId,
-  collapsed,
   items,
   onItemSelect,
   title,
@@ -305,20 +281,15 @@ function SidebarSection({
       aria-label={title}
       className="flex w-full flex-col gap-2"
     >
-      {!collapsed && (
-        <Text
-          as="h3"
-          variant="text-xs"
-          weight="medium"
-          className="storybook-sidebar-section__title w-full uppercase text-neutral-600"
-        >
-          {title}
-        </Text>
-      )}
-      <div className={buildClassName([
-        'flex w-full flex-col',
-        collapsed && 'items-center',
-      ])}>
+      <Text
+        as="h3"
+        variant="text-xs"
+        weight="medium"
+        className="w-full uppercase tracking-[0.2em] text-neutral-600"
+      >
+        {title}
+      </Text>
+      <div className="flex w-full flex-col">
         {items.map((item) => {
           const itemId = item.id ?? item.label;
           const isActive = itemId === activeItemId;
@@ -330,7 +301,6 @@ function SidebarSection({
               label={item.label}
               pressed={isActive}
               state={item.disabled ? 'disabled' : item.state ?? 'default'}
-              type={collapsed ? 'collapsed' : 'expanded'}
               onClick={() => onItemSelect?.(item, itemId)}
             />
           );
@@ -342,20 +312,18 @@ function SidebarSection({
 
 SidebarSection.propTypes = {
   activeItemId: PropTypes.string,
-  collapsed: PropTypes.bool,
   items: PropTypes.arrayOf(PropTypes.shape({
     disabled: PropTypes.bool,
     icon: PropTypes.oneOf(ICON_NAMES),
     id: PropTypes.string,
     label: PropTypes.string.isRequired,
-    state: PropTypes.oneOf([...ITEM_STATES, 'Default', 'Hover', 'Focused', 'Disabled']),
+    state: PropTypes.oneOf([...SIDEBAR_ITEM_STATES, 'Default', 'Hover', 'Focused', 'Disabled']),
   })).isRequired,
   onItemSelect: PropTypes.func,
   title: PropTypes.string.isRequired,
 };
 
 export function Sidebar({
-  type = 'expanded',
   activeItemId = 'active-theme',
   avatarLabel = 'Superfans',
   avatarMeta = '12023',
@@ -369,11 +337,6 @@ export function Sidebar({
   onLogout,
   onStoreChange,
 }) {
-  const normalizedType = normalizeValue(type, {
-    Expanded: 'expanded',
-    Collapsed: 'collapsed',
-  });
-  const isCollapsed = normalizedType === 'collapsed';
   const [selectedItemId, setSelectedItemId] = useState(activeItemId);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isPreviewLinkCopied, setIsPreviewLinkCopied] = useState(false);
@@ -484,98 +447,78 @@ export function Sidebar({
 
   return (
     <aside
-      className={getSidebarShellClassName({
-        isCollapsed,
-        className,
-      })}
+      className={getSidebarShellClassName(className)}
     >
       <div className="flex flex-col gap-6 pt-6">
         <div className="flex flex-col gap-4">
-          <header className={buildClassName([
-            'storybook-sidebar-brand-header flex h-[40px] items-center',
-            isCollapsed ? 'justify-center p-0' : 'px-4',
-          ])}>
+          <header className="storybook-sidebar-brand-header flex h-10 items-center px-4">
             <div className="inline-flex h-full items-center">
               <SuperfansBrand
-                alt={isCollapsed ? brandLabel : `${brandLabel} logo`}
-                variant={isCollapsed ? 'mark' : 'logo'}
+                alt={`${brandLabel} logo`}
+                variant="logo"
               />
             </div>
           </header>
 
-          {!isCollapsed ? (
-            <div className="px-4">
-              <div className="relative">
-                <button
-                  ref={storeButtonRef}
-                  type="button"
-                  aria-expanded={isStoreDropdownOpen}
-                  aria-controls="storybook-sidebar-store-dropdown"
-                  className="storybook-sidebar-store box-border flex h-11 w-full cursor-pointer items-center justify-between gap-2 rounded-2 border border-solid border-neutral-200 bg-neutral-0 px-[14px] py-2.5 focus-visible:outline-none focus-visible:shadow-focus-brand"
-                  onClick={() => setIsStoreDropdownOpen((currentValue) => !currentValue)}
+          <div className="px-4">
+            <div className="relative">
+              <button
+                ref={storeButtonRef}
+                type="button"
+                aria-expanded={isStoreDropdownOpen}
+                aria-controls="storybook-sidebar-store-dropdown"
+                className="storybook-sidebar-store box-border flex h-11 w-full cursor-pointer items-center justify-between gap-2 rounded-2 border border-solid border-neutral-200 bg-neutral-0 px-[14px] py-2.5 focus-visible:outline-none focus-visible:shadow-focus-brand"
+                onClick={() => setIsStoreDropdownOpen((currentValue) => !currentValue)}
+              >
+                <Text
+                  as="span"
+                  variant="text-sm"
+                  weight="regular"
+                  className={buildClassName([
+                    'min-w-0 overflow-hidden text-ellipsis whitespace-nowrap',
+                    selectedStore ? 'text-neutral-700' : 'text-neutral-300',
+                  ])}
                 >
-                  <Text
-                    as="span"
-                    variant="text-sm"
-                    weight="regular"
-                    className={buildClassName([
-                      'min-w-0 overflow-hidden text-ellipsis whitespace-nowrap',
-                      selectedStore ? 'text-neutral-700' : 'text-neutral-300',
-                    ])}
-                  >
-                    {selectedStore?.name ?? storePlaceholder}
-                  </Text>
-                  <CaretUpDown
-                    aria-hidden="true"
-                    className="size-5 shrink-0 text-neutral-600"
-                    size={20}
-                    weight="regular"
-                  />
-                </button>
+                  {selectedStore?.name ?? storePlaceholder}
+                </Text>
+                <CaretUpDown
+                  aria-hidden="true"
+                  className="size-5 shrink-0 text-neutral-600"
+                  size={20}
+                  weight="regular"
+                />
+              </button>
 
-                {isStoreDropdownOpen && (
-                  <div
-                    ref={storeDropdownRef}
-                    id="storybook-sidebar-store-dropdown"
-                    className="storybook-sidebar-store-dropdown absolute inset-x-0 z-20"
-                  >
-                    <DropdownList
-                      items={storeOptions.map((store) => ({
-                        label: store.name,
-                        value: store.id,
-                      }))}
-                      selectedValues={selectedStore ? [selectedStore.id] : []}
-                      variant="check-right"
-                      fullWidth
-                      onItemSelect={handleStoreSelect}
-                    />
-                  </div>
-                )}
-              </div>
+              {isStoreDropdownOpen && (
+                <div
+                  ref={storeDropdownRef}
+                  id="storybook-sidebar-store-dropdown"
+                  className="storybook-sidebar-store-dropdown absolute inset-x-0 top-[calc(100%+8px)] z-20"
+                >
+                  <DropdownList
+                    items={storeOptions.map((store) => ({
+                      label: store.name,
+                      value: store.id,
+                    }))}
+                    selectedValues={selectedStore ? [selectedStore.id] : []}
+                    variant="check-right"
+                    fullWidth
+                    onItemSelect={handleStoreSelect}
+                  />
+                </div>
+              )}
             </div>
-          ) : (
-            <button
-              type="button"
-              aria-label="Switch store"
-              className="storybook-sidebar-icon-button inline-flex cursor-pointer items-center justify-center self-center rounded-2 border border-solid border-neutral-100 bg-neutral-0 p-2 text-neutral-600 focus-visible:outline-none focus-visible:shadow-focus-brand"
-            >
-              {renderSidebarIcon('repeat', 'storybook-sidebar-icon-button__icon size-[18px] shrink-0')}
-            </button>
-          )}
+          </div>
         </div>
 
         <nav
           aria-label="Sidebar navigation"
-          className={buildClassName([
-            'flex flex-col gap-6',
-            isCollapsed ? 'items-center px-3' : 'px-4',
-          ])}
+          className="flex flex-col gap-6 px-4"
         >
           {sections.map((section) => (
             <SidebarSection
               key={section.title}
               activeItemId={selectedItemId}
-              collapsed={isCollapsed}
               items={section.items}
               title={section.title}
               onItemSelect={handleItemSelect}
@@ -584,83 +527,69 @@ export function Sidebar({
         </nav>
       </div>
 
-      <footer className={buildClassName([
-        'flex flex-col gap-4',
-        isCollapsed ? 'items-center justify-center px-3 pb-6' : 'px-4 pb-6',
-      ])}>
+      <footer className="flex flex-col gap-4 px-4 pb-6">
         <div className="flex items-center gap-3">
           <SuperfansBrand
             alt=""
-            sidebarCollapsed={isCollapsed}
             variant="avatar"
           />
-          {!isCollapsed && (
-            <div className="flex flex-col">
-              <Text
-                as="span"
-                variant="text-sm"
-                weight="bold"
-                className="text-neutral-900"
-              >
-                {selectedStore?.name ?? avatarLabel}
-              </Text>
-              <Text
-                as="span"
-                variant="text-xs"
-                weight="regular"
-                className="storybook-sidebar-account__meta text-neutral-600"
-              >
-                {selectedStore?.code ?? avatarMeta}
-              </Text>
-            </div>
-          )}
+          <div className="flex flex-col">
+            <Text
+              as="span"
+              variant="text-sm"
+              weight="bold"
+              className="text-neutral-900"
+            >
+              {selectedStore?.name ?? avatarLabel}
+            </Text>
+            <Text
+              as="span"
+              variant="text-xs"
+              weight="regular"
+              className="tracking-[0.2em] text-neutral-600"
+            >
+              {selectedStore?.code ?? avatarMeta}
+            </Text>
+          </div>
         </div>
 
         <span className="h-px w-full bg-neutral-100" />
 
-        <div className={buildClassName([
-          'flex items-center gap-3',
-          isCollapsed ? 'justify-center' : 'justify-between',
-        ])}>
+        <div className="flex items-center justify-between gap-3">
           <button
             ref={previewButtonRef}
             type="button"
-            aria-label={isCollapsed ? 'Preview' : undefined}
             aria-expanded={isPreviewOpen}
             aria-controls="storybook-sidebar-preview-popover"
             className={getSidebarActionClassName()}
             onClick={handlePreviewClick}
           >
             {renderSidebarIcon('camera', 'storybook-sidebar-action__icon size-[18px] shrink-0')}
-            {!isCollapsed && (
-              <Text
-                as="span"
-                variant="text-xs"
-                weight="semibold"
-                color="currentColor"
-              >
-                Preview
-              </Text>
-            )}
+            <Text
+              as="span"
+              variant="text-xs"
+              weight="semibold"
+              color="currentColor"
+            >
+              Preview
+            </Text>
           </button>
 
-          {!isCollapsed && (
-            <button
-              type="button"
-              className={getSidebarActionClassName(true)}
-              onClick={onLogout}
+          <button
+            type="button"
+            className={getSidebarActionClassName(true)}
+            onClick={onLogout}
+          >
+            {renderSidebarIcon('sign-out', 'storybook-sidebar-action__icon size-[18px] shrink-0')}
+            <Text
+              as="span"
+              variant="text-xs"
+              weight="semibold"
+              color="currentColor"
             >
-              {renderSidebarIcon('sign-out', 'storybook-sidebar-action__icon size-[18px] shrink-0')}
-              <Text
-                as="span"
-                variant="text-xs"
-                weight="semibold"
-                color="currentColor"
-              >
-                Logout
-              </Text>
-            </button>
-          )}
+              Logout
+            </Text>
+          </button>
         </div>
       </footer>
 
@@ -737,12 +666,11 @@ const sectionShape = PropTypes.shape({
     icon: PropTypes.oneOf(ICON_NAMES),
     id: PropTypes.string,
     label: PropTypes.string.isRequired,
-    state: PropTypes.oneOf([...ITEM_STATES, 'Default', 'Hover', 'Focused', 'Disabled']),
+    state: PropTypes.oneOf([...SIDEBAR_ITEM_STATES, 'Default', 'Hover', 'Focused', 'Disabled']),
   })).isRequired,
 });
 
 Sidebar.propTypes = {
-  type: PropTypes.oneOf([...SIDEBAR_TYPES, 'Expanded', 'Collapsed']),
   activeItemId: PropTypes.string,
   avatarLabel: PropTypes.string,
   avatarMeta: PropTypes.string,

@@ -190,7 +190,7 @@ export function MultiselectTwoLine({
               {selectedItems.map((item) => (
                 <Chip
                   key={item.value}
-                  type="button"
+                  type="chip-button"
                   label={item.label}
                   size="md"
                   shape="rounded"

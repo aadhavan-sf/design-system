@@ -1,11 +1,5 @@
 @import './sliderTrack.css';
 
-input[type='range'].storybook-slider__input {
-  margin: 0;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
 .storybook-slider__steps {
   position: absolute;
   top: 50%;

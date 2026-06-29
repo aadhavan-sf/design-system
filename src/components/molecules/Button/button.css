@@ -49,23 +49,6 @@
   align-items: center;
 }
 
-.storybook-button--secondary {
-  border: 0;
-  box-shadow: inset 0 0 0 1px var(--neutral_300);
-}
-
-.storybook-button--secondary.storybook-button--focus,
-.storybook-button--secondary:focus-visible {
-  box-shadow:
-    inset 0 0 0 1px var(--neutral_300),
-    var(--shadow_focus-neutral);
-}
-
-.storybook-button--secondary:disabled,
-.storybook-button--secondary.storybook-button--disabled {
-  box-shadow: inset 0 0 0 1px var(--neutral_200);
-}
-
 .storybook-button--primary,
 .storybook-button--primary-destructive {
   border: 0;

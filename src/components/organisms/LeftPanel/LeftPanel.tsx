@@ -25,12 +25,12 @@ const ITEM_STATES = ['default', 'hover', 'focused', 'disabled'];
 const STATUS_OPTIONS = ['draft', 'active'];
 
 const DEFAULT_BLOCK_ITEMS = [
-  { id: 'image-banner', label: 'Imager Banner' },
+  { id: 'image-carousel', label: 'Image Carousel' },
+  { id: 'spacer', label: 'Spacer' },
+  { id: 'image-banner', label: 'Image Banner' },
+  { id: 'promo-banner', label: 'Promo Banner' },
   { id: 'content-block', label: 'Content Block' },
-  { id: 'product-carousel', label: 'Product Carousel' },
-  { id: 'custom-blocks-1', label: 'Custom Blocks #1' },
   { id: 'image-slider', label: 'Image Slider' },
-  { id: 'content-block-2', label: 'Content Block' },
 ];
 
 const DEFAULT_FIXED_ITEMS = [
@@ -66,12 +66,116 @@ function buildClassName(parts) {
   return parts.flat().filter(Boolean).join(' ');
 }
 
+function getDragItemButtonRect(itemGroupNode) {
+  const button = itemGroupNode?.querySelector('.storybook-left-panel-item');
+
+  return button?.getBoundingClientRect() ?? itemGroupNode?.getBoundingClientRect();
+}
+
+function clampDragTop({
+  dragTop,
+  itemHeight,
+  panelRect,
+  sectionNode,
+}) {
+  if (!panelRect || !sectionNode) {
+    return dragTop;
+  }
+
+  const sectionRect = sectionNode.getBoundingClientRect();
+  const minTop = sectionRect.top - panelRect.top;
+  const maxTop = sectionRect.bottom - panelRect.top - itemHeight;
+
+  return Math.min(Math.max(dragTop, minTop), Math.max(minTop, maxTop));
+}
+
+const LEFT_PANEL_BUTTON_VISUAL_RESET =
+  'm-0 appearance-none cursor-pointer focus-visible:outline-none disabled:cursor-not-allowed';
+
+const LEFT_PANEL_ITEM_ACTIONS_WIDTH_VAR =
+  '[--left-panel-item-actions-width:calc((20px*2)+var(--size\\_3))]';
+
+const LEFT_PANEL_MAIN_SHRINK_CLASS =
+  'max-w-[calc(100%-var(--left-panel-item-actions-width)-var(--size\\_2))] overflow-hidden';
+
+function getLeftPanelItemMainClassName({
+  deleting,
+  dragging,
+  forceShowActions,
+  hidden,
+  isDisabled,
+  isFocused,
+  isInteractionHovered,
+  isRowHovered,
+  isStorybookHover,
+  pressed,
+  showHiddenTrash,
+}) {
+  const shouldShrinkMain = !hidden && (
+    deleting
+    || forceShowActions
+    || dragging
+    || isInteractionHovered
+    || (pressed && isDisabled && isInteractionHovered)
+  );
+  const shouldExpandMainForFocus = isFocused
+    && !isStorybookHover
+    && !pressed
+    && !isRowHovered;
+
+  return buildClassName([
+    'storybook-left-panel-item__main flex min-w-0 flex-[1_1_0] items-center gap-2',
+    hidden && (showHiddenTrash
+      ? 'storybook-left-panel-item__main--actions-expanded max-w-[calc(100%-var(--left-panel-item-actions-width)-var(--size\\_2))] overflow-hidden'
+      : 'storybook-left-panel-item__main--actions-single max-w-[calc(100%-20px-var(--size\\_2))] overflow-hidden'),
+    shouldShrinkMain && LEFT_PANEL_MAIN_SHRINK_CLASS,
+    shouldExpandMainForFocus && !shouldShrinkMain && 'max-w-none',
+  ]);
+}
+
+function getLeftPanelItemActionsClassName({
+  deleting,
+  dragging,
+  forceShowActions,
+  hasActions,
+  hidden,
+  isDisabled,
+  isInactive,
+  isInteractionHovered,
+  pressed,
+  showHiddenTrash,
+}) {
+  const shouldHideActions = isDisabled && !pressed;
+  const isDisabledPressedHover = isDisabled && pressed && isInteractionHovered;
+  const shouldRevealActions = !shouldHideActions && (
+    hidden
+    || dragging
+    || deleting
+    || forceShowActions
+    || isDisabledPressedHover
+    || (!hidden && isInteractionHovered)
+  );
+
+  return buildClassName([
+    'storybook-left-panel-item__actions absolute right-2 inline-flex w-[var(--left-panel-item-actions-width)] flex-none items-center justify-end',
+    shouldRevealActions ? 'translate-x-0 opacity-100' : 'translate-x-3 opacity-0',
+    shouldRevealActions && !isDisabledPressedHover && 'pointer-events-auto',
+    (!shouldRevealActions || isDisabledPressedHover) && 'pointer-events-none',
+    hidden && (showHiddenTrash
+      ? 'storybook-left-panel-item__actions--expanded w-[var(--left-panel-item-actions-width)] gap-3'
+      : 'storybook-left-panel-item__actions--single w-5 gap-0'),
+    !hidden && 'gap-3',
+    isInactive && 'text-neutral-600',
+    !isInactive && 'text-current',
+  ]);
+}
+
 function getLeftPanelShellClassName({
   className,
   isThemeSettings,
 }) {
   return buildClassName([
-    'storybook-left-panel box-border flex h-full min-h-0 w-full flex-col overflow-hidden rounded-6 border border-solid border-neutral-100 bg-neutral-0 p-6 font-sans',
+    'storybook-left-panel relative box-border flex h-full min-h-0 w-full flex-col overflow-hidden rounded-6 border border-solid border-neutral-100 bg-neutral-0 p-6 font-sans',
     isThemeSettings ? 'justify-start' : 'justify-between',
     className,
   ]);
@@ -118,19 +222,31 @@ function getLeftPanelFooterClassName() {
 }
 
 function getLeftPanelFooterButtonClassName() {
-  return 'storybook-left-panel-footer__button inline-flex w-[calc(100%-3rem)] items-center justify-center gap-2 rounded-2 border-0 bg-transparent px-3 py-2 font-sans text-neutral-700 focus-visible:shadow-focus-brand';
+  return buildClassName([
+    'storybook-left-panel-footer__button inline-flex w-[calc(100%-3rem)] items-center justify-center gap-2 rounded-2 border-0 bg-transparent px-3 py-2 font-sans text-neutral-700 focus-visible:shadow-focus-brand',
+    LEFT_PANEL_BUTTON_VISUAL_RESET,
+  ]);
 }
 
 function getLeftPanelBackButtonClassName() {
-  return 'storybook-left-panel__back inline-flex size-5 shrink-0 items-center justify-center rounded-2 border-0 bg-transparent p-0 text-neutral-900 focus-visible:shadow-focus-brand';
+  return buildClassName([
+    'storybook-left-panel__back inline-flex size-5 shrink-0 items-center justify-center rounded-2 border-0 bg-transparent p-0 text-neutral-900 focus-visible:shadow-focus-brand',
+    LEFT_PANEL_BUTTON_VISUAL_RESET,
+  ]);
 }
 
 function getLeftPanelAddButtonClassName() {
-  return 'storybook-left-panel-add inline-flex shrink-0 items-center justify-center gap-2 rounded-2 border border-solid border-neutral-300 bg-neutral-0 px-3 py-2 font-sans text-neutral-700 focus-visible:shadow-focus-brand';
+  return buildClassName([
+    'storybook-left-panel-add inline-flex shrink-0 items-center justify-center gap-2 rounded-2 border border-solid border-neutral-300 bg-neutral-0 px-3 py-2 font-sans text-neutral-700 focus-visible:shadow-focus-brand',
+    LEFT_PANEL_BUTTON_VISUAL_RESET,
+  ]);
 }
 
 function getLeftPanelInsertClassName() {
-  return 'storybook-left-panel-insert flex h-4 w-full items-center justify-center border-0 bg-transparent p-0 text-brand-400 opacity-0';
+  return buildClassName([
+    'storybook-left-panel-insert flex h-4 w-full items-center justify-center border-0 bg-transparent p-0 text-brand-400 opacity-0 hover:opacity-100 focus-visible:opacity-100',
+    LEFT_PANEL_BUTTON_VISUAL_RESET,
+  ]);
 }
 
 function getLeftPanelItemClassName({
@@ -139,7 +255,7 @@ function getLeftPanelItemClassName({
   hidden,
   deleting,
   dragging,
-  forceShowActions,
+  isFrameDragging,
   className,
 }) {
   const isDisabled = state === 'disabled';
@@ -147,7 +263,13 @@ function getLeftPanelItemClassName({
   const isFocused = state === 'focused';
 
   return buildClassName([
-    'storybook-left-panel-item relative box-border flex h-11 w-full items-center justify-center rounded-2 border border-solid px-2 py-3 text-left font-sans focus-visible:shadow-focus-brand',
+    'storybook-left-panel-item box-border flex h-11 w-full items-center rounded-2 border border-solid px-2 py-3 text-left font-sans focus-visible:shadow-focus-brand',
+    isFrameDragging ? 'absolute z-[60]' : 'relative',
+    LEFT_PANEL_BUTTON_VISUAL_RESET,
+    LEFT_PANEL_ITEM_ACTIONS_WIDTH_VAR,
+    hidden || dragging || (isHover && !hidden) || (pressed && isDisabled && isHover)
+      ? 'justify-between'
+      : 'justify-center hover:justify-between',
     !pressed && !hidden && !dragging && 'border-transparent',
     !pressed && !hidden && !isDisabled && !dragging && 'bg-transparent text-neutral-700 hover:bg-neutral-25 hover:text-neutral-700',
     !pressed && !hidden && isHover && 'bg-neutral-25 text-neutral-700',
@@ -157,17 +279,11 @@ function getLeftPanelItemClassName({
     pressed && !hidden && !isDisabled && isHover && 'border-brand-400 bg-brand-25 text-brand-400',
     pressed && !hidden && !isDisabled && isFocused && 'border-brand-400 bg-brand-25 text-brand-400 shadow-focus-brand',
     hidden && 'border-transparent bg-transparent text-neutral-700 hover:border-transparent hover:bg-neutral-25 hover:text-neutral-700',
-    dragging && 'pointer-events-none border-brand-400 bg-brand-25 text-brand-400 shadow-lg z-[3]',
+    dragging && 'pointer-events-none cursor-grabbing border-brand-400 bg-brand-25 text-brand-400 shadow-lg',
+    deleting && 'pointer-events-none storybook-left-panel-item--deleting',
     isDisabled && !pressed && 'border-transparent bg-neutral-50 text-neutral-300',
     pressed && isDisabled && 'border-brand-200 bg-brand-25 text-brand-200',
-    isHover && 'storybook-left-panel-item--hover',
-    isFocused && 'storybook-left-panel-item--focused',
-    pressed && 'storybook-left-panel-item--pressed',
-    hidden && 'storybook-left-panel-item--hidden',
-    deleting && 'storybook-left-panel-item--deleting',
     dragging && 'storybook-left-panel-item--dragging',
-    forceShowActions && 'storybook-left-panel-item--actions-visible',
-    isDisabled && 'storybook-left-panel-item--disabled',
     className,
   ]);
 }
@@ -180,6 +296,7 @@ function getLeftPanelMenuItemClassName({
 
   return buildClassName([
     'storybook-left-panel-menu-item box-border flex w-full items-center gap-2 rounded-2 border border-solid p-3 text-left font-sans focus-visible:shadow-focus-brand',
+    LEFT_PANEL_BUTTON_VISUAL_RESET,
     pressed && !isDisabled && 'border-brand-400 bg-brand-25 text-brand-400',
     pressed && !isDisabled && state === 'hover' && 'bg-brand-25',
     pressed && !isDisabled && state === 'focused' && 'border-brand-400 bg-brand-25 shadow-focus-brand',
@@ -264,7 +381,7 @@ ThemeStatus.propTypes = {
 
 export function LeftPanelItem({
   deleting = false,
-  dragOffsetY = 0,
+  dragPositionStyle,
   dragging = false,
   hidden = false,
   label = 'Imager Banner',
@@ -286,10 +403,12 @@ export function LeftPanelItem({
   const resolvedState = getResolvedState(state);
   const isDisabled = resolvedState === 'disabled';
   const isStorybookHover = resolvedState === 'hover';
+  const isFocused = resolvedState === 'focused';
   const isInteractionHovered = isRowHovered || isStorybookHover;
   const showHiddenTrash = hidden && isInteractionHovered && !suppressHiddenTrash;
   const hasActions = showActions ?? !locked;
   const forceShowActions = showActions === true;
+  const isFrameDragging = dragging && Boolean(dragPositionStyle);
   const LeadingIcon = locked ? LockSimple : DotsSixVertical;
   const isRestoringVisibility =
     visibilityAnimating && visibilityAnimationDirection === 'show';
@@ -306,10 +425,14 @@ export function LeftPanelItem({
         hidden,
         deleting,
         dragging,
-        forceShowActions,
+        isFrameDragging,
         className,
       })}
-      style={dragging ? { '--left-panel-drag-offset': `${dragOffsetY}px` } : undefined}
+      style={isFrameDragging ? {
+        top: dragPositionStyle.top,
+        left: dragPositionStyle.left,
+        width: dragPositionStyle.width,
+      } : undefined}
       onClick={isDisabled ? undefined : onClick}
       onPointerEnter={() => setIsRowHovered(true)}
       onPointerLeave={() => {
@@ -317,16 +440,25 @@ export function LeftPanelItem({
         onPointerLeave?.();
       }}
     >
-      <span className={buildClassName([
-        'storybook-left-panel-item__main flex min-w-0 flex-[1_1_0] items-center gap-2',
-        hidden && (showHiddenTrash
-          ? 'storybook-left-panel-item__main--actions-expanded'
-          : 'storybook-left-panel-item__main--actions-single'),
-      ])}>
+      <span className={getLeftPanelItemMainClassName({
+        deleting,
+        dragging,
+        forceShowActions,
+        hidden,
+        isDisabled,
+        isFocused,
+        isInteractionHovered,
+        isRowHovered,
+        isStorybookHover,
+        pressed,
+        showHiddenTrash,
+      })}>
         <LeadingIcon
           aria-hidden="true"
           className={buildClassName([
             'storybook-left-panel-item__leading-icon size-5 shrink-0',
+            !locked && 'cursor-grab touch-none',
+            dragging && !locked && 'cursor-grabbing',
             isInactive && 'text-neutral-600',
             !isInactive && 'text-current',
           ])}
@@ -349,19 +481,22 @@ export function LeftPanelItem({
         </Text>
       </span>
       {hasActions && (
-        <span className={buildClassName([
-          'storybook-left-panel-item__actions absolute right-2 inline-flex flex-none items-center justify-end',
-          !hidden && 'gap-3',
-          hidden && (showHiddenTrash
-            ? 'storybook-left-panel-item__actions--expanded'
-            : 'storybook-left-panel-item__actions--single'),
-          isInactive && 'text-neutral-600',
-          !isInactive && 'text-current',
-        ])}>
+        <span className={getLeftPanelItemActionsClassName({
+          deleting,
+          dragging,
+          forceShowActions,
+          hasActions,
+          hidden,
+          isDisabled,
+          isInactive,
+          isInteractionHovered,
+          pressed,
+          showHiddenTrash,
+        })}>
           <span
             aria-label={hidden ? 'Show block' : 'Hide block'}
             className={buildClassName([
-              'storybook-left-panel-item__action storybook-left-panel-item__action--visibility relative inline-flex size-5 shrink-0 items-center justify-center rounded-1',
+              'storybook-left-panel-item__action storybook-left-panel-item__action--visibility relative inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-1 text-current',
               visibilityAnimating && 'storybook-left-panel-item__action--visibility-animating',
               visibilityAnimating &&
                 visibilityAnimationDirection === 'show' &&
@@ -382,10 +517,10 @@ export function LeftPanelItem({
           <span
             aria-label="Delete block"
             className={buildClassName([
-              'storybook-left-panel-item__action storybook-left-panel-item__action--delete relative inline-flex size-5 shrink-0 items-center justify-center rounded-1',
+              'storybook-left-panel-item__action storybook-left-panel-item__action--delete relative inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-1 text-current',
               hidden && (showHiddenTrash
-                ? 'storybook-left-panel-item__action--delete-visible'
-                : 'storybook-left-panel-item__action--delete-collapsed'),
+                ? 'storybook-left-panel-item__action--delete-visible w-5 min-w-5 translate-x-0 opacity-100 pointer-events-auto'
+                : 'storybook-left-panel-item__action--delete-collapsed w-0 min-w-0 translate-x-3 overflow-hidden opacity-0 pointer-events-none'),
             ])}
             role="button"
             tabIndex={isDisabled ? -1 : 0}
@@ -406,7 +541,11 @@ export function LeftPanelItem({
 
 LeftPanelItem.propTypes = {
   deleting: PropTypes.bool,
-  dragOffsetY: PropTypes.number,
+  dragPositionStyle: PropTypes.shape({
+    top: PropTypes.number.isRequired,
+    left: PropTypes.number.isRequired,
+    width: PropTypes.number.isRequired,
+  }),
   dragging: PropTypes.bool,
   hidden: PropTypes.bool,
   label: PropTypes.string,
@@ -426,6 +565,7 @@ LeftPanelItem.propTypes = {
 };
 
 function LeftPanelInsertControl({
+  className,
   label = 'Add block here',
   onClick,
 }) {
@@ -433,7 +573,10 @@ function LeftPanelInsertControl({
     <button
       type="button"
       aria-label={label}
-      className={getLeftPanelInsertClassName()}
+      className={buildClassName([
+        getLeftPanelInsertClassName(),
+        className,
+      ])}
       onClick={onClick}
     >
       <span className="h-0.5 flex-[1_1_0] bg-current" />
@@ -449,6 +592,7 @@ function LeftPanelInsertControl({
 }
 
 LeftPanelInsertControl.propTypes = {
+  className: PropTypes.string,
   label: PropTypes.string,
   onClick: PropTypes.func,
 };
@@ -594,7 +738,7 @@ FooterAction.propTypes = {
 
 function BlockSection({
   activeDragItemId,
-  activeDragOffsetY = 0,
+  activeDragPositionStyle,
   deletingItemIds = [],
   hiddenItemIds = [],
   hiddenTrashSuppressedItemIds = [],
@@ -644,9 +788,15 @@ function BlockSection({
               className="storybook-left-panel-section__item-group flex w-full flex-col"
               ref={(node) => getItemRef?.(resolvedSectionKey, itemId, node)}
             >
+              {isDragging && (
+                <div
+                  aria-hidden="true"
+                  className="h-11 w-full shrink-0"
+                />
+              )}
               <LeftPanelItem
                 deleting={isDeleting}
-                dragOffsetY={isDragging ? activeDragOffsetY : 0}
+                dragPositionStyle={isDragging ? activeDragPositionStyle : undefined}
                 dragging={isDragging}
                 hidden={isHidden}
                 label={item.label}
@@ -668,6 +818,7 @@ function BlockSection({
               />
               {index < items.length - 1 && (
                 <LeftPanelInsertControl
+                  className={activeDragItemId ? 'pointer-events-none opacity-0' : undefined}
                   onClick={(event) => onInsertBlock?.({
                     afterItem: item,
                     afterItemId: itemId,
@@ -686,7 +837,11 @@ function BlockSection({
 
 BlockSection.propTypes = {
   activeDragItemId: PropTypes.string,
-  activeDragOffsetY: PropTypes.number,
+  activeDragPositionStyle: PropTypes.shape({
+    top: PropTypes.number.isRequired,
+    left: PropTypes.number.isRequired,
+    width: PropTypes.number.isRequired,
+  }),
   deletingItemIds: PropTypes.arrayOf(PropTypes.string),
   hiddenItemIds: PropTypes.arrayOf(PropTypes.string),
   hiddenTrashSuppressedItemIds: PropTypes.arrayOf(PropTypes.string),
@@ -791,7 +946,7 @@ export function LeftPanel({
   const resolvedPageTitle = pageTitle ?? (isThemeSettings ? 'Theme Settings' : 'Home');
   const shouldShowScrollSection = showScrollSection ?? scrollItems.length > 0;
   const initialSelectedItem = selectedItemId ?? (
-    isThemeSettings ? 'app-styling' : 'custom-blocks-1'
+    isThemeSettings ? 'app-styling' : 'image-slider'
   );
   const [internalSelectedItemId, setInternalSelectedItemId] = useState(initialSelectedItem);
   const [deletedItemIds, setDeletedItemIds] = useState([]);
@@ -807,6 +962,7 @@ export function LeftPanel({
   const animationTimeoutsRef = useRef([]);
   const dragStateRef = useRef(null);
   const itemRefs = useRef({});
+  const panelContainerRef = useRef(null);
   const sectionRefs = useRef({});
   const visibleFixedItems = orderedFixedItems.filter((item) => !deletedItemIds.includes(item.id ?? item.label));
   const visibleSecondaryFixedItems = orderedSecondaryFixedItems.filter(
@@ -827,6 +983,20 @@ export function LeftPanel({
       return undefined;
     }
 
+    document.body.style.cursor = 'grabbing';
+    document.body.style.userSelect = 'none';
+
+    return () => {
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+  }, [dragState]);
+
+  useEffect(() => {
+    if (!dragState) {
+      return undefined;
+    }
+
     const handlePointerMove = (event) => {
       const currentDragState = dragStateRef.current;
 
@@ -834,13 +1004,22 @@ export function LeftPanel({
         return;
       }
 
-      const nextOffset = Math.min(
-        Math.max(event.clientY - currentDragState.startY, currentDragState.minOffset),
-        currentDragState.maxOffset
-      );
+      const panelRect = panelContainerRef.current?.getBoundingClientRect();
+
+      if (!panelRect) {
+        return;
+      }
+
+      let dragTop = event.clientY - currentDragState.pointerOffsetY - panelRect.top;
+      dragTop = clampDragTop({
+        dragTop,
+        itemHeight: currentDragState.itemHeight,
+        panelRect,
+        sectionNode: sectionRefs.current[currentDragState.sectionKey],
+      });
 
       setDragState((currentState) => (
-        currentState ? { ...currentState, offsetY: nextOffset } : currentState
+        currentState ? { ...currentState, dragTop } : currentState
       ));
 
       const sectionItems = currentDragState.sectionKey === 'fixed'
@@ -897,15 +1076,11 @@ export function LeftPanel({
         setOrderedScrollItems(moveItem);
       }
 
-      const nextDragState = {
+      dragStateRef.current = {
         ...currentDragState,
         lastTargetItemId: targetItemId,
-        offsetY: 0,
-        startY: event.clientY,
+        dragTop,
       };
-
-      dragStateRef.current = nextDragState;
-      setDragState(nextDragState);
     };
 
     const handlePointerUp = () => {
@@ -1044,12 +1219,11 @@ export function LeftPanel({
     event.preventDefault();
     event.stopPropagation();
 
-    const itemNode = itemRefs.current[sectionKey]?.[itemId];
-    const sectionNode = sectionRefs.current[sectionKey];
-    const itemRect = itemNode?.getBoundingClientRect();
-    const sectionRect = sectionNode?.getBoundingClientRect();
+    const itemGroupNode = itemRefs.current[sectionKey]?.[itemId];
+    const itemRect = getDragItemButtonRect(itemGroupNode);
+    const panelRect = panelContainerRef.current?.getBoundingClientRect();
 
-    if (!itemRect || !sectionRect) {
+    if (!itemRect || !panelRect) {
       return;
     }
 
@@ -1058,15 +1232,26 @@ export function LeftPanel({
       item,
       itemId,
       sectionKey,
-      startY: event.clientY,
-      offsetY: 0,
-      minOffset: sectionRect.top - itemRect.top,
-      maxOffset: sectionRect.bottom - itemRect.bottom,
+      pointerOffsetY: event.clientY - itemRect.top,
+      dragTop: itemRect.top - panelRect.top,
+      dragLeft: itemRect.left - panelRect.left,
+      itemWidth: itemRect.width,
+      itemHeight: itemRect.height,
+      lastTargetItemId: null,
     });
   };
 
+  const activeDragPositionStyle = dragState
+    ? {
+      top: dragState.dragTop,
+      left: dragState.dragLeft,
+      width: dragState.itemWidth,
+    }
+    : undefined;
+
   return (
     <aside
+      ref={panelContainerRef}
       aria-label={resolvedPageTitle}
       className={getLeftPanelShellClassName({
         className,
@@ -1113,7 +1298,7 @@ export function LeftPanel({
                 <>
                   <BlockSection
                     activeDragItemId={dragState?.itemId}
-                    activeDragOffsetY={dragState?.offsetY ?? 0}
+                    activeDragPositionStyle={activeDragPositionStyle}
                     deletingItemIds={deletingItemIds}
                     hiddenItemIds={hiddenItemIds}
                     hiddenTrashSuppressedItemIds={hiddenTrashSuppressedItemIds}
@@ -1141,7 +1326,7 @@ export function LeftPanel({
                 <>
                   <BlockSection
                     activeDragItemId={dragState?.itemId}
-                    activeDragOffsetY={dragState?.offsetY ?? 0}
+                    activeDragPositionStyle={activeDragPositionStyle}
                     deletingItemIds={deletingItemIds}
                     hiddenItemIds={hiddenItemIds}
                     hiddenTrashSuppressedItemIds={hiddenTrashSuppressedItemIds}
@@ -1168,7 +1353,7 @@ export function LeftPanel({
               {shouldShowScrollSection && (
                 <BlockSection
                   activeDragItemId={dragState?.itemId}
-                  activeDragOffsetY={dragState?.offsetY ?? 0}
+                  activeDragPositionStyle={activeDragPositionStyle}
                   deletingItemIds={deletingItemIds}
                   hiddenItemIds={hiddenItemIds}
                   hiddenTrashSuppressedItemIds={hiddenTrashSuppressedItemIds}

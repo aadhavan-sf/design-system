@@ -42,28 +42,6 @@ button.storybook-dropdown-list__icon-picker-action {
   outline: none;
 }
 
-.storybook-dropdown-list__icon-picker-separator-line {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  left: 0;
-
-  transform: translateY(-50%);
-}
-
-.storybook-dropdown-list__icon-picker-upload-input {
-  position: absolute;
-
-  width: 1px;
-  height: 1px;
-
-  overflow: hidden;
-
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
 @keyframes storybook-dropdown-list-enter {
   0% {
     opacity: 0;

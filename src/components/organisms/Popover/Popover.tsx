@@ -176,7 +176,13 @@ function getPopoverClearButtonClassName() {
 }
 
 function getPopoverTabsClassName() {
-  return 'storybook-popover__tabs w-full gap-1.5';
+  return buildClassName([
+    'storybook-popover__tabs flex w-full gap-1.5',
+    '[&_.storybook-tab-item:nth-child(1)]:w-[70px]',
+    '[&_.storybook-tab-item:nth-child(2)]:w-[74px]',
+    '[&_.storybook-tab-item:nth-child(3)]:w-[63px]',
+    '[&_.storybook-tab-item[aria-selected=false]]:text-neutral-700',
+  ]);
 }
 
 function getPopoverEmptyStateIconShellClassName() {

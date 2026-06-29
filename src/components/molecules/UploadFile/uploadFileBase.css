@@ -23,15 +23,6 @@ button.storybook-upload-file-base:disabled {
   cursor: not-allowed;
 }
 
-.storybook-upload-file-base__title + .storybook-upload-file-base__description,
-.storybook-upload-file-base__title + .storybook-upload-file-base__support {
-  margin-top: var(--size_1);
-}
-
-.storybook-upload-file-base__description + .storybook-upload-file-base__support {
-  margin-top: var(--size_2);
-}
-
 .storybook-upload-file-base__title {
   line-height: var(--type-text-md-line);
 }

@@ -24,6 +24,9 @@ function buildClassName(parts: Array<string | false | null | undefined>) {
   return parts.flat().filter(Boolean).join(' ');
 }
 
+const SECONDARY_BORDER = 'border border-solid border-neutral-300';
+const SECONDARY_BORDER_DISABLED = 'border border-solid border-neutral-200';
+
 function getButtonVariantClasses({
   destructive,
   hierarchy,
@@ -85,17 +88,26 @@ function getButtonVariantClasses({
 
   if (hierarchy === 'secondary') {
     if (isDisabled) {
-      return 'storybook-button--secondary storybook-button--disabled bg-transparent text-neutral-300';
+      return buildClassName([
+        'storybook-button--secondary storybook-button--disabled bg-transparent text-neutral-300',
+        SECONDARY_BORDER_DISABLED,
+      ]);
     }
 
     if (isFocus) {
-      return 'storybook-button--secondary storybook-button--focus bg-transparent text-neutral-700';
+      return buildClassName([
+        'storybook-button--secondary storybook-button--focus bg-transparent text-neutral-700',
+        SECONDARY_BORDER,
+        'shadow-focus-neutral',
+      ]);
     }
 
-    return [
+    return buildClassName([
       'storybook-button--secondary bg-transparent text-neutral-700',
+      SECONDARY_BORDER,
       'enabled:hover:bg-neutral-50 enabled:hover:text-neutral-800',
-    ].join(' ');
+      'focus-visible:shadow-focus-neutral',
+    ]);
   }
 
   if (hierarchy === 'link-grey') {
@@ -152,7 +164,8 @@ function getButtonClassName({
   state: ButtonState;
 }) {
   return buildClassName([
-    'storybook-button box-border min-w-max rounded-ds border-0 font-sans font-semibold no-underline',
+    'storybook-button box-border min-w-max rounded-ds font-sans font-semibold no-underline',
+    hierarchy !== 'secondary' && 'border-0',
     getButtonVariantClasses({ destructive, hierarchy, state }),
     getButtonSizeClasses(size, isIconOnly, hierarchy),
     className,

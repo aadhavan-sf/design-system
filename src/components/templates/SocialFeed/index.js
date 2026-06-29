@@ -1,1 +1,0 @@
-export { SocialFeed } from './SocialFeed';

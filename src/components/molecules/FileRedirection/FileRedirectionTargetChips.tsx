@@ -6,8 +6,6 @@ import {
 } from './fileRedirection.constants';
 import { resolveFileRedirectionTarget } from './fileRedirectionStory.utils';
 
-import './fileRedirectionTargetChips.css';
-
 export interface FileRedirectionTargetChipsProps {
   disabled?: boolean;
   selectedTarget: NormalizedFileRedirectionTarget;
@@ -25,12 +23,13 @@ export function FileRedirectionTargetChips({
         <Chip
           key={targetOption}
           active={resolveFileRedirectionTarget(targetOption) === selectedTarget}
+          className="!px-2"
           disabled={disabled}
           label={targetOption}
           shape="pill"
           size="md"
           state={disabled ? 'disabled' : 'default'}
-          type="button"
+          type="chip-button"
           onClick={() => onTargetChange(targetOption)}
         />
       ))}

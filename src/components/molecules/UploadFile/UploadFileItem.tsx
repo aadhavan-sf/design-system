@@ -24,7 +24,6 @@ import {
 } from './uploadFile.constants';
 
 import './uploadFileDashedBorder.css';
-import './uploadFileItem.css';
 
 export type UploadFileItemState =
   | 'uploading-media'
@@ -232,8 +231,6 @@ function UploadSuccessItem({
   onReplace?: () => void;
   onDelete?: () => void;
 }) {
-  const thumbnailStyle = imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined;
-
   return (
     <div
       className={buildClassName([
@@ -242,9 +239,11 @@ function UploadSuccessItem({
         className,
       ])}
     >
-      <div
-        className="storybook-upload-item__thumbnail-image size-[92px] shrink-0 overflow-hidden rounded-8 border border-solid border-neutral-200 box-border bg-cover bg-center bg-no-repeat"
-        style={thumbnailStyle}
+      <img
+        alt=""
+        aria-hidden="true"
+        className="size-[92px] shrink-0 overflow-hidden rounded-8 border border-solid border-neutral-200 box-border object-cover object-center"
+        src={imageUrl ?? UPLOAD_FILE_DEFAULT_PREVIEW_IMAGE}
       />
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <div className="flex flex-col gap-1">

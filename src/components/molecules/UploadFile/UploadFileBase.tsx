@@ -151,6 +151,7 @@ function getTextLayoutClassName({
 
   return buildClassName([
     'storybook-upload-file-base__copy flex min-w-0 flex-col',
+    copyLayoutMode !== 'title-only' && 'gap-1',
     layout === 'vertical' && 'items-center',
     isHorizontal && copyLayoutMode === 'title-only' && 'justify-center',
   ]);
@@ -399,6 +400,7 @@ export function UploadFileBase({
                 className={buildClassName([
                   'storybook-upload-file-base__support block whitespace-nowrap',
                   getCopyTextClassName(isDisabled, 'text-neutral-600'),
+                  copyLayoutMode === 'full' && 'mt-1',
                 ])}
               >
                 {footerText}

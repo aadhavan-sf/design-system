@@ -14,16 +14,12 @@ export default {
     docs: {
       description: {
         component:
-          'Sidebar organism with expanded and collapsed layouts, reusable sidebar menu items, active/focus/disabled states, store switcher, account area, and quick actions.',
+          'Sidebar organism with reusable sidebar menu items, active/focus/disabled states, store switcher, account area, and quick actions.',
       },
     },
   },
   tags: ['autodocs'],
   argTypes: {
-    type: {
-      control: 'select',
-      options: ['expanded', 'collapsed'],
-    },
     activeItemId: {
       control: 'text',
     },
@@ -39,34 +35,16 @@ export default {
 };
 
 export const Playground = {
-  render: (args) => {
-    const isCollapsed = args.type === 'collapsed' || args.type === 'Collapsed';
-
-    return (
-      <div className="flex min-h-screen items-start justify-center gap-10 bg-neutral-100 p-8">
-        <div className={`h-dvh ${isCollapsed ? 'w-[60px]' : 'w-[216px]'}`}>
-          <Sidebar {...args} />
-        </div>
-      </div>
-    );
-  },
-  args: {
-    type: 'expanded',
-    activeItemId: 'active-theme',
-  },
-};
-
-export const Variants = {
-  render: () => (
-    <div className="flex min-h-screen items-start justify-center gap-10 bg-neutral-100 p-8">
+  render: (args) => (
+    <div className="flex min-h-screen items-start justify-center bg-neutral-100 p-8">
       <div className="h-dvh w-[216px]">
-        <Sidebar type="expanded" />
-      </div>
-      <div className="h-dvh w-[60px]">
-        <Sidebar type="collapsed" />
+        <Sidebar {...args} />
       </div>
     </div>
   ),
+  args: {
+    activeItemId: 'active-theme',
+  },
 };
 
 export const ItemStates = {
@@ -74,7 +52,7 @@ export const ItemStates = {
     <div className="grid grid-cols-[max-content_max-content] gap-x-16 gap-y-5 p-5">
       {['default', 'hover', 'focused', 'disabled'].map((state) => (
         <SidebarItem
-          key={`expanded-default-${state}`}
+          key={`default-${state}`}
           icon="drag"
           label="Custom Blocks #1"
           state={state}
@@ -82,30 +60,11 @@ export const ItemStates = {
       ))}
       {['default', 'hover', 'focused', 'disabled'].map((state) => (
         <SidebarItem
-          key={`expanded-pressed-${state}`}
+          key={`pressed-${state}`}
           icon="drag"
           label="Custom Blocks #1"
           pressed
           state={state}
-        />
-      ))}
-      {['default', 'hover', 'focused', 'disabled'].map((state) => (
-        <SidebarItem
-          key={`collapsed-default-${state}`}
-          icon="drag"
-          label="Custom Blocks #1"
-          state={state}
-          type="collapsed"
-        />
-      ))}
-      {['default', 'hover', 'focused', 'disabled'].map((state) => (
-        <SidebarItem
-          key={`collapsed-pressed-${state}`}
-          icon="drag"
-          label="Custom Blocks #1"
-          pressed
-          state={state}
-          type="collapsed"
         />
       ))}
     </div>
