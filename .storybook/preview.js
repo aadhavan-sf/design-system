@@ -33,6 +33,8 @@ const preview = {
           ['Modal', 'Top Navigation', 'Sidebar', 'Left Panel', 'Table', 'Settings Panel', 'Layouts Panel'],
           'Templates',
           ['Home Page'],
+          'Mobile UI',
+          ['Cart Counter', 'Countdown Timer', 'Toolbar'],
           'Foundations',
           ['Typography', 'Colors', 'Size Scale', 'Shadows'],
         ],
